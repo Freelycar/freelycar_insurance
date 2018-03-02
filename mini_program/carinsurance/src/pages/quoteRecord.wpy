@@ -1,0 +1,81 @@
+<style lang="less">
+.header-view{
+    height: 90rpx;
+    width: 100%;
+    text-align: center;
+    background: white;  
+    line-height: 90rpx;  
+    border-bottom: 1rpx solid lightgray
+} 
+.header-code, .header-time{
+    width: 50%;
+    display: inline-block;
+}
+
+.scroll-view-bg {
+  height: 1120rpx;
+  width: 100%;
+  background: #efeff4;
+//   padding-bottom: 10rpx;
+}
+.scroll-view-item {
+    height: 150rpx;
+    line-height: 150rpx;
+    margin: 10rpx 30rpx 0rpx 30rpx;
+    background: white;
+    border-radius: 10rpx;
+    padding: 0rpx 30rpx  0rpx 90rpx;
+}
+.scroll-view-item .carNmuber{
+    float: left;
+}
+.scroll-view-item .time{
+    float: right;
+}
+</style>
+<template >
+    <view class="container">
+        <view class='header-view'>
+            <view class='header-code'>车牌号</view>
+            <view class='header-time'>报价时间</view>
+        </view>
+        <scroll-view scroll-y="true" class='scroll-view-bg'>
+            <block wx:for="{{record}}" >
+                <view class='scroll-view-item'>
+                    <text class='carNmuber'>{{item.code}}</text>
+                    <text class='time'>{{item.time}}</text>
+                </view>
+            </block>
+            
+        </scroll-view>
+    </view>
+
+</template>
+
+<script>
+import wepy from 'wepy';
+import Toast from 'wepy-com-toast';
+
+export default class QuoteRecord extends wepy.page {
+  config = {
+    navigationBarTitleText: '报价记录'
+  };
+  components = {
+    toast: Toast
+  };
+
+  data = {
+    record: [{ time: '2017-12-31 18:30', code: '苏A44578' },{ time: '2016-12-31 18:30', code: '苏A64578' },{ time: '2016-12-31 18:30', code: '苏A64578' },{ time: '2016-12-31 18:30', code: '苏A64578' },{ time: '2016-12-31 18:30', code: '苏A64578' },{ time: '2016-12-31 18:30', code: '苏A64578' },{ time: '2016-12-31 18:30', code: '苏A64578' },{ time: '2016-12-31 18:30', code: '苏A64578' },{ time: '2016-12-31 18:30', code: '苏A64578' },{ time: '2016-12-31 18:30', code: '苏A64578' },{ time: '2016-12-31 18:30', code: '苏A64578' },{ time: '2016-12-31 18:30', code: '苏A64578' },{ time: '2016-12-31 18:30', code: '苏A64578' }]
+  };
+
+  computed = {};
+
+  methods = {
+    getQuoteRecord() {
+
+    }
+  };
+
+  onLoad() {}
+}
+</script>

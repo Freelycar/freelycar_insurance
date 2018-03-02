@@ -1,6 +1,8 @@
 <style lang="less">
+@import './font.wxss'; 
 .container {
   height: 100%;
+  width: 100%;
   display: flex;
   flex-direction: column;
   // align-items: center;
@@ -10,7 +12,11 @@
    font-size: 34rpx;
    font-family: "SimHei";
 }
-@import './font.wxss'; 
+
+page {
+  height: 100%;
+  width: 100%;
+}
 </style>
 
 <script>
@@ -25,7 +31,7 @@ setStore(store);
 
 export default class extends wepy.app {
   config = {
-    pages: ['pages/index', 'pages/main', 'pages/orderList'],
+    pages: ['pages/index', 'pages/main', 'pages/orderList', 'pages/quoteRecord', 'pages/quote'],
     window: {
       backgroundTextStyle: 'light',
       navigationBarBackgroundColor: '#ce1826',
