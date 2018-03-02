@@ -1,254 +1,276 @@
 <style lang="less">
-  .userinfo {
+.banner-bg {
+    height: 373rpx;
+    /* width: 750rpx; */
+}
+
+.quote-bg{
+    background: white;
+}
+
+.line {
     display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
+    flex-direction: row;
+    height: 92rpx;
+    width: 750rpx;
+    border-bottom: 1px solid #e7e7e7;
+    line-height: 92rpx;
+    padding-left: 15rpx;
+}
 
-  .userinfo-avatar {
-    width: 80rpx;
-    height: 80rpx;
-    border-radius: 50%;
-  }
+.line .line-key {
+    width: 210rpx;
+    text-align: center;
+    display: inline-block;
+    margin-right: 20rpx;
+}
 
-  .userinfo-nickname {
-    color: #aaa;
-  }
+.region-select {
+    width: 120rpx;
+    text-align: center;
+    margin-right: 10rpx;
+}
+.region-select .region-select-icon{
+    color:#b2b2b2;
+}
+
+.line .line-input {
+    width: 345rpx;
+    vertical-align: middle;
+    margin-top: 20rpx;
+}
+
+.right-text{
+    text-align: right;
+    font-size: 28rpx;
+    color: #b2b2b2;
+    padding: 5rpx 10rpx;
+}
+.right-text  .left{
+    float:left;
+    margin-left: 30rpx;
+    color: #007bc7;
+}
+
+.down-icon{
+    width: 30rpx;
+    height: 30rpx;
+}
+
+.confirm-button{
+    margin: 70rpx 30rpx 10rpx 30rpx; 
+    background: #f8b500;
+    color: white;
+    text-align: center;
+    border-radius: 10rpx;
+    width: auto; 
+    height: 90rpx;
+}
+
+.quote-record-bg{
+    margin: 10rpx 30rpx 30rpx 30rpx;
+    font-size: 25rpx;
+}
+
+.cooperation-agencies-title {
+    height: 90rpx;
+    line-height: 90rpx;
+    padding: 0 30rpx;
+    background: white;
+    border-bottom: 1rpx #b2b2b2 solid;
+    margin-top: 20rpx;
+}
+
+.cooperation-agencies {
+    height: 120rpx;
+    padding: 20rpx 30rpx;
+    line-height: 160rpx;
+    background: white;
+    margin-bottom: 15rpx;
+}
+
+.cooperation-agencies-img {
+    display: inline-block;
+    height: 110rpx;
+    width: 155rpx;
+    vertical-align: top;
+}
+
+.cooperation-agencies-text {
+    display: inline-block;
+    vertical-align: top;
+    line-height: 60rpx;
+    margin-left: 50rpx;
+}
+
+.call-button {
+    /* display: flex;
+    flex-direction: column; */
+    position: fixed;
+    right: 10rpx;
+    bottom: 30rpx;
+}
+.call-button-img{
+    height: 120rpx;
+    width: 120rpx;
+}
 </style>
 <template>
-  <view class="container">
-    <view class="userinfo" @tap="handleViewTap">
-      <image class="userinfo-avatar" src="{{ userInfo.avatarUrl }}" background-size="cover"/>
-      <view class="userinfo-nickname">{{ userInfo.nickName }}</view>
+    <view class="container">
+    <swiper indicator-dots="true" autoplay="true" interval="5000" duration="1000" class="banner-bg">
+        <block wx:for="{{imgUrls}}">
+            <swiper-item>
+                <image src="{{item}}" class="slide-image" style="height:373rpx;width:750rpx" />
+            </swiper-item>
+        </block>
+    </swiper>
+    <view class='quote-bg'>
+        <view class='line' style="flex-direction:row;">
+            <div class='line-key'>车牌号码
+                <text style="color: red">*</text>
+            </div>
+             <picker bindchange="bindPickerChange" value="{{index}}" range="{{array}}">
+                <view class='region-select'>{{region}} 
+                  <!-- <image src='../../assets/imgs/arrow_down.png' class='down-icon'></image> -->
+                  <text class='region-select-icon'>│</text></view>
+            </picker>
+            
+            <input class='line-input' placeholder='请输入车牌号码' bindinput="bindNumberInput" />
+        </view>
+        <view class='line' style="flex-direction:row;">
+            <view class='line-key'>车主姓名
+                <text style="color: red">*</text>
+            </view>
+            <input class='line-input' placeholder='请输入车主姓名' bindinput="bindNameInput" />
+        </view>
+        <view class='right-text'>
+          <text class='left'>是否过户车</text>
+          您的信息将被严格保密
+          </view>
+        <button class='confirm-button'>获取报价</button>
+        <view class='quote-record-bg'>
+            <text style="color: red">*</text>
+            现仅开通南京市内个人9座以下客车人保在线报价，其他情况可人工咨询
+            </view>
     </view>
-
-    <panel>
-      <view class="title" slot="title">测试数据绑定</view>
-
-      <text class="info">{{normalTitle}}</text>
-      <text class="info">{{setTimeoutTitle}}</text>
-      <text class="info">{{mixin}}</text>
-      <text class="info">{{mynum}}</text>
-      <text class="info">{{now}}</text>
-      <text class="info">{{num}}</text>
-      <text class="info">{{asyncNum}}</text>
-      <text class="info">{{sumNum}}</text>
-      <button @tap="plus('a')" size="mini">  +  </button>
-    </panel>
-
-    <panel>
-      <view class="title" slot="title">其它测试</view>
-      <button @tap="toast" size="mini">第三方组件</button>
-      <button @tap="communicate" size="mini">组件通信</button>
-      <button @tap="tap" size="mini">混合TAP事件</button>
-    </panel>
-
-    <panel>
-      <view class="title" slot="title">测试并发网络请求</view>
-      <view>返回结果: <text>{{netrst}}</text></view>
-      <button @tap="request" size="mini"> 点我发起10个请求 </button>
-    </panel>
-
-    <panel>
-      <view class="title" slot="title">测试组件</view>
-
-      <text class="testcounter">计数组件1: </text>
-      <view class="counterview">
-        <counter1 @index-emit.user="counterEmit" />
-      </view>
-
-      <text class="testcounter">计数组件2: </text>
-
-      <view class="counterview">
-        <counter2 :num.sync="mynum"></counter2>
-      </view>
-    </panel>
-
-    <panel>
-      <view class="title" slot="title">测试组件Repeat</view>
-      <repeat for="" index="index" item="item" key="key">
-        <group :grouplist="item" :indexa="index"></group>
-      </repeat>
-    </panel>
-
-    <panel>
-      <view class="title" slot="title">测试列表</view>
-      <list></list>
-    </panel>
-
-    <toast />
-  </view>
+    <view class='cooperation-agencies-title'>
+        <text>合作机构</text>
+    </view>
+    <view class='cooperation-agencies'>
+        <image class='cooperation-agencies-img' src='/assets/imgs/insurance_logo1.png' />
+    </view>
+    <!-- <view class='call-button'>
+        <image class='call-button-img' src='/assets/imgs/insurance_log1.png' />
+    </view> -->
+</view>
 </template>
 
 <script>
-  import wepy from 'wepy'
-  import { connect } from 'wepy-redux'
-  import Panel from '@/components/panel' // alias example
-  import Counter from 'counter' // alias example
-  import List from '../components/list' // aliasFields example
-  import moduleA from 'module-a' // aliasFields ignore module example
-  import Group from '../components/group'
-  import Toast from 'wepy-com-toast'
-  import testMixin from '../mixins/test'
+import wepy from 'wepy';
+import { connect } from 'wepy-redux';
+import Panel from '@/components/panel'; // alias example
+import Counter from 'counter'; // alias example
+import List from '../components/list'; // aliasFields example
+import moduleA from 'module-a'; // aliasFields ignore module example
+import Group from '../components/group';
+import Toast from 'wepy-com-toast';
+import testMixin from '../mixins/test';
 
-  console.log('moduleA ignored: ', moduleA) // => moduleA ignored: {}
+console.log('moduleA ignored: ', moduleA); // => moduleA ignored: {}
 
-  @connect({
-    num (state) {
-      return state.counter.num
-    },
-    asyncNum (state) {
-      return state.counter.asyncNum
-    },
-    sumNum (state) {
-      return state.counter.num + state.counter.asyncNum
-    }
-  })
-
-  export default class Index extends wepy.page {
-    config = {
-      navigationBarTitleText: 'test'
-    }
-    components = {
-      panel: Panel,
-      counter1: Counter,
-      counter2: Counter,
-      list: List,
-      group: Group,
-      toast: Toast
-    }
-
-    mixins = [testMixin]
-
-    data = {
-      mynum: 20,
-      userInfo: {
-        nickName: '加载中...'
-      },
-      normalTitle: '原始标题',
-      setTimeoutTitle: '标题三秒后会被修改',
-      count: 0,
-      netrst: '',
-      groupList: [
-        {
-          id: 1,
-          name: '点击改变',
-          list: [
-            {
-              childid: '1.1',
-              childname: '子项，点我改变'
-            }, {
-              childid: '1.2',
-              childname: '子项，点我改变'
-            }, {
-              childid: '1.3',
-              childname: '子项，点我改变'
-            }
-          ]
-        },
-        {
-          id: 2,
-          name: '点击改变',
-          list: [
-            {
-              childid: '2.1',
-              childname: '子项，点我改变'
-            }, {
-              childid: '2.2',
-              childname: '子项，点我改变'
-            }, {
-              childid: '2.3',
-              childname: '子项，点我改变'
-            }
-          ]
-        },
-        {
-          id: 3,
-          name: '点击改变',
-          list: [
-            {
-              childid: '3.1',
-              childname: '子项，点我改变'
-            }
-          ]
-        }
-      ]
-    }
-
-    computed = {
-      now () {
-        return +new Date()
-      }
-    }
-
-    methods = {
-      plus () {
-        this.mynum++
-      },
-      toast () {
-        let promise = this.$invoke('toast', 'show', {
-          title: '自定义标题',
-          img: 'https://raw.githubusercontent.com/kiinlam/wetoast/master/images/star.png'
-        })
-
-        promise.then((d) => {
-          console.log('toast done')
-        })
-      },
-      tap () {
-        console.log('do noting from ' + this.$name)
-      },
-      communicate () {
-        console.log(this.$name + ' tap')
-
-        this.$invoke('counter2', 'minus', 45, 6)
-        this.$invoke('counter1', 'plus', 45, 6)
-
-        this.$broadcast('index-broadcast', 1, 3, 4)
-      },
-      request () {
-        let self = this
-        let i = 10
-        let map = ['MA==', 'MQo=', 'Mg==', 'Mw==', 'NA==', 'NQ==', 'Ng==', 'Nw==', 'OA==', 'OQ==']
-        while (i--) {
-          wepy.request({
-            url: 'https://www.madcoder.cn/tests/sleep.php?time=1&t=css&c=' + map[i] + '&i=' + i,
-            success: function (d) {
-              self.netrst += d.data + '.'
-              self.$apply()
-            }
-          })
-        }
-      },
-      counterEmit (...args) {
-        let $event = args[args.length - 1]
-        console.log(`${this.$name} receive ${$event.name} from ${$event.source.$name}`)
-      }
-    }
-
-    events = {
-      'index-emit': (...args) => {
-        let $event = args[args.length - 1]
-        console.log(`${this.$name} receive ${$event.name} from ${$event.source.$name}`)
-      }
-    }
-
-    onLoad() {
-      let self = this
-      this.$parent.getUserInfo(function (userInfo) {
-        if (userInfo) {
-          self.userInfo = userInfo
-        }
-        self.normalTitle = '标题已被修改'
-
-        self.setTimeoutTitle = '标题三秒后会被修改'
-        setTimeout(() => {
-          self.setTimeoutTitle = '到三秒了'
-          self.$apply()
-        }, 3000)
-
-        self.$apply()
-      })
-    }
+@connect({
+  num(state) {
+    return state.counter.num;
+  },
+  asyncNum(state) {
+    return state.counter.asyncNum;
+  },
+  sumNum(state) {
+    return state.counter.num + state.counter.asyncNum;
   }
+})
+export default class Index extends wepy.page {
+  config = {
+    navigationBarTitleText: 'test',
+    background: '#efeff4'
+  };
+  components = {
+    panel: Panel,
+    counter1: Counter,
+    counter2: Counter,
+    list: List,
+    group: Group,
+    toast: Toast
+  };
+
+  mixins = [testMixin];
+
+  data = {
+    imgUrls: [
+            '/assets/imgs/banner.jpg',
+            '/assets/imgs/banner.jpg',
+            '/assets/imgs/banner.jpg'
+        ],
+    region: '苏A',
+    name: '',
+    carNumber: '',
+  };
+
+  computed = {
+    now() {
+      return +new Date();
+    }
+  };
+
+  methods = {
+    changeIndicatorDots(e) {
+        this.setData({
+            indicatorDots: !this.data.indicatorDots
+        })
+    },
+    bindNumberInput(e) {
+        this.setData({
+          inputValue: e.detail.value
+        })
+    },
+    bindNameInput(e) {
+        this.setData({
+            name: e.detail.value
+        })
+    },
+    bindPickerChange(e) {
+        this.setData({
+            region: this.data.array[e.detail.value]
+        })
+    }
+  };
+
+  events = {
+    'index-emit': (...args) => {
+      let $event = args[args.length - 1];
+      console.log(
+        `${this.$name} receive ${$event.name} from ${$event.source.$name}`
+      );
+    }
+  };
+
+  onLoad() {
+    let self = this;
+    this.$parent.getUserInfo(function(userInfo) {
+      console.log(userInfo);
+      if (userInfo) {
+        self.userInfo = userInfo;
+      }
+      self.normalTitle = '标题已被修改';
+
+      self.setTimeoutTitle = '标题三秒后会被修改';
+      setTimeout(() => {
+        self.setTimeoutTitle = '到三秒了';
+        self.$apply();
+      }, 3000);
+
+      self.$apply();
+    });
+  }
+}
 </script>
