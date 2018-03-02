@@ -261,7 +261,7 @@ export default class Main extends wepy.page {
   onLoad() {
     let self = this;
     this.$parent.getUserInfo(function(userInfo) {
-      console.log(userInfo);
+      console.log(userInfo)
       if (userInfo) {
         self.userInfo = userInfo;
       }
