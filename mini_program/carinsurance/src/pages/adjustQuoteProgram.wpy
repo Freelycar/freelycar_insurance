@@ -1,0 +1,266 @@
+<style lang="less">
+.program-bg {
+  box-sizing: border-box;
+}
+.renewal {
+  margin: 10rpx 0rpx;
+  background: white;
+  border-radius: 10rpx;
+  padding-bottom: 30rpx;
+}
+
+.hearder-bg {
+  padding-left: 30rpx;
+  border-bottom: 1rpx solid #efeff4;
+}
+.line {
+  height: 90rpx;
+  line-height: 90rpx;
+  background: white;
+  padding: 0rpx 30rpx 0rpx 0rpx;
+}
+.adjust-button {
+  color: #f8b500;
+}
+.item-bg {
+  margin-left: 30rpx;
+  border-bottom: 1rpx solid #efeff4;
+}
+.get-price-button {
+  margin: 20rpx 30rpx;
+  background: #f8b500;
+  color: white;
+  text-align: center;
+  border-radius: 10rpx;
+  width: auto;
+  height: 90rpx;
+  margin-bottom: 60rpx;
+}
+.get-price-button-loading {
+  background: #b2b2b2;
+}
+.flex-box-row {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.select-img {
+  height: 50rpx;
+  width: 50rpx;
+  margin-top: 20rpx;
+  background-size: 100%;
+}
+.bujimianpei {
+  background: #b5b5b5;
+  color: white;
+  margin-right: 30rpx;
+  height: 50rpx;
+  margin-top: 20rpx;
+  font-size: 25rpx;
+  line-height: 50rpx;
+  padding: 0rpx 10rpx;
+  border-radius: 10rpx;
+}
+.bujimianpei-select {
+  background: #f8b500;
+}
+
+.select-type-button {
+  color: #b5b5b5;
+  border: 1rpx solid #b5b5b5;
+  height: 50rpx;
+  margin-top: 20rpx;
+  font-size: 25rpx;
+  line-height: 50rpx;
+  padding: 0rpx 10rpx;
+  border-radius: 10rpx;
+  min-width: 75rpx;
+  text-align: center;
+}
+.select-type-button-bg {
+  color: #b5b5b5;
+  font-size: 30rpx;
+}
+.select-type-button-bg-hide {
+  color: white;
+  font-size: 30rpx;
+}
+.border-bottom {
+  border-bottom: 1rpx solid #efeff4;
+}
+.width-60percent {
+  width: 55%;
+  //   margin-right: 40rpx;
+}
+.white-bg {
+  background: white;
+}
+.reset-program-button {
+  color: #007bc7;
+  font-size: 25rpx;
+  height: 60rpx;
+  line-height: 60rpx;
+  padding-left: 30rpx;
+}
+</style>
+<template >
+  <scroll-view scroll-y="true" class="container program-bg">
+
+    <view class='white-bg border-bottom'>
+      <view class='line item-bg flex-box-row'>
+        <view> 交强险(含车船税)</view>
+        <view class='select-img' style='background-image: url(/assets/imgs/select-defult.png);'></view>
+      </view>
+    </view>
+    <view class='white-bg' style='margin-top:10rpx'>
+      <view class='line hearder-bg' style='padding-left: 30rpx'>商业险</view>
+      <view class='item-bg line  flex-box-row'>
+        <view>车辆损失险</view>
+        <view class='flex-box-row'>
+          <view class='bujimianpei bujimianpei-select'>不计免赔</view>
+          <view class='select-img' style='background-image: url(/assets/imgs/select-yes.png);'></view>
+        </view>
+      </view>
+      <view class='line item-bg flex-box-row'>
+        <view class='flex-box-row width-60percent'>
+          <view>第三者责任险</view>
+          <view class='flex-box-row select-type-button-bg-hide'>
+            <view class='select-type-button'>100万
+              <i class='fa fa-angle-down'></i>
+            </view>
+            <text>/座</text>
+          </view>
+        </view>
+        <view class='flex-box-row'>
+          <view class='bujimianpei'>不计免赔</view>
+          <view class='select-img' style='background-image: url(/assets/imgs/select-no.png);'></view>
+        </view>
+      </view>
+      <view class='line item-bg flex-box-row'>
+        <view class='flex-box-row width-60percent'>
+          <view>司机座位险</view>
+          <view class='flex-box-row select-type-button-bg'>
+            <view class='select-type-button'>1万
+              <i class='fa fa-angle-down'></i>
+            </view>
+            <text>/座</text>
+          </view>
+        </view>
+        <view class='flex-box-row'>
+          <view class='bujimianpei'>不计免赔</view>
+          <view class='select-img' style='background-image: url(/assets/imgs/select-no.png);'></view>
+        </view>
+      </view>
+      <view class='line item-bg flex-box-row'>
+        <view class='flex-box-row width-60percent'>
+          <view>乘客座位险</view>
+          <view class='flex-box-row select-type-button-bg'>
+            <view class='select-type-button'>1万
+              <i class='fa fa-angle-down'></i>
+            </view>
+            <text>/座</text>
+          </view>
+        </view>
+        <view class='flex-box-row'>
+          <view class='bujimianpei'>不计免赔</view>
+          <view class='select-img' style='background-image: url(/assets/imgs/select-no.png);'></view>
+        </view>
+      </view>
+      <view class='item-bg line  flex-box-row'>
+        <view>盗抢险</view>
+        <view class='flex-box-row'>
+          <view class='bujimianpei'>不计免赔</view>
+          <view class='select-img' style='background-image: url(/assets/imgs/select-yes.png);'></view>
+        </view>
+      </view>
+      <view class='line item-bg flex-box-row'>
+        <view class=' flex-box-row width-60percent'>
+          <view>玻璃破碎险</view>
+          <view class='flex-box-row select-type-button-bg-hide'>
+            <view class='select-type-button'>国产
+              <i class='fa fa-angle-down'></i>
+            </view>
+            <text>/座</text>
+          </view>
+          
+        </view>
+        <view class='flex-box-row'>
+          <view class='bujimianpei'>不计免赔</view>
+          <view class='select-img' style='background-image: url(/assets/imgs/select-no.png);'></view>
+        </view>
+      </view>
+      <view class='line item-bg flex-box-row'>
+        <view class=' flex-box-row width-60percent'>
+          <view>自燃险</view>
+          <view class='flex-box-row select-type-button-bg-hide'>
+            <view class='select-type-button'>2000
+              <i class='fa fa-angle-down'></i>
+            </view>
+            <text>/座</text>
+          </view>
+          <!-- <view class='select-type-button'>国产<i class='fa fa-angle-down'></i></view> -->
+        </view>
+        <view class='flex-box-row'>
+          <view class='bujimianpei'>不计免赔</view>
+          <view class='select-img' style='background-image: url(/assets/imgs/select-no.png);'></view>
+        </view>
+      </view>
+      <view class='item-bg line  flex-box-row'>
+        <view>划痕险</view>
+        <view class='flex-box-row'>
+          <view class='bujimianpei'>不计免赔</view>
+          <view class='select-img' style='background-image: url(/assets/imgs/select-yes.png);'></view>
+        </view>
+      </view>
+      <view class='item-bg line  flex-box-row'>
+        <view>涉水险</view>
+        <view class='flex-box-row'>
+          <view class='bujimianpei'>不计免赔</view>
+          <view class='select-img' style='background-image: url(/assets/imgs/select-yes.png);'></view>
+        </view>
+      </view>
+      <view class='line item-bg flex-box-row'>
+        <view> 制定维修厂</view>
+        <view class='select-img' style='background-image: url(/assets/imgs/select-no.png);'></view>
+      </view>
+      <view class='line item-bg flex-box-row'>
+        <view> 无法找到第三方责任险</view>
+        <view class='select-img' style='background-image: url(/assets/imgs/select-no.png);'></view>
+      </view>
+    </view>
+    <view class='reset-program-button'>
+      <i class='fa fa-undo'></i>重置投保方案</view>
+    <button class='get-price-button' @tap='queryQuote'>完成调整，立即报价</button>
+  </scroll-view>
+
+</template>
+
+<script>
+import wepy from 'wepy';
+import Toast from 'wepy-com-toast';
+
+export default class AdjustQuoteProgram extends wepy.page {
+  config = {
+    navigationBarTitleText: '车险报价'
+  };
+  components = {
+    toast: Toast
+  };
+
+  data = {};
+
+  computed = {};
+
+  methods = {
+    getQuoteRecord() {},
+    queryQuote() {
+        wx.navigateTo({
+            url: 'quoteSuccess'
+        })
+    }
+  };
+
+  onLoad() {}
+}
+</script>
