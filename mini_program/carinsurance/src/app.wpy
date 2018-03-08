@@ -6,11 +6,11 @@
   // align-items: center;
   // justify-content: space-between;
   // box-sizing: border-box;
-   background: #efeff4;
-   font-size: 34rpx;
-   font-family: "SimHei";
+  background: #efeff4;
+  font-size: 34rpx;
+  font-family: 'SimHei';
 }
-@import './font.wxss'; 
+@import './font.wxss';
 </style>
 
 <script>
@@ -25,28 +25,31 @@ setStore(store);
 
 export default class extends wepy.app {
   config = {
-    pages: ['pages/index', 'pages/main', 'pages/orderList'],
+    pages: ['pages/orderList', 'pages/index', 'pages/main'],
     window: {
       backgroundTextStyle: 'light',
       navigationBarBackgroundColor: '#ce1826',
       navigationBarTextStyle: '#fff',
-      navigationBarTitleText: 'WeChat',
-    }, 
+      navigationBarTitleText: 'WeChat'
+    },
     tabBar: {
-      list: [{ 
-        pagePath: 'pages/index', 
-        text: '车险',
-        iconPath: 'assets/imgs/tabBar_main.png',
-        selectedIconPath: 'assets/imgs/tabBar_main_selected.png'
-        }, {
-        pagePath: 'pages/orderList',
-        text: '订单',
-        iconPath: 'assets/imgs/tabBar_order.png',
-        selectedIconPath: 'assets/imgs/tabBar_order_selected.png'
-      }],
+      list: [
+        {
+          pagePath: 'pages/index',
+          text: '车险',
+          iconPath: 'assets/imgs/tabBar_main.png',
+          selectedIconPath: 'assets/imgs/tabBar_main_selected.png'
+        },
+        {
+          pagePath: 'pages/orderList',
+          text: '订单',
+          iconPath: 'assets/imgs/tabBar_order.png',
+          selectedIconPath: 'assets/imgs/tabBar_order_selected.png'
+        }
+      ],
       color: '#b3b3b3',
       selectedColor: '#ce1826'
-  },
+    }
   };
 
   globalData = {
