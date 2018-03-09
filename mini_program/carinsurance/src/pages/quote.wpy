@@ -1,0 +1,135 @@
+<style lang="less">
+.quote-bg {
+  padding: 0rpx 30rpx;
+  box-sizing: border-box;
+}
+.basicinfo {
+  height: 50rpx;
+  line-height: 50rpx;
+  font-size: 35rpx;
+}
+.city {
+  color: gray;
+  font-size: 30rpx;
+}
+.lastyear-bg {
+  margin-top: 30rpx;
+  background: #2b2b2b;
+  border-radius: 10rpx;
+  color: white;
+  width: 100%;
+  overflow: hidden;
+}
+.lastyear-bg .lastyear-header,
+.lastyear-bg .lastyear-record-bg {
+  padding: 0rpx 30rpx;
+}
+.lastyear-header {
+  background: #2f2f2f;
+  font-size: 38rpx;
+  height: 90rpx;
+  line-height: 90rpx;
+}
+.lastyear-header .left {
+  float: left;
+}
+.lastyear-header .right {
+  float: right;
+  color: #f8b605;
+}
+
+.lastyear-record-bg {
+  font-size: 30rpx;
+}
+.lastyear-record-item{
+    margin-bottom: 20rpx;
+}
+.lastyear-record-header {
+  height: 60rpx;
+  line-height: 60rpx;
+}
+.lastyear-record-detail {
+  display: inline-block;
+  width: 70%;
+  height: 120rpx;
+}
+.lastyear-record-detail .item {
+  display: inline-block;
+  height: 60rpx;
+  line-height: 60rpx;
+}
+.lastyear-record-money {
+  border-left: 1rpx solid white;
+  text-align: right;
+  // height: 120rpx;
+  width: 29%;
+  display: inline-block;
+  line-height: 120rpx;
+  margin-top: -40rpx;
+  vertical-align: bottom;
+  font-size: 35rpx;
+}
+</style>
+<template >
+    <view class="container quote-bg">
+        <view class='basicinfo city'>南京市</view>
+        <view class='basicinfo'>所有人: 臭傻逼</view>
+        <view class='basicinfo'>车牌号码: 苏A123R0</view>
+        <view class='lastyear-bg'>
+            <view class='lastyear-header'>
+                <text class='left'>去年投保</text>
+                <text class='right'>平安保险</text>
+            </view>
+            <view class='lastyear-record-bg'>
+                <view class='lastyear-record-item'>
+                    <view class='lastyear-record-header'> 商业险</view>
+                    <view class='lastyear-record-detail'>
+                        <view class='item'>保单号:11070043900349898960</view>
+                        <view class='item'>终保时间:2018-01-01</view>
+                    </view>
+                    <view class='lastyear-record-money'>
+                        ￥2712
+                    </view>
+                </view>
+                <view class='lastyear-record-item'>
+                    <view class='lastyear-record-header'> 商业险</view>
+                    <view class='lastyear-record-detail'>
+                        <view class='item'>保单号:11070043900349898960</view>
+                        <view class='item'>终保时间:2018-01-01</view>
+                    </view>
+                    <view class='lastyear-record-money'>
+                        ￥2712
+                    </view>
+                </view>
+            </view>
+            <view class=''>
+
+            </view>
+        </view>
+    </view>
+
+</template>
+
+<script>
+import wepy from 'wepy';
+import Toast from 'wepy-com-toast';
+
+export default class Quote extends wepy.page {
+  config = {
+    navigationBarTitleText: '车险报价'
+  };
+  components = {
+    toast: Toast
+  };
+
+  data = {};
+
+  computed = {};
+
+  methods = {
+    getQuoteRecord() {}
+  };
+
+  onLoad() {}
+}
+</script>

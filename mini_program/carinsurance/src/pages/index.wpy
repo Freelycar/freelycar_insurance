@@ -44,11 +44,11 @@
     text-align: right;
     font-size: 28rpx;
     color: #b2b2b2;
-    padding: 5rpx 10rpx;
+    padding: 5rpx 30rpx;
 }
 .right-text  .left{
     float:left;
-    margin-left: 30rpx;
+    // margin-left: 30rpx;
     color: #007bc7;
 }
 
@@ -56,9 +56,16 @@
     width: 30rpx;
     height: 30rpx;
 }
+.recently-quoted {
+    margin-top: 70rpx;  
+    margin-right: 30rpx;
+    color: #007bc7;
+    font-size: 25rpx;
+    text-align: right;
+}
 
 .confirm-button{
-    margin: 70rpx 30rpx 10rpx 30rpx; 
+    margin: 5rpx 30rpx 10rpx 30rpx; 
     background: #f8b500;
     color: white;
     text-align: center;
@@ -75,25 +82,27 @@
 .cooperation-agencies-title {
     height: 90rpx;
     line-height: 90rpx;
-    padding: 0 30rpx;
+    padding: 0 30rpx; 
     background: white;
     border-bottom: 1rpx #b2b2b2 solid;
     margin-top: 20rpx;
 }
 
 .cooperation-agencies {
-    height: 120rpx;
+    height: 250rpx;
     padding: 20rpx 30rpx;
-    line-height: 160rpx;
+    padding-right: 0rpx;
+    line-height: 140rpx;
     background: white;
-    margin-bottom: 15rpx;
+    margin-bottom: 0rpx;
 }
 
 .cooperation-agencies-img {
     display: inline-block;
-    height: 110rpx;
-    width: 155rpx;
+    height: 115rpx;
+    width: 215rpx;
     vertical-align: top;
+    margin-right: 25rpx;
 }
 
 .cooperation-agencies-text {
@@ -114,8 +123,33 @@
     height: 120rpx;
     width: 120rpx;
 }
+
+.modal-tips{
+    font-size: 25rpx;
+    color: #f8b500;
+}
+
+.modal input{
+    font-size: 30rpx;
+    margin-top: 20rpx;
+    padding-bottom: 10rpx;
+    border-bottom: 1px solid lightgray;
+}
+.modal .noborder{
+    width: 70%;
+    border-bottom: none;
+    display: inline-block;
+    // float: left;
+}
+.modal .modal-getcode{
+    vertical-align: middle;
+    margin-top: -60rpx;
+    display: inline-block;
+    color: #007bc7;
+}
+
 </style>
-<template>
+<template >
     <view class="container">
     <swiper indicator-dots="true" autoplay="true" interval="5000" duration="1000" class="banner-bg">
         <block wx:for="{{imgUrls}}">
@@ -144,10 +178,11 @@
             <input class='line-input' placeholder='请输入车主姓名' bindinput="bindNameInput" />
         </view>
         <view class='right-text'>
-          <text class='left'>是否过户车</text>
+          <picker bindchange='transferCarSelected' value="{{isTransferCar}}" range="{{transferCarArray}}"><view class='left'><text >是否过户车 </text><i class='fa fa-angle-down'></i></view></picker>
           您的信息将被严格保密
           </view>
-        <button class='confirm-button'>获取报价</button>
+        <view class='recently-quoted'><text @tap="checkQouteRecord" >最近报价记录</text></view>
+        <button class='confirm-button' @tap="getQuote">获取报价</button>
         <view class='quote-record-bg'>
             <text style="color: red">*</text>
             现仅开通南京市内个人9座以下客车人保在线报价，其他情况可人工咨询
@@ -158,32 +193,40 @@
     </view>
     <view class='cooperation-agencies'>
         <image class='cooperation-agencies-img' src='/assets/imgs/insurance_logo1.png' />
+        <image class='cooperation-agencies-img' src='/assets/imgs/insurance_logo2.png' />
+        <image class='cooperation-agencies-img' src='/assets/imgs/insurance_logo3.png' />
+        <image class='cooperation-agencies-img' src='/assets/imgs/insurance_logo4.png' />
+        <image class='cooperation-agencies-img' src='/assets/imgs/insurance_logo5.png' />
+        <image class='cooperation-agencies-img' src='/assets/imgs/insurance_logo6.png' />
     </view>
-    <!-- <view class='call-button'>
-        <image class='call-button-img' src='/assets/imgs/insurance_log1.png' />
-    </view> -->
+
+    <modal 
+        class='modal'
+        title='验证身份'
+        hidden="{{hiddenModal}}"
+        confirm-text="确定" 
+        bindcancel="modalCancal" 
+        bindconfirm="modalCancal" 
+        no-cancel="true">
+        <view class='modal-tips'>由于监管要求，初次报价需要通过信息真实性验证</view>
+        <input placeholder="请输入手机号码" />  
+        <input placeholder="请输入邀请码(选填)" /> 
+        <input class='noborder' placeholder="请输入验证码" /> <text class='modal-getcode'>获取验证码</text>
+    </modal>
 </view>
 </template>
 
 <script>
 import wepy from 'wepy';
 import { connect } from 'wepy-redux';
-import Panel from '@/components/panel'; // alias example
-import Counter from 'counter'; // alias example
-import List from '../components/list'; // aliasFields example
-import moduleA from 'module-a'; // aliasFields ignore module example
-import Group from '../components/group';
 import Toast from 'wepy-com-toast';
-import testMixin from '../mixins/test';
-
-console.log('moduleA ignored: ', moduleA); // => moduleA ignored: {}
 
 @connect({
   num(state) {
     return state.counter.num;
   },
   asyncNum(state) {
-    return state.counter.asyncNum;
+    return state.counter.asyncNum; 
   },
   sumNum(state) {
     return state.counter.num + state.counter.asyncNum;
@@ -191,19 +234,11 @@ console.log('moduleA ignored: ', moduleA); // => moduleA ignored: {}
 })
 export default class Index extends wepy.page {
   config = {
-    navigationBarTitleText: 'test',
-    background: '#efeff4'
+    navigationBarTitleText: '车险报价'
   };
   components = {
-    panel: Panel,
-    counter1: Counter,
-    counter2: Counter,
-    list: List,
-    group: Group,
     toast: Toast
   };
-
-  mixins = [testMixin];
 
   data = {
     imgUrls: [
@@ -214,6 +249,10 @@ export default class Index extends wepy.page {
     region: '苏A',
     name: '',
     carNumber: '',
+    hiddenModal: true,
+    isTransferCar: 0, //是否过户车 0 否 1 是
+    transferCarArray: ["否", '是']
+
   };
 
   computed = {
@@ -223,6 +262,11 @@ export default class Index extends wepy.page {
   };
 
   methods = {
+      getQuote() {
+        wx.navigateTo({
+            url: 'quote'
+        })
+      },
     changeIndicatorDots(e) {
         this.setData({
             indicatorDots: !this.data.indicatorDots
@@ -242,17 +286,28 @@ export default class Index extends wepy.page {
         this.setData({
             region: this.data.array[e.detail.value]
         })
+    },
+    transferCarSelected(e) {
+        console.log(e.detail.value);
+        this.setData({
+            isTransferCar: e.detail.value
+        })
+    },
+    checkQouteRecord() {
+        wx.navigateTo({
+            url: 'quoteRecord'
+        })
     }
   };
 
-  events = {
-    'index-emit': (...args) => {
-      let $event = args[args.length - 1];
-      console.log(
-        `${this.$name} receive ${$event.name} from ${$event.source.$name}`
-      );
-    }
-  };
+//   events = { 
+//     'index-emit': (...args) => {
+//       let $event = args[args.length - 1];
+//       console.log(
+//         `${this.$name} receive ${$event.name} from ${$event.source.$name}`
+//       );
+//     }
+//   };
 
   onLoad() {
     let self = this;
