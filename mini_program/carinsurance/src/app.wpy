@@ -17,7 +17,6 @@ page {
   height: 100%;
   width: 100%;
 }
-@import './font.wxss';
 </style>
 
 <script>
@@ -32,7 +31,7 @@ setStore(store);
 
 export default class extends wepy.app {
   config = {
-    pages: ['pages/orderList', 'pages/index', 'pages/main'],
+    pages: ['pages/orderDetail', 'pages/orderList', 'pages/index', 'pages/main'],
     window: {
       backgroundTextStyle: 'light',
       navigationBarBackgroundColor: '#ce1826',

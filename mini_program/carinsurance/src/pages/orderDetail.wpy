@@ -1,0 +1,164 @@
+<style lang="less">
+.order-detail {
+  padding: 30rpx 0;
+  height: auto !important;
+}
+.freelycar_logo {
+  padding: 0 30rpx;
+  width: 287rpx;
+  height: 88rpx;
+  margin-bottom: 30rpx;
+}
+.order-info {
+  padding: 0 30rpx;
+  margin-bottom: 12rpx;
+  font-size: 32rpx;
+  color: #b5b5b5;
+  &.info-black {
+    color: #1e1e1e;
+  }
+  .info-yellow {
+    color: #f8b500;
+  }
+  .info-blue {
+    color: #007bc7;
+  }
+}
+.order-detail-title {
+  margin-top: 25rpx;
+  padding-left: 22rpx;
+  line-height: 88rpx;
+  background: #fff;
+  color: #b5b5b5;
+  .title-icon {
+    color: #1e1e1e;
+    margin-right: 10rpx;
+    border-bottom: 1px solid #b5b5b5;
+  }
+}
+.order-detail-way {
+  margin: 10rpx 30rpx;
+  padding: 0 30rpx;
+  border-radius: 8rpx;
+  background: #fff;
+  .insurance-title {
+    display: flex;
+    justify-content: space-between;
+    line-height: 88rpx;
+  }
+  .insurance-detail {
+    line-height: 88rpx;
+    .detail-line {
+      padding: 0 30rpx;
+      display: flex;
+      justify-content: space-between;
+      background: #f2f2f2;
+      margin-bottom: 1px;
+      .detail-line-info {
+        font-size: 24rpx;
+        margin-left: 10rpx;
+      }
+    }
+  }
+}
+  .insurance-total {
+    display: flex;
+    justify-content: space-between;
+    background: #fff;
+    margin: 10rpx 0;
+    padding: 0 30rpx;
+    font-size: 32rpx;
+    line-height: 88rpx;
+    .insurance-discount {
+      color: #b5b5b5;
+      .insurance-discount-red {
+        color: #ce1826;
+      }
+    }
+    .insurance-total-price {
+      color: #1e1e1e;
+    }
+  }
+</style>
+<template>
+    <view class="container order-detail">
+      <image class="freelycar_logo" src="../../assets/imgs/freelycar_logo_color.png"/>
+      <view class="order-info">订单编号：6526949841215641</view>
+      <view class="order-info">订单时间：2017-12-30 18:30</view>
+      <view class="order-info">付款时间：2017-12-30 18:50</view>
+      <view class="order-info">发货时间：2018-01-03 09:14</view>
+      <view class="order-info">返现时间：2018-01-03 14:20</view>
+      <view class="order-info">成交时间：2018-01-03 14:20</view>
+      <view class="order-info info-black">快递公司：顺丰速递</view>
+      <view class="order-info info-black">运单号码：458486187 | <text class="info-blue">复制</text></view>
+      <view class="order-info info-black">备注：<text class="info-yellow">内件：(1)工具包，吸尘器，充气泵</text></view>
+      <view class="order-detail-title">
+        <text class="fa fa-file-text-o title-icon"/>投保方案
+      </view>
+      <view class="order-detail-way">
+        <view class="insurance-title">
+          <text>强制险</text>
+          <text>起保日期：2017-12-30</text>
+        </view>
+        <view class="insurance-detail">
+          <view class="detail-line">
+            <text>交强险</text>
+            <text>￥950</text>
+          </view>
+          <view class="detail-line">
+            <text>车船税</text>
+            <text>￥300</text>
+          </view>
+        </view>
+        <view class="insurance-title">
+          <text></text>
+          <text>小计：￥1250</text>
+        </view>
+      </view>
+       <view class="order-detail-way">
+        <view class="insurance-title">
+          <text>商业险</text>
+          <text>起保日期：2017-12-30</text>
+        </view>
+        <view class="insurance-detail">
+          <view class="detail-line">
+            <text>车辆损失险 <text class="detail-line-info">不计免赔</text></text>
+            <text>￥950</text>
+          </view>
+          <view class="detail-line">
+            <text>第三者责任险 <text class="detail-line-info">100万</text></text>
+            <text>￥300 </text>
+          </view>
+        </view>
+        <view class="insurance-title">
+          <text></text>
+          <text>小计：￥1250</text>
+        </view>
+      </view>
+      <view class="insurance-total">
+        <text class="insurance-discount">(<text class="insurance-discount-red">￥1460.28</text>现金红包已到账)<text>
+        <text class="insurance-total-price">合计：￥4582.28</text>
+      </view>
+      <view class="order-detail-title">
+        <text class="fa fa-file-text-o title-icon"/>保单收货信息
+      </view>
+    </view>
+</template>
+
+<script>
+import wepy from 'wepy';
+export default class OrderList extends wepy.page {
+  config = {
+    navigationBarTitleText: '订单明细'
+  };
+
+  components = {};
+
+  data = {
+    orderlist: []
+  };
+
+  methods = {};
+  onLoad() {}
+}
+</script>
