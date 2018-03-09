@@ -1,5 +1,5 @@
 <style lang="less">
-@import './font.wxss'; 
+@import './font.wxss';
 .container {
   height: 100%;
   width: 100%;
@@ -31,7 +31,17 @@ setStore(store);
 
 export default class extends wepy.app {
   config = {
-    pages: ['pages/orderDetail', 'pages/orderList', 'pages/index', 'pages/main'],
+    pages: [
+      'pages/index',
+      'pages/main',
+      'pages/orderList',
+      'pages/quoteRecord',
+      'pages/quote',
+      'pages/adjustQuoteProgram',
+      'pages/quoteSuccess',
+      'pages/confirmQuoteInfo'
+    ],
+    pages: ['pages/orderList', 'pages/index', 'pages/main'],
     window: {
       backgroundTextStyle: 'light',
       navigationBarBackgroundColor: '#ce1826',
