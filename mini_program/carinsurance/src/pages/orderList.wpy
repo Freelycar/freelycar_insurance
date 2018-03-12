@@ -1,14 +1,121 @@
 <style lang="less">
- 
+.order-list-box {
+  background: #fff;
+  padding: 30rpx;
+  border-bottom: 1px solid #d9d9dd;
+  margin-bottom: 10rpx;
+  .order-list {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    &.order-list-title {
+      margin-bottom: 25rpx;
+    }
+    &.order-list-item {
+      margin-bottom: 10rpx;
+    }
+    .list-item {
+      font-size: 28rpx;
+      color: #1e1e1e;
+      &.list-item-grey {
+        color: #b5b5b5;
+      }
+    }
+    .list-price {
+      font-size: 34rpx;
+      color: #f8b500;
+    }
+    .list-title {
+      color: #1e1e1e;
+      font-size: 32rpx;
+      .insurance-type {
+        margin-left: 10rpx;
+        color: #b5b5b5;
+        font-size: 28rpx;
+      }
+    }
+    .pay-btn {
+      padding: 9rpx 20rpx;
+      border-radius: 8px;
+      background: #f8b500;
+      color: #fff;
+    }
+    .pay-state {
+      color: #007bc7;
+      font-size: 28rpx;
+      display: flex;
+      align-items: center;
+      .orderlist_dispatch {
+        width: 30rpx;
+        height: 26rpx;
+        margin-right: 5rpx;
+      }
+      .orderlist_wait {
+        width: 32rpx;
+        height: 27rpx;
+        margin-right: 5rpx;
+      }
+      .orderlist_success {
+        width: 30rpx;
+        height: 26rpx;
+        margin-right: 5rpx;
+      }
+      .orderlist_check {
+        width: 25rpx;
+        height: 30rpx;
+        margin-right: 5rpx;
+      }
+    }
+  }
+}
 </style>
 <template>
-    <emptyList />
+    <!-- <emptyList /> -->
+    <view class="container">
+    <view class="order-list-box" @tap="goToDetail">
+      <view class="order-list order-list-title">
+        <view class="list-title">中国人保车险<text class="insurance-type">共选择<text style="color:#f8b500">5</text>个险种</text></view>
+        <view class="pay-btn">支付</view>
+      </view>
+      <view class="order-list order-list-item">
+        <text class="list-item">车牌号：苏A123R0</text>
+      </view>
+      <view class="order-list order-list-item">
+        <text class="list-item">订单号：8956484168746416</text>    
+        <text class="list-price">￥4280</text>    
+      </view>
+      <view class="order-list">
+        <text class="list-item">订单时间：2017-12-19</text>       
+        <text class="list-item list-item-grey">（可返￥1200现金红包）</text> 
+      </view>
+    </view>
+    <view class="order-list-box">
+      <view class="order-list order-list-title">
+        <view class="list-title">中国人保车险<text class="insurance-type">共选择<text style="color:#f8b500">5</text>个险种</text></view>
+        <!-- <view class="pay-state"><image class="orderlist_dispatch" src="../../assets/imgs/orderlist_dispatch.png"/>配送中</view>
+        <view class="pay-state"><image class="orderlist_wait" src="../../assets/imgs/orderlist_wait.png"/>待配送</view>
+        <view class="pay-state"><image class="orderlist_success" src="../../assets/imgs/orderlist_success.png"/>已投保</view>      -->
+        <view class="pay-state"><image class="orderlist_check" src="../../assets/imgs/orderlist_check.png"/>核保中</view>   
+      </view>
+      <view class="order-list order-list-item">
+        <text class="list-item">车牌号：苏A123R0</text>
+      </view>
+      <view class="order-list order-list-item">
+        <text class="list-item">订单号：8956484168746416</text>    
+        <text class="list-price">￥4280</text>    
+      </view>
+      <view class="order-list">
+        <text class="list-item">订单时间：2017-12-19</text>       
+        <text class="list-item list-item-grey">（可返￥1200现金红包）</text> 
+      </view>
+    </view>
+    </view>
 </template>
 
 <script>
 import wepy from 'wepy';
 import List from '../components/list'; // aliasFields example
-import EmptyOrderList from '../components/empty_list'
+import EmptyOrderList from '../components/empty_list';
 export default class OrderList extends wepy.page {
   config = {
     navigationBarTitleText: '车险订单'
@@ -24,8 +131,12 @@ export default class OrderList extends wepy.page {
   };
 
   methods = {
+    goToDetail() {
+      wepy.navigateTo({
+        url: `orderDetail?id=111`
+      })
+    }
   };
-  onLoad() {
-  }
+  onLoad() {}
 }
 </script>

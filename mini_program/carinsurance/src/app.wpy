@@ -1,5 +1,5 @@
 <style lang="less">
-@import './font.wxss'; 
+@import './font.wxss';
 .container {
   height: 100%;
   width: 100%;
@@ -12,15 +12,11 @@
   font-size: 34rpx;
   font-family: 'SimHei';
 }
-<<<<<<< HEAD
 
 page {
   height: 100%;
   width: 100%;
 }
-=======
-@import './font.wxss';
->>>>>>> 650e8755078ece6db82608089624995708a4fa72
 </style>
 
 <script>
@@ -35,17 +31,24 @@ setStore(store);
 
 export default class extends wepy.app {
   config = {
-<<<<<<< HEAD
-    pages: ['pages/index', 'pages/main', 'pages/orderList', 'pages/quoteRecord', 'pages/quote'],
-=======
-    pages: ['pages/orderList', 'pages/index', 'pages/main'],
->>>>>>> 650e8755078ece6db82608089624995708a4fa72
+    pages: [
+      'pages/orderDetail',
+      'pages/index',
+      'pages/main',
+      'pages/orderList',
+      'pages/quoteRecord',
+      'pages/quote',
+      'pages/adjustQuoteProgram',
+      'pages/quoteSuccess',
+      'pages/confirmQuoteInfo',
+      'pages/submitedUnderwriting'
+    ],
     window: {
       backgroundTextStyle: 'light',
       navigationBarBackgroundColor: '#ce1826',
       navigationBarTextStyle: '#fff',
       navigationBarTitleText: 'WeChat'
-    },
+    }, 
     tabBar: {
       list: [
         {

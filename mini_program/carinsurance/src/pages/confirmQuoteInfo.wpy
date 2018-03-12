@@ -1,0 +1,207 @@
+<style lang="less">
+.border-box{
+    box-sizing: border-box;
+}
+.scroll-view-bg{
+    height: 1120rpx;
+    width: 100%;
+}
+.header-img {
+  width: 100%;
+  height: 393rpx;
+}
+.renewal {
+  margin: 10rpx 30rpx;
+  background: white;
+  border-radius: 10rpx;
+  overflow: hidden;
+}
+.line {
+  height: 90rpx;
+  line-height: 90rpx;
+  padding: 0rpx 30rpx;
+  background: white;
+  border-bottom: 1rpx solid #efeff4;
+}
+.textColor-red {
+  color: #ff0000;
+}
+.item-bg {
+  background: #f2f2f2;
+  border-radius: 10rpx;
+  margin: 0 30rpx;
+  margin-bottom: 2rpx;
+}
+.flex-box-row {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+.flex-box-row input{
+    // line-height: 90rpx;
+    text-align: right;
+    vertical-align: middle;
+    margin-top: 20rpx;
+
+}
+.tag-view {
+  font-size: 25rpx;
+  margin-left: 10rpx;
+}
+.border-bottom {
+  border-bottom: 1rpx solid #efeff4;
+}
+.width-60percent {
+  width: 55%;
+  margin-right: 40rpx;
+}
+.footer{
+    position: fixed;
+    bottom: 0;
+    height: 100rpx;
+    width: 100%;
+    background: #efeff4;
+}
+.footer .total-price{
+    height: 100rpx;
+    width: 100%;
+    background: white;
+    line-height: 100rpx;
+}
+.footer .total-price-item{
+    padding: 0 30rpx;
+}
+.footer .total-price .next-step{
+    height: 100rpx;
+    width: 160px;
+    color:white;
+    text-align: center;
+    background: -webkit-gradient(linear, 0% 0%, 100% 0%,from(#f8b500), to(#e7760f))
+}
+</style>
+<template >
+    <view class="container border-box">
+        <scroll-view scroll-y="true" class="scroll-view-bg">
+            <image class='header-img' src='/assets/imgs/remind-bg.png'>
+            </image>
+            <view class='line border-bottom flex-box-row' style='margin-top: 0'>
+                <view>
+                    <i class='fa fa-file-text-o'></i> 收款信息</view>
+                <view class='textColor-red' >小易现金红包金额¥1460.28</view>
+            </view>
+            <view class='renewal'>
+                    <view class='line flex-box-row'>
+                        <view>开户人姓名<text class='textColor-red'>*</text></view>
+                        <input placeholder='请输入收款人姓名' />
+                    </view>
+                    <view class='line flex-box-row'>
+                        <view>收款人卡号<text class='textColor-red'>*</text></view>
+                        <input placeholder='请输入卡号' />
+                    </view>
+                    <view class='line flex-box-row'>
+                        <view>开户行<text class='textColor-red'>*</text></view>
+                        <input placeholder='请输入开户行' />
+                    </view>
+            </view>
+            <view class='line border-bottom' style='margin-top: 0'>
+                <view> <i class='fa fa-file-text-o'></i> 车辆信息</view>
+            </view>
+            <view class='renewal'>
+                    <view class='line flex-box-row'>
+                        <view>车牌号</view>
+                        <input placeholder='请输入车牌号' value='苏A123R0' />
+                    </view>
+                    <view class='line flex-box-row'>
+                        <view>车主姓名</view>
+                        <input placeholder='请输入姓名' />
+                    </view>
+                    <view class='line flex-box-row'>
+                        <view>身份证号<text class='textColor-red'>*</text></view>
+                        <input placeholder='请输入身份证号' />
+                    </view>
+                    <view class='line flex-box-row'>
+                        <view>车主电话</view>
+                        <input placeholder='请输入车主电话' />
+                    </view>
+            </view>
+            <view class='line border-bottom' style='margin-top: 0'>
+                <view><i class='fa fa-file-text-o'></i> 保单收货信息</view>
+            </view>
+            <view class='renewal'>
+                    <view class='line flex-box-row'>
+                        <view>收件人姓名<text class='textColor-red'>*</text></view>
+                        <input placeholder='请输入收货人姓名' />
+                    </view>
+                    <view class='line flex-box-row'>
+                        <view>手机号码<text class='textColor-red'>*</text></view>
+                        <input placeholder='请输入手机号码' />
+                    </view>
+                    <view class='line flex-box-row'>
+                        <view>地址<text class='textColor-red'>*</text></view>
+                        <input placeholder='请输入地址' />
+                    </view>
+                    <view class='line flex-box-row'>
+                        <view></view>
+                        <input placeholder='请输入详细地址' />
+                    </view>
+            </view>
+            <view class='line border-bottom' style='margin-top: 0'>
+                <view><i class='fa fa-file-text-o'></i> 发票信息</view>
+            </view>
+            <view class='renewal'>
+                    <view class='line flex-box-row'>
+                        <view>发票类型</view>
+                        <input placeholder='请选择发票类型' />
+                    </view>
+                    <view class='line flex-box-row'>
+                        <view>发票抬头</view>
+                        <input placeholder='请输入发票抬头' />
+                    </view>
+                    <view class='line flex-box-row'>
+                        <view>手机号码<text class='textColor-red'>*</text></view>
+                        <input placeholder='请输入手机号码' />
+                    </view>
+            </view>
+        </scroll-view>
+        <view class='footer'>
+            <view class='total-price flex-box-row'>
+                <view class='total-price-item'>
+                    合计: <text style='color: #f8b500'>¥4847.28</text>
+                </view>
+                <view class='next-step' @tap='confirm'>
+                    确认投保信息
+                </view>
+            </view>
+        </view>
+    </view>
+
+</template>
+
+<script>
+import wepy from 'wepy';
+import Toast from 'wepy-com-toast';
+
+export default class ConfirmQuoteInfo extends wepy.page {
+  config = {
+    navigationBarTitleText: '车险报价'
+  };
+  components = {
+    toast: Toast
+  };
+
+  data = {};
+
+  computed = {};
+
+  methods = {
+    getQuoteRecord() {},
+    confirm() {
+      wepy.navigateTo({
+        url: 'submitedUnderwriting'
+      });
+    }
+  };
+
+  onLoad() {}
+}
+</script>
