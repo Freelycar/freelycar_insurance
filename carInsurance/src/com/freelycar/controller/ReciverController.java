@@ -6,6 +6,7 @@ import com.freelycar.service.ReciverService;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -35,8 +36,8 @@ public class ReciverController
 	
 	//查询所有的Reciver	
 	@RequestMapping(value = "/list",method = RequestMethod.GET)
-	public Map<String,Object> listReciver(Reciver reciver, int _pageNumber,int _pageSize){
-		return reciverService.listReciver(reciver, _pageNumber, _pageSize);
+	public Map<String,Object> listReciver(@RequestBody(required =false) Reciver reciver, int page,int number){
+		return reciverService.listReciver(reciver, page, number);
 	}
 	
 	//根据id删除Reciver

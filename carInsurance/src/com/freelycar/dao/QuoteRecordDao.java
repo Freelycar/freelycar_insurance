@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.freelycar.entity.QuoteRecord;
+import com.freelycar.util.QueryUtils;
 import com.freelycar.util.SqlHelper;
 /**  
  *  操作数据库的dao层
@@ -40,16 +41,13 @@ public class QuoteRecordDao
 	//查询所有的QuoteRecord	
 	@SuppressWarnings("unchecked")
 	public List<QuoteRecord> listQuoteRecord(QuoteRecord quoteRecord,int from, int num){
-		String hql = SqlHelper.generatorSql(quoteRecord, QuoteRecord.class);
-		
-		Query query = getSession().createQuery(hql);
-		query = SqlHelper.getQuery(quoteRecord, QuoteRecord.class, query);
-		
-		if(from>=0 && num>0){
-			query = query.setFirstResult(from).setMaxResults(num);
+		QueryUtils utils = new QueryUtils(getSession(), "from QuoteRecord");
+		if(quoteRecord != null){
+			utils = utils.addStringLike("openId", quoteRecord.getOpenId());
 		}
-		
-		return query.list();
+		return utils.setFirstResult(from)
+			 .setMaxResults(num)
+			 .getQuery().list();
 	}
 	
 	
@@ -58,10 +56,11 @@ public class QuoteRecordDao
 	 * @return
 	 */
 	public long getQuoteRecordCount(QuoteRecord quoteRecord){
-	    String hql = SqlHelper.generatorSql(quoteRecord, QuoteRecord.class);
-	    hql = "select count(*)" + hql;
-	    long count = (long) getSession().createQuery(hql).uniqueResult();
-        return count;
+		QueryUtils utils = new QueryUtils(getSession(), "select count(*) from QuoteRecord");
+		if(quoteRecord != null){
+			utils = utils.addString("openId", quoteRecord.getOpenId());
+		}
+		return (long) utils.getQuery().uniqueResult();
 	}
 	
 	

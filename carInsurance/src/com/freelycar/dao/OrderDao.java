@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.freelycar.entity.InsuranceOrder;
+import com.freelycar.util.QueryUtils;
 import com.freelycar.util.SqlHelper;
 /**  
  *  操作数据库的dao层
@@ -40,16 +41,15 @@ public class OrderDao
 	//查询所有的Order	
 	@SuppressWarnings("unchecked")
 	public List<InsuranceOrder> listOrder(InsuranceOrder order,int from, int num){
-		String hql = SqlHelper.generatorSql(order, InsuranceOrder.class);
+		QueryUtils utils = new QueryUtils(getSession(), "from InsuranceOrder");
 		
-		Query query = getSession().createQuery(hql);
-		query = SqlHelper.getQuery(order, InsuranceOrder.class, query);
-		
-		if(from>=0 && num>0){
-			query = query.setFirstResult(from).setMaxResults(num);
+		if(order != null){
+			utils = utils.addString("state", order.getState());
 		}
 		
-		return query.list();
+		return utils.setFirstResult(from)
+			 .setMaxResults(num)
+			 .getQuery().list();
 	}
 	
 	
@@ -58,10 +58,11 @@ public class OrderDao
 	 * @return
 	 */
 	public long getOrderCount(InsuranceOrder order){
-	    String hql = SqlHelper.generatorSql(order, InsuranceOrder.class);
-	    hql = "select count(*)" + hql;
-	    long count = (long) getSession().createQuery(hql).uniqueResult();
-        return count;
+		QueryUtils utils = new QueryUtils(getSession(), "select count(*) from InsuranceOrder");
+		if(order != null){
+			utils = utils.addString("state", order.getState());
+		}
+		return (long) utils.getQuery().uniqueResult();
 	}
 	
 	
