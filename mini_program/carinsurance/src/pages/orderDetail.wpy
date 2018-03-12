@@ -136,7 +136,10 @@
       </view>
     </view>
     <view class="insurance-total">
-      <text class="insurance-discount">(<text class="insurance-discount-red">￥1460.28</text>现金红包已到账)<text>
+      <view class="insurance-discount">
+        (<text class="insurance-discount-red">￥1460.28</text>
+        现金红包已到账)
+      </view>
       <text class="insurance-total-price">合计：￥4582.28</text>
     </view>
     <view class="order-detail-title">
@@ -181,7 +184,6 @@
 
 <script>
 import wepy from 'wepy';
-
 export default class OrderDetail extends wepy.page {
   config = {
     navigationBarTitleText: '订单详情'
