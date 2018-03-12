@@ -180,7 +180,7 @@ export default class QuoteSuccess extends wepy.page {
   methods = {
     getQuoteRecord() {},
     gotoConfirmQuoteInfo() {
-      wx.navigateTo({
+      wepy.navigateTo({
         url: 'confirmQuoteInfo'
       });
     }

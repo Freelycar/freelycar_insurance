@@ -179,7 +179,7 @@ export default class ConfirmQuoteInfo extends wepy.page {
   methods = {
     getQuoteRecord() {},
     adjustQuoteProgram() {
-      wx.navigateTo({
+      wepy.navigateTo({
         url: 'adjustQuoteProgram'
       });
     }

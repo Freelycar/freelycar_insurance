@@ -161,7 +161,7 @@
     </view>
     <view class="order-detail-title">
       <text class="fa fa-file-text-o title-icon"/>发票信息
-    </view>
+    </view> 
     <view class="order-detail-way">
       <view class="insurance-title">
         <text>发票类型</text>
@@ -175,12 +175,13 @@
         <text>手机号码</text>
         <text>15188947877</text>
       </view>
-    </view>
+    </view> 
   </view>
 </template>
 
 <script>
 import wepy from 'wepy';
+
 export default class OrderDetail extends wepy.page {
   config = {
     navigationBarTitleText: '订单详情'
