@@ -189,7 +189,7 @@ export default class OrderDetail extends wepy.page {
   components = {
   };
 
-  data = {
+  data = { 
   };
 
   methods = {
