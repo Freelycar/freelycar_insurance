@@ -40,14 +40,15 @@ export default class extends wepy.app {
       'pages/quote',
       'pages/adjustQuoteProgram',
       'pages/quoteSuccess',
-      'pages/confirmQuoteInfo'
+      'pages/confirmQuoteInfo',
+      'pages/submitedUnderwriting'
     ],
     window: {
       backgroundTextStyle: 'light',
       navigationBarBackgroundColor: '#ce1826',
       navigationBarTextStyle: '#fff',
       navigationBarTitleText: 'WeChat'
-    },
+    }, 
     tabBar: {
       list: [
         {
