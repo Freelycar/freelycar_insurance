@@ -72,7 +72,7 @@
 <template>
     <!-- <emptyList /> -->
     <view class="container">
-    <view class="order-list-box">
+    <view class="order-list-box" @tap="goToDetail">
       <view class="order-list order-list-title">
         <view class="list-title">中国人保车险<text class="insurance-type">共选择<text style="color:#f8b500">5</text>个险种</text></view>
         <view class="pay-btn">支付</view>
@@ -130,7 +130,13 @@ export default class OrderList extends wepy.page {
     orderlist: []
   };
 
-  methods = {};
+  methods = {
+    goToDetail() {
+      wepy.navigateTo({
+        url: `orderDetail?id=111`
+      })
+    }
+  };
   onLoad() {}
 }
 </script>
