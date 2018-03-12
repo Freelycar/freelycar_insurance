@@ -33,9 +33,9 @@ setStore(store);
 export default class extends wepy.app {
   config = {
     pages: [
-      'pages/payment',
       'pages/index',
       'pages/main',
+      'pages/payment',
       'pages/orderDetail',
       'pages/orderList',
       'pages/quoteRecord',
