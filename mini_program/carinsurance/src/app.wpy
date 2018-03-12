@@ -32,6 +32,7 @@ setStore(store);
 export default class extends wepy.app {
   config = {
     pages: [
+      'pages/orderDetail',
       'pages/index',
       'pages/main',
       'pages/orderList',
@@ -41,7 +42,6 @@ export default class extends wepy.app {
       'pages/quoteSuccess',
       'pages/confirmQuoteInfo'
     ],
-    pages: ['pages/orderList', 'pages/index', 'pages/main'],
     window: {
       backgroundTextStyle: 'light',
       navigationBarBackgroundColor: '#ce1826',
