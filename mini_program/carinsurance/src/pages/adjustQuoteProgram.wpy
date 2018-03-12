@@ -255,7 +255,7 @@ export default class AdjustQuoteProgram extends wepy.page {
   methods = {
     getQuoteRecord() {},
     queryQuote() {
-        wx.navigateTo({
+        wepy.navigateTo({
             url: 'quoteSuccess'
         })
     }

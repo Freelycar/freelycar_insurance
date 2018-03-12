@@ -1,10 +1,9 @@
 <style lang="less">
-.quote-bg {
-  padding: 0rpx 30rpx;
-  box-sizing: border-box;
+.border-box{
+    box-sizing: border-box;
 }
 .scroll-view-bg{
-    height: 1020rpx;
+    height: 1120rpx;
     width: 100%;
 }
 .header-img {
@@ -12,20 +11,20 @@
   height: 393rpx;
 }
 .renewal {
-  margin: 10rpx 0rpx;
+  margin: 10rpx 30rpx;
   background: white;
   border-radius: 10rpx;
-  padding-bottom: 30rpx;
-  // overflow: hidden;
+  overflow: hidden;
 }
 .line {
   height: 90rpx;
   line-height: 90rpx;
   padding: 0rpx 30rpx;
   background: white;
+  border-bottom: 1rpx solid #efeff4;
 }
-.adjust-button {
-  color: #f8b500;
+.textColor-red {
+  color: #ff0000;
 }
 .item-bg {
   background: #f2f2f2;
@@ -37,6 +36,13 @@
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+}
+.flex-box-row input{
+    // line-height: 90rpx;
+    text-align: right;
+    vertical-align: middle;
+    margin-top: 20rpx;
+
 }
 .tag-view {
   font-size: 25rpx;
@@ -52,19 +58,9 @@
 .footer{
     position: fixed;
     bottom: 0;
-    height: 200rpx;
+    height: 100rpx;
     width: 100%;
     background: #efeff4;
-}
-.footer .return-money-view{
-    height: 90rpx;
-    width: 100%;
-    padding: 0rpx 30rpx;
-    line-height: 90rpx;
-    color: #ff0000;
-    font-size: 30rpx;
-    background: white;
-    margin-bottom: 10rpx;
 }
 .footer .total-price{
     height: 100rpx;
@@ -84,75 +80,96 @@
 }
 </style>
 <template >
-    <view class="container">
+    <view class="container border-box">
         <scroll-view scroll-y="true" class="scroll-view-bg">
             <image class='header-img' src='/assets/imgs/remind-bg.png'>
             </image>
             <view class='line border-bottom flex-box-row' style='margin-top: 0'>
                 <view>
-                    <i class='fa fa-file-text-o'></i> 确认投保方案</view>
-                <view class='adjust-button' @tap='adjustQuoteProgram'>调整续保方案
-                    <i class='fa  fa-angle-right'></i>
-                </view>
+                    <i class='fa fa-file-text-o'></i> 收款信息</view>
+                <view class='textColor-red' >小易现金红包金额¥1460.28</view>
             </view>
-            <view class="quote-bg">
-                <view class='renewal'>
+            <view class='renewal'>
                     <view class='line flex-box-row'>
-                        <view>强制险</view>
-                        <view>
-                            <i class='fa fa-calendar' style='color:lightgray'></i> 起保日期:2017-12-30</view>
+                        <view>开户人姓名<text class='textColor-red'>*</text></view>
+                        <input placeholder='请输入收款人姓名' />
                     </view>
-                    <view class='line item-bg flex-box-row'>
-                        <view> 交强险</view>
-                        <view>¥1847</view>
-                    </view>
-                    <view class='line item-bg flex-box-row'>
-                        <view> 车船税</view>
-                        <view>¥1847</view>
-                    </view>
-                </view>
-
-                <view class='renewal'>
                     <view class='line flex-box-row'>
-                        <view>商业险</view>
-                        <view>
-                            <i class='fa fa-calendar' style='color:lightgray'></i> 起保日期:2017-12-30</view>
+                        <view>收款人卡号<text class='textColor-red'>*</text></view>
+                        <input placeholder='请输入卡号' />
                     </view>
-                    <view class='line item-bg flex-box-row'>
-                        <view class='flex-box-row '>
-                            <view>车辆损失险</view>
-                            <view class='tag-view'>不计免赔</view>
-                        </view>
-                        <view>¥1847</view>
+                    <view class='line flex-box-row'>
+                        <view>开户行<text class='textColor-red'>*</text></view>
+                        <input placeholder='请输入开户行' />
                     </view>
-                    <view class='line item-bg flex-box-row'>
-                        <view class='flex-box-row '>
-                            <view>第三者责任险</view>
-                            <view class='tag-view'>100万 不计免赔</view>
-                        </view>
-                        <view>¥1847</view>
-                    </view>
-                    <view class='line item-bg flex-box-row'>
-                        <view class=' flex-box-row '>
-                            <view>玻璃破碎险</view>
-                            <view class='tag-view'>10万</view>
-                        </view>
-                        <view>¥1847</view>
-                    </view>
-                </view>
             </view>
-
+            <view class='line border-bottom' style='margin-top: 0'>
+                <view> <i class='fa fa-file-text-o'></i> 车辆信息</view>
+            </view>
+            <view class='renewal'>
+                    <view class='line flex-box-row'>
+                        <view>车牌号</view>
+                        <input placeholder='请输入车牌号' value='苏A123R0' />
+                    </view>
+                    <view class='line flex-box-row'>
+                        <view>车主姓名</view>
+                        <input placeholder='请输入姓名' />
+                    </view>
+                    <view class='line flex-box-row'>
+                        <view>身份证号<text class='textColor-red'>*</text></view>
+                        <input placeholder='请输入身份证号' />
+                    </view>
+                    <view class='line flex-box-row'>
+                        <view>车主电话</view>
+                        <input placeholder='请输入车主电话' />
+                    </view>
+            </view>
+            <view class='line border-bottom' style='margin-top: 0'>
+                <view><i class='fa fa-file-text-o'></i> 保单收货信息</view>
+            </view>
+            <view class='renewal'>
+                    <view class='line flex-box-row'>
+                        <view>收件人姓名<text class='textColor-red'>*</text></view>
+                        <input placeholder='请输入收货人姓名' />
+                    </view>
+                    <view class='line flex-box-row'>
+                        <view>手机号码<text class='textColor-red'>*</text></view>
+                        <input placeholder='请输入手机号码' />
+                    </view>
+                    <view class='line flex-box-row'>
+                        <view>地址<text class='textColor-red'>*</text></view>
+                        <input placeholder='请输入地址' />
+                    </view>
+                    <view class='line flex-box-row'>
+                        <view></view>
+                        <input placeholder='请输入详细地址' />
+                    </view>
+            </view>
+            <view class='line border-bottom' style='margin-top: 0'>
+                <view><i class='fa fa-file-text-o'></i> 发票信息</view>
+            </view>
+            <view class='renewal'>
+                    <view class='line flex-box-row'>
+                        <view>发票类型</view>
+                        <input placeholder='请选择发票类型' />
+                    </view>
+                    <view class='line flex-box-row'>
+                        <view>发票抬头</view>
+                        <input placeholder='请输入发票抬头' />
+                    </view>
+                    <view class='line flex-box-row'>
+                        <view>手机号码<text class='textColor-red'>*</text></view>
+                        <input placeholder='请输入手机号码' />
+                    </view>
+            </view>
         </scroll-view>
         <view class='footer'>
-            <view class='return-money-view'>
-                温馨提示:投保成功可获得小易现金红包¥1460.28 <i class='fa fa-question-circle-o' style='color:#328ebc'></i>
-            </view>
             <view class='total-price flex-box-row'>
                 <view class='total-price-item'>
                     合计: <text style='color: #f8b500'>¥4847.28</text>
                 </view>
-                <view class='next-step'>
-                    下一步
+                <view class='next-step' @tap='confirm'>
+                    确认投保信息
                 </view>
             </view>
         </view>
@@ -178,9 +195,9 @@ export default class ConfirmQuoteInfo extends wepy.page {
 
   methods = {
     getQuoteRecord() {},
-    adjustQuoteProgram() {
-      wx.navigateTo({
-        url: 'adjustQuoteProgram'
+    confirm() {
+      wepy.navigateTo({
+        url: 'submitedUnderwriting'
       });
     }
   };

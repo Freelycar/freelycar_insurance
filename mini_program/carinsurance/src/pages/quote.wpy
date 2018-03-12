@@ -236,6 +236,7 @@
 <script>
 import wepy from 'wepy';
 import Toast from 'wepy-com-toast';
+const insurances = require('../util/defultInsurances');
 
 export default class Quote extends wepy.page {
   config = {
@@ -245,19 +246,44 @@ export default class Quote extends wepy.page {
     toast: Toast
   };
 
-  data = {};
+  data = {
+    insurances: insurances
+  };
 
   computed = {};
 
   methods = {
     getQuoteRecord() {},
     adjustQuoteProgram() {
-      wx.navigateTo({
+      wepy.navigateTo({
             url: 'adjustQuoteProgram'
         })
+    },
+    selectInsuranceOrNot(code){
+      const insurances = this.data.insurances;
+      const index = code - 1;
+      insurances[index].isToubao = !insurances[index].isToubao;
+      insurances[index].compensation = insurances[index].isToubao;
+      this.setData({
+        insurances: insurances
+      })
+    }
+    selectCompensationOrNot(code) {
+      const insurances = this.data.insurances;
+      const index = code - 1;
+      if (insurances[index].isToubao) {
+        insurances[index].compensation = !insurances[index].compensation;
+        this.setData({
+          insurances: insurances
+        })
+      }
+      
+      
     }
   };
 
-  onLoad() {}
+  onLoad() {
+    console.log(this.insurances)
+  }
 }
 </script>
