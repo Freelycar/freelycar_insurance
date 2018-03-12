@@ -1,6 +1,5 @@
 package com.freelycar.dao; 
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.hibernate.Query;
@@ -10,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.freelycar.entity.Invition;
+import com.freelycar.util.QueryUtils;
 import com.freelycar.util.SqlHelper;
 /**  
  *  操作数据库的dao层
@@ -41,16 +41,16 @@ public class InvitionDao
 	//查询所有的Invition	
 	@SuppressWarnings("unchecked")
 	public List<Invition> listInvition(Invition invition,int from, int num){
-		String hql = SqlHelper.generatorSql(invition, Invition.class);
+		QueryUtils utils = new QueryUtils(getSession(), "from Invition");
 		
-		Query query = getSession().createQuery(hql);
-		query = SqlHelper.getQuery(invition, Invition.class, query);
-		
-		if(from>=0 && num>0){
-			query = query.setFirstResult(from).setMaxResults(num);
+		if(invition != null){
+			utils = utils.addStringLike("name", invition.getName())
+			 .addStringLike("invcode", invition.getInvcode());
 		}
 		
-		return query.list();
+		return utils.setFirstResult(from)
+			 .setMaxResults(num)
+			 .getQuery().list();
 	}
 	
 	
@@ -59,26 +59,20 @@ public class InvitionDao
 	 * @return
 	 */
 	public long getInvitionCount(Invition invition){
-	    String hql = SqlHelper.generatorSql(invition, Invition.class);
-	    hql = "select count(*)" + hql;
-	    long count = (long) getSession().createQuery(hql).uniqueResult();
-        return count;
+        QueryUtils utils = new QueryUtils(getSession(), "from Invition");
+		if(invition != null){
+			utils = utils.addStringLike("name", invition.getName())
+			 .addStringLike("invcode", invition.getInvcode());
+		}
+		return (long) utils.getQuery().uniqueResult();
+        
 	}
 	
 	
 	//根据id删除Invition
-	public boolean removeInvitionById(String id,String... ids){
-		String hql = "delete from Invition where id in :ids";
-		
-		List<String> idList  = new ArrayList<>();
-		if(ids != null){
-			for(String item : ids){
-				idList.add(item);
-			}
-		}
-		idList.add(id);
-		
-		int executeUpdate = getSession().createQuery(hql).setParameterList("ids", idList).executeUpdate();
+	public boolean removeInvitionById(List<Integer> ids){
+		String hql = "delete from Invition where id in (:ids)";
+		int executeUpdate = getSession().createQuery(hql).setParameterList("ids", ids).executeUpdate();
 		return executeUpdate>0; 
 	}
 	

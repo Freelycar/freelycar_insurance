@@ -32,8 +32,8 @@ public class ClientService
 	}
 	
     public Map<String,Object> getClientDetail(int id){
-    	clientDao.getClientById(id);
-    	return RESCODE.SUCCESS.getJSONRES();
+    	Client clientById = clientDao.getClientById(id);
+    	return RESCODE.SUCCESS.getJSONRES(clientById);
     }
 	
 	/**

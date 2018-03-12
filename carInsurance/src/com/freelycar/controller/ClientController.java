@@ -7,6 +7,7 @@ import com.freelycar.util.LeanCloudSms;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -34,8 +35,6 @@ public class ClientController
     	return LeanCloudSms.verifySMSCode(phone, code);
     }
 
-
-
     
     //增加一个Client
     @RequestMapping(value = "/detail",method = RequestMethod.GET)
@@ -51,8 +50,8 @@ public class ClientController
     }
     
 	//查询所有的Client	
-	@RequestMapping(value = "/list",method = RequestMethod.POST)
-	public Map<String,Object> listClient(Client client, int pages,int number){
+	@RequestMapping(value = "/list")
+	public Map<String,Object> listClient(@RequestBody(required = false) Client client, int pages,int number){
 		return clientService.listClient(client, pages, number);
 	}
 	

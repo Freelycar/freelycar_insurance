@@ -50,14 +50,11 @@ public class AdminService
     
     //登陆
     public Map<String,Object> login(String username, String password){
-    	Admin entity = new Admin();
-    	entity.setUsername(username);
-    	entity.setPassword(password);
-        List<Admin> list = adminDao.listAdmin(entity, 0, 0);
-        if (list==null || list.isEmpty()) {
+        Admin admin = adminDao.findAdminByUserAndPass(username, password);
+        if (admin==null) {
         	return RESCODE.NOT_FOUND.getJSONRES();
         } else {
-        	return RESCODE.SUCCESS.getJSONRES(list.get(0));
+        	return RESCODE.SUCCESS.getJSONRES(admin);
         }
     }
     

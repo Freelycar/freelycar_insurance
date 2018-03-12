@@ -74,12 +74,13 @@ public class CashbackRecordDao
 	
 	//更新CashbackRecord
 	public void updateCashbackRecord(CashbackRecord cashbackrecord){
-	    String hql = SqlHelper.genUpdateSql(cashbackrecord, CashbackRecord.class);
-		
-		Query query = getSession().createQuery(hql);
-		query = SqlHelper.getQuery(cashbackrecord, CashbackRecord.class, query);
-		
-		query.executeUpdate();
+		String hql = "update CashbackRecord set payee = :payee ,account = :account,bankname=:bankname where clientId = :clientId";
+		int executeUpdate = getSession().createQuery(hql)
+										.setString("payee", cashbackrecord.getPayee())
+										.setString("account", cashbackrecord.getAccount())
+										.setString("bankname", cashbackrecord.getBankname())
+										.setInteger("clientId", cashbackrecord.getClientId())
+										.executeUpdate();
 	    
 	}
     

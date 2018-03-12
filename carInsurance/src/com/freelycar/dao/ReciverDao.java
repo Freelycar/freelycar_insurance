@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.freelycar.entity.Reciver;
+import com.freelycar.util.QueryUtils;
 import com.freelycar.util.SqlHelper;
 /**  
  *  操作数据库的dao层
@@ -40,16 +41,17 @@ public class ReciverDao
 	//查询所有的Reciver	
 	@SuppressWarnings("unchecked")
 	public List<Reciver> listReciver(Reciver reciver,int from, int num){
-		String hql = SqlHelper.generatorSql(reciver, Reciver.class);
+		QueryUtils utils = new QueryUtils(getSession(), "from Client");
 		
-		Query query = getSession().createQuery(hql);
-		query = SqlHelper.getQuery(reciver, Reciver.class, query);
-		
-		if(from>=0 && num>0){
-			query = query.setFirstResult(from).setMaxResults(num);
+		if(reciver != null){
+			utils = utils
+			 .addInteger("clientId", reciver.getClientId());
 		}
 		
-		return query.list();
+		return utils.setFirstResult(from)
+			 .setMaxResults(num)
+			 .getQuery().list();
+		
 	}
 	
 	
@@ -58,10 +60,12 @@ public class ReciverDao
 	 * @return
 	 */
 	public long getReciverCount(Reciver reciver){
-	    String hql = SqlHelper.generatorSql(reciver, Reciver.class);
-	    hql = "select count(*)" + hql;
-	    long count = (long) getSession().createQuery(hql).uniqueResult();
-        return count;
+		QueryUtils utils = new QueryUtils(getSession(), "select count(*) from Client");
+		
+		if(reciver != null){
+			utils = utils.addInteger("clientId", reciver.getClientId());
+		}
+		return (long) utils.getQuery().uniqueResult();
 	}
 	
 	

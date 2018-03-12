@@ -74,12 +74,13 @@ public class InvoiceInfoDao
 	
 	//更新InvoiceInfo
 	public void updateInvoiceInfo(InvoiceInfo invoiceinfo){
-	    String hql = SqlHelper.genUpdateSql(invoiceinfo, InvoiceInfo.class);
-		
-		Query query = getSession().createQuery(hql);
-		query = SqlHelper.getQuery(invoiceinfo, InvoiceInfo.class, query);
-		
-		query.executeUpdate();
+		String hql = "update InvoiceInfo set invoiceType = :invoiceType ,invoiceTitle = :invoiceTitle,phone=:phone where clientId = :clientId";
+		int executeUpdate = getSession().createQuery(hql)
+										.setString("invoiceType", invoiceinfo.getInvoiceType())
+										.setString("invoiceTitle", invoiceinfo.getInvoiceTitle())
+										.setString("phone", invoiceinfo.getPhone())
+										.setInteger("clientId", invoiceinfo.getClientId())
+										.executeUpdate();
 	    
 	}
     

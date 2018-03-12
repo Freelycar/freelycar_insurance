@@ -52,6 +52,13 @@ public class AdminDao
 		return query.list();
 	}
 	
+	//根据用户名密码Admin	
+	public Admin findAdminByUserAndPass(String username,String password){
+		String hql = "from Admin where username = :username and password = :password";
+        Admin result = (Admin) getSession().createQuery(hql).setString("username", username).setString("password", password).uniqueResult();
+        return result;
+	}
+	
 	
 	/**
 	 * 查询Admin的总数

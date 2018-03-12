@@ -47,6 +47,7 @@ public class Client
     private String idCard;  //身份证号码;
 	
     private boolean transfer;  //是否过户;
+    private boolean toubao;  //是否过户;
 	
     private Long transferTime;  //过户日期;
 	
@@ -169,6 +170,15 @@ public class Client
     }  
       
 
+    public boolean isToubao() {
+		return toubao;
+	}
+    
+    public void setToubao(boolean toubao) {
+		this.toubao = toubao;
+	}
+    
+    
 	@Override
 	public String toString() {
 		return "Client [id=" + id 
