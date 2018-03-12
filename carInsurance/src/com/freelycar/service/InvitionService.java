@@ -27,7 +27,7 @@ public class InvitionService
     
     //增加一个Invition
     public Map<String,Object> saveInvition(Invition invition){
-		
+    	invition.setCreateTime(System.currentTimeMillis());
 		invitionDao.saveInvition(invition);
 		return RESCODE.SUCCESS.getJSONRES();
 	}
@@ -51,13 +51,9 @@ public class InvitionService
 	
 	
 	//根据id删除Invition
-	public Map<String,Object> removeInvitionById(String id,String... ids){
-		boolean res =  invitionDao.removeInvitionById(id,ids);
-		if (res) {
-			return RESCODE.SUCCESS.getJSONRES();
-		} else {
-			return RESCODE.DELETE_FAIL.getJSONRES();
-		}
+	public Map<String,Object> removeInvitionById(List<Integer> ids){
+		boolean res =  invitionDao.removeInvitionById(ids);
+		return res ? RESCODE.SUCCESS.getJSONRES() : RESCODE.DELETE_FAIL.getJSONRES();
 	}
 	
 	//更新Invition

@@ -6,6 +6,7 @@ import com.freelycar.service.CashbackRecordService;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -24,7 +25,7 @@ public class CashbackRecordController
     
     //增加一个CashbackRecord
     @RequestMapping(value = "/save",method = RequestMethod.POST)
-    public Map<String,Object> saveCashbackRecord(CashbackRecord cashbackrecord){
+    public Map<String,Object> saveCashbackRecord(@RequestBody CashbackRecord cashbackrecord){
 		return cashbackRecordService.saveCashbackRecord(cashbackrecord);
 	}
 	
@@ -42,7 +43,7 @@ public class CashbackRecordController
 	
 	//更新CashbackRecord
 	@RequestMapping(value = "/update",method = RequestMethod.POST)
-	public Map<String,Object> updateCashbackRecord(CashbackRecord cashbackrecord){
+	public Map<String,Object> updateCashbackRecord(@RequestBody CashbackRecord cashbackrecord){
 	    return cashbackRecordService.updateCashbackRecord(cashbackrecord);
 	}
     

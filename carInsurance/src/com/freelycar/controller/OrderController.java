@@ -3,6 +3,7 @@ package com.freelycar.controller;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -35,7 +36,7 @@ public class OrderController
 	
 	//查询所有的Order	
 	@RequestMapping(value = "/list",method = RequestMethod.GET)
-	public Map<String,Object> listOrder(InsuranceOrder order, int page,int number){
+	public Map<String,Object> listOrder(@RequestBody(required =false) InsuranceOrder order, int page,int number){
 		return orderService.listOrder(order, page, number);
 	}
 	

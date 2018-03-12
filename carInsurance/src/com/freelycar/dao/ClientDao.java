@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.freelycar.entity.Client;
+import com.freelycar.util.QueryUtils;
 import com.freelycar.util.SqlHelper;
 /**  
  *  操作数据库的dao层
@@ -40,16 +41,20 @@ public class ClientDao
 	//查询所有的Client	
 	@SuppressWarnings("unchecked")
 	public List<Client> listClient(Client client,int from, int num){
-		String hql = SqlHelper.generatorSql(client, Client.class);
+		QueryUtils utils = new QueryUtils(getSession(), "from Client");
 		
-		Query query = getSession().createQuery(hql);
-		query = SqlHelper.getQuery(client, Client.class, query);
-		
-		if(from>=0 && num>0){
-			query = query.setFirstResult(from).setMaxResults(num);
+		if(client != null){
+			utils = utils.addStringLike("idCard", client.getIdCard())
+			 .addString("licenseNumber", client.getLicenseNumber())
+			 .addString("nickName", client.getNickName())
+			 .addBoolean("transfer", client.getTransfer())
+			 .addBoolean("toubao", client.isToubao())
+			 .addString("phone", client.getPhone());
 		}
 		
-		return query.list();
+		return utils.setFirstResult(from)
+			 .setMaxResults(num)
+			 .getQuery().list();
 	}
 	
 	
@@ -58,10 +63,17 @@ public class ClientDao
 	 * @return
 	 */
 	public long getClientCount(Client client){
-	    String hql = SqlHelper.generatorSql(client, Client.class);
-	    hql = "select count(*)" + hql;
-	    long count = (long) getSession().createQuery(hql).uniqueResult();
-        return count;
+		QueryUtils utils = new QueryUtils(getSession(), "select count(*) from Client");
+		
+		if(client != null){
+			utils = utils.addStringLike("idCard", client.getIdCard())
+			 .addString("licenseNumber", client.getLicenseNumber())
+			 .addString("nickName", client.getNickName())
+			 .addBoolean("transfer", client.getTransfer())
+			 .addBoolean("toubao", client.isToubao())
+			 .addString("phone", client.getPhone());
+		}
+		return (long) utils.getQuery().uniqueResult();
 	}
 	
 	
