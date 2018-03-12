@@ -16,6 +16,7 @@
 page {
   height: 100%;
   width: 100%;
+  background: #efeff4;
 }
 </style>
 
@@ -32,9 +33,10 @@ setStore(store);
 export default class extends wepy.app {
   config = {
     pages: [
-      'pages/orderDetail',
+      'pages/payment',
       'pages/index',
       'pages/main',
+      'pages/orderDetail',
       'pages/orderList',
       'pages/quoteRecord',
       'pages/quote',
@@ -48,7 +50,7 @@ export default class extends wepy.app {
       navigationBarBackgroundColor: '#ce1826',
       navigationBarTextStyle: '#fff',
       navigationBarTitleText: 'WeChat'
-    }, 
+    },
     tabBar: {
       list: [
         {

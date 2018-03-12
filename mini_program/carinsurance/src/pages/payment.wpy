@@ -1,0 +1,227 @@
+<style lang="less">
+.payment-box {
+  position: relative;
+  height: auto !important;
+}
+.verify-code-bac {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  // justify-content: center;
+  width: 120%;
+  left: 50%;
+  background: #ce1826;
+  height: 600rpx;
+  overflow: visible;
+  border-radius: 100%;
+  transform: translate(-50%, -50%);
+  z-index: 0;
+  .freelycar_logo {
+    margin-top: 340rpx;
+    width: 286rpx;
+    height: 88rpx;
+  }
+  .pay-qrcode {
+    position: absolute;
+    top: 480rpx;
+    width: 180rpx;
+    height: 180rpx;
+    // margin-top: 340rpx;
+  }
+}
+.wechart-pay-box {
+  margin-top: 380rpx;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  .wechart_pay {
+    width: 286rpx;
+    height: 58rpx;
+  }
+  .wechart-pay-info {
+    margin-top: 25rpx;
+    font-size: 28rpx;
+    color: #ce1826;
+  }
+}
+.order-detail-way {
+  margin: 10rpx 30rpx;
+  padding: 0 30rpx;
+  border-radius: 8rpx;
+  background: #fff;
+  &.cost-info-box {
+    padding: 20rpx 30rpx;
+  }
+  .cost-info {
+    font-size: 32rpx;
+    line-height: 60rpx;
+  }
+  &.order-side-padding {
+    padding: 0;
+  }
+  .insurance-title {
+    display: flex;
+    justify-content: space-between;
+    line-height: 88rpx;
+    &.title-bottom-line {
+      padding: 0 30rpx;
+      border-bottom: 1px solid #dcdcdc;
+    }
+  }
+  .insurance-detail {
+    line-height: 88rpx;
+    .detail-line {
+      padding: 0 30rpx;
+      display: flex;
+      justify-content: space-between;
+      background: #f2f2f2;
+      margin-bottom: 1px;
+      .detail-line-info {
+        font-size: 24rpx;
+        margin-left: 10rpx;
+      }
+    }
+  }
+}
+.order-detail-title {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 25rpx;
+  padding:0 22rpx;
+  line-height: 88rpx;
+  background: #fff;
+  color: #1e1e1e;
+  .title-icon {
+    color: #1e1e1e;
+    margin-right: 10rpx;
+    border-bottom: 1px solid #b5b5b5;
+  }
+  .drag-down {
+    font-size: 22rpx;
+  }
+}  
+.insurance-total {
+  display: flex;
+  justify-content: space-between;
+  background: #fff;
+  margin: 10rpx 0;
+  padding: 0 30rpx;
+  font-size: 32rpx;
+  line-height: 88rpx;
+  .insurance-discount {
+    color: #b5b5b5;
+    .insurance-discount-red {
+      color: #ce1826;
+    }
+  }
+  .insurance-total-price {
+    color: #1e1e1e;
+  }
+}
+</style>
+<template>
+  <view class="container payment-box">
+    <view class="verify-code-bac">
+      <image class="freelycar_logo" src="../../assets/imgs/freelycar_logo_white.png"/>
+      <image class="pay-qrcode" src="../../assets/imgs/test_pay_QRcode.png"/>
+    </view>
+    <view class="wechart-pay-box">
+      <image class="wechart_pay" src="../../assets/imgs/wechart_pay.png"/>
+      <text class="wechart-pay-info">请于2017-12-31 19:41:00之前使用微信扫一扫进行支付！ </text>
+    </view>
+    <view class="order-detail-title">
+      <view><text class="fa fa-credit-card title-icon"/>结算信息</view>
+    </view>
+    <view class="order-detail-way cost-info-box">
+      <view class="cost-info">金额：￥4582.28</view>
+      <view class="cost-info">姓名：张蕾西</view>
+      <view class="cost-info">车牌号：苏A123R0</view>
+      <view class="cost-info">流水号：JSBX-41854551657489</view>
+      <view class="cost-info">缴费通知单号：41648941631</view>
+    </view>
+    <view class="order-detail-title" @tap="dragDown">
+      <view><text class="fa fa-file-text-o title-icon"/>投保方案</view>
+      <view wx:if="{{!down}}"><text class="fa fa-chevron-down drag-down"/></view>
+      <view wx:if="{{down}}"><text class="fa fa-chevron-up drag-down"/></view>
+    </view>
+    <view wx:if="{{down}}" class="order-detail-way">
+      <view class="insurance-title">
+        <text>强制险</text>
+        <text>起保日期：2017-12-30</text>
+      </view>
+      <view class="insurance-detail">
+        <view class="detail-line">
+          <text>交强险</text>
+          <text>￥950</text>
+        </view>
+        <view class="detail-line">
+          <text>车船税</text>
+          <text>￥300</text>
+        </view>
+      </view>
+      <view class="insurance-title">
+        <text></text>
+        <text>小计：￥1250</text>
+      </view>
+    </view>
+    <view wx:if="{{down}}" class="order-detail-way">
+      <view class="insurance-title">
+        <text>商业险</text>
+        <text>起保日期：2017-12-30</text>
+      </view>
+      <view class="insurance-detail">
+        <view class="detail-line">
+          <text>车辆损失险 <text class="detail-line-info">不计免赔</text></text>
+          <text>￥950</text>
+        </view>
+        <view class="detail-line">
+          <text>第三者责任险 <text class="detail-line-info">100万</text></text>
+          <text>￥300 </text>
+        </view>
+      </view>
+      <view class="insurance-title">
+        <text></text>
+        <text>小计：￥1250</text>
+      </view>
+    </view>
+    <view wx:if="{{down}}" class="insurance-total">
+      <view class="insurance-discount">
+        (<text class="insurance-discount-red">￥1460.28</text>
+        现金红包已到账)
+      </view>
+      <text class="insurance-total-price">合计：￥4582.28</text>
+    </view>
+  </view>
+</template>
+
+<script>
+import wepy from 'wepy';
+
+export default class Payment extends wepy.page {
+  config = {
+    navigationBarTitleText: '订单支付'
+  };
+
+  components = {
+  };
+
+  data = {
+    down: false
+  };
+
+  methods = {
+    goToDetail() {
+      wepy.navigateTo({
+        url: `orderDetail?id=111`
+      })
+    },
+    dragDown() {
+      this.down = !(this.down)
+      this.$apply()
+    }
+  };
+  onLoad() {}
+}
+</script>
