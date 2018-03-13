@@ -6,8 +6,9 @@ import java.util.Properties;
 
 public class Constant {
 
-    private static Properties prop = new Properties();
+    private static Properties prop;
     static {
+    	prop = new Properties();
         ClassLoader cl = Thread.currentThread().getContextClassLoader();  
         if (cl == null)
             cl = Constant.class.getClassLoader(); 
@@ -19,14 +20,8 @@ public class Constant {
         }
 
 
-      UPLOAD_URL = prop.getProperty("upload_url");
-      UPLOAD_FOLDER = prop.getProperty("upload_folder");    
       }
     
-    
-    
-    //上传文件 映射目录
-    public static final String UPLOAD_URL;
-    //上传文件目录
-    public static final String UPLOAD_FOLDER;
+    //骆驼加油的接口 key
+    public static final String LUOTUOKEY = prop.getProperty("luotuo_key");
 }

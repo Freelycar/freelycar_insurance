@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.freelycar.dao.InsuranceDao;
 import com.freelycar.entity.Client;
 import com.freelycar.entity.Insurance;
+import com.freelycar.util.Constant;
 import com.freelycar.util.HttpClientUtil;
 import com.freelycar.util.RESCODE;
 import com.freelycar.util.Tools;
@@ -28,13 +29,13 @@ public class InsuranceService
     @Autowired
 	private InsuranceDao insuranceDao;
     
-    
+    private String LUOTUOKEY = Constant.LUOTUOKEY;
     
     public Map<String, Object> queryLastYear(Client client){
     	Map<String,Object> param = new HashMap<>();
     	param.put("licenseNumber", client.getLicenseNumber());
     	param.put("ownerName", client.getOwnerName());
-    	JSONObject resultJson = HttpClientUtil.httpGet("http://wechat.bac365.com:8081/carRisk/car_risk/carApi/queryLatestPolicy?api_key=006374252f324aa19a76cc5c5e8eabe5HLDD", param);
+    	JSONObject resultJson = HttpClientUtil.httpGet("http://wechat.bac365.com:8081/carRisk/car_risk/carApi/queryLatestPolicy?api_key="+LUOTUOKEY, param);
     	
     	if(resultJson.has("errorMsg")){
     		String msg = resultJson.getJSONObject("errorMsg").getString("code");
@@ -94,7 +95,7 @@ public class InsuranceService
     	param.put("transferDate", client.getTransfer()?client.getTransferTime():0);
     	param.put("requestHeader", Tools.uuid()+"HLDD");
     	
-    	JSONObject resultJson = HttpClientUtil.httpGet("http://wechat.bac365.com:8081/carRisk/car_risk/carApi/ createEnquiry?api_key=006374252f324aa19a76cc5c5e8eabe5HLDD", param);
+    	JSONObject resultJson = HttpClientUtil.httpGet("http://wechat.bac365.com:8081/carRisk/car_risk/carApi/ createEnquiry?api_key="+LUOTUOKEY, param);
     	
     	if(resultJson.has("errorMsg")){
     		String msg = resultJson.getJSONObject("errorMsg").getString("code");
