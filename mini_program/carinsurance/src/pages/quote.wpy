@@ -201,7 +201,7 @@
         <view>
 
           <view class='line'>商业险</view>
-          <block wx:for='{{insurances}}'>
+          <block wx:for='{{insurances}}' wx:key='index'>
             <block wx:if='{{item.code == 1 || item.code == 2 || item.code == 6}}'>
               <view class='line item-bg flex-box-row'>
                 <block wx:if='{{item.code == 2 || item.code == 6}}'>
@@ -215,7 +215,7 @@
                   </view>
                 </block>
                 <block wx:else>
-                  <view>{{item.name}}</view>
+                  <view>{{item.name}}</view> 
                 </block>
                 <view class='flex-box-row'>
                   <view class="{{item.compensation ? 'bujimianpei  bujimianpei-select' : 'bujimianpei'}}" @tap="selectCompensationOrNot" data-code='{{item.code}}'>不计免赔</view>
@@ -287,7 +287,6 @@ export default class Quote extends wepy.page {
       const index = code - 1;
       if (insurances[index].isToubao) {
         const value = event.detail.value;
-        console.log(value);
         const selectAry = insurances[index].selectAry;
         insurances[index].amountStr = selectAry[value] || '';
         insurances[index].selectIndex = value;
@@ -299,7 +298,6 @@ export default class Quote extends wepy.page {
   };
 
   onLoad() {
-    console.log(this.insurances);
   }
 }
 </script>

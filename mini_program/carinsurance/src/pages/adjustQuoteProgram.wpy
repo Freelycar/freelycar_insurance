@@ -116,7 +116,7 @@
     </view>
     <view class='white-bg' style='margin-top:10rpx'>
       <view class='line hearder-bg' style='padding-left: 30rpx'>商业险</view>
-      <block wx:for='{{insurances}}'>
+      <block wx:for='{{insurances}}' wx:key='index'>
         <block wx:if='{{item.code >= 10}}'>
           <view class='line item-bg flex-box-row'>
             <view>{{item.name}}</view>
