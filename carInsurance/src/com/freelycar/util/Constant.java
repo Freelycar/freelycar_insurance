@@ -12,7 +12,7 @@ public class Constant {
         ClassLoader cl = Thread.currentThread().getContextClassLoader();  
         if (cl == null)
             cl = Constant.class.getClassLoader(); 
-        InputStream in = cl.getResourceAsStream("jdbc.properties");
+        InputStream in = cl.getResourceAsStream("config.properties");
         try {
             prop.load(in);
         } catch (IOException e1) {

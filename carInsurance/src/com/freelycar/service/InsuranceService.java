@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -33,29 +34,38 @@ public class InsuranceService
     
     public Map<String, Object> queryLastYear(Client client){
     	Map<String,Object> param = new HashMap<>();
-    	param.put("licenseNumber", client.getLicenseNumber());
+    	param.put("api_key", LUOTUOKEY);
     	param.put("ownerName", client.getOwnerName());
-    	JSONObject resultJson = HttpClientUtil.httpGet("http://wechat.bac365.com:8081/carRisk/car_risk/carApi/queryLatestPolicy?api_key="+LUOTUOKEY, param);
-    	
+    	param.put("licenseNumber", client.getLicenseNumber());
+    	JSONObject resultJson = HttpClientUtil.httpGet("http://wechat.bac365.com:8081/carRisk/car_risk/carApi/queryLatestPolicy", param);
     	if(resultJson.has("errorMsg")){
     		String msg = resultJson.getJSONObject("errorMsg").getString("code");
     		if("success".equals(msg)){
-    			JSONObject data = resultJson.getJSONObject("data");
-    			JSONObject biInfo = data.getJSONObject("biInfo");
-    			JSONObject ciInfo = data.getJSONObject("ciInfo");
-    			JSONArray array = new JSONArray();
-    			array.put(biInfo);
-    			array.put(ciInfo);
     			
+    			JSONObject data = null;
+				try { data = new JSONObject(resultJson.getString("data"));
+				} catch (JSONException e) { e.printStackTrace();
+				}
+				
+    			JSONArray array = new JSONArray();
+    			if(data.has("biInfo")){//商业险 
+    				JSONObject biInfo = data.getJSONObject("biInfo");
+    				array.put(biInfo);
+    			}
+    			if(data.has("ciInfo")){//商业险 
+    				JSONObject ciInfo = data.getJSONObject("ciInfo");
+    				array.put(ciInfo);
+    			}
     			List<Insurance> result = new ArrayList<>();
     			for(int i=0;i<array.length();i++){
     				JSONObject info = array.getJSONObject(i);
     				
     				String policyNo = info.getString("policyNo");
-    				String insuranceCompany = info.getString("companyName");
+    				String insuranceCompany = info.getString("insuranceCompany");
+    				int insuranceCompanyId = info.getInt("insuranceCompanyId");
     				String insuranceBeginTime = info.getString("insuranceBeginTime");
     				String insuranceEndTime = info.getString("insuranceEndTime");
-    				String insuranceJson = info.has("insuranceJson")?info.getString("insuranceJson"):null;
+    				String insuranceJson = info.has("insurances")?info.getJSONArray("insurances").toString():null;
     				
     				Insurance insurance = new Insurance();
     				insurance.setPolicyNo(policyNo);
@@ -63,11 +73,13 @@ public class InsuranceService
     				insurance.setInsurances(insuranceJson);
     				insurance.setInsuranceBeginTime(insuranceBeginTime);
     				insurance.setInsuranceCompany(insuranceCompany);
+    				insurance.setInsuranceCompanyId(insuranceCompanyId);
     				insurance.setInsuranceEndTime(insuranceEndTime);
     				insurance.setTotalLicenseNumber(client.getLicenseNumber());
+    				insurance.setLicenseNumber(client.getLicenseNumber());
+    				insurance.setOwnerName(client.getOwnerName());
     				insurance.setTotalOpenId(client.getOpenId());
     				saveInsurance(insurance);
-    				
     				result.add(insurance);
     			}
     			
@@ -84,6 +96,7 @@ public class InsuranceService
     //查询价格
     public Map<String,Object> queryPrice(Client client, Insurance insurance,String cityCode,String cityName){
     	Map<String,Object> param = new HashMap<>();
+    	param.put("api_key", LUOTUOKEY);
     	param.put("licenseNumber", client.getLicenseNumber());
     	param.put("ownerName", client.getOwnerName());
     	param.put("cityCode", cityCode);
@@ -95,7 +108,7 @@ public class InsuranceService
     	param.put("transferDate", client.getTransfer()?client.getTransferTime():0);
     	param.put("requestHeader", Tools.uuid()+"HLDD");
     	
-    	JSONObject resultJson = HttpClientUtil.httpGet("http://wechat.bac365.com:8081/carRisk/car_risk/carApi/ createEnquiry?api_key="+LUOTUOKEY, param);
+    	JSONObject resultJson = HttpClientUtil.httpGet("http://wechat.bac365.com:8081/carRisk/car_risk/carApi/ createEnquiry", param);
     	
     	if(resultJson.has("errorMsg")){
     		String msg = resultJson.getJSONObject("errorMsg").getString("code");

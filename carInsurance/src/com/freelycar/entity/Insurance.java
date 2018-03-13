@@ -3,17 +3,7 @@ package com.freelycar.entity;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-
+import javax.persistence.Lob;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
@@ -35,6 +25,7 @@ public class Insurance
 	
     private String policyNo;  //保单号;
 	
+    private String ownerName;  //车牌号码;
     private String licenseNumber;  //车牌号码;
 	
     private Integer insuranceCompanyId;  //保险公司ID;
@@ -50,6 +41,7 @@ public class Insurance
 	
     private boolean commercial;  //是否为商业险;
 	
+    @Lob
     private String insurances;  //商业险有险种列表方案！;
 	
     private String totalOpenId;  //属于同一个人的openId;
@@ -127,6 +119,13 @@ public class Insurance
         this.insuranceEndTime = insuranceEndTime;  
     }  
       
+    public String getOwnerName() {
+		return ownerName;
+	}
+    
+    public void setOwnerName(String ownerName) {
+		this.ownerName = ownerName;
+	}
 	
     public String getInsuranceBeginTime() {  
         return insuranceBeginTime;  

@@ -63,9 +63,9 @@ public class HttpClientUtil {
 			// 设置最大路由
 			poolConnManager.setDefaultMaxPerRoute(2);
 			// 根据默认超时限制初始化requestConfig
-			int socketTimeout = 10000;
-			int connectTimeout = 10000;
-			int connectionRequestTimeout = 10000;
+			int socketTimeout = 1000*60*5;
+			int connectTimeout = 1000*60*5;
+			int connectionRequestTimeout = 1000*60*5;
 			requestConfig = RequestConfig.custom().setConnectionRequestTimeout(connectionRequestTimeout)
 					.setSocketTimeout(socketTimeout).setConnectTimeout(connectTimeout).build();
 
@@ -108,7 +108,7 @@ public class HttpClientUtil {
 			String paramString = URLEncodedUtils.format(nvps, "utf-8");
 			url = url+"?"+paramString;
 		}
-		
+		System.out.println("请求的url: "+url);
 		HttpGet httpGet = new HttpGet(url);
 		httpGet.setHeader("Accept", "text/html,application/xhtml+xml,application/xml;");
 		httpGet.setHeader("Accept-Language", "zh-cn");
@@ -126,7 +126,7 @@ public class HttpClientUtil {
 			HttpEntity entity = response.getEntity();
 			result = EntityUtils.toString(entity, "utf-8");
 			EntityUtils.consume(entity);
-			System.out.println("get : "+result);
+			System.out.println("请求的结果: "+result);
 		} catch (IOException e) {
 			e.printStackTrace();
 		} finally {
