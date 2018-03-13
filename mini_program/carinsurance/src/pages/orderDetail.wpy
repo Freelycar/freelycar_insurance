@@ -1,6 +1,7 @@
 <style lang="less">
 .order-detail {
   padding: 30rpx 0;
+  color: #1e1e1e;
   height: auto !important;
 }
 .freelycar_logo {
@@ -41,10 +42,17 @@
   padding: 0 30rpx;
   border-radius: 8rpx;
   background: #fff;
+  &.order-side-padding {
+    padding: 0;
+  }
   .insurance-title {
     display: flex;
     justify-content: space-between;
     line-height: 88rpx;
+    &.title-bottom-line {
+      padding: 0 30rpx;
+      border-bottom: 1px solid #dcdcdc;
+    }
   }
   .insurance-detail {
     line-height: 88rpx;
@@ -78,6 +86,19 @@
   .insurance-total-price {
     color: #1e1e1e;
   }
+}
+.insurance-address {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+.order-confirm {
+  margin-top: 40rpx;
+  width: 100%;
+  text-align: center;
+  color: #fff;
+  padding: 25rpx 0;
+  background: #ce1826;
 }
 </style>
 <template>
@@ -115,7 +136,7 @@
         <text>小计：￥1250</text>
       </view>
     </view>
-      <view class="order-detail-way">
+    <view class="order-detail-way">
       <view class="insurance-title">
         <text>商业险</text>
         <text>起保日期：2017-12-30</text>
@@ -143,42 +164,45 @@
       <text class="insurance-total-price">合计：￥4582.28</text>
     </view>
     <view class="order-detail-title">
-      <text class="fa fa-file-text-o title-icon"/>保单收货信息
+      <text class="fa fa-address-card-o title-icon"/>保单收货信息
     </view>
-    <view class="order-detail-way">
-      <view class="insurance-title">
+    <view class="order-detail-way order-side-padding">
+      <view class="insurance-title title-bottom-line">
         <text>收件人姓名</text>
         <text>张蕾西</text>
       </view>
-      <view class="insurance-title">
+      <view class="insurance-title title-bottom-line">
         <text>手机号码</text>
         <text>15188947877</text>
       </view>
-      <view class="insurance-title">
+      <view class="insurance-title title-bottom-line">
         <text>地址</text>
-        <view>
+        <view class="insurance-address">
           <text>江苏省-南京市-玄武区</text>
           <text>苏宁青创园D206</text>
         </view>
       </view>
     </view>
     <view class="order-detail-title">
-      <text class="fa fa-file-text-o title-icon"/>发票信息
+      <text class="fa fa-newspaper-o title-icon"/>发票信息
     </view> 
-    <view class="order-detail-way">
-      <view class="insurance-title">
+    <view class="order-detail-way order-side-padding">
+      <view class="insurance-title title-bottom-line">
         <text>发票类型</text>
         <text>电子发票</text>
       </view>
-      <view class="insurance-title">
+      <view class="insurance-title title-bottom-line">
         <text>发票抬头</text>
         <text>张蕾西</text>
       </view>
-      <view class="insurance-title">
+      <view class="insurance-title title-bottom-line">
         <text>手机号码</text>
         <text>15188947877</text>
       </view>
     </view> 
+    <view class="order-confirm">
+      确认收货
+    </view>
   </view>
 </template>
 
@@ -192,7 +216,7 @@ export default class OrderDetail extends wepy.page {
   components = {
   };
 
-  data = {
+  data = { 
   };
 
   methods = {

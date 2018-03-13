@@ -90,8 +90,9 @@
   border-bottom: 1rpx solid #efeff4;
 }
 .width-60percent {
-  width: 55%;
-  //   margin-right: 40rpx;
+  max-width: 70%;
+  min-width: 60%;
+  // margin-right: 40rpx;
 }
 .white-bg {
   background: white;
@@ -115,149 +116,104 @@
     </view>
     <view class='white-bg' style='margin-top:10rpx'>
       <view class='line hearder-bg' style='padding-left: 30rpx'>商业险</view>
-      <view class='item-bg line  flex-box-row'>
-        <view>车辆损失险</view>
-        <view class='flex-box-row'>
-          <view class='bujimianpei bujimianpei-select'>不计免赔</view>
-          <view class='select-img' style='background-image: url(/assets/imgs/select-yes.png);'></view>
-        </view>
-      </view>
-      <view class='line item-bg flex-box-row'>
-        <view class='flex-box-row width-60percent'>
-          <view>第三者责任险</view>
-          <view class='flex-box-row select-type-button-bg-hide'>
-            <view class='select-type-button'>100万
-              <i class='fa fa-angle-down'></i>
-            </view>
-            <text>/座</text>
+      <block wx:for='{{insurances}}'>
+        <block wx:if='{{item.code >= 10}}'>
+          <view class='line item-bg flex-box-row'>
+            <view>{{item.name}}</view>
+            <view class='select-img' style="background-image: url({{item.isToubao? '/assets/imgs/select-yes.png' : '/assets/imgs/select-no.png'}});" @tap="selectInsuranceOrNot" data-code='{{item.code}}'></view>
           </view>
-        </view>
-        <view class='flex-box-row'>
-          <view class='bujimianpei'>不计免赔</view>
-          <view class='select-img' style='background-image: url(/assets/imgs/select-no.png);'></view>
-        </view>
-      </view>
-      <view class='line item-bg flex-box-row'>
-        <view class='flex-box-row width-60percent'>
-          <view>司机座位险</view>
-          <view class='flex-box-row select-type-button-bg'>
-            <view class='select-type-button'>1万
-              <i class='fa fa-angle-down'></i>
+        </block>
+        <block wx:else>
+          <view class='item-bg line  flex-box-row'>
+            <block wx:if="{{!item.amountStr}}">
+              <view>{{item.name}}</view>
+            </block>
+            <block wx:else>
+              <view class='flex-box-row width-60percent'>
+                <view>{{item.name}}</view>
+                <view class="{{item.unit === '' ? 'flex-box-row select-type-button-bg-hide' : 'flex-box-row select-type-button-bg'}}">
+                  <picker bindchange='selectAmountStr' data-code='{{item.code}}' value="{{item.selectIndex}}" range="{{item.selectAry}}" disabled='{{!item.isToubao}}'>
+                    <view class='select-type-button'>{{item.amountStr}}
+                      <i class='fa fa-angle-down'></i>
+                    </view>
+                  </picker>
+                  <text>{{item.unit || '/座'}}</text>
+                </view>
+              </view>
+            </block>
+            <view class='flex-box-row'>
+              <view class="{{item.compensation ? 'bujimianpei  bujimianpei-select' : 'bujimianpei'}}" @tap="selectCompensationOrNot" data-code='{{item.code}}'>不计免赔</view>
+              <view class='select-img' style="background-image: url({{item.isToubao? '/assets/imgs/select-yes.png' : '/assets/imgs/select-no.png'}});" @tap="selectInsuranceOrNot" data-code='{{item.code}}'></view>
             </view>
-            <text>/座</text>
           </view>
-        </view>
-        <view class='flex-box-row'>
-          <view class='bujimianpei'>不计免赔</view>
-          <view class='select-img' style='background-image: url(/assets/imgs/select-no.png);'></view>
-        </view>
-      </view>
-      <view class='line item-bg flex-box-row'>
-        <view class='flex-box-row width-60percent'>
-          <view>乘客座位险</view>
-          <view class='flex-box-row select-type-button-bg'>
-            <view class='select-type-button'>1万
-              <i class='fa fa-angle-down'></i>
-            </view>
-            <text>/座</text>
-          </view>
-        </view>
-        <view class='flex-box-row'>
-          <view class='bujimianpei'>不计免赔</view>
-          <view class='select-img' style='background-image: url(/assets/imgs/select-no.png);'></view>
-        </view>
-      </view>
-      <view class='item-bg line  flex-box-row'>
-        <view>盗抢险</view>
-        <view class='flex-box-row'>
-          <view class='bujimianpei'>不计免赔</view>
-          <view class='select-img' style='background-image: url(/assets/imgs/select-yes.png);'></view>
-        </view>
-      </view>
-      <view class='line item-bg flex-box-row'>
-        <view class=' flex-box-row width-60percent'>
-          <view>玻璃破碎险</view>
-          <view class='flex-box-row select-type-button-bg-hide'>
-            <view class='select-type-button'>国产
-              <i class='fa fa-angle-down'></i>
-            </view>
-            <text>/座</text>
-          </view>
-          
-        </view>
-        <view class='flex-box-row'>
-          <view class='bujimianpei'>不计免赔</view>
-          <view class='select-img' style='background-image: url(/assets/imgs/select-no.png);'></view>
-        </view>
-      </view>
-      <view class='line item-bg flex-box-row'>
-        <view class=' flex-box-row width-60percent'>
-          <view>自燃险</view>
-          <view class='flex-box-row select-type-button-bg-hide'>
-            <view class='select-type-button'>2000
-              <i class='fa fa-angle-down'></i>
-            </view>
-            <text>/座</text>
-          </view>
-          <!-- <view class='select-type-button'>国产<i class='fa fa-angle-down'></i></view> -->
-        </view>
-        <view class='flex-box-row'>
-          <view class='bujimianpei'>不计免赔</view>
-          <view class='select-img' style='background-image: url(/assets/imgs/select-no.png);'></view>
-        </view>
-      </view>
-      <view class='item-bg line  flex-box-row'>
-        <view>划痕险</view>
-        <view class='flex-box-row'>
-          <view class='bujimianpei'>不计免赔</view>
-          <view class='select-img' style='background-image: url(/assets/imgs/select-yes.png);'></view>
-        </view>
-      </view>
-      <view class='item-bg line  flex-box-row'>
-        <view>涉水险</view>
-        <view class='flex-box-row'>
-          <view class='bujimianpei'>不计免赔</view>
-          <view class='select-img' style='background-image: url(/assets/imgs/select-yes.png);'></view>
-        </view>
-      </view>
-      <view class='line item-bg flex-box-row'>
-        <view> 制定维修厂</view>
-        <view class='select-img' style='background-image: url(/assets/imgs/select-no.png);'></view>
-      </view>
-      <view class='line item-bg flex-box-row'>
-        <view> 无法找到第三方责任险</view>
-        <view class='select-img' style='background-image: url(/assets/imgs/select-no.png);'></view>
-      </view>
+        </block>
+      </block>
     </view>
-    <view class='reset-program-button'>
+    <view class='reset-program-button' @tap='reset'>
       <i class='fa fa-undo'></i>重置投保方案</view>
-    <button class='get-price-button' @tap='queryQuote'>完成调整，立即报价</button>
+    <button class="{{this.waitTime > 0 ? 'get-price-button-loading get-price-button' : 'get-price-button'}}" @tap='queryQuote'>{{this.waitTime > 0 ? '报价中......90s' : '完成调整，立即报价'}}</button>
   </scroll-view>
 
 </template>
 
 <script>
 import wepy from 'wepy';
-import Toast from 'wepy-com-toast';
+const defultInsurances = require('../util/defultInsurances');
 
 export default class AdjustQuoteProgram extends wepy.page {
   config = {
     navigationBarTitleText: '车险报价'
   };
-  components = {
-    toast: Toast
-  };
+  components = {};
 
-  data = {};
+  data = {
+    insurances: JSON.parse(JSON.stringify(defultInsurances)),
+    waitTime: 0,
+    timer: null
+  };
 
   computed = {};
 
   methods = {
-    getQuoteRecord() {},
     queryQuote() {
-        wepy.navigateTo({
-            url: 'quoteSuccess'
-        })
+      this.waitingForquote();
+      // wepy.navigateTo({
+      //   url: 'quoteSuccess'
+      // });
+    },
+    selectInsuranceOrNot(event) {
+      const code = event.currentTarget.dataset.code;
+      const insurances = this.data.insurances;
+      const index = code - 1;
+      insurances[index].isToubao = !insurances[index].isToubao;
+      insurances[index].compensation = insurances[index].isToubao;
+      this.insurances = insurances;
+    },
+    selectCompensationOrNot(event) {
+      const code = event.currentTarget.dataset.code;
+      const insurances = this.data.insurances;
+      const index = code - 1;
+      if (insurances[index].isToubao) {
+        insurances[index].compensation = !insurances[index].compensation;
+        this.insurances = insurances;
+      }
+    },
+    selectAmountStr(event) {
+      const code = event.currentTarget.dataset.code;
+
+      const insurances = this.data.insurances;
+      const index = code - 1;
+      if (insurances[index].isToubao) {
+        const value = event.detail.value;
+        const selectAry = insurances[index].selectAry;
+        insurances[index].amountStr = selectAry[value] || '';
+        insurances[index].selectIndex = value;
+        this.insurances = insurances;
+      }
+    },
+    reset() {
+      const data = JSON.parse(JSON.stringify(defultInsurances));
+      this.insurances = data;
     }
   };
 

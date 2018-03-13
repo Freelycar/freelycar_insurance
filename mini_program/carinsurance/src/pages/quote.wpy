@@ -11,7 +11,7 @@
 .city {
   color: gray;
   font-size: 30rpx;
-} 
+}
 .lastyear-bg {
   margin-top: 30rpx;
   background: #2b2b2b;
@@ -69,50 +69,50 @@
   vertical-align: bottom;
   font-size: 35rpx;
 }
-.renewal{
+.renewal {
   margin: 10rpx 0rpx;
   background: white;
   border-radius: 10rpx;
   padding-bottom: 30rpx;
   // overflow: hidden;
 }
-.renewal .line{
+.renewal .line {
   height: 90rpx;
   line-height: 90rpx;
   padding: 0rpx 30rpx;
 }
-.adjust-button{
+.adjust-button {
   color: #f8b500;
 }
-.item-bg{
+.item-bg {
   background: #f2f2f2;
   border-radius: 10rpx;
   margin: 0 30rpx;
   margin-bottom: 2rpx;
 }
-.get-price-button{
-    margin: 20rpx 0rpx;
-    background: #f8b500;
-    color: white;
-    text-align: center;
-    border-radius: 10rpx;
-    width: auto; 
-    height: 90rpx;
-    margin-bottom: 60rpx;
+.get-price-button {
+  margin: 20rpx 0rpx;
+  background: #f8b500;
+  color: white;
+  text-align: center;
+  border-radius: 10rpx;
+  width: auto;
+  height: 90rpx;
+  margin-bottom: 60rpx;
 }
-.flex-box-row{
+.flex-box-row {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
 }
 
-.select-img{
+.select-img {
   height: 50rpx;
   width: 50rpx;
   margin-top: 20rpx;
   background-size: 100%;
 }
-.bujimianpei{
+.bujimianpei {
   background: #b5b5b5;
   color: white;
   margin-right: 30rpx;
@@ -123,11 +123,11 @@
   padding: 0rpx 10rpx;
   border-radius: 10rpx;
 }
-.bujimianpei-select{
+.bujimianpei-select {
   background: #f8b500;
 }
 
-.select-type-button{
+.select-type-button {
   color: #b5b5b5;
   border: 1rpx solid #b5b5b5;
   height: 50rpx;
@@ -139,16 +139,18 @@
   min-width: 75rpx;
   text-align: center;
 }
-.border-bottom{
-  border-bottom: 1rpx solid #efeff4
+.border-bottom {
+  border-bottom: 1rpx solid #efeff4;
 }
-.width-60percent{
-  width: 55%;
+.width-60percent {
+  // width: 55%;
+  max-width: 65%;
+  min-width: 55%;
   margin-right: 40rpx;
 }
 </style>
 <template >
-  <scroll-view  scroll-y="true" class="container quote-bg">
+  <scroll-view scroll-y="true" class="container quote-bg">
     <view class='basicinfo city'>南京市</view>
     <view class='basicinfo'>所有人: 臭傻逼</view>
     <view class='basicinfo'>车牌号码: 苏A123R0</view>
@@ -179,56 +181,54 @@
           </view>
         </view>
       </view>
-      
+
     </view>
     <view class='renewal'>
-        <view class='line border-bottom flex-box-row'>
-          <view >续保方案</view>
-          <view class='adjust-button' @tap='adjustQuoteProgram'>调整续保方案 <i class='fa  fa-angle-right'></i></view>
+      <view class='line border-bottom flex-box-row'>
+        <view>续保方案</view>
+        <view class='adjust-button' @tap='adjustQuoteProgram'>调整续保方案
+          <i class='fa  fa-angle-right'></i>
         </view>
-        <view >
-          <view>
-            <view class='line'>强制险</view>
-            <view class='line item-bg flex-box-row'>
-              <view> 交强险、车船税</view>
-              <view class='select-img' style='background-image: url(/assets/imgs/select-defult.png);'></view>
-            </view>
-          </view>
-          <view>
-            <view class='line'>商业险</view>
-            <view class='line item-bg flex-box-row'>
-              <view>车辆损失险</view>
-              <view class='flex-box-row'>
-                <view class='bujimianpei bujimianpei-select'>不计免赔</view>
-                <view class='select-img' style='background-image: url(/assets/imgs/select-yes.png);'></view>
-              </view>
-            </view>
-            <view class='line item-bg flex-box-row'>
-              <view class='flex-box-row width-60percent'>
-                <view>第三者责任险</view>
-                <view class='select-type-button'>100万<i class='fa fa-angle-down'></i></view>
-              </view>
-              <view class='flex-box-row'>
-                <view class='bujimianpei'>不计免赔</view>
-                <view class='select-img' style='background-image: url(/assets/imgs/select-no.png);'></view>
-              </view>
-            </view>
-            <view class='line item-bg flex-box-row'>
-              <view class=' flex-box-row width-60percent'>
-                <view>玻璃破碎险</view>
-                 <view class='select-type-button'>国产<i class='fa fa-angle-down'></i></view>
-              </view>
-              <view class='flex-box-row'>
-                <view class='bujimianpei'>不计免赔</view>
-                <view class='select-img' style='background-image: url(/assets/imgs/select-no.png);'></view>
-              </view>
-              
-            </view>
-          </view>
-        </view>
-        
       </view>
-      <button class='get-price-button'>人保报价</button>
+      <view>
+        <view>
+          <view class='line'>强制险</view>
+          <view class='line item-bg flex-box-row'>
+            <view> 交强险、车船税</view>
+            <view class='select-img' style='background-image: url(/assets/imgs/select-defult.png);'></view>
+          </view>
+        </view>
+        <view>
+
+          <view class='line'>商业险</view>
+          <block wx:for='{{insurances}}'>
+            <block wx:if='{{item.code == 1 || item.code == 2 || item.code == 6}}'>
+              <view class='line item-bg flex-box-row'>
+                <block wx:if='{{item.code == 2 || item.code == 6}}'>
+                  <view class='flex-box-row width-60percent'>
+                    <view>{{item.name}}</view>
+                    <picker bindchange='selectAmountStr' data-code='{{item.code}}' value="{{item.selectIndex}}" range="{{item.selectAry}}" disabled='{{!item.isToubao}}'>
+                      <view class='select-type-button'>{{item.amountStr}}
+                        <i class='fa fa-angle-down'></i>
+                      </view>
+                    </picker>
+                  </view>
+                </block>
+                <block wx:else>
+                  <view>{{item.name}}</view>
+                </block>
+                <view class='flex-box-row'>
+                  <view class="{{item.compensation ? 'bujimianpei  bujimianpei-select' : 'bujimianpei'}}" @tap="selectCompensationOrNot" data-code='{{item.code}}'>不计免赔</view>
+                  <view class='select-img' style="background-image: url({{item.isToubao? '/assets/imgs/select-yes.png' : '/assets/imgs/select-no.png'}});" @tap="selectInsuranceOrNot" data-code='{{item.code}}'></view>
+                </view>
+              </view>
+            </block>
+          </block>
+        </view>
+      </view>
+
+    </view>
+    <button class='get-price-button'>人保报价</button>
   </scroll-view>
 
 </template>
@@ -256,34 +256,50 @@ export default class Quote extends wepy.page {
     getQuoteRecord() {},
     adjustQuoteProgram() {
       wepy.navigateTo({
-            url: 'adjustQuoteProgram'
-        })
+        url: 'adjustQuoteProgram'
+      });
     },
-    selectInsuranceOrNot(code){
+    selectInsuranceOrNot(event) {
+      const code = event.currentTarget.dataset.code;
       const insurances = this.data.insurances;
       const index = code - 1;
       insurances[index].isToubao = !insurances[index].isToubao;
       insurances[index].compensation = insurances[index].isToubao;
       this.setData({
         insurances: insurances
-      })
-    }
-    selectCompensationOrNot(code) {
+      });
+    },
+    selectCompensationOrNot(event) {
+      const code = event.currentTarget.dataset.code;
       const insurances = this.data.insurances;
       const index = code - 1;
       if (insurances[index].isToubao) {
         insurances[index].compensation = !insurances[index].compensation;
         this.setData({
           insurances: insurances
-        })
+        });
       }
-      
-      
+    },
+    selectAmountStr(event) {
+      const code = event.currentTarget.dataset.code;
+
+      const insurances = this.data.insurances;
+      const index = code - 1;
+      if (insurances[index].isToubao) {
+        const value = event.detail.value;
+        console.log(value);
+        const selectAry = insurances[index].selectAry;
+        insurances[index].amountStr = selectAry[value] || '';
+        insurances[index].selectIndex = value;
+        this.setData({
+          insurances: insurances
+        });
+      }
     }
   };
 
   onLoad() {
-    console.log(this.insurances)
+    console.log(this.insurances);
   }
 }
 </script>

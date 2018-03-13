@@ -1,219 +1,225 @@
 <style lang="less">
 .banner-bg {
-    height: 373rpx;
-    /* width: 750rpx; */
+  height: 373rpx;
+  /* width: 750rpx; */
 }
 
-.quote-bg{
-    background: white;
+.quote-bg {
+  background: white;
 }
 
 .line {
-    display: flex;
-    flex-direction: row;
-    height: 92rpx;
-    width: 750rpx;
-    border-bottom: 1px solid #e7e7e7;
-    line-height: 92rpx;
-    padding-left: 15rpx;
+  display: flex;
+  flex-direction: row;
+  height: 92rpx;
+  width: 750rpx;
+  border-bottom: 1px solid #e7e7e7;
+  line-height: 92rpx;
+  padding-left: 15rpx;
 }
 
 .line .line-key {
-    width: 210rpx;
-    text-align: center;
-    display: inline-block;
-    margin-right: 20rpx;
+  width: 210rpx;
+  text-align: center;
+  display: inline-block;
+  margin-right: 20rpx;
 }
 
 .region-select {
-    width: 120rpx;
-    text-align: center;
-    margin-right: 10rpx;
+  width: 120rpx;
+  text-align: center;
+  margin-right: 10rpx;
 }
-.region-select .region-select-icon{
-    color:#b2b2b2;
+.region-select .region-select-icon {
+  color: #b2b2b2;
 }
 
 .line .line-input {
-    width: 345rpx;
-    vertical-align: middle;
-    margin-top: 20rpx;
+  width: 345rpx;
+  vertical-align: middle;
+  margin-top: 20rpx;
 }
 
-.right-text{
-    text-align: right;
-    font-size: 28rpx;
-    color: #b2b2b2;
-    padding: 5rpx 30rpx;
+.right-text {
+  text-align: right;
+  font-size: 28rpx;
+  color: #b2b2b2;
+  padding: 5rpx 30rpx;
 }
-.right-text  .left{
-    float:left;
-    // margin-left: 30rpx;
-    color: #007bc7;
+.right-text .left {
+  float: left;
+  // margin-left: 30rpx;
+  color: #007bc7;
 }
 
-.down-icon{
-    width: 30rpx;
-    height: 30rpx;
+.down-icon {
+  width: 30rpx;
+  height: 30rpx;
 }
 .recently-quoted {
-    margin-top: 70rpx;  
-    margin-right: 30rpx;
-    color: #007bc7;
-    font-size: 25rpx;
-    text-align: right;
+  margin-top: 70rpx;
+  margin-right: 30rpx;
+  color: #007bc7;
+  font-size: 25rpx;
+  text-align: right;
 }
 
-.confirm-button{
-    margin: 5rpx 30rpx 10rpx 30rpx; 
-    background: #f8b500;
-    color: white;
-    text-align: center;
-    border-radius: 10rpx;
-    width: auto; 
-    height: 90rpx;
+.confirm-button {
+  margin: 5rpx 30rpx 10rpx 30rpx;
+  background: #f8b500;
+  color: white;
+  text-align: center;
+  border-radius: 10rpx;
+  width: auto;
+  height: 90rpx;
 }
 
-.quote-record-bg{
-    margin: 10rpx 30rpx 30rpx 30rpx;
-    font-size: 25rpx;
+.quote-record-bg {
+  margin: 10rpx 30rpx 30rpx 30rpx;
+  font-size: 25rpx;
 }
 
 .cooperation-agencies-title {
-    height: 90rpx;
-    line-height: 90rpx;
-    padding: 0 30rpx; 
-    background: white;
-    border-bottom: 1rpx #b2b2b2 solid;
-    margin-top: 20rpx;
+  height: 90rpx;
+  line-height: 90rpx;
+  padding: 0 30rpx;
+  background: white;
+  border-bottom: 1rpx #b2b2b2 solid;
+  margin-top: 20rpx;
 }
 
 .cooperation-agencies {
-    height: 250rpx;
-    padding: 20rpx 30rpx;
-    padding-right: 0rpx;
-    line-height: 140rpx;
-    background: white;
-    margin-bottom: 0rpx;
+  height: 250rpx;
+  padding: 20rpx 30rpx;
+  padding-right: 0rpx;
+  line-height: 140rpx;
+  background: white;
+  margin-bottom: 0rpx;
 }
 
 .cooperation-agencies-img {
-    display: inline-block;
-    height: 115rpx;
-    width: 215rpx;
-    vertical-align: top;
-    margin-right: 25rpx;
+  display: inline-block;
+  height: 115rpx;
+  width: 215rpx;
+  vertical-align: top;
+  margin-right: 25rpx;
 }
 
 .cooperation-agencies-text {
-    display: inline-block;
-    vertical-align: top;
-    line-height: 60rpx;
-    margin-left: 50rpx;
+  display: inline-block;
+  vertical-align: top;
+  line-height: 60rpx;
+  margin-left: 50rpx;
 }
 
 .call-button {
-    /* display: flex;
+  /* display: flex;
     flex-direction: column; */
-    position: fixed;
-    right: 10rpx;
-    bottom: 30rpx;
+  position: fixed;
+  right: 10rpx;
+  bottom: 30rpx;
 }
-.call-button-img{
-    height: 120rpx;
-    width: 120rpx;
-}
-
-.modal-tips{
-    font-size: 25rpx;
-    color: #f8b500;
+.call-button-img {
+  height: 120rpx;
+  width: 120rpx;
+  display: inline-block;
+  overflow: hidden;
 }
 
-.modal input{
-    font-size: 30rpx;
-    margin-top: 20rpx;
-    padding-bottom: 10rpx;
-    border-bottom: 1px solid lightgray;
-}
-.modal .noborder{
-    width: 70%;
-    border-bottom: none;
-    display: inline-block;
-    // float: left;
-}
-.modal .modal-getcode{
-    vertical-align: middle;
-    margin-top: -60rpx;
-    display: inline-block;
-    color: #007bc7;
+.modal-tips {
+  font-size: 25rpx;
+  color: #f8b500;
 }
 
+.modal input {
+  font-size: 30rpx;
+  margin-top: 20rpx;
+  padding-bottom: 10rpx;
+  border-bottom: 1px solid lightgray;
+}
+.modal .noborder {
+  width: 70%;
+  border-bottom: none;
+  display: inline-block;
+  // float: left;
+}
+.modal .modal-getcode {
+  vertical-align: middle;
+  margin-top: -60rpx;
+  display: inline-block;
+  color: #007bc7;
+}
 </style>
 <template >
     <view class="container">
-    <swiper indicator-dots="true" autoplay="true" interval="5000" duration="1000" class="banner-bg">
-        <block wx:for="{{imgUrls}}" wx:key='index'>
-            <swiper-item>
-                <image src="{{item}}" class="slide-image" style="height:373rpx;width:750rpx" />
-            </swiper-item>
-        </block>
-    </swiper>
-    <view class='quote-bg'>
-        <view class='line' style="flex-direction:row;">
-            <div class='line-key'>车牌号码
-                <text style="color: red">*</text>
-            </div>
-             <picker bindchange="bindPickerChange" value="{{index}}" range="{{array}}">
-                <view class='region-select'>{{region}} 
-                  <!-- <image src='../../assets/imgs/arrow_down.png' class='down-icon'></image> -->
-                  <text class='region-select-icon'>│</text></view>
-            </picker>
-            
-            <input class='line-input' placeholder='请输入车牌号码' bindinput="bindNumberInput" />
-        </view>
-        <view class='line' style="flex-direction:row;">
-            <view class='line-key'>车主姓名
-                <text style="color: red">*</text>
-            </view>
-            <input class='line-input' placeholder='请输入车主姓名' bindinput="bindNameInput" />
-        </view>
-        <view class='right-text'>
-          <picker bindchange='transferCarSelected' value="{{isTransferCar}}" range="{{transferCarArray}}"><view class='left'><text >是否过户车 </text><i class='fa fa-angle-down'></i></view></picker>
-          您的信息将被严格保密
-          </view>
-        <view class='recently-quoted'><text @tap="checkQouteRecord" >最近报价记录</text></view>
-        <button class='confirm-button' @tap="getQuote">获取报价</button>
-        <view class='quote-record-bg'>
-            <text style="color: red">*</text>
-            现仅开通南京市内个人9座以下客车人保在线报价，其他情况可人工咨询
-            </view>
-    </view>
-    <view class='cooperation-agencies-title'>
-        <text>合作机构</text>
-    </view>
-    <view class='cooperation-agencies'>
-        <image class='cooperation-agencies-img' src='/assets/imgs/insurance_logo1.png' />
-        <image class='cooperation-agencies-img' src='/assets/imgs/insurance_logo2.png' />
-        <image class='cooperation-agencies-img' src='/assets/imgs/insurance_logo3.png' />
-        <image class='cooperation-agencies-img' src='/assets/imgs/insurance_logo4.png' />
-        <image class='cooperation-agencies-img' src='/assets/imgs/insurance_logo5.png' />
-        <image class='cooperation-agencies-img' src='/assets/imgs/insurance_logo6.png' />
-    </view>
+        <swiper indicator-dots="true" autoplay="true" interval="5000" duration="1000" class="banner-bg">
+            <block wx:for="{{imgUrls}}" wx:key='index'>
+                <swiper-item>
+                    <image src="{{item}}" class="slide-image" style="height:373rpx;width:750rpx" />
+                </swiper-item>
+            </block>
+        </swiper>
+        <view class='quote-bg'>
+            <view class='line' style="flex-direction:row;">
+                <div class='line-key'>车牌号码
+                    <text style="color: red">*</text>
+                </div>
+                <picker bindchange="bindPickerChange" value="{{index}}" range="{{array}}">
+                    <view class='region-select'>{{region}}
+                        <!-- <image src='../../assets/imgs/arrow_down.png' class='down-icon'></image> -->
+                        <text class='region-select-icon'>│</text>
+                    </view>
+                </picker>
 
-    <modal 
-        class='modal'
-        title='验证身份'
-        hidden="{{hiddenModal}}"
-        confirm-text="确定" 
-        bindcancel="modalCancal" 
-        bindconfirm="modalCancal" 
-        no-cancel="true">
-        <view class='modal-tips'>由于监管要求，初次报价需要通过信息真实性验证</view>
-        <input placeholder="请输入手机号码" />  
-        <input placeholder="请输入邀请码(选填)" /> 
-        <input class='noborder' placeholder="请输入验证码" /> <text class='modal-getcode'>获取验证码</text>
-    </modal>
-</view>
+                <input class='line-input' placeholder='请输入车牌号码' bindinput="bindNumberInput" />
+            </view>
+            <view class='line' style="flex-direction:row;">
+                <view class='line-key'>车主姓名
+                    <text style="color: red">*</text>
+                </view>
+                <input class='line-input' placeholder='请输入车主姓名' bindinput="bindNameInput" />
+            </view>
+            <view class='right-text'>
+                <picker bindchange='transferCarSelected' value="{{isTransferCar}}" range="{{transferCarArray}}">
+                    <view class='left'>
+                        <text>是否过户车 </text>
+                        <i class='fa fa-angle-down'></i>
+                    </view>
+                </picker>
+                您的信息将被严格保密
+            </view>
+            <view class='recently-quoted'>
+                <text @tap="checkQouteRecord">最近报价记录</text>
+            </view>
+            <button class='confirm-button' @tap="getQuote">获取报价</button>
+            <view class='quote-record-bg'>
+                <text style="color: red">*</text>
+                现仅开通南京市内个人9座以下客车人保在线报价，其他情况可人工咨询
+            </view>
+        </view>
+        <view class='cooperation-agencies-title'>
+            <text>合作机构</text>
+        </view>
+        <view class='cooperation-agencies'>
+            <image class='cooperation-agencies-img' src='/assets/imgs/insurance_logo1.png' />
+            <image class='cooperation-agencies-img' src='/assets/imgs/insurance_logo2.png' />
+            <image class='cooperation-agencies-img' src='/assets/imgs/insurance_logo3.png' />
+            <image class='cooperation-agencies-img' src='/assets/imgs/insurance_logo4.png' />
+            <image class='cooperation-agencies-img' src='/assets/imgs/insurance_logo5.png' />
+            <image class='cooperation-agencies-img' src='/assets/imgs/insurance_logo6.png' />
+        </view>
+        <view class='call-button' @tap=''>
+            <image class='call-button-img' src='/assets/imgs/manual_consultation.png' />
+        </view>
+
+        <modal class='modal' title='验证身份' hidden="{{hiddenModal}}" confirm-text="确定" bindcancel="modalCancal" bindconfirm="modalCancal" no-cancel="true">
+            <view class='modal-tips'>由于监管要求，初次报价需要通过信息真实性验证</view>
+            <input placeholder="请输入手机号码" />
+            <input placeholder="请输入邀请码(选填)" />
+            <input class='noborder' placeholder="请输入验证码" />
+            <text class='modal-getcode'>获取验证码</text>
+        </modal>
+    </view>
 </template>
 
 <script>
@@ -226,7 +232,7 @@ import Toast from 'wepy-com-toast';
     return state.counter.num;
   },
   asyncNum(state) {
-    return state.counter.asyncNum; 
+    return state.counter.asyncNum;
   },
   sumNum(state) {
     return state.counter.num + state.counter.asyncNum;
@@ -242,17 +248,16 @@ export default class Index extends wepy.page {
 
   data = {
     imgUrls: [
-            '/assets/imgs/banner.jpg',
-            '/assets/imgs/banner.jpg',
-            '/assets/imgs/banner.jpg'
-        ],
+      '/assets/imgs/banner.jpg',
+      '/assets/imgs/banner.jpg',
+      '/assets/imgs/banner.jpg'
+    ],
     region: '苏A',
     name: '',
     carNumber: '',
     hiddenModal: true,
     isTransferCar: 0, //是否过户车 0 否 1 是
-    transferCarArray: ["否", '是']
-
+    transferCarArray: ['否', '是']
   };
 
   computed = {
@@ -262,52 +267,52 @@ export default class Index extends wepy.page {
   };
 
   methods = {
-      getQuote() {
-        wepy.navigateTo({
-            url: 'quote'
-        })
-      },
+    getQuote() {
+      wepy.navigateTo({
+        url: 'quote'
+      });
+    },
     changeIndicatorDots(e) {
-        this.setData({
-            indicatorDots: !this.data.indicatorDots
-        })
+      this.setData({
+        indicatorDots: !this.data.indicatorDots
+      });
     },
     bindNumberInput(e) {
-        this.setData({
-          inputValue: e.detail.value
-        })
+      this.setData({
+        inputValue: e.detail.value
+      });
     },
     bindNameInput(e) {
-        this.setData({
-            name: e.detail.value
-        })
+      this.setData({
+        name: e.detail.value
+      });
     },
     bindPickerChange(e) {
-        this.setData({
-            region: this.data.array[e.detail.value]
-        })
+      this.setData({
+        region: this.data.array[e.detail.value]
+      });
     },
     transferCarSelected(e) {
-        console.log(e.detail.value);
-        this.setData({
-            isTransferCar: e.detail.value
-        })
+      console.log(e.detail.value);
+      this.setData({
+        isTransferCar: e.detail.value
+      });
     },
     checkQouteRecord() {
-        wepy.navigateTo({
-            url: 'quoteRecord'
-        })
+      wepy.navigateTo({
+        url: 'quoteRecord'
+      });
     }
   };
 
-//   events = { 
-//     'index-emit': (...args) => {
-//       let $event = args[args.length - 1];
-//       console.log(
-//         `${this.$name} receive ${$event.name} from ${$event.source.$name}`
-//       );
-//     }
-//   };
+  //   events = {
+  //     'index-emit': (...args) => {
+  //       let $event = args[args.length - 1];
+  //       console.log(
+  //         `${this.$name} receive ${$event.name} from ${$event.source.$name}`
+  //       );
+  //     }
+  //   };
 
   onLoad() {
     let self = this;
