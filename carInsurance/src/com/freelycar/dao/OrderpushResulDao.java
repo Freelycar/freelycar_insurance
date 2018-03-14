@@ -43,6 +43,12 @@ public class OrderpushResulDao
     	return result;
     }
     
+    public OrderpushResul getOrderpushResulBySpecify(String specify){
+    	String hql = "from OrderpushResul where "+specify+" = :"+specify;
+    	OrderpushResul result = (OrderpushResul) getSession().createQuery(hql).setString(specify, specify).uniqueResult();
+    	return result;
+    }
+    
 	//查询所有的OrderpushResul	
 	@SuppressWarnings("unchecked")
 	public List<OrderpushResul> listOrderpushResul(OrderpushResul orderpushResul,int from, int num){

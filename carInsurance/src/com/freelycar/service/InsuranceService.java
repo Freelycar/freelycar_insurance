@@ -13,10 +13,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.freelycar.dao.InsuranceDao;
+import com.freelycar.dao.QuoteRecordDao;
 import com.freelycar.entity.Client;
 import com.freelycar.entity.Insurance;
+import com.freelycar.entity.QuoteRecord;
 import com.freelycar.util.Constant;
 import com.freelycar.util.HttpClientUtil;
+import com.freelycar.util.INSURANCE;
 import com.freelycar.util.RESCODE;
 import com.freelycar.util.Tools;
 /**  
@@ -29,6 +32,9 @@ public class InsuranceService
     /********** 注入InsuranceDao ***********/  
     @Autowired
 	private InsuranceDao insuranceDao;
+    
+    @Autowired
+    private QuoteRecordDao qrdao;
     
     private String LUOTUOKEY = Constant.LUOTUOKEY;
     
@@ -108,7 +114,8 @@ public class InsuranceService
     	createEnquiryParams.put("insuranceStartTime", Tools.isEmpty(insurance.getInsuranceBeginTime())?0:insurance.getInsuranceBeginTime());//
     	createEnquiryParams.put("forceInsuranceStartTime", insurance.getForceInsuranceStartTime());//
     	createEnquiryParams.put("transferDate", !client.getTransfer()?"0":client.getTransferTime());//
-    	createEnquiryParams.put("requestHeader", Tools.uuid()+"HLDD");//
+    	String requestHeader = Tools.uuid()+"HLDD";
+    	createEnquiryParams.put("requestHeader", requestHeader);//
     	
     	
     	JSONArray insurancesList = new JSONArray();
@@ -136,6 +143,23 @@ public class InsuranceService
     	if(resultJson.has("errorMsg")){
     		String msg = resultJson.getJSONObject("errorMsg").getString("code");
     		if("success".equals(msg)){
+    			//询价成功
+    			
+    			QuoteRecord qr = new QuoteRecord();
+    			qr.setCityCode(cityCode);
+    			qr.setCityName(cityName);
+    			qr.setClientId(client.getId());
+    			qr.setCrateTime(System.currentTimeMillis());
+    			qr.setForceInsuranceStartTime(Integer.parseInt(insurance.getForceInsuranceStartTime()));
+    			
+    			qr.setInsuranceCompanyName("人保车险");
+    			qr.setInsurances(insurance.getInsurances());
+    			qr.setInsuranceStartTime(Integer.parseInt(insurance.getForceInsuranceStartTime()));
+    			qr.setLicenseNumber(insurance.getLicenseNumber());
+    			qr.setOwnerName(client.getOwnerName());
+    			qr.setRequestHeader(requestHeader);
+    			qr.setTransferDate(0);
+    			qrdao.saveQuoteRecord(qr);
     			return RESCODE.SUCCESS.getJSONRES();
     		}
     	}

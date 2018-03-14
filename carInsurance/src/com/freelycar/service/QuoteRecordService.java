@@ -31,6 +31,7 @@ public class QuoteRecordService
     		System.out.println(result);
 			JSONObject resObj = new JSONObject(result);
 			if(resObj.getJSONObject("errorMsg").getString("code").equals("success")){
+				
 				JSONObject data = resObj.getJSONObject("data");
 				JSONObject resultobj = data.getJSONObject("result");
 				
@@ -39,12 +40,12 @@ public class QuoteRecordService
 				int state = resultobj.getInt("state");
 				String requestHeader = resultobj.getString("requestHeader");
 				
-				QuoteRecord qr = new QuoteRecord();
+				QuoteRecord qr = quoteRecordDao.getQuoteRecordBySpecify("requestHeader");
 				qr.setRequestHeader(requestHeader);
 				qr.setState(state);
 				qr.setOfferId(offerId);
 				qr.setOfferDetail(offerDetail);
-				quoteRecordDao.updateQuoteRecordBySpecify(qr, "offerId");
+				quoteRecordDao.update(qr);
 				
 				Map<String,Object> msg = new HashMap<>();
 				msg.put("offerId", offerId);

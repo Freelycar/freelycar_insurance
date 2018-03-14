@@ -23,8 +23,8 @@ public class QuoteRecordController
 
     
     @RequestMapping(value="/resultPush")
-    public Map<String,Object> quoteRecordPush(String result){
-    	return quoteRecordService.quoteRecordPushDeal(result);
+    public Map<String,Object> quoteRecordPush(String data){
+    	return quoteRecordService.quoteRecordPushDeal(data);
     }
 
     

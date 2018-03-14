@@ -37,6 +37,12 @@ public class QuoteRecordDao
         return result;
     }
 	
+    //指定cloumn
+    public QuoteRecord getQuoteRecordBySpecify(String specify){
+    	String hql = "from QuoteRecord where "+specify+" = :"+specify;
+    	QuoteRecord result = (QuoteRecord) getSession().createQuery(hql).setString(specify, specify).uniqueResult();
+    	return result;
+    }
 	
 	//查询所有的QuoteRecord	
 	@SuppressWarnings("unchecked")
@@ -89,6 +95,9 @@ public class QuoteRecordDao
 		query = SqlHelper.getQuery(quoterecord, QuoteRecord.class, query);
 		
 		query.executeUpdate();
-		
+	}
+	
+	public void update(QuoteRecord quoterecord){
+		getSession().update(quoterecord);
 	}
 }

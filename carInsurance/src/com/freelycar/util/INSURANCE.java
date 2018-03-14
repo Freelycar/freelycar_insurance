@@ -20,7 +20,7 @@ public enum INSURANCE {
 	}
 	
 	//根据number得到名称
-	public String getInsuranceTypeName(int number){
+	public static String getInsuranceTypeName(int number){
 		return INSURANCE.valueOf("INSURANCE_NO_"+number).insuranceTypeName;
 	}
 	
