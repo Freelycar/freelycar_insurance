@@ -59,7 +59,7 @@ public class InvitionDao
 	 * @return
 	 */
 	public long getInvitionCount(Invition invition){
-        QueryUtils utils = new QueryUtils(getSession(), "from Invition");
+        QueryUtils utils = new QueryUtils(getSession(), "select count(*) from Invition");
 		if(invition != null){
 			utils = utils.addStringLike("name", invition.getName())
 			 .addStringLike("invcode", invition.getInvcode());

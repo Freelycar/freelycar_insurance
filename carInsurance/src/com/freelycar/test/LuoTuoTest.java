@@ -13,7 +13,7 @@ import com.freelycar.util.HttpClientUtil;
 
 public class LuoTuoTest {
 
-	@Test
+	@Test//询价
 	public void testcreateEnquiry(){
 		
 		Map<String,Object> obj = new HashMap<>();
@@ -36,6 +36,19 @@ public class LuoTuoTest {
 		//HttpClientUtil.httpPost("http://localhost:8080/carInsurance/api/insurance/queryPrice", obj);
 	}
 	
+	@Test//核保
+	public void testsubmitProposal(){
+		
+		Map<String,Object> obj = new HashMap<>();
+		obj.put("offerId", "200-20180314160718-4c2fe2");
+		obj.put("ownerName", "朱祥珍");
+		obj.put("idCard", "320113196303202013");
+		obj.put("phone", "13705159506");
+		obj.put("contactAddress", "江苏南京");
+		
+		HttpClientUtil.httpPost("http://www.xhnky.cn/carInsurance/api/insurance/submitProposal", obj);
+		//HttpClientUtil.httpPost("http://localhost:8080/carInsurance/api/insurance/queryPrice", obj);
+	}
 	@Test
 	public void testDate(){
 		System.out.println(System.currentTimeMillis());

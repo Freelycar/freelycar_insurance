@@ -173,6 +173,7 @@ public class InsuranceService
     	param.put("api_key", LUOTUOKEY);
     	
     	JSONObject params = new JSONObject();
+    	System.out.println("#######"+record.getOfferId());
     	params.put("orderId", record.getOfferId());//
     	params.put("insuredName", client.getOwnerName());//
     	params.put("insuredIdNo", client.getIdCard());//
