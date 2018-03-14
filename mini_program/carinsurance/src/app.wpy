@@ -100,15 +100,18 @@ export default class extends wepy.app {
   getUserInfo(cb) {
     const that = this;
     if (this.globalData.userInfo) {
-      return this.globalData.userInfo;
+      cb && cb(this.globalData.userInfo);
+    } else {
+      wepy.getUserInfo({
+            success(res) {
+              that.globalData.userInfo = res.userInfo;
+              cb && cb(res.userInfo);
+            },
+            fail(error) {
+              console.log(error);
+            }
+      });
     }
-
-    wepy.getUserInfo({
-      success(res) {
-        that.globalData.userInfo = res.userInfo;
-        cb && cb(res.userInfo);
-      }
-    });
   }
 }
 </script>
