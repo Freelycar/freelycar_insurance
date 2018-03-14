@@ -3,21 +3,7 @@ package com.freelycar.entity;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-
+import javax.persistence.Lob;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.GenericGenerator;
@@ -42,6 +28,7 @@ public class QuoteRecord
 	
     private String offerId;//变价编号
     
+    @Lob
     private String offerDetail;//报价详细
     
     private String licenseNumber;  //车牌号;

@@ -38,9 +38,9 @@ public class QuoteRecordDao
     }
 	
     //指定cloumn
-    public QuoteRecord getQuoteRecordBySpecify(String specify){
+    public QuoteRecord getQuoteRecordBySpecify(String specify,String value){
     	String hql = "from QuoteRecord where "+specify+" = :"+specify;
-    	QuoteRecord result = (QuoteRecord) getSession().createQuery(hql).setString(specify, specify).uniqueResult();
+    	QuoteRecord result = (QuoteRecord) getSession().createQuery(hql).setString(specify, value).uniqueResult();
     	return result;
     }
 	

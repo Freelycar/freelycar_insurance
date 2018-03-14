@@ -33,14 +33,23 @@ public class QuoteRecordService
 			if(resObj.getJSONObject("errorMsg").getString("code").equals("success")){
 				
 				JSONObject data = resObj.getJSONObject("data");
+				String requestHeader = data.getString("requestHeader");
+				
 				JSONObject resultobj = data.getJSONObject("result");
 				
 				String offerId = resultobj.getString("offerId");
 				String offerDetail = resultobj.getString("offerDetail");
 				int state = resultobj.getInt("state");
-				String requestHeader = resultobj.getString("requestHeader");
 				
-				QuoteRecord qr = quoteRecordDao.getQuoteRecordBySpecify("requestHeader");
+				
+				System.out.println("requestHeader  :"+requestHeader);
+				System.out.println(" offerId :"+offerId);
+				System.out.println("offerDetail  :"+offerDetail);
+				System.out.println(" state :"+state);
+				
+				
+				QuoteRecord qr = quoteRecordDao.getQuoteRecordBySpecify("requestHeader",requestHeader);
+				System.out.println(qr);
 				qr.setRequestHeader(requestHeader);
 				qr.setState(state);
 				qr.setOfferId(offerId);
