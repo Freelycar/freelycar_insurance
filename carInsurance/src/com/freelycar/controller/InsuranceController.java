@@ -42,7 +42,7 @@ public class InsuranceController
      * @return
      */
     @RequestMapping(value="/queryPrice",method = RequestMethod.POST)
-    public Map<String, Object> queryPrice(@RequestBody Client client, Insurance insurance,String cityCode,String cityName){
+    public Map<String, Object> queryPrice(Client client, Insurance insurance,String cityCode,String cityName){
     	return insuranceService.queryPrice(client, insurance, cityCode, cityName);
     }
  

@@ -15,7 +15,9 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
+import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
@@ -28,6 +30,7 @@ import org.apache.http.conn.socket.ConnectionSocketFactory;
 import org.apache.http.conn.socket.PlainConnectionSocketFactory;
 import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
 import org.apache.http.conn.ssl.TrustSelfSignedStrategy;
+import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.DefaultHttpRequestRetryHandler;
 import org.apache.http.impl.client.HttpClients;
@@ -97,8 +100,14 @@ public class HttpClientUtil {
 
 		return httpClient;
 	}
-
+	
+	
 	public static JSONObject httpGet(String url,Map<String,Object> param) {
+		return httpGet(url, param, null);
+	}
+	
+
+	public static JSONObject httpGet(String url,Map<String,Object> param,Map<String,String> head) {
 		
 		if(param!=null){
 			List<NameValuePair> nvps = new ArrayList<NameValuePair>();
@@ -110,6 +119,12 @@ public class HttpClientUtil {
 		}
 		System.out.println("请求的url: "+url);
 		HttpGet httpGet = new HttpGet(url);
+		if(head != null){
+			for(Map.Entry<String, String> h : head.entrySet()){
+				httpGet.setHeader(h.getKey(), h.getValue());
+			}
+		}
+		
 		httpGet.setHeader("Accept", "text/html,application/xhtml+xml,application/xml;");
 		httpGet.setHeader("Accept-Language", "zh-cn");
 		httpGet.setHeader("User-Agent",
@@ -147,6 +162,21 @@ public class HttpClientUtil {
 		return obj;
 	}
 
+	
+	public static void httpPost(String url,JSONObject params) throws ClientProtocolException, IOException {
+
+	    HttpPost request = new HttpPost(url);
+	    StringEntity paramsEntity =new StringEntity(params.toString());
+	    request.addHeader("content-type", "application/json;charset=utf-8");
+	    request.setEntity(paramsEntity);
+	    HttpResponse response = httpClient.execute(request);
+	    HttpEntity entity = response.getEntity();
+		String result = EntityUtils.toString(entity, "utf-8");
+		
+		System.out.println("post : "+result);
+		EntityUtils.consume(entity);
+	    
+	}
 	
 	
 	public static void httpPost(String url,Map<String,Object> params) {

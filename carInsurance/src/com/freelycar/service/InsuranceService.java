@@ -97,18 +97,41 @@ public class InsuranceService
     public Map<String,Object> queryPrice(Client client, Insurance insurance,String cityCode,String cityName){
     	Map<String,Object> param = new HashMap<>();
     	param.put("api_key", LUOTUOKEY);
-    	param.put("licenseNumber", client.getLicenseNumber());
-    	param.put("ownerName", client.getOwnerName());
-    	param.put("cityCode", cityCode);
-    	param.put("cityName", cityName);
-    	param.put("insuranceCompanyName", insurance.getInsuranceCompany());//保险公司编号多加用逗号分隔
-    	param.put("insurancesList", insurance.getInsurances());
-    	param.put("insuranceStartTime", insurance.getInsuranceBeginTime());
-    	param.put("forceInsuranceStartTime", insurance.getForceInsuranceStartTime());
-    	param.put("transferDate", client.getTransfer()?client.getTransferTime():0);
-    	param.put("requestHeader", Tools.uuid()+"HLDD");
+    	param.put("mobilePhone", client.getPhone());
     	
-    	JSONObject resultJson = HttpClientUtil.httpGet("http://wechat.bac365.com:8081/carRisk/car_risk/carApi/ createEnquiry", param);
+    	JSONObject createEnquiryParams = new JSONObject();
+    	createEnquiryParams.put("licenseNumber", client.getLicenseNumber());//
+    	createEnquiryParams.put("ownerName", client.getOwnerName());//
+    	createEnquiryParams.put("cityCode", cityCode);//
+    	//obj.put("cityName", cityName);//cityName可以不传
+    	createEnquiryParams.put("insuranceCompanyName", insurance.getInsuranceCompanyId());//保险公司编号多加用逗号分隔
+    	createEnquiryParams.put("insuranceStartTime", Tools.isEmpty(insurance.getInsuranceBeginTime())?0:insurance.getInsuranceBeginTime());//
+    	createEnquiryParams.put("forceInsuranceStartTime", insurance.getForceInsuranceStartTime());//
+    	createEnquiryParams.put("transferDate", !client.getTransfer()?"0":client.getTransferTime());//
+    	createEnquiryParams.put("requestHeader", Tools.uuid()+"HLDD");//
+    	
+    	
+    	JSONArray insurancesList = new JSONArray();
+    	JSONObject fangan1 = new JSONObject();
+    	fangan1.put("schemeName", "方案1");
+    	JSONObject forcePremium = new JSONObject();
+    	forcePremium.put("isToubao", "1");
+    	fangan1.put("forcePremium", forcePremium);
+		try {
+			fangan1.put("insurances", new JSONArray(insurance.getInsurances()));
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+    	insurancesList.put(fangan1);
+    	
+    	createEnquiryParams.put("insurancesList", insurancesList);
+    	param.put("createEnquiryParams", createEnquiryParams);
+    	
+    	for(Map.Entry<String, Object> p : param.entrySet()){
+    		System.out.println(p.getKey()+"------"+p.getValue());
+    	}
+    	
+    	JSONObject resultJson = HttpClientUtil.httpGet("http://wechat.bac365.com:8081/carRisk/car_risk/carApi/createEnquiry", param);
     	
     	if(resultJson.has("errorMsg")){
     		String msg = resultJson.getJSONObject("errorMsg").getString("code");
@@ -117,9 +140,9 @@ public class InsuranceService
     		}
     	}
     	return RESCODE.FAIL.getJSONRES();
-    	
-    	
 	}
+    
+    
 	
     //增加一个Insurance
     public Map<String,Object> saveInsurance(Insurance insurance){
