@@ -151,75 +151,75 @@
 }
 </style>
 <template >
-    <view class="container">
-        <swiper indicator-dots="true" autoplay="true" interval="5000" duration="1000" class="banner-bg">
-            <block wx:for="{{imgUrls}}" wx:key='index'>
-                <swiper-item>
-                    <image src="{{item}}" class="slide-image" style="height:373rpx;width:750rpx" />
-                </swiper-item>
-            </block>
-        </swiper>
-        <view class='quote-bg'>
-            <view class='line' style="flex-direction:row;">
-                <div class='line-key'>车牌号码
-                    <text style="color: red">*</text>
-                </div>
-                <picker bindchange="bindPickerChange" value="{{index}}" range="{{array}}">
-                    <view class='region-select'>{{region}}
-                        <!-- <image src='../../assets/imgs/arrow_down.png' class='down-icon'></image> -->
-                        <text class='region-select-icon'>│</text>
-                    </view>
-                </picker>
+  <view class="container">
+    <swiper indicator-dots="true" autoplay="true" interval="5000" duration="1000" class="banner-bg">
+      <block wx:for="{{imgUrls}}" wx:key='index'>
+        <swiper-item>
+          <image src="{{item}}" class="slide-image" style="height:373rpx;width:750rpx" />
+        </swiper-item>
+      </block>
+    </swiper>
+    <view class='quote-bg'>
+      <view class='line' style="flex-direction:row;">
+        <div class='line-key'>车牌号码
+          <text style="color: red">*</text>
+        </div>
+        <picker bindchange="bindPickerChange" value="{{index}}" range="{{array}}">
+          <view class='region-select'>{{region}}
+            <!-- <image src='../../assets/imgs/arrow_down.png' class='down-icon'></image> -->
+            <text class='region-select-icon'>│</text>
+          </view>
+        </picker>
 
-                <input class='line-input' placeholder='请输入车牌号码' bindinput="bindNumberInput" />
-            </view>
-            <view class='line' style="flex-direction:row;">
-                <view class='line-key'>车主姓名
-                    <text style="color: red">*</text>
-                </view>
-                <input class='line-input' placeholder='请输入车主姓名' bindinput="bindNameInput" />
-            </view>
-            <view class='right-text'>
-                <picker bindchange='transferCarSelected' value="{{isTransferCar}}" range="{{transferCarArray}}">
-                    <view class='left'>
-                        <text>是否过户车 </text>
-                        <i class='fa fa-angle-down'></i>
-                    </view>
-                </picker>
-                您的信息将被严格保密
-            </view>
-            <view class='recently-quoted'>
-                <text @tap="checkQouteRecord">最近报价记录</text>
-            </view>
-            <button class='confirm-button' @tap="getQuote">获取报价</button>
-            <view class='quote-record-bg'>
-                <text style="color: red">*</text>
-                现仅开通南京市内个人9座以下客车人保在线报价，其他情况可人工咨询
-            </view>
+        <input class='line-input' placeholder='请输入车牌号码' bindinput="bindNumberInput" />
+      </view>
+      <view class='line' style="flex-direction:row;">
+        <view class='line-key'>车主姓名
+          <text style="color: red">*</text>
         </view>
-        <view class='cooperation-agencies-title'>
-            <text>合作机构</text>
-        </view>
-        <view class='cooperation-agencies'>
-            <image class='cooperation-agencies-img' src='/assets/imgs/insurance_logo1.png' />
-            <image class='cooperation-agencies-img' src='/assets/imgs/insurance_logo2.png' />
-            <image class='cooperation-agencies-img' src='/assets/imgs/insurance_logo3.png' />
-            <image class='cooperation-agencies-img' src='/assets/imgs/insurance_logo4.png' />
-            <image class='cooperation-agencies-img' src='/assets/imgs/insurance_logo5.png' />
-            <image class='cooperation-agencies-img' src='/assets/imgs/insurance_logo6.png' />
-        </view>
-        <view class='call-button' @tap=''>
-            <image class='call-button-img' src='/assets/imgs/manual_consultation.png' />
-        </view>
-
-        <modal class='modal' title='验证身份' hidden="{{hiddenModal}}" confirm-text="确定" bindcancel="modalCancal" bindconfirm="modalCancal" no-cancel="true">
-            <view class='modal-tips'>由于监管要求，初次报价需要通过信息真实性验证</view>
-            <input placeholder="请输入手机号码" />
-            <input placeholder="请输入邀请码(选填)" />
-            <input class='noborder' placeholder="请输入验证码" />
-            <text class='modal-getcode'>获取验证码</text>
-        </modal>
+        <input class='line-input' placeholder='请输入车主姓名' bindinput="bindNameInput" />
+      </view>
+      <view class='right-text'>
+        <picker bindchange='transferCarSelected' value="{{isTransferCar}}" range="{{transferCarArray}}">
+          <view class='left'>
+            <text>是否过户车 </text>
+            <i class='fa fa-angle-down'></i>
+          </view>
+        </picker>
+        您的信息将被严格保密
+      </view>
+      <view class='recently-quoted'>
+        <text @tap="checkQouteRecord">最近报价记录</text>
+      </view>
+      <button class='confirm-button' @tap="getQuote">获取报价</button>
+      <view class='quote-record-bg'>
+        <text style="color: red">*</text>
+        现仅开通南京市内个人9座以下客车人保在线报价，其他情况可人工咨询
+      </view>
     </view>
+    <view class='cooperation-agencies-title'>
+      <text>合作机构</text>
+    </view>
+    <view class='cooperation-agencies'>
+      <image class='cooperation-agencies-img' src='/assets/imgs/insurance_logo1.png' />
+      <image class='cooperation-agencies-img' src='/assets/imgs/insurance_logo2.png' />
+      <image class='cooperation-agencies-img' src='/assets/imgs/insurance_logo3.png' />
+      <image class='cooperation-agencies-img' src='/assets/imgs/insurance_logo4.png' />
+      <image class='cooperation-agencies-img' src='/assets/imgs/insurance_logo5.png' />
+      <image class='cooperation-agencies-img' src='/assets/imgs/insurance_logo6.png' />
+    </view>
+    <view class='call-button' @tap=''>
+      <image class='call-button-img' src='/assets/imgs/manual_consultation.png' />
+    </view>
+
+    <modal class='modal' title='验证身份' hidden="{{hiddenModal}}" confirm-text="确定" bindcancel="modalCancal" bindconfirm="modalCancal" no-cancel="true">
+      <view class='modal-tips'>由于监管要求，初次报价需要通过信息真实性验证</view>
+      <input placeholder="请输入手机号码" />
+      <input placeholder="请输入邀请码(选填)" />
+      <input class='noborder' placeholder="请输入验证码" />
+      <text class='modal-getcode'>获取验证码</text>
+    </modal>
+  </view>
 </template>
 
 <script>
@@ -298,8 +298,19 @@ export default class Index extends wepy.page {
       });
     },
     checkQouteRecord() {
-      wepy.navigateTo({
-        url: 'quoteRecord'
+      // wepy.navigateTo({
+      //   url: 'quoteRecord'
+      // });
+      wx.request({
+        url: 'http://localhost:8080/carInsurance/api/insurance/test1',
+        data: {},
+        method: 'GET',
+        header: {
+          'content-type': 'application/json'
+        },
+        success: function(res) {
+          console.log(res);
+        }
       });
     }
   };
@@ -316,7 +327,7 @@ export default class Index extends wepy.page {
   onLoad() {
     let self = this;
     this.$parent.getUserInfo(function(userInfo) {
-      console.log(userInfo)
+      console.log(userInfo);
     });
   }
 }
