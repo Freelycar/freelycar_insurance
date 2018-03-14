@@ -163,8 +163,11 @@ export const getRouterData = (app) => {
     '/user/register-result': {
       component: dynamicWrapper(app, [], () => import('../routes/User/RegisterResult')),
     },
-    '/clientList': {
+    '/client/list': {
       component: dynamicWrapper(app, [], () => import('../routes/Client/ClientList')),
+    },
+    '/client/detail': {
+      component: dynamicWrapper(app, [], () => import('../routes/Client/ClientDetail')),
     },
   };
   // Get name from ./menu.js or just set it in the router data.

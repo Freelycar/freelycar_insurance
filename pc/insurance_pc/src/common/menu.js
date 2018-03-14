@@ -1,8 +1,22 @@
 import { isUrl } from '../utils/utils';
 
-const menuData = [{
+const menuData = [ {
   name: '车险客户',
   icon: 'user',
+  path: 'client',
+  children: [{
+    // name: '客户列表',
+    path: 'list',
+  },
+  {
+    // name: '客户详情',
+    path: 'detail',
+    // hideInMenu: true,  // 隐藏该条
+  }
+  ],
+}, {
+  name: '业绩统计',
+  icon: 'area-chart',
   path: 'dashboard',
   children: [{
     name: '分析页',
@@ -15,17 +29,6 @@ const menuData = [{
     path: 'workplace',
     // hideInMenu: true,
   }],
-}, {
-  name: '业绩统计',
-  icon: 'area-chart',
-  path: 'clientList',
-  // children: [{
-  //   // name: '查询表格',
-  //   path: 'table-list',
-  // }, {
-  //   name: '标准列表',
-  //   path: 'basic-list',
-  // }],
 }, {
   name: '渠道管理',
   icon: 'fork',
