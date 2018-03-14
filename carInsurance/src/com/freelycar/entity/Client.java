@@ -15,6 +15,7 @@ import javax.persistence.Id;
 	
 
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import org.hibernate.annotations.GenericGenerator;
 
@@ -52,6 +53,9 @@ public class Client
     private Long transferTime;  //过户日期;
 	
     private Long insuranceDeadline;  //保险到期;
+    
+    @Transient
+    private String contactAddress;
     /********** constructors ***********/  
     public Client() {  
       
@@ -84,6 +88,15 @@ public class Client
         return openId;  
     }  
   
+    public String getContactAddress() {
+		return contactAddress;
+	}
+    
+    
+    public void setContactAddress(String contactAddress) {
+		this.contactAddress = contactAddress;
+	}
+    
     public void setOpenId(String openId) {  
         this.openId = openId;  
     }  

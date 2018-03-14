@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.freelycar.entity.Client;
 import com.freelycar.entity.Insurance;
+import com.freelycar.entity.QuoteRecord;
 import com.freelycar.service.InsuranceService;
 /**  
  *  
@@ -46,6 +47,16 @@ public class InsuranceController
     	return insuranceService.queryPrice(client, insurance, cityCode, cityName);
     }
  
+    
+    /**
+     * 核保
+     * @return
+     */
+    @RequestMapping(value="/submitProposal",method = RequestMethod.POST)
+    public Map<String, Object> submitProposal(Client client, QuoteRecord quoteRecord){
+    	return insuranceService.submitProposal(client, quoteRecord);
+    }
+    
     
     
     @RequestMapping(value = "/test1")

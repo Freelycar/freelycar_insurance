@@ -167,6 +167,47 @@ public class InsuranceService
 	}
     
     
+    //查询价格
+    public Map<String,Object> submitProposal(Client client, QuoteRecord record){
+    	Map<String,Object> param = new HashMap<>();
+    	param.put("api_key", LUOTUOKEY);
+    	
+    	JSONObject params = new JSONObject();
+    	params.put("orderId", record.getOfferId());//
+    	params.put("insuredName", client.getOwnerName());//
+    	params.put("insuredIdNo", client.getIdCard());//
+    	params.put("insuredPhone", client.getPhone());//保险公司编号多加用逗号分隔
+    	params.put("customerName", client.getOwnerName());//
+    	params.put("customerPhone", client.getPhone());//
+    	params.put("customerIdNo", client.getIdCard());//
+    	params.put("contactName", client.getOwnerName());//
+    	params.put("contactPhone", client.getPhone());//
+    	params.put("contactAddress", client.getContactAddress());//
+    	
+    	JSONObject invoiceInfo = new JSONObject();
+    	invoiceInfo.put("isInvoice", 0);
+    	params.put("invoiceInfo", invoiceInfo);
+    	
+    	params.put("ownerIdCard", client.getIdCard());//
+    	params.put("ownerMobilePhone", client.getPhone());//
+    	
+    	param.put("params", params);
+    	
+    	JSONObject resultJson = HttpClientUtil.httpGet("http://wechat.bac365.com:8081/carRisk/car_risk/carApi/submitProposal", param);
+    	
+    	if(resultJson.has("errorMsg")){
+    		String msg = resultJson.getJSONObject("errorMsg").getString("code");
+    		if("success".equals(msg)){
+    			//询价成功
+    			
+    			System.out.println("ddddddddddddddddddddddd");
+    			return RESCODE.SUCCESS.getJSONRES();
+    		}
+    	}
+    	return RESCODE.FAIL.getJSONRES();
+    }
+    
+    
 	
     //增加一个Insurance
     public Map<String,Object> saveInsurance(Insurance insurance){
