@@ -8,7 +8,7 @@ export default {
   ],
   env: {
     development: {
-      extraBabelPlugins: ['dva-hmr'],
+      extraBabelPlugins: ['dva-hmr']
     },
   },
   alias: {
@@ -22,4 +22,11 @@ export default {
   publicPath: '/',
   disableDynamicImport: true,
   hash: true,
+  proxy:{
+    '/api':{
+      target: "http://172.17.3.106:8080/carInsurance/api",
+      changeOrigin: true,
+      pathRewrite: { "^/api": "" }
+    } 
+  }
 };

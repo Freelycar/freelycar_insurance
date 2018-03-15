@@ -10,33 +10,16 @@ import styles from './ClientDetail.less';
 const FormItem = Form.Item;
 const { Option } = Select;
 const getValue = obj => Object.keys(obj).map(key => obj[key]).join(',');
-const columns = [
-//   {
-//     title: '序号',
-//     dataIndex: 'no',
-//     render: val => {
-//       return val;
-//     }
-//   },
+const recordColumns = [
   {
-    title: '车牌号码',
+    title: '车牌号',
     dataIndex: 'carNumber',
     key: 'carNumber',
   },
   {
     title: '车主姓名',
-    dataIndex: 'name', 
+    dataIndex: 'name',
     key: 'name',
-  },
-  {
-    title: '手机号码',
-    dataIndex: 'phoneNumber',
-    key: 'phoneNumber',
-  },
-  {
-    title: '保险到期',
-    dataIndex: 'limitDate',
-    key: 'limitDate',
   },
   {
     title: '报价时间',
@@ -44,80 +27,61 @@ const columns = [
     key: 'time',
   },
   {
-    title: '报价状态',
-    dataIndex: 'status',
-    key: 'status',
-  },
-  {
-    title: '来源渠道',
-    dataIndex: 'from',
-    key: 'from',
+    title: '报价编号',
+    dataIndex: 'orderCode',
+    key: 'orderCode',
   }
 ];
-const alreadyColumns = [
-  {
-    title: '序号',
-    dataIndex: 'no',
-    render: val => {
-      return val;
-    }
-  },
-  {
-    title: '车牌号码',
-    dataIndex: 'carNumber',
-  },
-  {
-    title: '车主姓名',
-    dataIndex: 'name',
-  },
-  {
-    title: '手机号码',
-    dataIndex: 'phoneNumber',
-  },
-  {
-    title: '订单编号',
-    dataIndex: 'limitDate',
-  },
+const orderColumns = [
   {
     title: '订单时间',
     dataIndex: 'time',
+  }, {
+    title: '订单编号',
+    dataIndex: 'orderCode',
+  }, {
+    title: '订单总额(元)',
+    dataIndex: 'total',
   },
   {
-    title: '订单状态',
+    title: '支付状态',
     dataIndex: 'status',
   },
   {
+    title: '返现金额(元)',
+    dataIndex: 'returnMoney',
+  },
+  {
     title: '是否返现',
-    dataIndex: 'from',
+    dataIndex: 'isReturn',
   },
   {
-    title: '返现金额',
-    dataIndex: 'money',
+    title: '返现时间',
+    dataIndex: 'returnTime',
   },
   {
-    title: '操作',
-    // dataIndex: 'from', 
-    render: val => {
-      return <div>
-        <a>配送</a>
-        <a>返现</a>
-      </div>
-    }
+    title: '付款时间',
+    dataIndex: 'payTime',
+  },
+  {
+    title: '运单编号',
+    dataIndex: 'kuaidiCode',
   }
 ];
 
 const norealData = [{
-    key: '1',
-    carNumber: '苏A6666',
-    name: '杨威',
-    phoneNumber: '15651751173',
-    limitDate: '2018-03-25',
-    time: '2018-03-24',
-    status: '报价成功了吧，应该',
-    from: '微信小程序'
-}] 
+  key: '1',
+  carNumber: '苏A6666',
+  name: '杨威',
+  phoneNumber: '15651751173',
+  limitDate: '2018-03-25',
+  time: '2018-03-24',
+  status: '报价成功了吧，应该',
+  from: '微信小程序'
+}];
 
-const CreateForm = Form.create()((props) => {
+
+const WaybillDetail = Form.create()((props) => {
   const { modalVisible, form, handleAdd, handleModalVisible } = props;
   const okHandle = () => {
     form.validateFields((err, fieldsValue) => {
@@ -128,52 +92,56 @@ const CreateForm = Form.create()((props) => {
   };
   return (
     <Modal
-      title="新建规则"
+      title="运单详细"
       visible={modalVisible}
-      onOk={okHandle}
       onCancel={() => handleModalVisible()}
     >
-      <FormItem
-        labelCol={{ span: 5 }}
-        wrapperCol={{ span: 15 }}
-        label="描述"
-      >
-        {form.getFieldDecorator('desc', {
-          rules: [{ required: true, message: 'Please input some description...' }],
-        })(
-          <Input placeholder="请输入" />
-        )}
-      </FormItem>
+      <Row ><Col span={12} offset={6}>收件人姓名：臭傻逼</Col></Row>
+      <Row ><Col span={12} offset={6}>1231231231</Col></Row>
+      <Row ><Col span={12} offset={6}>收件地址：南京市玄武区仙岭大道1号苏宁青创园爱打飞机啊动法</Col></Row>
+      <Row ><Col span={12} offset={6}>快递公司：顺丰速运</Col></Row>
+      <Row ><Col span={12} offset={6}>运单编号：8989798</Col></Row>
+      <Row ><Col span={12} offset={6}>备注：内件：（1）工具包，吸尘器，充气泵</Col></Row>
     </Modal>
   );
 });
 
-@connect(({ rule, loading }) => ({
-  rule,
-  loading: loading.models.rule,
-}))
-@Form.create()
 export default class ClientDetail extends PureComponent {
   state = {
-    modalVisible: false,
+    waybillModalVisible: false,
+    orderModalVisible: false,
     expandForm: false,
     formValues: {},
-    type: '0' // 0 未投保 1 已投保
+    type: '0', // 0 未投保 1 已投保
+    clientInfo: {
+      name: '杨威',
+      phone: '15651751173',
+      IDCard: '2341234123412341234',
+      carNumber: '苏A12345',
+      limitDate: '2018-01-20',
+      form: '天上'
+    },
+    recordData: [{
+      name: '杨威',
+      orderCode: '2341234123412341234',
+      carNumber: '苏A12345',
+      total: '2000',
+      form: '天上'
+    }],
+    orderList: [{
+      orderCode: '2341234123412341234',
+      carNumber: '苏A12345',
+      time: '2018-01-20',
+      form: '天上',
+      status: '完成',
+      returnMoney: '200',
+      isReturn: '是',
+      returnTime: '2016-40-30',
+
+    }]
   };
 
   componentDidMount() {
-    // const { dispatch } = this.props;
-    // dispatch({
-    //   type: 'rule/fetch',
-    // });
-  }
-
-  handleFormReset = () => {
-    const { form } = this.props;
-    form.resetFields();
-    this.setState({
-      formValues: {},
-    });
   }
 
   toggleForm = () => {
@@ -201,194 +169,78 @@ export default class ClientDetail extends PureComponent {
     });
   }
 
-  handleModalVisible = (flag) => {
+  handleWaybillModalVisible = (flag) => {
     this.setState({
-      modalVisible: !!flag,
+      waybillModalVisible: !!flag,
     });
   }
 
-  handleAdd = (fields) => {
 
-    message.success('添加成功');
-    this.setState({
-      modalVisible: false,
-    });
-  }
-
-  renderSimpleForm() {
-    const { getFieldDecorator } = this.props.form;
-    console.log(norealData);
-    return (
-      <Form onSubmit={this.handleSearch} layout="inline">
-        <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
-          <Col md={6} sm={24}>
-            <FormItem label="车牌号码">
-              {getFieldDecorator('carNumber')(
-                <Input placeholder="请输入" />
-              )}
-            </FormItem>
-          </Col>
-          <Col md={6} sm={24}>
-            <FormItem label="订单状态">
-              {getFieldDecorator('orderStatus')(
-                <Select placeholder="请选择" style={{ width: '100%' }}>
-                  <Option value="0">待签收</Option>
-                  <Option value="1">待配送</Option>
-                  <Option value="2">已签收</Option>
-                </Select>
-              )}
-            </FormItem>
-          </Col>
-          <Col md={6} sm={24}>
-            <FormItem label="是否返现">
-              {getFieldDecorator('isReturn')(
-                <Select placeholder="请选择" style={{ width: '100%' }}>
-                  <Option value="0">否</Option>
-                  <Option value="1">是</Option>
-                </Select>
-              )}
-            </FormItem>
-          </Col>
-          <Col md={6} sm={24}>
-            <span className={styles.submitButtons}>
-              <Button type="primary" htmlType="submit">查询</Button>
-              <Button style={{ marginLeft: 8 }} onClick={this.handleFormReset}>重置</Button>
-              {/* <a style={{ marginLeft: 8 }} onClick={this.toggleForm}>
-                展开 <Icon type="down" />
-              </a> */}
-            </span>
-          </Col>
-        </Row>
-      </Form>
-    );
-  }
-
-  renderAdvancedForm() {
-    const { getFieldDecorator } = this.props.form;
-    return (
-      <Form onSubmit={this.handleSearch} layout="inline">
-        <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
-          <Col md={6} sm={24}>
-            <FormItem label="车牌号码">
-              {getFieldDecorator('carNumber')(
-                <Input placeholder="请输入" />
-              )}
-            </FormItem>
-          </Col>
-          <Col md={6} sm={24}>
-            <FormItem label="手机号码">
-              {getFieldDecorator('phoneNumber')(
-                <Input placeholder="请输入" />
-              )}
-            </FormItem>
-          </Col>
-          <Col md={6} sm={24}>
-            <FormItem label="来源渠道">
-              {getFieldDecorator('from')(
-                <Input placeholder="请输入" />
-              )}
-            </FormItem>
-          </Col>
-          <Col md={6} sm={24}>
-            <FormItem label="报价状态">
-              {getFieldDecorator('check’')(
-                <Select placeholder="请选择" style={{ width: '100%' }}>
-                  <Option value="0">待报价</Option>
-                  <Option value="1">已报价</Option>
-                  <Option value="3">核保成功</Option>
-                  <Option value="4">核保失败</Option>
-                </Select>
-              )}
-            </FormItem>
-          </Col>
-        </Row>
-        {/* <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
-          <Col md={8} sm={24}>
-            <FormItem label="更新日期">
-              {getFieldDecorator('date')(
-                <DatePicker style={{ width: '100%' }} placeholder="请输入更新日期" />
-              )}
-            </FormItem>
-          </Col> 
-          <Col md={12} sm={24}>
-            <FormItem label="来源渠道">
-            {getFieldDecorator('from')(
-                <Input placeholder="请输入" />
-              )}
-            </FormItem>
-          </Col>
-          <Col md={12} sm={24}>
-            <FormItem label="报价状态">
-              {getFieldDecorator('check’')(
-                <Select placeholder="请选择" style={{ width: '100%' }}>
-                  <Option value="0">待报价</Option>
-                  <Option value="1">已报价</Option>
-                  <Option value="3">核保成功</Option>
-                  <Option value="4">核保失败</Option>
-                </Select>
-              )}
-            </FormItem>
-          </Col>
-          
-        </Row> */}
-        <div style={{ overflow: 'hidden' }}>
-          <span style={{ float: 'right', marginBottom: 24 }}>
-            <Button type="primary" htmlType="submit">查询</Button>
-            <Button style={{ marginLeft: 8 }} onClick={this.handleFormReset}>重置</Button>
-            {/* <a style={{ marginLeft: 8 }} onClick={this.toggleForm}>
-              收起 <Icon type="up" />
-            </a> */}
-          </span>
-        </div>
-      </Form>
-    );
-  }
-
-  renderForm() {
-    return this.state.type === '1' ? this.renderAdvancedForm() : this.renderSimpleForm();
-  }
-
-  handleTypeChange = (e) => {
-    this.setState({ type: e.target.value });
-  }
   render() {
-    const { rule: { data }, loading } = this.props;
-    const { modalVisible, type } = this.state;
-
+    const waybillModalVisible = this.state.waybillModalVisible
     const parentMethods = {
-      handleAdd: this.handleAdd,
       handleModalVisible: this.handleModalVisible,
     };
-    let tableColumns;
-    if (type === '0') {
-      tableColumns = columns;
-    } else {
-      tableColumns = alreadyColumns;
-    }
-
     return (
       <PageHeaderLayout >
-        <Card bordered={false}>
-          <div className={styles.tableList}>
-           
-            <div className={styles.tableListForm}>
-              {this.renderForm()}
-            </div>
-            <div className={styles.tableListOperator}>
-              <Button type="primary" icon="download" size='large'>导出</Button>
-            </div>
-            <Table
-              loading={loading}
-              // data={data}
-              dataSource={norealData} 
-              columns={tableColumns}
-            />
-          </div>
+        <Card title="客户信息" className={styles.card} bordered={false}>
+          <Form layout="vertical" hideRequiredMark>
+            <Row gutter={16}>
+              <Col lg={6} md={12} sm={24}>
+                <Form.Item label='姓名'>
+                  臭傻逼
+                </Form.Item>
+              </Col>
+              <Col xl={{ span: 6, offset: 2 }} lg={{ span: 8 }} md={{ span: 12 }} sm={24}>
+                <Form.Item label='联系电话'>
+                  15651751173
+                </Form.Item>
+              </Col>
+              <Col xl={{ span: 8, offset: 2 }} lg={{ span: 10 }} md={{ span: 24 }} sm={24}>
+                <Form.Item label='身份证号码'>
+                  88888888888
+                </Form.Item>
+              </Col>
+            </Row>
+            <Row gutter={16}>
+              <Col lg={6} md={12} sm={24}>
+                <Form.Item label='车牌号'>
+                  苏A6666
+                </Form.Item>
+              </Col>
+              <Col xl={{ span: 6, offset: 2 }} lg={{ span: 8 }} md={{ span: 12 }} sm={24}>
+                <Form.Item label='保险到期'>
+                  2018-01-20
+                </Form.Item>
+              </Col>
+              <Col xl={{ span: 8, offset: 2 }} lg={{ span: 10 }} md={{ span: 24 }} sm={24}>
+                <Form.Item label='来源渠道'>
+                  效益门店
+                </Form.Item>
+              </Col>
+            </Row>
+          </Form>
         </Card>
-        <CreateForm
+        <Card title="报价记录" className={styles.card} bordered={false}>
+          <Table
+            // loading={loading}
+            dataSource={this.state.recordData}
+            columns={recordColumns}
+          />
+        </Card>
+
+        <Card title="车险订单" className={styles.card} bordered={false}>
+          <Table
+            // loading={loading}
+            dataSource={this.state.orderList}
+            columns={orderColumns}
+          />
+        </Card>
+        <WaybillDetail
           {...parentMethods}
-          modalVisible={modalVisible}
+          modalVisible={waybillModalVisible}
         />
+
       </PageHeaderLayout >
     );
   }

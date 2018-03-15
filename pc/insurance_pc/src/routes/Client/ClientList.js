@@ -14,11 +14,11 @@ const getValue = obj => Object.keys(obj).map(key => obj[key]).join(',');
 const columns = [
   {
     title: '序号',
-    dataIndex: 'key',
-    // render: (text, record) => {
-    //   console.log(val)
-    //   // return val.key;
-    // }
+    // dataIndex: 'key',
+    render: (text, record, index) => {
+      // console.log(val)
+      return index + 1;
+    }
   },
   {
     title: '车牌号码',

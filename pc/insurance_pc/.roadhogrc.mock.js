@@ -134,3 +134,6 @@ const proxy = {
 };
 
 export default noProxy ? {} : delay(proxy, 1000);
+// export default {
+//   'GET /api/(.*)': 'https://http://localhost:8080/carInsurance/',
+// };
