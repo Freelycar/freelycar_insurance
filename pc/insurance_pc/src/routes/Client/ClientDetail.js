@@ -4,54 +4,54 @@ import moment from 'moment';
 import { Row, Col, Card, Form, Input, Select, Icon, Button, Radio, Dropdown, Menu, InputNumber, DatePicker, Modal, message, Badge, Divider, Table } from 'antd';
 import StandardTable from 'components/StandardTable';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
-import { Link } from 'dva/router';
 
-import styles from './ClientList.less';
+import styles from './ClientDetail.less';
 
 const FormItem = Form.Item;
 const { Option } = Select;
 const getValue = obj => Object.keys(obj).map(key => obj[key]).join(',');
 const columns = [
-  {
-    title: '序号',
-    dataIndex: 'key',
-    // render: (text, record) => {
-    //   console.log(val)
-    //   // return val.key;
-    // }
-  },
+//   {
+//     title: '序号',
+//     dataIndex: 'no',
+//     render: val => {
+//       return val;
+//     }
+//   },
   {
     title: '车牌号码',
     dataIndex: 'carNumber',
-    render: (text, record) => {
-      return <Link to='/client/detail' >
-        {text}
-      </Link>
-    }
+    key: 'carNumber',
   },
   {
     title: '车主姓名',
-    dataIndex: 'name',
+    dataIndex: 'name', 
+    key: 'name',
   },
   {
     title: '手机号码',
     dataIndex: 'phoneNumber',
+    key: 'phoneNumber',
   },
   {
     title: '保险到期',
     dataIndex: 'limitDate',
+    key: 'limitDate',
   },
   {
     title: '报价时间',
     dataIndex: 'time',
+    key: 'time',
   },
   {
     title: '报价状态',
     dataIndex: 'status',
+    key: 'status',
   },
   {
     title: '来源渠道',
     dataIndex: 'from',
+    key: 'from',
   }
 ];
 const alreadyColumns = [
@@ -107,14 +107,14 @@ const alreadyColumns = [
 ];
 
 const norealData = [{
-  key: '1',
-  carNumber: '苏A6666',
-  name: '杨威',
-  phoneNumber: '15651751173',
-  limitDate: '2018-03-25',
-  time: '2018-03-24',
-  status: '报价成功了吧，应该',
-  from: '微信小程序'
+    key: '1',
+    carNumber: '苏A6666',
+    name: '杨威',
+    phoneNumber: '15651751173',
+    limitDate: '2018-03-25',
+    time: '2018-03-24',
+    status: '报价成功了吧，应该',
+    from: '微信小程序'
 }] 
 
 const CreateForm = Form.create()((props) => {
@@ -153,7 +153,7 @@ const CreateForm = Form.create()((props) => {
   loading: loading.models.rule,
 }))
 @Form.create()
-export default class ClientList extends PureComponent {
+export default class ClientDetail extends PureComponent {
   state = {
     modalVisible: false,
     expandForm: false,
@@ -217,6 +217,7 @@ export default class ClientList extends PureComponent {
 
   renderSimpleForm() {
     const { getFieldDecorator } = this.props.form;
+    console.log(norealData);
     return (
       <Form onSubmit={this.handleSearch} layout="inline">
         <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
@@ -366,15 +367,10 @@ export default class ClientList extends PureComponent {
     }
 
     return (
-      <PageHeaderLayout title="车险客户">
+      <PageHeaderLayout >
         <Card bordered={false}>
           <div className={styles.tableList}>
-            <div className={styles.tableListOperator}>
-              <Radio.Group value={this.state.type} onChange={this.handleTypeChange} size='large' type="primary">
-                <Radio.Button value='0' >未投保</Radio.Button>
-                <Radio.Button value='1'>已投保</Radio.Button>
-              </Radio.Group>
-            </div>
+           
             <div className={styles.tableListForm}>
               {this.renderForm()}
             </div>
@@ -384,7 +380,7 @@ export default class ClientList extends PureComponent {
             <Table
               loading={loading}
               // data={data}
-              dataSource={norealData}
+              dataSource={norealData} 
               columns={tableColumns}
             />
           </div>

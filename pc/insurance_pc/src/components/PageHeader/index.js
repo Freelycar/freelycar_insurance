@@ -181,7 +181,8 @@ export default class PageHeader extends PureComponent {
 
     return (
       <div className={clsString}>
-        {breadcrumb}
+      {/*  面包屑开关 */} 
+        {breadcrumb}  
         <div className={styles.detail}>
           {logo && <div className={styles.logo}>{logo}</div>}
           <div className={styles.main}>
