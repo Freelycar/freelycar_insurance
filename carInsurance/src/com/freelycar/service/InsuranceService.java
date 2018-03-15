@@ -13,9 +13,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.freelycar.dao.InsuranceDao;
+import com.freelycar.dao.OrderDao;
 import com.freelycar.dao.QuoteRecordDao;
 import com.freelycar.entity.Client;
 import com.freelycar.entity.Insurance;
+import com.freelycar.entity.InsuranceOrder;
 import com.freelycar.entity.QuoteRecord;
 import com.freelycar.util.Constant;
 import com.freelycar.util.HttpClientUtil;
@@ -33,12 +35,16 @@ public class InsuranceService
     @Autowired
 	private InsuranceDao insuranceDao;
     
+    private  OrderDao orderDao;
+    
     @Autowired
     private QuoteRecordDao qrdao;
     
     private String LUOTUOKEY = Constant.LUOTUOKEY;
     
     public Map<String, Object> queryLastYear(Client client){
+    	
+    	System.out.println(client);
     	Map<String,Object> param = new HashMap<>();
     	param.put("api_key", LUOTUOKEY);
     	param.put("ownerName", client.getOwnerName());
@@ -167,23 +173,31 @@ public class InsuranceService
 	}
     
     
-    //查询价格
+    //提交核保
     public Map<String,Object> submitProposal(Client client, QuoteRecord record){
     	Map<String,Object> param = new HashMap<>();
     	param.put("api_key", LUOTUOKEY);
     	
     	JSONObject params = new JSONObject();
     	System.out.println("#######"+record.getOfferId());
-    	params.put("orderId", record.getOfferId());//
-    	params.put("insuredName", client.getOwnerName());//
-    	params.put("insuredIdNo", client.getIdCard());//
+    	params.put("orderId", record.getOfferId());
+    	params.put("insuredName", client.getOwnerName());
+    	params.put("insuredIdNo", client.getIdCard());
     	params.put("insuredPhone", client.getPhone());//保险公司编号多加用逗号分隔
     	params.put("customerName", client.getOwnerName());//
-    	params.put("customerPhone", client.getPhone());//
-    	params.put("customerIdNo", client.getIdCard());//
-    	params.put("contactName", client.getOwnerName());//
+    	params.put("customerPhone", client.getPhone());
+    	params.put("customerIdNo", client.getIdCard());
+    	params.put("contactName", client.getOwnerName());
     	params.put("contactPhone", client.getPhone());//
-    	params.put("contactAddress", client.getContactAddress());//
+    	
+    	JSONObject address = new JSONObject();
+    	address.put("acceptProvince", "");
+    	address.put("contactAddressDetail", "江苏 南京市 栖霞区紫东");
+    	address.put("address", "紫东");
+    	address.put("acceptProvinceName", "江苏 南京市 栖霞区");
+    	
+    	params.put("contactAddress", address);
+    	params.put("imageJson", "");
     	
     	JSONObject invoiceInfo = new JSONObject();
     	invoiceInfo.put("isInvoice", 0);
@@ -194,14 +208,25 @@ public class InsuranceService
     	
     	param.put("params", params);
     	
+    	
+    	for(Map.Entry<String, Object> p : param.entrySet()){
+    		System.out.println(p.getKey()+"------"+p.getValue());
+    	}
     	JSONObject resultJson = HttpClientUtil.httpGet("http://wechat.bac365.com:8081/carRisk/car_risk/carApi/submitProposal", param);
     	
     	if(resultJson.has("errorMsg")){
     		String msg = resultJson.getJSONObject("errorMsg").getString("code");
     		if("success".equals(msg)){
-    			//询价成功
-    			
-    			System.out.println("ddddddddddddddddddddddd");
+    			//提交核保成功
+    			InsuranceOrder inorder = new InsuranceOrder();
+    			inorder.setCreateTime(System.currentTimeMillis());
+    			inorder.setInsuredIdNo(client.getIdCard());
+    			inorder.setInsuredPhone(client.getPhone());
+    			inorder.setInsureName(client.getOwnerName());
+    			inorder.setLicenseNumber(client.getLicenseNumber());
+    			inorder.setOrderId(record.getOfferId());
+    			inorder.setState("提交核保");
+    			orderDao.saveOrder(inorder);
     			return RESCODE.SUCCESS.getJSONRES();
     		}
     	}

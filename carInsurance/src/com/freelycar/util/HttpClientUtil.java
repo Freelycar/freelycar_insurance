@@ -166,7 +166,7 @@ public class HttpClientUtil {
 	public static void httpPost(String url,JSONObject params) throws ClientProtocolException, IOException {
 
 	    HttpPost request = new HttpPost(url);
-	    StringEntity paramsEntity =new StringEntity(params.toString());
+	    StringEntity paramsEntity =new StringEntity(params.toString(), "UTF-8");
 	    request.addHeader("content-type", "application/json;charset=utf-8");
 	    request.setEntity(paramsEntity);
 	    HttpResponse response = httpClient.execute(request);

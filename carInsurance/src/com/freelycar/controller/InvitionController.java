@@ -32,8 +32,8 @@ public class InvitionController
 	}
     
 	//查询所有的Invition	
-	@RequestMapping(value = "/list",method = RequestMethod.POST)
-	public Map<String,Object> listInvition(@RequestBody(required=false) Invition invition, int page,int number){
+	@RequestMapping(value = "/list",method = RequestMethod.GET)
+	public Map<String,Object> listInvition(Invition invition, int page,int number){
 		return invitionService.listInvition(invition, page, number);
 	}
 	

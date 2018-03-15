@@ -28,6 +28,7 @@ public class InvitionService
     //增加一个Invition
     public Map<String,Object> saveInvition(Invition invition){
     	invition.setCreateTime(System.currentTimeMillis());
+    	
 		invitionDao.saveInvition(invition);
 		return RESCODE.SUCCESS.getJSONRES();
 	}

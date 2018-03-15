@@ -21,9 +21,14 @@ public class OrderpushResulController
 	private OrderpushResulService orderpushResulService;
 
     
+    /**
+     * 核保推送
+     * @param result
+     * @return
+     */
     @RequestMapping(value="/resultPush")
-    public Map<String,Object> orderpushResult(String result){
-    	return orderpushResulService.orderpushResult(result);
+    public Map<String,Object> orderpushResult(String data){
+    	return orderpushResulService.orderpushResult(data);
     }
 
    
