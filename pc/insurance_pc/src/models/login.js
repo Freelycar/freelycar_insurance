@@ -12,6 +12,7 @@ export default {
 
   effects: {
     *login({ payload }, { call, put }) {
+      console.log('zheli')
       const response = yield call(fakeAccountLogin, payload);
       yield put({
         type: 'changeLoginStatus',

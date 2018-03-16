@@ -134,14 +134,22 @@ export default class GlobalHeader extends PureComponent {
               emptyImage="https://gw.alipayobjects.com/zos/rmsportal/HsIsxMZiWKrNUavQUXqx.svg"
             />
           </NoticeIcon> */}
-          {currentUser.name ? (
+          {'我的名字' ? (
             <Dropdown overlay={menu}>
               <span className={`${styles.action} ${styles.account}`}>
-                <Avatar size="small" className={styles.avatar} src={currentUser.avatar} />
-                <span className={styles.name}>{currentUser.name}</span>
+                {/* <Avatar size="small" className={styles.avatar} src={currentUser.avatar} /> */}
+                <span className={styles.name}>我的名字</span>
               </span>
             </Dropdown>
           ) : <Spin size="small" style={{ marginLeft: 8 }} />}
+          {/* {'我的名字' ? (
+            <Dropdown overlay={menu}>
+              <span className={`${styles.action} ${styles.account}`}>
+                <Avatar size="small" className={styles.avatar} src={currentUser.avatar} />
+                <span className={styles.name}>我的名字</span>
+              </span>
+            </Dropdown>
+          ) : <Spin size="small" style={{ marginLeft: 8 }} />} */}
         </div>
       </div>
     );
