@@ -89,7 +89,7 @@ public enum RESCODE {
 		
 		Map<String,Object> msg = new HashMap<>();
 		msg.put("code", this.nMsg);
-		msg.put("message", this.nMsg);
+		msg.put("message", this.nMsg.equals("success")?"操作成功":"操作失败");
 		jsonres.put("errorMsg", msg);
 		
 		jsonres.put("data", data);

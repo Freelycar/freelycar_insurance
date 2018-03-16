@@ -20,6 +20,7 @@ import javax.persistence.Transient;
 import org.hibernate.annotations.GenericGenerator;
 
 import com.freelycar.util.INSURANCE;
+import com.freelycar.util.Tools;
 
 /**  
  *  
@@ -209,8 +210,11 @@ public class Client
     
     public String getQuoteState() {
     	//自定义枚举类意思
-    	return INSURANCE.getQuotestateName(Integer.parseInt(this.quoteState));
-		//return quoteState;
+    	/*if(Tools.notEmpty(this.quoteState)){
+    		
+    	}
+    	return INSURANCE.getQuotestateName(Integer.parseInt(this.quoteState));*/
+		return quoteState;
 	}
     
     public void setQuoteState(String quoteState) {

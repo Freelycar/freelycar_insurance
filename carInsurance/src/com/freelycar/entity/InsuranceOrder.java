@@ -90,6 +90,8 @@ public class InsuranceOrder
     private String expressCompany;  //快递公司;
 	
     private String remark;  //备注;
+    
+    private long totalPrice;//总价
     /********** constructors ***********/  
     public InsuranceOrder() {  
       
@@ -125,6 +127,14 @@ public class InsuranceOrder
     public Integer getId() {
         return id;
     }
+    
+    public long getTotalPrice() {
+		return totalPrice;
+	}
+    
+    public void setTotalPrice(long totalPrice) {
+		this.totalPrice = totalPrice;
+	}
     
     public void setId(Integer id) {
         this.id = id;

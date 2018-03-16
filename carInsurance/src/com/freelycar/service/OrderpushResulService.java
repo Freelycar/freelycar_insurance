@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.freelycar.dao.OrderpushResulDao;
+import com.freelycar.dao.QuoteRecordDao;
 import com.freelycar.entity.InsuranceOrder;
 import com.freelycar.entity.OrderpushResul;
 import com.freelycar.entity.QuoteRecord;
@@ -29,6 +30,8 @@ public class OrderpushResulService
     @Autowired
     private OrderService orderService;
     
+    @Autowired
+    private QuoteRecordDao quoteRecordDao;
     
     
     
@@ -94,6 +97,7 @@ public class OrderpushResulService
 				
 				int state = resultobj.getInt("state");
 				String orderId = resultobj.getString("orderId");
+				String licenseNumber = resultobj.getString("licenseNumber");
 				int underwritingPriceCent = resultobj.getInt("underwritingPriceCent");
 				
 				
@@ -108,23 +112,13 @@ public class OrderpushResulService
 					order.setCiPolicyNo(ciNo);
 				}
 				
-				//order.set
 				
+				QuoteRecord qr = quoteRecordDao.getQuoteRecordBySpecify("offerId", orderId);
+				order.setOfferDetail(qr.getOfferDetail());
 				
-				
-				//underwritingJson.get(key)
-				//order.setBiPolicyNo(biPolicyNo);
-				//order.set
-				
-				
+				order.setTotalPrice(underwritingPriceCent);
+				order.setLicenseNumber(licenseNumber);
 				orderService.updateOrder(order);
-				
-				
-				OrderpushResul qr = new OrderpushResul();
-				qr.setState(state);
-				qr.setUnderwritingJson(underwritingJson.toString());
-				qr.setUnderwritingPriceCent(underwritingPriceCent);
-				orderpushResulDao.updateOrderpushResulBySpecifyId(qr, "orderId");
 				
 				Map<String,Object> msg = new HashMap<>();
 				msg.put("orderId", orderId);
