@@ -69,7 +69,6 @@ public class OrderService
 	
 	//更新Order
 	public Map<String,Object> updateOrder(InsuranceOrder order){
-	    orderDao.updateOrder(order);
 	    return RESCODE.SUCCESS.getJSONRES();
 	}
     

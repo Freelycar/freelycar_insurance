@@ -17,27 +17,32 @@ public enum INSURANCE {
 	
 	
 	//报价状态
-	QUOTESTATE_NO_1("待报价"),
-	QUOTESTATE_NO_2("已报价"),
-	QUOTESTATE_NO_3("核保成功"),
-	QUOTESTATE_NO_4("核保失败"),
-	QUOTESTATE_NO_5("待牵收"),
-	QUOTESTATE_NO_6("待配送"),
-	QUOTESTATE_NO_7("已配送");
+	QUOTESTATE_NO_1(1,"待报价"),
+	QUOTESTATE_NO_2(2,"已报价"),
+	QUOTESTATE_NO_3(3,"核保成功"),
+	QUOTESTATE_NO_4(4,"核保失败"),
+	QUOTESTATE_NO_5(5,"待签收"),
+	QUOTESTATE_NO_6(6,"待配送"),
+	QUOTESTATE_NO_7(7,"已配送");
 
-	private String insuranceTypeName;// 险种名称
-	private INSURANCE(String insuranceTypeName) {
-		this.insuranceTypeName = insuranceTypeName;
+	private int code;// 险种名称
+	private String name;// 险种名称
+	private INSURANCE(String name) {
+		this.name = name;
+	}
+	private INSURANCE(int code,String name) {
+		this.code = code;
+		this.name = name;
 	}
 	
 	//根据number得到名称
 	public static String getInsuranceTypeName(int number){
-		return INSURANCE.valueOf("INSURANCE_NO_"+number).insuranceTypeName;
+		return INSURANCE.valueOf("INSURANCE_NO_"+number).name;
 	}
 	
 	//根据state来得到报价状态的中文意思
 	public static String getQuotestateName(int number){
-		return INSURANCE.valueOf("QUOTESTATE_NO_"+number).insuranceTypeName;
+		return INSURANCE.valueOf("QUOTESTATE_NO_"+number).name;
 	}
 	
 	

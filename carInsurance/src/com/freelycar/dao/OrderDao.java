@@ -2,7 +2,6 @@ package com.freelycar.dao;
 
 import java.util.List;
 
-import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,7 +9,6 @@ import org.springframework.stereotype.Repository;
 
 import com.freelycar.entity.InsuranceOrder;
 import com.freelycar.util.QueryUtils;
-import com.freelycar.util.SqlHelper;
 /**  
  *  操作数据库的dao层
  */  
@@ -35,6 +33,12 @@ public class OrderDao
         String hql = "from Order where id = :id";
         InsuranceOrder result = (InsuranceOrder) getSession().createQuery(hql).setInteger("id", id).uniqueResult();
         return result;
+    }
+    //根据id查询Order
+    public InsuranceOrder getOrderByOrderId(String orderId){
+    	String hql = "from Order where orderId = :orderId";
+    	InsuranceOrder result = (InsuranceOrder) getSession().createQuery(hql).setString("orderId", orderId).uniqueResult();
+    	return result;
     }
 	
 	
@@ -75,12 +79,18 @@ public class OrderDao
 	
 	//更新Order
 	public void updateOrder(InsuranceOrder order){
-	    String hql = SqlHelper.genUpdateSql(order, InsuranceOrder.class);
-		
-		Query query = getSession().createQuery(hql);
-		query = SqlHelper.getQuery(order, InsuranceOrder.class, query);
-		
-		query.executeUpdate();
+		InsuranceOrder or = getOrderByOrderId(order.getOrderId());
+		or.setBackmoney(order.getBackmoney());
+		or.setBiPolicyNo(order.getBiPolicyNo());
+		or.setBiPolicyPrice(order.getBiPolicyPrice());
+		or.setCashback(order.getCashback());
+		or.setCiPolicyNo(order.getBiPolicyNo());
+		or.setCiPolicyPrice(order.getCiPolicyPrice());
+		or.setExpressCompany(order.getExpressCompany());
+		or.setExpressNumber(order.getExpressNumber());
+		or.setLicenseNumber(order.getLicenseNumber());
+		or.setOfferDetail(order.getOfferDetail());
+	    getSession().update(order);
 	    
 	}
     

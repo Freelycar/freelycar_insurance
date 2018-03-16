@@ -51,7 +51,7 @@ public class ClientController
     
 	//查询所有的Client	
 	@RequestMapping(value = "/list")
-	public Map<String,Object> listClient(@RequestBody(required = false) Client client, int pages,int number){
+	public Map<String,Object> listClient(Client client, int pages,int number){
 		return clientService.listClient(client, pages, number);
 	}
 	

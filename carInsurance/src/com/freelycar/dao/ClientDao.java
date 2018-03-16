@@ -49,7 +49,7 @@ public class ClientDao
 			 .addStringLike("source", client.getSource())
 			 .addString("licenseNumber", client.getLicenseNumber())
 			 .addString("nickName", client.getNickName())
-			 .addString("quoteState", INSURANCE.getQuotestateName(Integer.parseInt(client.getQuoteState())))
+			 .addString("quoteState", client.getQuoteState())
 			 .addBoolean("transfer", client.getTransfer())
 			 .addBoolean("toubao", client.isToubao())
 			 .addBoolean("cashback", client.isCashback())

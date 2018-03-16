@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.freelycar.dao.OrderpushResulDao;
+import com.freelycar.entity.InsuranceOrder;
 import com.freelycar.entity.OrderpushResul;
 import com.freelycar.entity.QuoteRecord;
 import com.freelycar.util.RESCODE;  
@@ -25,6 +26,8 @@ public class OrderpushResulService
     @Autowired
 	private OrderpushResulDao orderpushResulDao;
     
+    @Autowired
+    private OrderService orderService;
     
     
     
@@ -94,6 +97,15 @@ public class OrderpushResulService
 				String orderId = resultobj.getString("orderId");
 				int underwritingPriceCent = resultobj.getInt("underwritingPriceCent");
 				System.out.println("★★★@@@： "+underwritingJson);
+				
+				
+				InsuranceOrder order = new InsuranceOrder();
+				
+				order
+				
+				
+				orderService.updateOrder(order)
+				
 				
 				OrderpushResul qr = new OrderpushResul();
 				qr.setState(state);

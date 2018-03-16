@@ -208,12 +208,13 @@ public class Client
 	}
     
     public String getQuoteState() {
-		return quoteState;
+    	//自定义枚举类意思
+    	return INSURANCE.getQuotestateName(Integer.parseInt(this.quoteState));
+		//return quoteState;
 	}
     
     public void setQuoteState(String quoteState) {
-    	//自定义枚举类意思
-		this.quoteState = INSURANCE.getQuotestateName(Integer.parseInt(quoteState));;
+		this.quoteState = quoteState;
 	}
     
     public boolean isCashback() {
