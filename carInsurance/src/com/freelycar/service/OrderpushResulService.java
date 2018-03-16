@@ -101,10 +101,10 @@ public class OrderpushResulService
 				
 				InsuranceOrder order = new InsuranceOrder();
 				
-				order
+				//order.set
 				
 				
-				orderService.updateOrder(order)
+				orderService.updateOrder(order);
 				
 				
 				OrderpushResul qr = new OrderpushResul();
