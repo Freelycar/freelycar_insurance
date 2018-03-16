@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.freelycar.entity.Client;
+import com.freelycar.util.INSURANCE;
 import com.freelycar.util.QueryUtils;
 import com.freelycar.util.SqlHelper;
 /**  
@@ -48,8 +49,10 @@ public class ClientDao
 			 .addStringLike("source", client.getSource())
 			 .addString("licenseNumber", client.getLicenseNumber())
 			 .addString("nickName", client.getNickName())
+			 .addString("quoteState", INSURANCE.getQuotestateName(Integer.parseInt(client.getQuoteState())))
 			 .addBoolean("transfer", client.getTransfer())
 			 .addBoolean("toubao", client.isToubao())
+			 .addBoolean("cashback", client.isCashback())
 			 .addString("phone", client.getPhone());
 		}
 		

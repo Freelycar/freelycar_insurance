@@ -19,6 +19,8 @@ import javax.persistence.Transient;
 
 import org.hibernate.annotations.GenericGenerator;
 
+import com.freelycar.util.INSURANCE;
+
 /**  
  *  
  */  
@@ -49,8 +51,11 @@ public class Client
 	
     private boolean transfer;  //是否过户;
     private boolean toubao;  //是否投保;
+    private boolean cashback;  //是否投保;
     
-    private String source;
+    private String source;//来源
+    
+    private String quoteState;//报价状态
 	
     private Long transferTime;  //过户日期;
 	
@@ -200,6 +205,23 @@ public class Client
     
     public void setToubao(boolean toubao) {
 		this.toubao = toubao;
+	}
+    
+    public String getQuoteState() {
+		return quoteState;
+	}
+    
+    public void setQuoteState(String quoteState) {
+    	//自定义枚举类意思
+		this.quoteState = INSURANCE.getQuotestateName(Integer.parseInt(quoteState));;
+	}
+    
+    public boolean isCashback() {
+		return cashback;
+	}
+    
+    public void setCashback(boolean cashback) {
+		this.cashback = cashback;
 	}
     
     
