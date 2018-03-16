@@ -45,6 +45,7 @@ public class ClientDao
 		
 		if(client != null){
 			utils = utils.addStringLike("idCard", client.getIdCard())
+			 .addStringLike("source", client.getSource())
 			 .addString("licenseNumber", client.getLicenseNumber())
 			 .addString("nickName", client.getNickName())
 			 .addBoolean("transfer", client.getTransfer())

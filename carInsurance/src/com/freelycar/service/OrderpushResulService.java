@@ -83,16 +83,17 @@ public class OrderpushResulService
 			JSONObject resObj = new JSONObject(result);
 			if(resObj.getJSONObject("errorMsg").getString("code").equals("success")){
 				JSONObject resultobj = resObj.getJSONObject("data");
-				JSONObject underwritingJson = resultobj.getJSONObject("underwritingJson");
+				JSONObject underwritingJson = new JSONObject(resultobj.getString("underwritingJson"));
 				
+				System.out.println("★★★： "+underwritingJson);
 				if(underwritingJson.has("errorMsg")){
 					return RESCODE.LUOTUO_SUCCESS.getLuoTuoRes(underwritingJson.getString("errorMsg"));
 				}
 				
-				
 				int state = resultobj.getInt("state");
 				String orderId = resultobj.getString("orderId");
 				int underwritingPriceCent = resultobj.getInt("underwritingPriceCent");
+				System.out.println("★★★@@@： "+underwritingJson);
 				
 				OrderpushResul qr = new OrderpushResul();
 				qr.setState(state);

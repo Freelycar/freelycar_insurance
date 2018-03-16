@@ -48,7 +48,9 @@ public class Client
     private String idCard;  //身份证号码;
 	
     private boolean transfer;  //是否过户;
-    private boolean toubao;  //是否过户;
+    private boolean toubao;  //是否投保;
+    
+    private String source;
 	
     private Long transferTime;  //过户日期;
 	
@@ -110,6 +112,15 @@ public class Client
         this.nickName = nickName;  
     }  
       
+    
+    public String getSource() {
+		return source;
+	}
+    
+    
+    public void setSource(String source) {
+		this.source = source;
+	}
 	
     public String getHeadImg() {  
         return headImg;  

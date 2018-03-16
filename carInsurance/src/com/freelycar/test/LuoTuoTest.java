@@ -71,7 +71,7 @@ public class LuoTuoTest {
 		obj.put("idCard", "320113196303202013");
 		obj.put("phone", "13705159506");
 		obj.put("contactAddress", "江苏南京");*/
-		obj.put("offerId", "109-20180315172137-27694");
+		obj.put("offerId", "109-20180316135652-f2333");
 		obj.put("ownerName", "刘扬");
 		obj.put("idCard", "320112198807021630");
 		obj.put("phone", "13705159506");
