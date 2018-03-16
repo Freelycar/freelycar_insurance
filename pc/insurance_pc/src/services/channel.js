@@ -8,6 +8,13 @@ export async function addChannel(params) {
     });
 }
 
+export async function modifyChannel(params) {
+    return request('/api/invition/update', {
+      method: 'POST',
+      body: params,
+    });
+}
+
 export async function removeChannels(params) {
     return request(`/api/invition/remove?${stringify(params)}`);
 }
