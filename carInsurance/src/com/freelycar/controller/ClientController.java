@@ -51,8 +51,8 @@ public class ClientController
     
 	//查询所有的Client	
 	@RequestMapping(value = "/list")
-	public Map<String,Object> listClient(Client client, int pages,int number){
-		return clientService.listClient(client, pages, number);
+	public Map<String,Object> listClient(Client client, int page,int number){
+		return clientService.listClient(client, page, number);
 	}
 	
 	//根据id删除Client

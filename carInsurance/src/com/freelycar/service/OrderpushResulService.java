@@ -88,7 +88,6 @@ public class OrderpushResulService
 				JSONObject resultobj = resObj.getJSONObject("data");
 				JSONObject underwritingJson = new JSONObject(resultobj.getString("underwritingJson"));
 				
-				System.out.println("★★★： "+underwritingJson);
 				if(underwritingJson.has("errorMsg")){
 					return RESCODE.LUOTUO_SUCCESS.getLuoTuoRes(underwritingJson.getString("errorMsg"));
 				}
@@ -96,11 +95,25 @@ public class OrderpushResulService
 				int state = resultobj.getInt("state");
 				String orderId = resultobj.getString("orderId");
 				int underwritingPriceCent = resultobj.getInt("underwritingPriceCent");
-				System.out.println("★★★@@@： "+underwritingJson);
 				
 				
 				InsuranceOrder order = new InsuranceOrder();
+				if(underwritingJson.has("biNo")){//商业险
+					String bino = underwritingJson.getJSONObject("biNo").getString("value");//保单号
+					order.setBiPolicyNo(bino);
+				}
 				
+				if(underwritingJson.has("ciNo")){//较强险
+					String ciNo = underwritingJson.getJSONObject("ciNo").getString("value");//保单号
+					order.setCiPolicyNo(ciNo);
+				}
+				
+				//order.set
+				
+				
+				
+				//underwritingJson.get(key)
+				//order.setBiPolicyNo(biPolicyNo);
 				//order.set
 				
 				
