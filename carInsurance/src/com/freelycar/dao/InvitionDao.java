@@ -78,12 +78,11 @@ public class InvitionDao
 	
 	//更新Invition
 	public void updateInvition(Invition invition){
-	    String hql = SqlHelper.genUpdateSql(invition, Invition.class);
-		
-		Query query = getSession().createQuery(hql);
-		query = SqlHelper.getQuery(invition, Invition.class, query);
-		
-		query.executeUpdate();
+	    Invition invitionById = getInvitionById(invition.getId());
+	    invitionById.setInvcode(invition.getInvcode());
+	    invitionById.setName(invition.getName());
+	    invitionById.setRemark(invition.getRemark());
+	    getSession().update(invitionById);
 	    
 	}
     

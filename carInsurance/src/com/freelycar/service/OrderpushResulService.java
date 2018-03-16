@@ -79,7 +79,7 @@ public class OrderpushResulService
 	//核保结果推送
 	public Map<String, Object> orderpushResult(String result) {
 		try {
-    		System.out.println(result);
+    		System.out.println("核保推送结果： "+result);
 			JSONObject resObj = new JSONObject(result);
 			if(resObj.getJSONObject("errorMsg").getString("code").equals("success")){
 				JSONObject resultobj = resObj.getJSONObject("data");

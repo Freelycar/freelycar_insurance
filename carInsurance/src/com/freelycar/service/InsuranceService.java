@@ -35,6 +35,7 @@ public class InsuranceService
     @Autowired
 	private InsuranceDao insuranceDao;
     
+    @Autowired
     private  OrderDao orderDao;
     
     @Autowired
@@ -218,6 +219,7 @@ public class InsuranceService
     		String msg = resultJson.getJSONObject("errorMsg").getString("code");
     		if("success".equals(msg)){
     			//提交核保成功
+    			System.out.println("提交核保成功");
     			InsuranceOrder inorder = new InsuranceOrder();
     			inorder.setCreateTime(System.currentTimeMillis());
     			inorder.setInsuredIdNo(client.getIdCard());
@@ -227,6 +229,7 @@ public class InsuranceService
     			inorder.setOrderId(record.getOfferId());
     			inorder.setState("提交核保");
     			orderDao.saveOrder(inorder);
+    			
     			return RESCODE.SUCCESS.getJSONRES();
     		}
     	}

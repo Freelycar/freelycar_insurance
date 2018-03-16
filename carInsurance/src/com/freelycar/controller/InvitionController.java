@@ -45,7 +45,7 @@ public class InvitionController
 	
 	//更新Invition
 	@RequestMapping(value = "/update",method = RequestMethod.POST)
-	public Map<String,Object> updateInvition(Invition invition){
+	public Map<String,Object> updateInvition(@RequestBody Invition invition){
 	    return invitionService.updateInvition(invition);
 	}
     

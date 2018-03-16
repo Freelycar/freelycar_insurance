@@ -38,6 +38,7 @@ public class QuoteRecordService
 				JSONObject resultobj = data.getJSONObject("result");
 				
 				String offerId = resultobj.getString("offerId");
+				System.out.println("报价推送的offerId:"+offerId);
 				String offerDetail = resultobj.getString("offerDetail");
 				int state = resultobj.getInt("state");
 				
