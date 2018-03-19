@@ -68,8 +68,25 @@ public class OrderService
 	}
 	
 	//更新Order
-	public Map<String,Object> updateOrder(InsuranceOrder order){
+	public Map<String,Object> updateOrderByOfferId(InsuranceOrder order){
+		InsuranceOrder or = orderDao.getOrderByOrderId(order.getOrderId());
+		or.setBackmoney(order.getBackmoney());
+		or.setBiPolicyNo(order.getBiPolicyNo());
+		or.setBiPolicyPrice(order.getBiPolicyPrice());
+		or.setCashback(order.getCashback());
+		or.setCiPolicyNo(order.getBiPolicyNo());
+		or.setCiPolicyPrice(order.getCiPolicyPrice());
+		or.setExpressCompany(order.getExpressCompany());
+		or.setExpressNumber(order.getExpressNumber());
+		or.setLicenseNumber(order.getLicenseNumber());
+		or.setOfferDetail(order.getOfferDetail());
+		orderDao.updateOrder(or);
 	    return RESCODE.SUCCESS.getJSONRES();
+	}
+	//更新Order
+	public Map<String,Object> updateOrder(InsuranceOrder order){
+		orderDao.updateOrder(order);
+		return RESCODE.SUCCESS.getJSONRES();
 	}
     
 }

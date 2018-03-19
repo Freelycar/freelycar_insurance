@@ -58,6 +58,20 @@ public class InsuranceController
     }
     
     
+    /**
+     * 7、确认是否承保接口
+     * @param client
+     * @param quoteRecord
+     * @return
+     */
+    @RequestMapping(value="/confirmChengbao",method = RequestMethod.POST)
+    public Map<String, Object> confirmChengbao(String orderId){
+    	return insuranceService.confirmChengbao(orderId);
+    }
+    
+    
+    
+    
     
     @RequestMapping(value = "/test1")
     public String queryPrice(){

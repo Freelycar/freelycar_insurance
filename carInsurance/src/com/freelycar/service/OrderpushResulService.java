@@ -3,6 +3,7 @@ package com.freelycar.service;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -10,11 +11,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.freelycar.dao.OrderDao;
 import com.freelycar.dao.OrderpushResulDao;
 import com.freelycar.dao.QuoteRecordDao;
 import com.freelycar.entity.InsuranceOrder;
 import com.freelycar.entity.OrderpushResul;
 import com.freelycar.entity.QuoteRecord;
+import com.freelycar.util.Constant;
 import com.freelycar.util.RESCODE;  
 /**  
  *  
@@ -26,6 +29,9 @@ public class OrderpushResulService
     /********** 注入OrderpushResulDao ***********/  
     @Autowired
 	private OrderpushResulDao orderpushResulDao;
+    
+    @Autowired
+    private OrderDao orderDao;
     
     @Autowired
     private OrderService orderService;
@@ -111,14 +117,29 @@ public class OrderpushResulService
 					String ciNo = underwritingJson.getJSONObject("ciNo").getString("value");//保单号
 					order.setCiPolicyNo(ciNo);
 				}
+
+				//把单号和过期时间存在map中
+				JSONObject jsonObject = underwritingJson.getJSONObject("checkCode");
+				Map<String, String> proposalMap = Constant.getProposalMap();
+				proposalMap.put(orderId, jsonObject.getString("value"));//2018-3-19 17:33:27
+				Constant.getCachedThreadPool().execute(new Runnable() {
+					public void run() {
+						//在这里我们在过期时间之内定时调用 7、确认是否承保接口
+						Constant.getTimeExecutor().scheduleAtFixedRate(new Runnable() {
+							public void run() {
+								System.out.println("定时器");
+							}
+						},0, 1, TimeUnit.SECONDS);
+					}
+				});
 				
 				
 				QuoteRecord qr = quoteRecordDao.getQuoteRecordBySpecify("offerId", orderId);
 				order.setOfferDetail(qr.getOfferDetail());
-				
 				order.setTotalPrice(underwritingPriceCent);
 				order.setLicenseNumber(licenseNumber);
-				orderService.updateOrder(order);
+				order.setOrderId(orderId);
+				orderService.updateOrderByOfferId(order);
 				
 				Map<String,Object> msg = new HashMap<>();
 				msg.put("orderId", orderId);
@@ -146,9 +167,10 @@ public class OrderpushResulService
 				String ciPolicyNo = resultobj.getString("ciPolicyNo");
 				String biPolicyNo = resultobj.getString("biPolicyNo");
 				
-				OrderpushResul qr = new OrderpushResul();
-				qr.setState(state);
-				orderpushResulDao.updateOrderpushResulBySpecifyId(qr, "orderId");
+				
+				InsuranceOrder orderByOrderId = orderDao.getOrderByOrderId(orderId);
+				orderByOrderId.setState(state+"");
+				orderDao.updateOrder(orderByOrderId);
 				
 				Map<String,Object> msg = new HashMap<>();
 				msg.put("orderId", orderId);

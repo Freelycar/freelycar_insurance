@@ -3,30 +3,7 @@ package com.freelycar.entity;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-
+import javax.persistence.Lob;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.GenericGenerator;
@@ -57,6 +34,7 @@ public class InsuranceOrder
 	
     private Long biPolicyPrice;  //商业险价格;
 	
+    @Lob
     private String offerDetail;  //报价方案结果详情;
 	
     private String insureName;  //被保人姓名;

@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.freelycar.entity.Client;
-import com.freelycar.util.INSURANCE;
 import com.freelycar.util.QueryUtils;
 import com.freelycar.util.SqlHelper;
 /**  
@@ -36,6 +35,13 @@ public class ClientDao
         String hql = "from Client where id = :id";
         Client result = (Client) getSession().createQuery(hql).setInteger("id", id).uniqueResult();
         return result;
+    }
+    
+    //根据phone查询Client
+    public Client getClientByPhone(String phone){
+    	String hql = "from Client where phone = :phone";
+    	Client result = (Client) getSession().createQuery(hql).setString("phone", phone).uniqueResult();
+    	return result;
     }
 	
 	

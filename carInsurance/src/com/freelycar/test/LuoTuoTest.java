@@ -15,14 +15,23 @@ import com.freelycar.util.HttpClientUtil;
 
 public class LuoTuoTest {
 
+	private static String licenseNumber = "苏A4F4A0";
+	private static String ownerName = "胡青";
 	
 	@Test
 	public void testXunBao() throws ClientProtocolException, IOException{
 		
+		
+		
+		
 		JSONObject obj = new JSONObject();
-		obj.put("licenseNumber", "苏A4PZ99");
+		obj.put("licenseNumber", licenseNumber);
+		obj.put("ownerName", ownerName);
+/*		obj.put("licenseNumber", "苏A129B0");
+		obj.put("ownerName", "朱祥珍");
+*//*		obj.put("licenseNumber", "苏A4PZ99");
 		obj.put("ownerName", "刘扬");
-		HttpClientUtil.httpPost("http://www.xhnky.cn/carInsurance/api/insurance/queryLastYear", obj);
+*/		HttpClientUtil.httpPost("http://www.xhnky.cn/carInsurance/api/insurance/queryLastYear", obj);
 	}
 	
 	
@@ -31,11 +40,12 @@ public class LuoTuoTest {
 		
 		Map<String,Object> obj = new HashMap<>();
 		/*obj.put("phone", "18362981113");
-		obj.put("licenseNumber", "苏A129B0");
+		obj.put("licenseNumber", licenseNumber);
+		obj.put("ownerName", ownerName);
 		obj.put("cityCode", "320100");
 		obj.put("cityName", "南京");
-		obj.put("ownerName", "朱祥珍");
-		obj.put("insuranceCompanyId", "2");*/
+		obj.put("insuranceCompanyId", "2");
+		obj.put("forceInsuranceStartTime", "1522857600");*/
 		
 		/*obj.put("phone", "13913980918");
 		obj.put("licenseNumber", "苏A2F6S5");
@@ -66,12 +76,17 @@ public class LuoTuoTest {
 	public void testsubmitProposal(){
 		
 		Map<String,Object> obj = new HashMap<>();
-		/*obj.put("offerId", "200-20180315094928-0b4f04");
+		/*obj.put("offerId", offerId);
+		obj.put("ownerName", ownerName);
+		obj.put("idCard", "320106197808281627");
+		obj.put("phone", "13705159506");
+		obj.put("contactAddress", "江苏南京");*/
+		/*obj.put("offerId", offerId);
 		obj.put("ownerName", "朱祥珍");
 		obj.put("idCard", "320113196303202013");
 		obj.put("phone", "13705159506");
 		obj.put("contactAddress", "江苏南京");*/
-		obj.put("offerId", "109-20180316135652-f2333");
+		obj.put("offerId", offerId);
 		obj.put("ownerName", "刘扬");
 		obj.put("idCard", "320112198807021630");
 		obj.put("phone", "13705159506");
@@ -80,13 +95,27 @@ public class LuoTuoTest {
 		HttpClientUtil.httpPost("http://www.xhnky.cn/carInsurance/api/insurance/submitProposal", obj);
 		//HttpClientUtil.httpPost("http://localhost:8080/carInsurance/api/insurance/queryPrice", obj);
 	}
+	
+	private static String offerId = "109-20180319174637-c36fc";
+	
+	@Test//确认承保
+	public void testconfirmChengbao(){
+		
+		Map<String,Object> obj = new HashMap<>();
+		obj.put("orderId", offerId);
+		
+		HttpClientUtil.httpPost("http://www.xhnky.cn/carInsurance/api/insurance/confirmChengbao", obj);
+		//HttpClientUtil.httpPost("http://localhost:8080/carInsurance/api/insurance/queryPrice", obj);
+	}
 	@Test
 	public void testDate(){
 		System.out.println((int)Math.pow(10, 7));
 		SimpleDateFormat formate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		//SimpleDateFormat formate = new SimpleDateFormat("yyyy-MM-dd");
 		try {
-			Date parse = formate.parse("2018-04-18 23:59:59");
+			//Date parse = formate.parse("2018-04-18 23:59:59");
+			//Date parse = formate.parse("2018-08-09 00:00:00");//朱
+			Date parse = formate.parse("2018-04-05 00:00:00");//胡
 			System.out.println(parse.getTime());
 		} catch (ParseException e) {
 			// TODO Auto-generated catch block

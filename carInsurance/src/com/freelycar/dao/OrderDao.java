@@ -30,13 +30,13 @@ public class OrderDao
 	
 	//根据id查询Order
     public InsuranceOrder getOrderById(int id){
-        String hql = "from Order where id = :id";
+        String hql = "from InsuranceOrder where id = :id";
         InsuranceOrder result = (InsuranceOrder) getSession().createQuery(hql).setInteger("id", id).uniqueResult();
         return result;
     }
     //根据id查询Order
     public InsuranceOrder getOrderByOrderId(String orderId){
-    	String hql = "from Order where orderId = :orderId";
+    	String hql = "from InsuranceOrder where orderId = :orderId";
     	InsuranceOrder result = (InsuranceOrder) getSession().createQuery(hql).setString("orderId", orderId).uniqueResult();
     	return result;
     }
@@ -79,17 +79,6 @@ public class OrderDao
 	
 	//更新Order
 	public void updateOrder(InsuranceOrder order){
-		InsuranceOrder or = getOrderByOrderId(order.getOrderId());
-		or.setBackmoney(order.getBackmoney());
-		or.setBiPolicyNo(order.getBiPolicyNo());
-		or.setBiPolicyPrice(order.getBiPolicyPrice());
-		or.setCashback(order.getCashback());
-		or.setCiPolicyNo(order.getBiPolicyNo());
-		or.setCiPolicyPrice(order.getCiPolicyPrice());
-		or.setExpressCompany(order.getExpressCompany());
-		or.setExpressNumber(order.getExpressNumber());
-		or.setLicenseNumber(order.getLicenseNumber());
-		or.setOfferDetail(order.getOfferDetail());
 	    getSession().update(order);
 	    
 	}

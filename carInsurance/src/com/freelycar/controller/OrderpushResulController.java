@@ -31,7 +31,11 @@ public class OrderpushResulController
     	return orderpushResulService.orderpushResult(data);
     }
 
-   
+   /**
+    * 承保推送
+    * @param result
+    * @return
+    */
     @RequestMapping(value="/chengbaoPush")
     public Map<String,Object> chengbaoResult(String result){
     	return orderpushResulService.chenbaopPushResult(result);

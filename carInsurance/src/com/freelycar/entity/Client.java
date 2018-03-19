@@ -52,7 +52,7 @@ public class Client
 	
     private boolean transfer;  //是否过户;
     private boolean toubao;  //是否投保;
-    private boolean cashback;  //是否投保;
+    private boolean cashback;  //是否返现
     
     private String source;//来源
     
