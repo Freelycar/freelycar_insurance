@@ -5,14 +5,11 @@ import { Row, Col, Card, Form, Input, Icon, Button, InputNumber, Modal, message,
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 
 
-import { addChannel, removeChannels, getChannelList } from '../../services/channel';
+import { addChannel, removeChannels, getChannelList, modifyChannel } from '../../services/channel';
 
 import styles from './ChannelManage.less';
-
-
 const FormItem = Form.Item;
-
-const CreateForm = Form.create()((props) => {
+const CreateAddForm = Form.create()((props) => {
     const { modalVisible, form, handleAdd, handleModalVisible } = props;
     const okHandle = () => {
         form.validateFields((err, fieldsValue) => {
@@ -68,10 +65,18 @@ const CreateForm = Form.create()((props) => {
 export default class ChannelManage extends PureComponent {
     state = {
         modalVisible: false,
+        modifyModalVisible: false,
         invcode: '',  //搜索用的邀请码
         name: '',   //搜索用的渠道名称,
         listData: [],
-        columns : [
+        modifyData: {
+            name: '',
+            remark: '',
+            invcode: '',
+            id: ''
+        },    //用于修改的数据  
+        selectedRowKeys: [],
+        columns: [
             {
                 title: '序号',
                 dataIndex: 'no',
@@ -100,14 +105,21 @@ export default class ChannelManage extends PureComponent {
                 // dataIndex: 'from', 
                 render: item => {
                     return <div>
-                        <a>修改</a>
+                        <a onClick={() => this.showModifyModal(item)} >修改</a>
                         <Popconfirm title="是否要删除此行？" onConfirm={() => this.deleteChannel([item.id])}>
-                            <a style={{marginLeft : 20}} >删除</a>
+                            <a style={{ marginLeft: 20 }} >删除</a>
                         </Popconfirm>
                     </div>
                 }
             }]
     };
+
+    showModifyModal = (item) => {
+        this.setState({
+            modifyData: JSON.parse(JSON.stringify(item)) ,
+            modifyModalVisible: true
+        })
+    }
 
     componentDidMount() {
         this.getChannelList();
@@ -117,7 +129,7 @@ export default class ChannelManage extends PureComponent {
         getChannelList({
             invcode: this.state.invcode,
             name: this.state.name,
-            page: 1, 
+            page: 1,
             number: 99
         }).then((res) => {
             if (res.code == 0) {
@@ -129,7 +141,7 @@ export default class ChannelManage extends PureComponent {
                     listData: res.data
                 })
             } else {
-                
+
             }
         }).catch((error) => {
             console.log(error)
@@ -144,7 +156,6 @@ export default class ChannelManage extends PureComponent {
     }
 
     handleSearch = () => {
-
     }
 
     handleModalVisible = (flag) => {
@@ -154,7 +165,6 @@ export default class ChannelManage extends PureComponent {
     }
 
     handleAdd = (fields) => {
-        console.log(fields)
         addChannel({
             ...fields
         }).then(res => {
@@ -173,9 +183,46 @@ export default class ChannelManage extends PureComponent {
         })
     }
 
+    handleModify = () => {
+        if (!this.state.modifyData.name) {
+            message.warn('请输入渠道名称!');
+            return;
+        } else if (!this.state.modifyData.invcode) {
+            message.warn('请输入邀请码!');
+            return;
+        }
+        let modifyData = this.state.modifyData;
+        delete modifyData.createTime;
+        delete modifyData.key
+        modifyChannel({
+            ...modifyData,
+        }).then(res => {
+            if (res.code == 0) {
+                this.setState({
+                    modifyModalVisible: false,
+                    modifyData: {
+                        name: '',
+                        remark: '',
+                        invcode: '',
+                        id: ''
+                    }
+                });
+                message.success('修改成功');
+                this.getChannelList()
+            } else {
+                message.error(res.msg);
+            }
+        }).catch(err => {
+            message.error('修改失败，请重试！');
+            console.log(err);
+        })
+    }
+
     deleteChannel = (ids) => {
+        if (ids.length < 0) {
+            return;
+        }
         const id = ids.join(',');
-        console.log(id);
         removeChannels({
             id: id
         }).then(res => {
@@ -187,12 +234,10 @@ export default class ChannelManage extends PureComponent {
             }
         }).catch(err => {
             message.error('删除失败');
-            console.log(err);
         })
     }
 
     handleInputChange = (e, key) => {
-        console.log(e.target.value);
         if (key == 'name') {
             this.setState({
                 name: e.target.value
@@ -202,7 +247,6 @@ export default class ChannelManage extends PureComponent {
                 invcode: e.target.value
             })
         }
-        // e.detail.value
     }
 
     renderSimpleForm() {
@@ -212,12 +256,12 @@ export default class ChannelManage extends PureComponent {
 
                     <Col md={6} sm={24}>
                         <FormItem label="业务渠道名称">
-                            <Input placeholder='请输入渠道名称' value={this.state.name} onChange={(e) => {this.handleInputChange(e, "name")}} />
+                            <Input placeholder='请输入渠道名称' value={this.state.name} onChange={(e) => { this.handleInputChange(e, "name") }} />
                         </FormItem>
                     </Col>
                     <Col md={6} sm={24}>
                         <FormItem label="邀请码">
-                            <Input placeholder='请输入邀请码' value={this.state.invcode} onChange={(e) => {this.handleInputChange(e, "invcode")}} />
+                            <Input placeholder='请输入邀请码' value={this.state.invcode} onChange={(e) => { this.handleInputChange(e, "invcode") }} />
                         </FormItem>
                     </Col>
 
@@ -232,11 +276,60 @@ export default class ChannelManage extends PureComponent {
         );
     }
 
+    getModifyModal = () => {
+        return <Modal
+            title="修改渠道"
+            visible={this.state.modifyModalVisible}
+            onOk={this.handleModify}
+            onCancel={() => {this.setState({modifyModalVisible: false, modifyData: {}})}}
+        >
+            <FormItem
+                labelCol={{ span: 5 }}
+                wrapperCol={{ span: 15 }}
+                label="渠道名称: "
+            >
+                <Input placeholder="请输入渠道名称" value={this.state.modifyData.name || ''} onChange={(e) => {this.handleModifyData(e.target.value, 'name')}} />
+            </FormItem>
+            <FormItem
+                labelCol={{ span: 5 }}
+                wrapperCol={{ span: 15 }}
+                label="邀请码: "
+            >
+                <Input placeholder="请输入邀请码" value={this.state.modifyData.invcode || ''} onChange={(e) => {this.handleModifyData(e.target.value, 'invcode')}} />
+            </FormItem>
+            <FormItem
+                labelCol={{ span: 5 }}
+                wrapperCol={{ span: 15 }}
+                label="备注: "
+            >
+                <Input placeholder="请输入备注" value={this.state.modifyData.remark || ''} onChange={(e) => {this.handleModifyData(e.target.value, 'remark')}} />
+            </FormItem>
+        </Modal>
+    }
+
+    handleModifyData = (value, key) => {
+        let modifyData = this.state.modifyData;
+        modifyData[key] = value;
+        this.setState({
+            modifyData: JSON.parse(JSON.stringify(modifyData))
+        })
+    }
+
+    onSelectChange = (selectedRowKeys) => {
+        console.log('selectedRowKeys changed: ', selectedRowKeys);
+        this.setState({ selectedRowKeys });
+      }
+
     render() {
 
         const parentMethods = {
             handleAdd: this.handleAdd,
             handleModalVisible: this.handleModalVisible,
+        };
+        const { loading, selectedRowKeys } = this.state;
+        const rowSelection = {
+            selectedRowKeys,
+            onChange: this.onSelectChange,
         };
 
         return (
@@ -247,21 +340,24 @@ export default class ChannelManage extends PureComponent {
                             {this.renderSimpleForm()}
                         </div>
                         <div className={styles.tableListOperator} style={{ marginTop: 50 }}>
-                            <Button onClick={() => {this.setState({modalVisible: true})}} >新增</Button>
-                            <Button style={{ marginLeft: 20 }}>批量删除</Button>
+                            <Button onClick={() => { this.setState({ modalVisible: true }) }} >新增</Button>
+                            <Button style={{ marginLeft: 20 }} onClick={() => this.deleteChannel(this.state.selectedRowKeys)} >批量删除</Button>
                         </div>
                         <Table
                             //   loading={loading}
                             // data={data}
                             dataSource={this.state.listData}
                             columns={this.state.columns}
+                            rowSelection={rowSelection}
                         />
                     </div>
                 </Card>
-                <CreateForm
+                <CreateAddForm
                     {...parentMethods}
                     modalVisible={this.state.modalVisible}
+                    modifyData={this.state.modifyData}
                 />
+                {this.getModifyModal()}
             </PageHeaderLayout >
         );
     }
