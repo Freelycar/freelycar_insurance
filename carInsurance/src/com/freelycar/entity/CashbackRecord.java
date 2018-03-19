@@ -16,7 +16,7 @@ import org.hibernate.annotations.GenericGenerator;
  *  
  */  
 @Entity
-@Table(name="sss")
+@Table
 public class CashbackRecord  
 {  
     /********** attribute ***********/  

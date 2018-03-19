@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.freelycar.dao.ClientDao;
 import com.freelycar.dao.InsuranceDao;
 import com.freelycar.dao.OrderDao;
 import com.freelycar.dao.QuoteRecordDao;
@@ -41,11 +42,21 @@ public class InsuranceService
     @Autowired
     private QuoteRecordDao qrdao;
     
+    @Autowired
+    private ClientDao clientDao;
+    
     private String LUOTUOKEY = Constant.LUOTUOKEY;
     
     public Map<String, Object> queryLastYear(Client client){
     	
     	System.out.println(client);
+    	//先去查是不是老用户
+    	Client clientByPhone = clientDao.getClientByPhone(client.getPhone());
+    	if(clientByPhone == null){
+    		return RESCODE.USER_NO_PHONE.getJSONRES();
+    	}
+    	
+    	
     	Map<String,Object> param = new HashMap<>();
     	param.put("api_key", LUOTUOKEY);
     	param.put("ownerName", client.getOwnerName());
@@ -96,6 +107,11 @@ public class InsuranceService
     				result.add(insurance);
     			}
     			
+    			
+    			//x询价的时候 插入客户的信息//初始状态 呆报价
+    			client.setQuoteState(INSURANCE.QUOTESTATE_NO_1.getCode()+"");
+    			clientDao.saveClient(client);
+    			
     			return RESCODE.SUCCESS.getJSONRES(result);
     		}
     	}
@@ -119,7 +135,9 @@ public class InsuranceService
     	//obj.put("cityName", cityName);//cityName可以不传
     	createEnquiryParams.put("insuranceCompanyName", insurance.getInsuranceCompanyId());//保险公司编号多加用逗号分隔
     	createEnquiryParams.put("insuranceStartTime", Tools.isEmpty(insurance.getInsuranceBeginTime())?0:insurance.getInsuranceBeginTime());//
-    	createEnquiryParams.put("forceInsuranceStartTime", insurance.getForceInsuranceStartTime());//
+    	
+    	String forceInsuranceStartTime = insurance.getForceInsuranceStartTime();
+    	createEnquiryParams.put("forceInsuranceStartTime", forceInsuranceStartTime);//
     	createEnquiryParams.put("transferDate", !client.getTransfer()?"0":client.getTransferTime());//
     	String requestHeader = Tools.uuid()+"HLDD";
     	createEnquiryParams.put("requestHeader", requestHeader);//
@@ -157,7 +175,10 @@ public class InsuranceService
     			qr.setCityName(cityName);
     			qr.setClientId(client.getId());
     			qr.setCrateTime(System.currentTimeMillis());
-    			qr.setForceInsuranceStartTime(Integer.parseInt(insurance.getForceInsuranceStartTime()));
+    			
+    			if(Tools.notEmpty(forceInsuranceStartTime)){
+    				qr.setForceInsuranceStartTime(Integer.parseInt(forceInsuranceStartTime));
+    			}
     			
     			qr.setInsuranceCompanyName("人保车险");
     			qr.setInsurances(insurance.getInsurances());
@@ -235,6 +256,34 @@ public class InsuranceService
     	}
     	return RESCODE.FAIL.getJSONRES();
     }
+    
+    
+    //7、确认是否承保接口
+    public Map<String,Object> confirmChengbao(String orderId){
+    	
+    	System.out.println("orderId");
+    	Map<String,Object> param = new HashMap<>();
+    	param.put("api_key", LUOTUOKEY);
+    	
+    	JSONObject params = new JSONObject();
+    	System.out.println("#######"+orderId);
+    	params.put("orderId", orderId);
+    	JSONObject resultJson = HttpClientUtil.httpGet("http://wechat.bac365.com:8081/carRisk/car_risk/carApi/confirmChengbao", param);
+    	
+    	if(resultJson.has("errorMsg")){
+    		String msg = resultJson.getJSONObject("errorMsg").getString("code");
+    		if("success".equals(msg)){
+    			//确认承保成功示例
+    			
+    			return RESCODE.SUCCESS.getJSONRES();
+    		}else{
+    			//请求失败
+    		}
+    	}
+    	return RESCODE.FAIL.getJSONRES();
+    }
+    
+    
     
     
 	
