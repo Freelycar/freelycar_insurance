@@ -68,7 +68,6 @@
     }
   }
 }
-
 </style>
 <template>
     <!-- <emptyList /> -->
@@ -135,9 +134,24 @@ export default class OrderList extends wepy.page {
     goToDetail() {
       wepy.navigateTo({
         url: `orderDetail?id=111`
-      })
+      });
     }
   };
-  onLoad() {}
+  onLoad() {
+    this.queryList();
+  }
+  queryList() {
+    wepy.request({
+      url: 'http://172.17.3.106:8080/carInsurance/api/insurance/test1',
+      data: {
+        type: -1,
+        page: 1,
+        number: 99
+      },
+      success: res => {
+        console.log(res);
+      }
+    });
+  }
 }
 </script>
