@@ -13,9 +13,9 @@ public enum RESCODE {
 	
 	USER_PHONE_REGISTERED(200,"手机号已注册"),
 	USER_MAIL_USERD(201,"该邮箱已被注册"),
-	USER_NAMEPAS_ERROR(202,"用户名或密码错误"),
-	USER_EXIST(202,"用户已存在"),
-	USER_NO_PHONE(202,"新用户没有手机号"),
+	USER_NAMEPAS_ERROR(203,"用户名或密码错误"),
+	USER_EXIST(204,"用户已存在"),
+	USER_NO_PHONE(205,"新用户没有手机号"),
 	
 	
 	
