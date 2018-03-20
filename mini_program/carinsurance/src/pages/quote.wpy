@@ -152,14 +152,17 @@
 <template >
   <scroll-view scroll-y="true" class="container quote-bg">
     <view class='basicinfo city'>南京市</view>
-    <view class='basicinfo'>所有人: 臭傻逼</view>
-    <view class='basicinfo'>车牌号码: 苏A123R0</view>
+    <view class='basicinfo'>所有人: {{name}}</view>
+    <view class='basicinfo'>车牌号码: {{licenseNumber}}</view>
     <view class='lastyear-bg'>
       <view class='lastyear-header'>
         <text class='left'>去年投保</text>
         <text class='right'>平安保险</text>
       </view>
       <view class='lastyear-record-bg'>
+        <block wx:for={{lastYearRecord}}>
+
+        </block>
         <view class='lastyear-record-item'>
           <view class='lastyear-record-header'> 商业险</view>
           <view class='lastyear-record-detail'>
@@ -215,7 +218,7 @@
                   </view>
                 </block>
                 <block wx:else>
-                  <view>{{item.name}}</view> 
+                  <view>{{item.name}}</view>
                 </block>
                 <view class='flex-box-row'>
                   <view class="{{item.compensation ? 'bujimianpei  bujimianpei-select' : 'bujimianpei'}}" @tap="selectCompensationOrNot" data-code='{{item.code}}'>不计免赔</view>
@@ -237,7 +240,6 @@
 import wepy from 'wepy';
 import Toast from 'wepy-com-toast';
 const insurances = require('../util/defultInsurances');
-
 export default class Quote extends wepy.page {
   config = {
     navigationBarTitleText: '车险报价'
@@ -247,7 +249,10 @@ export default class Quote extends wepy.page {
   };
 
   data = {
-    insurances: insurances
+    name: '',
+    licenseNumber: '',
+    insurances: insurances,
+    lastYearRecord: []
   };
 
   computed = {};
@@ -265,9 +270,8 @@ export default class Quote extends wepy.page {
       const index = code - 1;
       insurances[index].isToubao = !insurances[index].isToubao;
       insurances[index].compensation = insurances[index].isToubao;
-      this.setData({
-        insurances: insurances
-      });
+      this.insurances = insurances;
+      this.$parent.globalData.insurances = insurances;
     },
     selectCompensationOrNot(event) {
       const code = event.currentTarget.dataset.code;
@@ -275,9 +279,8 @@ export default class Quote extends wepy.page {
       const index = code - 1;
       if (insurances[index].isToubao) {
         insurances[index].compensation = !insurances[index].compensation;
-        this.setData({
-          insurances: insurances
-        });
+        this.insurances = insurances;
+        this.$parent.globalData.insurances = insurances;
       }
     },
     selectAmountStr(event) {
@@ -290,14 +293,38 @@ export default class Quote extends wepy.page {
         const selectAry = insurances[index].selectAry;
         insurances[index].amountStr = selectAry[value] || '';
         insurances[index].selectIndex = value;
-        this.setData({
-          insurances: insurances
-        });
+        this.insurances = insurances;
+        this.$parent.globalData.insurances = insurances;
       }
     }
   };
 
   onLoad() {
+    this.name = this.$parent.globalData.name;
+    this.licenseNumber = this.$parent.globalData.licenseNumber;
+    this.$apply();
+    wepy.showLoading();
+    wepy.request({
+      url: 'http://localhost:8080/carInsurance/api/insurance/queryLastYear',
+      data: {
+        ownerName: this.$parent.globalData.name,
+        licenseNumber: this.$parent.globalData.licenseNumber,
+        openId: this.$parent.globalData.openId
+      },
+      method: 'POST',
+      success: res => {
+        console.log(res);
+        if (res.data.code == 0) {
+          this.lastYearRecord = res.data.data;
+          this.$apply();
+        } else {
+          wepy.showToast({ title: res.data.msg, icon: 'none' });
+        }
+      },
+      complete: function() {
+        wepy.hideLoading();
+      }
+    });
   }
 }
 </script>
