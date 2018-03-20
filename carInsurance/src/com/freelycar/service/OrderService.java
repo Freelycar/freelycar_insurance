@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.freelycar.dao.OrderDao;
 import com.freelycar.entity.InsuranceOrder;
+import com.freelycar.util.INSURANCE;
 import com.freelycar.util.RESCODE;
 /**  
  *  
@@ -50,6 +51,10 @@ public class OrderService
 	    int from = (page-1)*number;
 	    List<InsuranceOrder> listPage = orderDao.listOrder(order,from, number);
 	    if(listPage !=null && !listPage.isEmpty()){
+	    	for(InsuranceOrder io : listPage){
+	    		io.setStateString(INSURANCE.getQuotestateName(io.getState()));
+	    	}
+	    	
 	    	long count = orderDao.getOrderCount(order);
 			return RESCODE.SUCCESS.getJSONRES(listPage,(int)Math.ceil(count/(float)number),count);
 		} 

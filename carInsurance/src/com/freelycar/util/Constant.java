@@ -12,6 +12,7 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ThreadPoolExecutor;
 
 import net.sf.ehcache.constructs.nonstop.store.ExecutorServiceStore;
+import net.sf.ehcache.store.chm.ConcurrentHashMap;
 
 public class Constant {
 
@@ -37,7 +38,7 @@ public class Constant {
     
     //核保的 key :单号  value 过期时间戳
     private static class proposalHolder{
-    	private static final Map<String,Long> proposalMap = new HashMap<String, Long>();
+    	private static final Map<String,Long> proposalMap = new ConcurrentHashMap<String, Long>();
     }
     
     public static Map<String,Long> getProposalMap(){
@@ -56,7 +57,7 @@ public class Constant {
     
     //定时器
     private static class TimeExecutorHolder{
-    	private static final ScheduledExecutorService scheduledExecutor = Executors.newScheduledThreadPool(20);
+    	private static final ScheduledExecutorService scheduledExecutor = Executors.newScheduledThreadPool(1000);
     }
     
     public static ScheduledExecutorService getTimeExecutor(){

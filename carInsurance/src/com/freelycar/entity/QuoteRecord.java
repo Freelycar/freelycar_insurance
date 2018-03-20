@@ -37,7 +37,7 @@ public class QuoteRecord
 	
     private String insurances;  //报价方案;
 	
-    private Long crateTime;  //报价时间;
+    private Long createTime;  //报价时间;
 	
     private String cityCode;  //城市编码;
 	
@@ -61,13 +61,13 @@ public class QuoteRecord
       
     }  
   
-    public QuoteRecord(Integer clientId, String openId, String licenseNumber, String ownerName, String insurances, Long crateTime, String cityCode, String cityName, String insuranceCompanyName, String insurancesList, Integer insuranceStartTime, Integer forceInsuranceStartTime, Integer transferDate, String requestHeader) {  
+    public QuoteRecord(Integer clientId, String openId, String licenseNumber, String ownerName, String insurances, Long createTime, String cityCode, String cityName, String insuranceCompanyName, String insurancesList, Integer insuranceStartTime, Integer forceInsuranceStartTime, Integer transferDate, String requestHeader) {  
         this.clientId = clientId;  
         this.openId = openId;  
         this.licenseNumber = licenseNumber;  
         this.ownerName = ownerName;  
         this.insurances = insurances;  
-        this.crateTime = crateTime;  
+        this.createTime = createTime;  
         this.cityCode = cityCode;  
         this.cityName = cityName;  
         this.insuranceCompanyName = insuranceCompanyName;  
@@ -134,11 +134,11 @@ public class QuoteRecord
       
 	
     public Long getCrateTime() {  
-        return crateTime;  
+        return createTime;  
     }  
   
-    public void setCrateTime(Long crateTime) {  
-        this.crateTime = crateTime;  
+    public void setCrateTime(Long createTime) {  
+        this.createTime = createTime;  
     }  
       
 	
@@ -248,7 +248,7 @@ public class QuoteRecord
 				+ ", licenseNumber=" + licenseNumber
 				+ ", ownerName=" + ownerName
 				+ ", insurances=" + insurances
-				+ ", crateTime=" + crateTime
+				+ ", createTime=" + createTime
 				+ ", cityCode=" + cityCode
 				+ ", cityName=" + cityName
 				+ ", insuranceCompanyName=" + insuranceCompanyName

@@ -44,6 +44,12 @@ public class ClientDao
     	return result;
     }
 	
+    //根据phone查询Client
+    public Client getClientByOpenId(String openId){
+    	String hql = "from Client where openId = :openId";
+    	Client result = (Client) getSession().createQuery(hql).setString("openId", openId).uniqueResult();
+    	return result;
+    }
 	
 	//查询所有的Client	
 	@SuppressWarnings("unchecked")

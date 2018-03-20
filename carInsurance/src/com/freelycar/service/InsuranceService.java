@@ -51,11 +51,10 @@ public class InsuranceService
     	
     	System.out.println(client);
     	//先去查是不是老用户
-    	Client clientByPhone = clientDao.getClientByPhone(client.getPhone());
-    	if(clientByPhone == null){
+    	Client client1 = clientDao.getClientByOpenId(client.getOpenId());
+    	if(client1 == null){
     		return RESCODE.USER_NO_PHONE.getJSONRES();
     	}
-    	
     	
     	Map<String,Object> param = new HashMap<>();
     	param.put("api_key", LUOTUOKEY);
@@ -278,6 +277,7 @@ public class InsuranceService
     			return RESCODE.SUCCESS.getJSONRES();
     		}else{
     			//请求失败
+    			return RESCODE.FAIL.getJSONRES(msg);
     		}
     	}
     	return RESCODE.FAIL.getJSONRES();

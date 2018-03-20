@@ -41,6 +41,9 @@ public class OrderpushResulService
     @Autowired
     private QuoteRecordDao quoteRecordDao;
     
+    @Autowired
+    private InsuranceService insuranceService;
+    
 
     private static SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     
@@ -105,7 +108,7 @@ public class OrderpushResulService
 				}
 				
 				int state = resultobj.getInt("state");
-				String orderId = resultobj.getString("orderId");
+				final String orderId = resultobj.getString("orderId");
 				String licenseNumber = resultobj.getString("licenseNumber");
 				int underwritingPriceCent = resultobj.getInt("underwritingPriceCent");
 				
@@ -123,30 +126,34 @@ public class OrderpushResulService
 
 				//把单号和过期时间存在map中
 				JSONObject jsonObject = underwritingJson.getJSONObject("checkCode");
-				Map<String, Long> proposalMap = Constant.getProposalMap();
+				final Map<String, Long> proposalMap = Constant.getProposalMap();
 				
 				try {
+					//2018-3-19 17:33:27
 					proposalMap.put(orderId, format.parse(jsonObject.getString("value")).getTime());
 				} catch (ParseException e) {
 					e.printStackTrace();
-				}//2018-3-19 17:33:27
+				}
 				
-				Constant.getCachedThreadPool().execute(new Runnable() {
+				//在这里我们在过期时间之内定时调用 7、确认是否承保接口
+				Constant.getTimeExecutor().scheduleAtFixedRate(new Runnable() {
 					public void run() {
-						//在这里我们在过期时间之内定时调用 7、确认是否承保接口
-						Constant.getTimeExecutor().scheduleAtFixedRate(new Runnable() {
-							public void run() {
-								
-								/*if(){
-									
-								}*/
-								
-								
-								System.out.println("定时器");
+						
+						if(proposalMap.get(orderId) > System.currentTimeMillis()){
+							Map<String, Object> confirmChengbao = insuranceService.confirmChengbao(orderId);
+							if(confirmChengbao.get("code").equals("0")){//用户交钱了
+								//等待骆驼推送
+								Constant.getTimeExecutor().shutdown();
 							}
-						},0, 1, TimeUnit.SECONDS);
+							
+						}else{
+							Constant.getTimeExecutor().shutdown();
+						}
+						
+						
+						System.out.println("定时器");
 					}
-				});
+				},0, 1, TimeUnit.SECONDS);
 				
 				
 				QuoteRecord qr = quoteRecordDao.getQuoteRecordBySpecify("offerId", orderId);
