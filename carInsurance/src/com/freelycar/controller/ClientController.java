@@ -65,7 +65,7 @@ public class ClientController
     
     
     //获取短信验证码
-    @RequestMapping(value = "/isExistByOpenId",method = RequestMethod.GET)
+    @RequestMapping(value = "/isExistByOpenId",method = RequestMethod.POST)
     public Map<String,Object> isExistByOpenId(@RequestBody String openId){
     	return clientService.isExistByOpenId(openId);
     }
