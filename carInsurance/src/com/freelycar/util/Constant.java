@@ -35,12 +35,12 @@ public class Constant {
     public static final String LUOTUOKEY = prop.getProperty("luotuo_key");
     
     
-    //核保的 key :单号  value 过期时间
+    //核保的 key :单号  value 过期时间戳
     private static class proposalHolder{
-    	private static final Map<String,String> proposalMap = new HashMap<String, String>();
+    	private static final Map<String,Long> proposalMap = new HashMap<String, Long>();
     }
     
-    public static Map<String,String> getProposalMap(){
+    public static Map<String,Long> getProposalMap(){
     	return proposalHolder.proposalMap;
     }
     

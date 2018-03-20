@@ -36,6 +36,13 @@ public class InvitionDao
         Invition result = (Invition) getSession().createQuery(hql).setInteger("id", id).uniqueResult();
         return result;
     }
+    
+    //根据id查询Invition
+    public Invition getInvitionByInvcode(String invcode){
+    	String hql = "from Invition where invcode = :invcode";
+    	Invition result = (Invition) getSession().createQuery(hql).setString("invcode", invcode).uniqueResult();
+    	return result;
+    }
 	
 	
 	//查询所有的Invition	

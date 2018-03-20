@@ -21,9 +21,22 @@ public class InvitionService
     @Autowired
 	private InvitionDao invitionDao;
     
+
+    //根据code查询Invition
+    public Map<String, Object> getInvitionByInvcode(String invcode){
+    	Invition iv = invitionDao.getInvitionByInvcode(invcode);
+    	if(iv == null){
+    		return RESCODE.NOT_FOUND.getJSONRES();
+    	}else{
+    		return RESCODE.SUCCESS.getJSONRES();
+    	}
+    }
     
-    
-    
+    //根据code查询Invition
+    public Invition getInvitionByInvcode2(String invcode){
+    	Invition iv = invitionDao.getInvitionByInvcode(invcode);
+    	return iv;
+    }
     
     //增加一个Invition
     public Map<String,Object> saveInvition(Invition invition){
