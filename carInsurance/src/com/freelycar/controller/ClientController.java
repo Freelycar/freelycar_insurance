@@ -25,7 +25,7 @@ public class ClientController
 
     //获取短信验证码
     @RequestMapping(value = "/sms/getCode",method = RequestMethod.POST)
-    public Map<String,Object> smsgetCode(String phone){
+    public Map<String,Object> smsgetCode(@RequestBody String phone){
 		return LeanCloudSms.sendSmsCode(phone);
 	}
 
