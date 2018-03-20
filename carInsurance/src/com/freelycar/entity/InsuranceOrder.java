@@ -53,7 +53,8 @@ public class InsuranceOrder
 	
     private Integer addressId;  //地址信息;
 	
-    private String state;  //订单状态。没错就是存的String表义;
+    private int state;  //订单状态
+    private String stateString;  //订单状态。没错就是存的String表义;
 	
     private Long createTime;  //创建时间;
 	
@@ -75,7 +76,7 @@ public class InsuranceOrder
       
     }  
   
-    public InsuranceOrder(String orderId, String ciPolicyNo, Long ciPolicyPrice, Long taxPrice, String biPolicyNo, Long biPolicyPrice, String offerDetail, String insureName, String insuredIdNo, String insuredPhone, String licenseNumber, boolean cashback, Long backmoney, String invoiceInfo, Integer addressId, String state, Long createTime, Long payTime, Long deliveredTime, Long dealTime, String expressNumber, String expressCompany, String remark) {  
+    public InsuranceOrder(String orderId, String ciPolicyNo, Long ciPolicyPrice, Long taxPrice, String biPolicyNo, Long biPolicyPrice, String offerDetail, String insureName, String insuredIdNo, String insuredPhone, String licenseNumber, boolean cashback, Long backmoney, String invoiceInfo, Integer addressId, int state, Long createTime, Long payTime, Long deliveredTime, Long dealTime, String expressNumber, String expressCompany, String remark) {  
         this.orderId = orderId;  
         this.ciPolicyNo = ciPolicyNo;  
         this.ciPolicyPrice = ciPolicyPrice;  
@@ -254,11 +255,11 @@ public class InsuranceOrder
     }  
       
 	
-    public String getState() {  
+    public int getState() {  
         return state;  
     }  
   
-    public void setState(String state) {  
+    public void setState(int state) {  
         this.state = state;  
     }  
       
@@ -325,6 +326,14 @@ public class InsuranceOrder
         this.remark = remark;  
     }  
       
+    
+    public String getStateString() {
+		return stateString;
+	}
+    
+    public void setStateString(String stateString) {
+		this.stateString = stateString;
+	}
 
 	@Override
 	public String toString() {

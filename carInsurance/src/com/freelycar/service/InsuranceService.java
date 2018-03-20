@@ -248,7 +248,7 @@ public class InsuranceService
     			inorder.setInsureName(client.getOwnerName());
     			inorder.setLicenseNumber(client.getLicenseNumber());
     			inorder.setOrderId(record.getOfferId());
-    			inorder.setState("提交核保");
+    			inorder.setStateString("提交核保");
     			orderDao.saveOrder(inorder);
     			
     			return RESCODE.SUCCESS.getJSONRES();

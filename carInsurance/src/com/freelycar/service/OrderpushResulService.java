@@ -184,7 +184,7 @@ public class OrderpushResulService
 				
 				
 				InsuranceOrder orderByOrderId = orderDao.getOrderByOrderId(orderId);
-				orderByOrderId.setState(state+"");
+				orderByOrderId.setState(state);
 				orderDao.updateOrder(orderByOrderId);
 				
 				Map<String,Object> msg = new HashMap<>();
