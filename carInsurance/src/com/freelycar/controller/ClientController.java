@@ -1,7 +1,9 @@
 package com.freelycar.controller; 
 
 import com.freelycar.entity.Client;
+import com.freelycar.entity.Invition;
 import com.freelycar.service.ClientService;
+import com.freelycar.service.InvitionService;
 import com.freelycar.util.LeanCloudSms;
 
 import java.util.Map;
@@ -22,6 +24,8 @@ public class ClientController
     @Autowired
 	private ClientService clientService;
 
+    @Autowired
+    private InvitionService invitionService;
 
     //获取短信验证码
     @RequestMapping(value = "/sms/getCode",method = RequestMethod.POST)
@@ -29,10 +33,29 @@ public class ClientController
 		return LeanCloudSms.sendSmsCode(phone);
 	}
 
+    
+    
+    
+    
     //获取短信验证码
     @RequestMapping(value = "/sms/verification",method = RequestMethod.POST)
-    public Map<String,Object> smsgetCode(String phone, String code){
-    	return LeanCloudSms.verifySMSCode(phone, code);
+    public Map<String,Object> smsgetCode(String phone, String smscode, String invCode){
+    	System.out.println(phone);
+    	System.out.println(smscode);
+    	System.out.println(invCode);
+    	
+    	Map<String, Object> res = LeanCloudSms.verifySMSCode(phone, smscode);
+    	if(res.get("code").equals("0")){
+    		Client client = new Client();
+    		client.setPhone(phone);
+    		Invition invitionByInvcode2 = invitionService.getInvitionByInvcode2(invCode);
+    		if(invitionByInvcode2 != null){
+    			client.setSource(invitionByInvcode2.getName());
+    		}
+    		
+    		return saveClient(client);
+    	}
+    	return res;
     }
 
     
