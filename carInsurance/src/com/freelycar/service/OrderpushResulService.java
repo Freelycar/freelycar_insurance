@@ -1,5 +1,7 @@
 package com.freelycar.service; 
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -39,7 +41,8 @@ public class OrderpushResulService
     @Autowired
     private QuoteRecordDao quoteRecordDao;
     
-    
+
+    private static SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     
     //增加一个OrderpushResul
     public Map<String,Object> saveOrderpushResul(OrderpushResul orderpushResul){
@@ -120,13 +123,25 @@ public class OrderpushResulService
 
 				//把单号和过期时间存在map中
 				JSONObject jsonObject = underwritingJson.getJSONObject("checkCode");
-				Map<String, String> proposalMap = Constant.getProposalMap();
-				proposalMap.put(orderId, jsonObject.getString("value"));//2018-3-19 17:33:27
+				Map<String, Long> proposalMap = Constant.getProposalMap();
+				
+				try {
+					proposalMap.put(orderId, format.parse(jsonObject.getString("value")).getTime());
+				} catch (ParseException e) {
+					e.printStackTrace();
+				}//2018-3-19 17:33:27
+				
 				Constant.getCachedThreadPool().execute(new Runnable() {
 					public void run() {
 						//在这里我们在过期时间之内定时调用 7、确认是否承保接口
 						Constant.getTimeExecutor().scheduleAtFixedRate(new Runnable() {
 							public void run() {
+								
+								/*if(){
+									
+								}*/
+								
+								
 								System.out.println("定时器");
 							}
 						},0, 1, TimeUnit.SECONDS);

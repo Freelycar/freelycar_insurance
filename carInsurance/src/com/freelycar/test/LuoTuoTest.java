@@ -15,15 +15,14 @@ import com.freelycar.util.HttpClientUtil;
 
 public class LuoTuoTest {
 
-	private static String licenseNumber = "苏A4F4A0";
-	private static String ownerName = "胡青";
+	private static String licenseNumber = "苏A88G87";
+	private static String ownerName = "许亮";
+	private static String idNumber = "320107198502275014";
+	private static String forceInsuranceStartTime = "1524153600";
+	private static String offerId = "109-20180319180754-e5c52";
 	
 	@Test
 	public void testXunBao() throws ClientProtocolException, IOException{
-		
-		
-		
-		
 		JSONObject obj = new JSONObject();
 		obj.put("licenseNumber", licenseNumber);
 		obj.put("ownerName", ownerName);
@@ -39,13 +38,13 @@ public class LuoTuoTest {
 	public void testcreateEnquiry(){
 		
 		Map<String,Object> obj = new HashMap<>();
-		/*obj.put("phone", "18362981113");
+		obj.put("phone", "18362981113");
 		obj.put("licenseNumber", licenseNumber);
 		obj.put("ownerName", ownerName);
 		obj.put("cityCode", "320100");
 		obj.put("cityName", "南京");
 		obj.put("insuranceCompanyId", "2");
-		obj.put("forceInsuranceStartTime", "1522857600");*/
+		obj.put("forceInsuranceStartTime", forceInsuranceStartTime);
 		
 		/*obj.put("phone", "13913980918");
 		obj.put("licenseNumber", "苏A2F6S5");
@@ -53,13 +52,13 @@ public class LuoTuoTest {
 		obj.put("cityName", "南京");
 		obj.put("ownerName", "王惺嫱");
 		obj.put("insuranceCompanyId", "2");*/
-		obj.put("phone", "18252085210");
+		/*obj.put("phone", "18252085210");
 		obj.put("licenseNumber", "苏A4PZ99");
 		obj.put("cityCode", "320100");
 		obj.put("cityName", "南京");
 		obj.put("ownerName", "刘扬");
 		obj.put("insuranceCompanyId", "2");
-		obj.put("forceInsuranceStartTime", "1524067199");
+		obj.put("forceInsuranceStartTime", "1524067199");*/
 		
 		
 		//obj.put("insurances", "[{\"englishName\":\"车损\",\"compensation\":\"true\",\"isSupported\":\"false\",\"price\":\"1\",\"isToubao\":\"1\",\"amountStr\":\"投保\",\"quotesPrice\":\"0\",\"state\":\"1\",\"isHot\":\"false\",\"insuranceId\":\"1\",\"type\":\"0\",\"insuranceName\":\"车辆损失险\"},{\"englishName\":\"三者\",\"compensation\":\"true\",\"isSupported\":\"false\",\"price\":\"500000\",\"isToubao\":\"1\",\"amountStr\":\"50万\",\"quotesPrice\":\"0\",\"state\":\"1\",\"isHot\":\"false\",\"insuranceId\":\"2\",\"type\":\"0\",\"insuranceName\":\"第三者责任险\"}]");
@@ -76,27 +75,26 @@ public class LuoTuoTest {
 	public void testsubmitProposal(){
 		
 		Map<String,Object> obj = new HashMap<>();
-		/*obj.put("offerId", offerId);
+		obj.put("offerId", offerId);
 		obj.put("ownerName", ownerName);
-		obj.put("idCard", "320106197808281627");
+		obj.put("idCard", idNumber);
 		obj.put("phone", "13705159506");
-		obj.put("contactAddress", "江苏南京");*/
+		obj.put("contactAddress", "江苏南京");
 		/*obj.put("offerId", offerId);
 		obj.put("ownerName", "朱祥珍");
 		obj.put("idCard", "320113196303202013");
 		obj.put("phone", "13705159506");
-		obj.put("contactAddress", "江苏南京");*/
-		obj.put("offerId", offerId);
+		obj.put("contactAddress", "江苏南京");
+		/*obj.put("offerId", offerId);
 		obj.put("ownerName", "刘扬");
 		obj.put("idCard", "320112198807021630");
 		obj.put("phone", "13705159506");
-		obj.put("contactAddress", "江苏南京");
+		obj.put("contactAddress", "江苏南京");*/
 		
 		HttpClientUtil.httpPost("http://www.xhnky.cn/carInsurance/api/insurance/submitProposal", obj);
 		//HttpClientUtil.httpPost("http://localhost:8080/carInsurance/api/insurance/queryPrice", obj);
 	}
 	
-	private static String offerId = "109-20180319174637-c36fc";
 	
 	@Test//确认承保
 	public void testconfirmChengbao(){
@@ -115,7 +113,7 @@ public class LuoTuoTest {
 		try {
 			//Date parse = formate.parse("2018-04-18 23:59:59");
 			//Date parse = formate.parse("2018-08-09 00:00:00");//朱
-			Date parse = formate.parse("2018-04-05 00:00:00");//胡
+			Date parse = formate.parse("2018-04-20 00:00:00");//胡
 			System.out.println(parse.getTime());
 		} catch (ParseException e) {
 			// TODO Auto-generated catch block
