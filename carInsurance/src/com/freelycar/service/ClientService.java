@@ -35,6 +35,14 @@ public class ClientService
     	Client clientById = clientDao.getClientById(id);
     	return RESCODE.SUCCESS.getJSONRES(clientById);
     }
+    
+    public Map<String,Object> isExistByOpenId(String openId){
+    	Client client = clientDao.getClientByOpenId(openId);
+    	if(client == null){
+    		return RESCODE.NOT_FOUND.getJSONRES();
+    	}
+    	return RESCODE.SUCCESS.getJSONRES(client);
+    }
 	
 	/**
 		分页查询

@@ -42,7 +42,7 @@ public class ClientController
     	String phone = entity.getPhone();
     	String smscode = entity.getSmscode();
     	String invCode = entity.getInvCode();
-    	
+    	String openId = entity.getOpenId();
     	System.out.println(phone);
     	System.out.println(smscode);
     	System.out.println(invCode);
@@ -51,6 +51,7 @@ public class ClientController
     	if(res.get("code").equals("0")){
     		Client client = new Client();
     		client.setPhone(phone);
+    		client.setOpenId(openId);
     		Invition invitionByInvcode2 = invitionService.getInvitionByInvcode2(invCode);
     		if(invitionByInvcode2 != null){
     			client.setSource(invitionByInvcode2.getName());
@@ -59,6 +60,14 @@ public class ClientController
     		return saveClient(client);
     	}
     	return res;
+    }
+    
+    
+    
+    //获取短信验证码
+    @RequestMapping(value = "/isExistByOpenId",method = RequestMethod.GET)
+    public Map<String,Object> isExistByOpenId(@RequestBody String openId){
+    	return clientService.isExistByOpenId(openId);
     }
 
     
@@ -99,6 +108,15 @@ public class ClientController
 		private String phone;
 		private String smscode;
 		private String invCode;
+		private String openId;
+		
+		public String getOpenId() {
+			return openId;
+		}
+		
+		public void setOpenId(String openId) {
+			this.openId = openId;
+		}
 		public String getPhone() {
 			return phone;
 		}
