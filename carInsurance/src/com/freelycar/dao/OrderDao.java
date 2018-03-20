@@ -48,7 +48,7 @@ public class OrderDao
 		QueryUtils utils = new QueryUtils(getSession(), "from InsuranceOrder");
 		
 		if(order != null){
-			utils = utils.addString("state", order.getState());
+			utils = utils.addInteger("state", order.getState());
 		}
 		
 		return utils.setFirstResult(from)
@@ -64,7 +64,7 @@ public class OrderDao
 	public long getOrderCount(InsuranceOrder order){
 		QueryUtils utils = new QueryUtils(getSession(), "select count(*) from InsuranceOrder");
 		if(order != null){
-			utils = utils.addString("state", order.getState());
+			utils = utils.addInteger("state", order.getState());
 		}
 		return (long) utils.getQuery().uniqueResult();
 	}
