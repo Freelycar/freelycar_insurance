@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 /**  
  *  
@@ -33,14 +34,15 @@ public class ClientController
     public Map<String,Object> smsgetCode(@RequestBody String phone){
 		return LeanCloudSms.sendSmsCode(phone);
 	}
-
-    
-    
     
     
     //获取短信验证码
     @RequestMapping(value = "/sms/verification",method = RequestMethod.POST)
-    public Map<String,Object> smsgetCode(@RequestParam String phone, @RequestParam  String smscode, @RequestParam  String invCode){
+    public Map<String,Object> smsgetCode(@RequestBody SmsEntity entity){
+    	String phone = entity.getPhone();
+    	String smscode = entity.getSmscode();
+    	String invCode = entity.getInvCode();
+    	
     	System.out.println(phone);
     	System.out.println(smscode);
     	System.out.println(invCode);
@@ -91,4 +93,29 @@ public class ClientController
 	    return clientService.updateClient(client);
 	}
     
+	
+	
+	static class SmsEntity{
+		private String phone;
+		private String smscode;
+		private String invCode;
+		public String getPhone() {
+			return phone;
+		}
+		public void setPhone(String phone) {
+			this.phone = phone;
+		}
+		public String getSmscode() {
+			return smscode;
+		}
+		public void setSmscode(String smscode) {
+			this.smscode = smscode;
+		}
+		public String getInvCode() {
+			return invCode;
+		}
+		public void setInvCode(String invCode) {
+			this.invCode = invCode;
+		}
+	}
 }
