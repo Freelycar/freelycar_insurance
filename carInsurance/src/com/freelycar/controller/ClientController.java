@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 /**  
  *  
@@ -39,7 +40,7 @@ public class ClientController
     
     //获取短信验证码
     @RequestMapping(value = "/sms/verification",method = RequestMethod.POST)
-    public Map<String,Object> smsgetCode(String phone, String smscode, String invCode){
+    public Map<String,Object> smsgetCode(@RequestParam String phone, @RequestParam  String smscode, @RequestParam  String invCode){
     	System.out.println(phone);
     	System.out.println(smscode);
     	System.out.println(invCode);
