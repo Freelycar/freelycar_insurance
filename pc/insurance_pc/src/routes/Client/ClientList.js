@@ -24,7 +24,7 @@ const columns = [
         title: '车牌号码',
         dataIndex: 'licenseNumber',
         render: (text, record) => {
-            return <Link to='/client/detail' >
+            return <Link to={`/client/detail/${record.id}`} >
                 {text}
             </Link>
         }
@@ -84,6 +84,11 @@ const alreadyColumns = [
     {
         title: '车牌号码',
         dataIndex: 'licenseNumber',
+        render: (text, record) => {
+            return <Link to='/client/detail' >
+                {text}
+            </Link>
+        }
     },
     {
         title: '车主姓名',

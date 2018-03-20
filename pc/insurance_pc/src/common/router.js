@@ -166,7 +166,7 @@ export const getRouterData = (app) => {
     '/client/list': {
       component: dynamicWrapper(app, [], () => import('../routes/Client/ClientList')),
     },
-    '/client/detail': {
+    '/client/detail/:id': {
       component: dynamicWrapper(app, [], () => import('../routes/Client/ClientDetail')),
     },
     '/performance/statistics': {
