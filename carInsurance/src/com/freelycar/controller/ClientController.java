@@ -48,7 +48,8 @@ public class ClientController
     	System.out.println(invCode);
     	
     	Map<String, Object> res = LeanCloudSms.verifySMSCode(phone, smscode);
-    	if(res.get("code").equals("0")){
+    	if(Integer.parseInt((String)res.get("code"))== 0){
+    		System.out.println("------------");
     		Client client = new Client();
     		client.setPhone(phone);
     		client.setOpenId(openId);
@@ -56,7 +57,7 @@ public class ClientController
     		if(invitionByInvcode2 != null){
     			client.setSource(invitionByInvcode2.getName());
     		}
-    		
+    		System.out.println("client :"+client);
     		return saveClient(client);
     	}
     	return res;

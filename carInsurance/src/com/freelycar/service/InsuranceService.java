@@ -65,6 +65,12 @@ public class InsuranceService
     		String msg = resultJson.getJSONObject("errorMsg").getString("code");
     		if("success".equals(msg)){
     			
+    			//证明用户身份真实有效
+    			Client clientByOpenIdAndLicenseNumber = clientDao.getClientByOpenIdAndLicenseNumber(client.getLicenseNumber(), client.getOpenId());
+    			if(clientByOpenIdAndLicenseNumber != null){
+    				clientDao.saveClient(client1);
+    			}
+
     			JSONObject data = null;
 				try { data = new JSONObject(resultJson.getString("data"));
 				} catch (JSONException e) { e.printStackTrace();

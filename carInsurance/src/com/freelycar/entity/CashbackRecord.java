@@ -33,6 +33,8 @@ public class CashbackRecord
     private String account;  //收款人卡;
 	
     private String bankname;  //开户行;
+    
+    private String orderId;
     /********** constructors ***********/  
     public CashbackRecord() {  
       
@@ -63,7 +65,13 @@ public class CashbackRecord
         this.clientId = clientId;  
     }  
       
+	public String getOrderId() {
+		return orderId;
+	}
 	
+	public void setOrderId(String orderId) {
+		this.orderId = orderId;
+	}
     public String getPayee() {  
         return payee;  
     }  

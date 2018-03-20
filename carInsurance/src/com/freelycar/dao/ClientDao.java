@@ -44,13 +44,22 @@ public class ClientDao
     	return result;
     }
 	
-    //根据phone查询Client
+    //根据openId查询Client
     public Client getClientByOpenId(String openId){
     	String hql = "from Client where openId = :openId";
     	Client result = (Client) getSession().createQuery(hql).setString("openId", openId).uniqueResult();
     	return result;
     }
 	
+    //根据openId查询Client
+    public Client getClientByOpenIdAndLicenseNumber(String licenseNumber,String openId){
+    	String hql = "from Client where openId = :openId and licenseNumber = :licenseNumber";
+    	Client result = (Client) getSession().createQuery(hql)
+    			.setString("openId", openId)
+    			.setString("licenseNumber", licenseNumber)
+    			.uniqueResult();
+    	return result;
+    }
 	//查询所有的Client	
 	@SuppressWarnings("unchecked")
 	public List<Client> listClient(Client client,int from, int num){

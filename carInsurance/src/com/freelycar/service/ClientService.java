@@ -57,7 +57,7 @@ public class ClientService
 	    	long count = clientDao.getClientCount(client);
 			return RESCODE.SUCCESS.getJSONRES(listPage,(int)Math.ceil(count/(float)number),count);
 		} 
-		return RESCODE.NOT_FOUND.getJSONRES();
+		return RESCODE.SUCCESS.getJSONRES(listPage);
     }
 	
 	
