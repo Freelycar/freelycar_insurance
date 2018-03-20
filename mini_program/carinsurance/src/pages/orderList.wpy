@@ -70,32 +70,32 @@
 }
 </style>
 <template>
-    <!-- <emptyList /> -->
-    <view class="container">
+  <emptyList  wx:if="{{orderlist.length==0}}"/> 
+  <view class="container">
     <block wx:for="{{orderlist}}" wx:key="{{index}}">
-    <view class="order-list-box" @tap="goToDetail">
-      <view class="order-list order-list-title">
-        <view class="list-title">{{item.insureName}}<text class="insurance-type">共选择<text style="color:#f8b500">5</text>个险种</text></view>
-        <view wx:if="" class="pay-btn">支付</view>
-         <!-- <view class="pay-state"><image class="orderlist_dispatch" src="../../assets/imgs/orderlist_dispatch.png"/>配送中</view>
-        <view class="pay-state"><image class="orderlist_wait" src="../../assets/imgs/orderlist_wait.png"/>待配送</view>
-        <view class="pay-state"><image class="orderlist_success" src="../../assets/imgs/orderlist_success.png"/>已投保</view>      -->
-        <!-- <view class="pay-state"><image class="orderlist_check" src="../../assets/imgs/orderlist_check.png"/>核保中</view>    -->
+      <view class="order-list-box" data-order-id="{{item.orderId}}"  @tap="goToDetail">
+        <view class="order-list order-list-title">
+          <view class="list-title">{{item.insureName}}<text class="insurance-type">共选择<text style="color:#f8b500">5</text>个险种</text></view>
+          <view wx:if="{{state<5}}" class="pay-btn">支付</view>
+            <view wx:if="{{state==7}}" class="pay-state"><image class="orderlist_dispatch" src="../../assets/imgs/orderlist_dispatch.png"/>配送中</view>
+          <view wx:if="{{state==6}}" class="pay-state"><image class="orderlist_wait" src="../../assets/imgs/orderlist_wait.png"/>待配送</view>
+          <view wx:if="{{state==8}}" class="pay-state"><image class="orderlist_success" src="../../assets/imgs/orderlist_success.png"/>已投保</view>      
+        <view wx:if="{{state==2}}" class="pay-state"><image class="orderlist_check" src="../../assets/imgs/orderlist_check.png"/>核保中</view>   
+        </view>
+        <view class="order-list order-list-item">
+          <text class="list-item">车牌号：{{item.licenseNumber}}</text>
+        </view>
+        <view class="order-list order-list-item">
+          <text class="list-item">订单号：{{item.orderId}}</text>    
+          <text class="list-price">￥{{item.totalPrice}}</text>    
+        </view>
+        <view class="order-list">
+          <text class="list-item">订单时间：{{item.payTime}}</text>       
+          <text class="list-item list-item-grey">（可返￥1200现金红包）</text> 
+        </view>
       </view>
-      <view class="order-list order-list-item">
-        <text class="list-item">车牌号：{{item.licenseNumber}}</text>
-      </view>
-      <view class="order-list order-list-item">
-        <text class="list-item">订单号：{{item.orderId}}</text>    
-        <text class="list-price">￥{{item.totalPrice}}</text>    
-      </view>
-      <view class="order-list">
-        <text class="list-item">订单时间：{{item.payTime}}</text>       
-        <text class="list-item list-item-grey">（可返￥1200现金红包）</text> 
-      </view>
-    </view>
     </block>
-    </view>
+  </view>
 </template>
 
 <script>
@@ -117,9 +117,11 @@ export default class OrderList extends wepy.page {
   };
 
   methods = {
-    goToDetail() {
+    goToDetail(e) {
+      let orderId = e.currentTarget.dataset.orderId;
+      console.log(orderId);
       wepy.navigateTo({
-        url: `orderDetail?id=111`
+        url: `orderDetail?id=${orderId}`
       });
     }
   };
@@ -128,7 +130,7 @@ export default class OrderList extends wepy.page {
   }
   queryList() {
     wepy.request({
-      url: 'http://172.17.3.108:8080/carInsurance/api/order/list',
+      url: 'http://172.17.3.106:8080/carInsurance/api/order/list',
       data: {
         type: -1,
         page: 1,
