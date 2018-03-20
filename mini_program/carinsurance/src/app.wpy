@@ -35,9 +35,9 @@ export default class extends wepy.app {
     pages: [
       'pages/index',
       'pages/main',
+      'pages/orderList',
       'pages/payment',
       'pages/orderDetail',
-      'pages/orderList',
       'pages/quoteRecord',
       'pages/quote',
       'pages/adjustQuoteProgram',
@@ -103,13 +103,13 @@ export default class extends wepy.app {
       cb && cb(this.globalData.userInfo);
     } else {
       wepy.getUserInfo({
-            success(res) {
-              that.globalData.userInfo = res.userInfo;
-              cb && cb(res.userInfo);
-            },
-            fail(error) {
-              console.log(error);
-            }
+        success(res) {
+          that.globalData.userInfo = res.userInfo;
+          cb && cb(res.userInfo);
+        },
+        fail(error) {
+          console.log(error);
+        }
       });
     }
   }

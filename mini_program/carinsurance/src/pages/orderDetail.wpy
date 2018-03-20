@@ -213,14 +213,28 @@ export default class OrderDetail extends wepy.page {
     navigationBarTitleText: '订单详情'
   };
 
-  components = {
-  };
+  components = {};
 
-  data = { 
-  };
+  data = {};
 
-  methods = {
-  };
-  onLoad() {}
+  methods = {};
+
+  onLoad() {
+    wepy.request({
+      url: 'http://172.17.3.108:8080/carInsurance/api/order/list',
+      data: {
+        type: -1,
+        page: 1,
+        number: 99
+      },
+      header: {
+        'content-type': 'application/x-www-form-urlencoded'
+      },
+      method: 'POST',
+      success: res => {
+        console.log(res);
+      }
+    });
+  }
 }
 </script>
