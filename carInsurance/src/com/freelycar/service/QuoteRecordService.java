@@ -51,7 +51,7 @@ public class QuoteRecordService
 				quoteRecordDao.update(qr);
 				
 				
-				SocketHelper.sendMessage(qr.getOfferId(), qr);
+				SocketHelper.sendMessage(qr.getOfferId(), data.toString());
 				
 				Map<String,Object> msg = new HashMap<>();
 				msg.put("offerId", offerId);
