@@ -3,6 +3,7 @@ package com.freelycar.controller;
 import com.freelycar.entity.Client;
 import com.freelycar.entity.Invition;
 import com.freelycar.service.ClientService;
+import com.freelycar.service.InsuranceService;
 import com.freelycar.service.InvitionService;
 import com.freelycar.util.LeanCloudSms;
 
@@ -28,6 +29,9 @@ public class ClientController
 
     @Autowired
     private InvitionService invitionService;
+    
+    @Autowired
+    private InsuranceService insuranceService;
 
     //获取短信验证码
     @RequestMapping(value = "/sms/getCode",method = RequestMethod.POST)
@@ -48,7 +52,7 @@ public class ClientController
     	System.out.println(invCode);
     	
     	Map<String, Object> res = LeanCloudSms.verifySMSCode(phone, smscode);
-    	if(Integer.parseInt((String)res.get("code"))== 0){
+    	if((int)res.get("code")== 0){
     		System.out.println("------------");
     		Client client = new Client();
     		client.setPhone(phone);
@@ -58,17 +62,16 @@ public class ClientController
     			client.setSource(invitionByInvcode2.getName());
     		}
     		System.out.println("client :"+client);
-    		return saveClient(client);
+    		return clientService.saveClient(client);
     	}
     	return res;
     }
     
     
     
-    //获取短信验证码
     @RequestMapping(value = "/isExistByOpenId",method = RequestMethod.POST)
-    public Map<String,Object> isExistByOpenId(@RequestBody String openId){
-    	return clientService.isExistByOpenId(openId);
+    public Map<String,Object> isExistByOpenId(@RequestBody Client client){
+    	return insuranceService.queryLastYear(client);
     }
 
     

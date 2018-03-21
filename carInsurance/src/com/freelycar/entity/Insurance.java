@@ -47,11 +47,19 @@ public class Insurance
     private String totalOpenId;  //属于同一个人的openId;
 	
     private String totalLicenseNumber;  //同一个车牌，怕一个openId有多个车;
+    
+    private String price;//该险种的钱
+    
     /********** constructors ***********/  
     public Insurance() {  
       
     }  
   
+    class InsurancesList{
+    	
+    }
+    
+    
     public Insurance(String policyNo, String licenseNumber, Integer insuranceCompanyId, String insuranceCompany, String insuranceEndTime, String insuranceBeginTime, boolean commercial, String insurances, String totalOpenId, String totalLicenseNumber) {  
         this.policyNo = policyNo;  
         this.licenseNumber = licenseNumber;  
@@ -177,6 +185,15 @@ public class Insurance
     
     public void setForceInsuranceStartTime(String forceInsuranceStartTime) {
 		this.forceInsuranceStartTime = forceInsuranceStartTime;
+	}
+    
+    
+    public String getPrice() {
+		return price;
+	}
+    
+    public void setPrice(String price) {
+		this.price = price;
 	}
 
 	@Override

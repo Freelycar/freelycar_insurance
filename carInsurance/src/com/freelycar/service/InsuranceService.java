@@ -1,5 +1,7 @@
 package com.freelycar.service; 
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -47,12 +49,14 @@ public class InsuranceService
     
     private String LUOTUOKEY = Constant.LUOTUOKEY;
     
+    private static SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    
     public Map<String, Object> queryLastYear(Client client){
     	
     	System.out.println(client);
     	//先去查是不是老用户
-    	Client client1 = clientDao.getClientByOpenId(client.getOpenId());
-    	if(client1 == null){
+    	List<Client> clientByOpenIdList = clientDao.getClientByOpenIdList(client.getOpenId());
+    	if(clientByOpenIdList.isEmpty()){
     		return RESCODE.USER_NO_PHONE.getJSONRES();
     	}
     	
@@ -61,19 +65,18 @@ public class InsuranceService
     	param.put("ownerName", client.getOwnerName());
     	param.put("licenseNumber", client.getLicenseNumber());
     	JSONObject resultJson = HttpClientUtil.httpGet("http://wechat.bac365.com:8081/carRisk/car_risk/carApi/queryLatestPolicy", param);
+    	
+    	System.out.println("续保"+resultJson);
     	if(resultJson.has("errorMsg")){
     		String msg = resultJson.getJSONObject("errorMsg").getString("code");
     		if("success".equals(msg)){
-    			
-    			//证明用户身份真实有效
-    			Client clientByOpenIdAndLicenseNumber = clientDao.getClientByOpenIdAndLicenseNumber(client.getLicenseNumber(), client.getOpenId());
-    			if(clientByOpenIdAndLicenseNumber != null){
-    				clientDao.saveClient(client1);
-    			}
-
     			JSONObject data = null;
 				try { data = new JSONObject(resultJson.getString("data"));
 				} catch (JSONException e) { e.printStackTrace();
+				}
+				
+				if(data.length()==0){
+					return RESCODE.USER_NAME_LICENSENUMBER_NOT_FOUND.getJSONRES();
 				}
 				
     			JSONArray array = new JSONArray();
@@ -94,7 +97,15 @@ public class InsuranceService
     				int insuranceCompanyId = info.getInt("insuranceCompanyId");
     				String insuranceBeginTime = info.getString("insuranceBeginTime");
     				String insuranceEndTime = info.getString("insuranceEndTime");
+    				try {
+    					insuranceEndTime = String.valueOf(format.parse(insuranceEndTime).getTime()/1000);
+					} catch (ParseException e) {
+						e.printStackTrace();
+					}
+    				
+    				String totalAmount = info.getString("totalAmount");
     				String insuranceJson = info.has("insurances")?info.getJSONArray("insurances").toString():null;
+    				
     				
     				Insurance insurance = new Insurance();
     				insurance.setPolicyNo(policyNo);
@@ -108,14 +119,19 @@ public class InsuranceService
     				insurance.setLicenseNumber(client.getLicenseNumber());
     				insurance.setOwnerName(client.getOwnerName());
     				insurance.setTotalOpenId(client.getOpenId());
+    				insurance.setPrice(totalAmount);
     				saveInsurance(insurance);
     				result.add(insurance);
     			}
     			
     			
-    			//x询价的时候 插入客户的信息//初始状态 呆报价
-    			client.setQuoteState(INSURANCE.QUOTESTATE_NO_1.getCode()+"");
-    			clientDao.saveClient(client);
+    			//证明用户身份真实有效
+    			Client clientByOpenIdAndLicenseNumber = clientDao.getClientByOpenIdAndLicenseNumber(client.getLicenseNumber(), client.getOpenId());
+    			if(clientByOpenIdAndLicenseNumber == null){
+    				//x询价的时候 插入客户的信息//初始状态 呆报价
+    				client.setQuoteState(INSURANCE.QUOTESTATE_NO_1.getCode()+"");
+    				clientDao.saveClient(client);
+    			}
     			
     			return RESCODE.SUCCESS.getJSONRES(result);
     		}
@@ -131,7 +147,10 @@ public class InsuranceService
     public Map<String,Object> queryPrice(Client client, Insurance insurance,String cityCode,String cityName){
     	Map<String,Object> param = new HashMap<>();
     	param.put("api_key", LUOTUOKEY);
-    	param.put("mobilePhone", client.getPhone());
+    	
+    	//通过openId 查手机号
+    	Client clientByOpenId = clientDao.getClientByOpenId(client.getOpenId());
+    	param.put("mobilePhone", clientByOpenId.getPhone());
     	
     	JSONObject createEnquiryParams = new JSONObject();
     	createEnquiryParams.put("licenseNumber", client.getLicenseNumber());//

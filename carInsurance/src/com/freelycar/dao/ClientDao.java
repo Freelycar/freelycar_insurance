@@ -50,6 +50,13 @@ public class ClientDao
     	Client result = (Client) getSession().createQuery(hql).setString("openId", openId).uniqueResult();
     	return result;
     }
+    
+    //根据判断openId 存不存在
+    @SuppressWarnings("unchecked")
+	public List<Client> getClientByOpenIdList(String openId){
+    	String hql = "from Client where openId = :openId";
+    	return getSession().createQuery(hql).setString("openId", openId).list();
+    }
 	
     //根据openId查询Client
     public Client getClientByOpenIdAndLicenseNumber(String licenseNumber,String openId){

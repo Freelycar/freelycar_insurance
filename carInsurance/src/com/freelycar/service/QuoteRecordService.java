@@ -12,7 +12,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.freelycar.dao.QuoteRecordDao;
 import com.freelycar.entity.QuoteRecord;
-import com.freelycar.util.RESCODE;  
+import com.freelycar.util.RESCODE;
+import com.freelycar.util.SocketHelper;  
 /**  
  *  
  */  
@@ -48,6 +49,9 @@ public class QuoteRecordService
 				qr.setOfferId(offerId);
 				qr.setOfferDetail(offerDetail);
 				quoteRecordDao.update(qr);
+				
+				
+				SocketHelper.sendMessage(qr.getOfferId(), qr);
 				
 				Map<String,Object> msg = new HashMap<>();
 				msg.put("offerId", offerId);
