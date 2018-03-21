@@ -166,7 +166,7 @@
     width: 80%;
     margin: auto auto;
     margin-top: 40%;
-  background: rgba(0, 0, 0, 0.7);
+    background: rgba(0, 0, 0, 0.75);
     padding: 0rpx 20rpx;
 
     border-radius: 10rpx;
@@ -183,13 +183,16 @@
       padding-top: 20rpx;
       border-bottom: 1rpx solid lightgray;
       height: 70rpx;
+      input {
+        color: white;
+      }
     }
     .flex-box {
       display: flex;
       justify-content: space-between;
     }
     .getcode-view {
-      color: #007bc7;
+      color: #009eff;
       width: 50%;
       text-align: right;
     }
@@ -263,7 +266,7 @@
             <image class='cooperation-agencies-img' src='/assets/imgs/insurance_logo5.png' />
             <image class='cooperation-agencies-img' src='/assets/imgs/insurance_logo6.png' />
         </view>
-        <view class='call-button' @tap=''>
+        <view class='call-button' @tap='makePhoneCall'>
             <image class='call-button-img' src='/assets/imgs/manual_consultation.png' />
         </view>
     </view>
@@ -277,8 +280,18 @@
                 <input placeholder='请输入邀请码(选填)' bindinput="bindInvcodeInput" />
             </view>
             <view class='row flex-box'>
-                <input placeholder='请输入验证码' bindinput="bindverificationCodeInput" />
-                <view class='getcode-view' @tap='getVerificatCode'>获取验证码</view>
+                <input placeholder='请输入验证码' bindinput="bindverificationCodeInput" />\
+                <block wx:if={{waitting}}>
+                    <view class='getcode-view'>
+                        {{wait}}s后重试
+                    </view>
+                </block>
+                <block wx:else>
+                    <view class='getcode-view' @tap='getVerificatCode'>
+                        获取验证码
+                    </view>
+                </block>
+
             </view>
             <view class='confirm' @tap='verificationPhone'> 确定 </view>
         </view>
@@ -327,34 +340,61 @@ export default class Index extends wepy.page {
 
     phoneNumber: '',
     verificationCode: '',
-    invcode: '' //邀请码
+    invcode: '', //邀请码
+    wait: 60, //倒计时60秒
+    waitting: false,
+    timer: null
   };
 
   methods = {
     getQuote() {
-      this.showModal = true;
-      //   if (this.data.licenseNumber === '') {
-      //     wepy.showToast({ title: '请输入车牌号码', icon: 'none' });
-      //     return;
-      //   } else if (this.data.name === '') {
-      //     wepy.showToast({ title: '请输入车主姓名', icon: 'none' });
-      //     return;
-      //   }
-      //   wepy.showLoading();
-      //   wepy.request({
-      //     url: 'http://localhost:8080/carInsurance/api/insurance/test1',
-      //     data: {},
-      //     method: 'GET',
-      //     success: function(res) {
-      //       console.log(res);
-      //     },
-      //     complete: function() {
-      //       wepy.hideLoading();
-      //     }
-      //   });
-      // wepy.navigateTo({
-      //   url: 'quote'
-      // });
+        //  wepy.navigateTo({
+        //       url: 'quote'
+        //     });
+        //     return;
+      //   this.showModal = true;
+      if (this.data.licenseNumber === '') {
+        wepy.showToast({ title: '请输入车牌号码', icon: 'none' });
+        return;
+      } else if (this.data.name === '') {
+        wepy.showToast({ title: '请输入车主姓名', icon: 'none' });
+        return;
+      }
+
+      this.$parent.globalData.name = this.name;
+      this.$parent.globalData.licenseNumber = this.region + this.licenseNumber;
+      console.log(this.$parent.globalData)
+      wepy.showLoading();
+      wepy.request({
+        url: this.$parent.globalData.baseUrl +  'client/isExistByOpenId',
+        data: {
+          openId: this.$parent.globalData.openId,
+          ownerName: this.name,
+          licenseNumber: this.region + this.licenseNumber
+        },
+        method: 'POST',
+        success: res => {
+          console.log(res);
+          if (res.data.code == 0) {
+            wepy.navigateTo({
+              url: 'quote'
+            });
+          } else if (res.data.code == 205) {
+            this.showModal = true;
+            this.$apply();
+          } else {
+            wepy.showModal({
+                title: '提示',
+                content: '为能查到您的续保信息，请检查车牌号或车主姓名是否正确!',
+                showCancel: false
+
+            })
+          }
+        },
+        complete: function() {
+          wepy.hideLoading();
+        }
+      });
     },
     changeIndicatorDots(e) {
       this.setData({
@@ -388,18 +428,13 @@ export default class Index extends wepy.page {
     },
 
     checkQouteRecord() {
-      // wepy.navigateTo({
-      //   url: 'quoteRecord'
-      // });
-      wepy.request({
-        url: 'http://localhost:8080/carInsurance/api/insurance/test1',
-        data: {},
-        method: 'GET',
-        success: function(res) {
-          console.log(res);
-        }
+      //查看最近报价记录
+      wepy.navigateTo({
+        url: 'quoteRecord'
       });
     },
+
+    //验证手机很验证码
     verificationPhone() {
       //验证短信
       if (!this.data.phoneNumber) {
@@ -409,6 +444,35 @@ export default class Index extends wepy.page {
         wepy.showToast({ title: '请输入验证码', icon: 'none' });
         return;
       }
+
+      wepy.showLoading();
+      wepy.request({
+        url: this.$parent.globalData.baseUrl +  'client/sms/verification',
+        data: {
+          phone: this.data.phoneNumber,
+          smscode: this.data.verificationCode,
+          invCode: this.data.invitationCode,
+          openId: this.$parent.globalData.openId
+        },
+        method: 'POST',
+        success: res => {
+          console.log(res);
+          if (res.data.code == 0) {
+            this.showModal = false;
+            this.phoneNumber = '';
+            this.verificationCode = '';
+            this.invcode = '';
+            this.$apply();
+            console.log(this.showModal);
+            wepy.showToast({ title: '验证成功', icon: 'success' });
+          } else {
+            wepy.showToast({ title: res.data.msg, icon: 'none' });
+          }
+        },
+        complete: function() {
+          wepy.hideLoading();
+        }
+      });
     },
     getVerificatCode() {
       if (!this.data.phoneNumber) {
@@ -417,26 +481,60 @@ export default class Index extends wepy.page {
       }
       wepy.showLoading();
       wepy.request({
-        url: 'http://localhost:8080/carInsurance/api/client/sms/getCode',
+        url: this.$parent.globalData.baseUrl +  'client/sms/getCode',
         data: {
-          phone: this.data.phoneNumber
+          phone: this.data.phoneNumber + ''
         },
         method: 'POST',
-        success: function(res) {
-          console.log(res);
+        success: res => {
+          console.log(res.data);
+          if (res.data.code == 0) {
+            wepy.showToast({ title: '验证码发送成功' });
+            this.startCountdown();
+          } else {
+            wepy.showToast({ title: res.data.msg, icon: 'none' });
+          }
         },
-        complete: function() {
+        complete: () => {
           wepy.hideLoading();
         }
+      });
+    },
+
+    makePhoneCall() {
+      wepy.makePhoneCall({
+        phoneNumber: '15651751173' //仅为示例，并非真实的电话号码
       });
     }
   };
 
   onLoad() {
     let self = this;
+    this.$parent.globalData.name = '';
+    this.$parent.globalData.licenseNumber = '';
     this.$parent.getUserInfo(function(userInfo) {
       console.log(userInfo);
     });
+  }
+
+  onUnload() {
+    clearInterval(this.timer);
+  }
+
+  startCountdown() {
+    //开始倒计时
+    this.waitting = true;
+    this.timer = setInterval(() => {
+      let wait = this.wait;
+      this.wait = wait - 1;
+      this.$apply();
+      if (this.wait < 1) {
+        this.wait = 60;
+        this.waitting = false;
+        this.$apply();
+        clearInterval(this.timer);
+      }
+    }, 1000);
   }
 }
 </script>

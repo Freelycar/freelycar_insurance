@@ -72,7 +72,13 @@ export default class extends wepy.app {
   };
 
   globalData = {
-    userInfo: null
+    userInfo: null,
+    openId: '666666',
+    session_key: '',
+    name: '',
+    licenseNumber: '',
+    insurances: [],
+    baseUrl: 'http://www.xhnky.cn/carInsurance/api/'
   };
 
   constructor() {
@@ -102,6 +108,26 @@ export default class extends wepy.app {
     if (this.globalData.userInfo) {
       cb && cb(this.globalData.userInfo);
     } else {
+      wepy.login({
+        success: res => {
+          wepy.request({
+            //获取openid接口
+            url: 'https://api.weixin.qq.com/sns/jscode2session',
+            data: {
+              appid: 'wx1394f2d5a7311394',
+              secret: ' 95b447b20607d95c1aedd573079e05f3',
+              js_code: res.code,
+              grant_type: 'authorization_code' 
+            },
+            method: 'GET',
+            success(res) {
+              console.log(res.data);
+              that.globalData.openId = res.data.openid || that.globalData.openId; //获取到的openid
+              that.globalData.session_key = res.data.session_key || that.globalData.session_key; //获取到session_key
+            }
+          });
+        }
+      });
       wepy.getUserInfo({
         success(res) {
           that.globalData.userInfo = res.userInfo;

@@ -167,7 +167,7 @@ export default class AdjustQuoteProgram extends wepy.page {
   components = {};
 
   data = {
-    insurances: JSON.parse(JSON.stringify(defultInsurances)),
+    insurances: [],
     waitTime: 0,
     timer: null
   };
@@ -217,6 +217,9 @@ export default class AdjustQuoteProgram extends wepy.page {
     }
   };
 
-  onLoad() {}
+  onLoad() {
+    this.insurances = this.$parent.globalData.insurances || JSON.parse(JSON.stringify(defultInsurances));
+    this.$apply();
+  }
 }
 </script>
