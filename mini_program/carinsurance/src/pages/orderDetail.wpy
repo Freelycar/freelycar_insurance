@@ -102,7 +102,7 @@
 }
 </style>
 <template>
-  <view class="container order-detail">
+  <view class="container order-detail" wx:if="{{orderDetail}}">
     <image class="freelycar_logo" src="../../assets/imgs/freelycar_logo_color.png"/>
     <view class="order-info">订单编号：6526949841215641</view>
     <view class="order-info">订单时间：2017-12-30 18:30</view>
@@ -215,14 +215,16 @@ export default class OrderDetail extends wepy.page {
 
   components = {};
 
-  data = {};
+  data = {
+    orderDetail: ''
+  };
 
   methods = {};
 
   onLoad(params) {
     console.log(params);
     wepy.request({
-      url: 'http://172.17.3.108:8080/carInsurance/api/order/getOrderById',
+      url: 'http://172.17.3.106:8080/carInsurance/api/order/getOrderById',
       data: {
         id: params.id
       },
@@ -232,6 +234,8 @@ export default class OrderDetail extends wepy.page {
       method: 'GET',
       success: res => {
         console.log(res);
+        this.orderDetail = res.data.data;
+        this.$apply();
       }
     });
   }
