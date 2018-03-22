@@ -1,41 +1,48 @@
 <style lang="less">
-  .orderList{
-    height: 100%;
-    align-items: center;
-    justify-content: center;
-    box-sizing: border-box;
-  }
-  page {
-    height: 100%;
-  }
-  .empty_orderList {
-    width:150rpx;
-    height: 264rpx;
-  }
-  .empty_indo {
-    margin-top: 44rpx;
-    color:#1e1e1e;
-    font-size: 32rpx;
-  }
-  .goto_offer {
-    margin-top: 70rpx;
-    border: 1px solid #f8b500;
-    border-radius: 8px;
-    color: #f8b500;
-    font-size: 32rpx;
-    padding: 30rpx 140rpx;
-  }
+.orderList {
+  height: 100%;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+}
+page {
+  height: 100%;
+}
+.empty_orderList {
+  width: 150rpx;
+  height: 264rpx;
+}
+.empty_indo {
+  margin-top: 44rpx;
+  color: #1e1e1e;
+  font-size: 32rpx;
+}
+.goto_offer {
+  margin-top: 70rpx;
+  border: 1px solid #f8b500;
+  border-radius: 8px;
+  color: #f8b500;
+  font-size: 32rpx;
+  padding: 30rpx 140rpx;
+}
 </style>
 <template>
     <view class="container orderList">
       <image class="empty_orderList" src="/assets/imgs/empty_orderList.png"/>
       <text class="empty_indo">您还没有相关的车险订单</text>
-      <view class="goto_offer">去报价</view>
+      <view @tap="goto_offer" class="goto_offer">去报价</view>
     </view>
 </template>
 
 <script>
 import wepy from 'wepy';
 export default class OrderList extends wepy.page {
+  methods = {
+    goto_offer() {
+      wepy.switchTab({
+        url: 'index'
+      });
+    }
+  };
 }
 </script>

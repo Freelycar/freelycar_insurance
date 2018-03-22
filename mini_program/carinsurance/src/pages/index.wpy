@@ -452,7 +452,8 @@ export default class Index extends wepy.page {
           phone: this.data.phoneNumber,
           smscode: this.data.verificationCode,
           invCode: this.data.invitationCode,
-          openId: this.$parent.globalData.openId
+          openId: this.$parent.globalData.openId,
+          licenseNumber: this.data.region + this.data.licenseNumber
         },
         method: 'POST',
         success: res => {

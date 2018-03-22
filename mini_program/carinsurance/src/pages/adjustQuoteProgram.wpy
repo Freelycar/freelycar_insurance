@@ -151,7 +151,13 @@
     </view>
     <view class='reset-program-button' @tap='reset'>
       <i class='fa fa-undo'></i>重置投保方案</view>
-    <button class="{{this.waitTime > 0 ? 'get-price-button-loading get-price-button' : 'get-price-button'}}" @tap='queryQuote'>{{this.waitTime > 0 ? '报价中......90s' : '完成调整，立即报价'}}</button>
+    <block wx:if={{waitting}}>
+      <button class='get-price-button get-price-button-unable'>报价中......{{waitSecond}}s</button>
+    </block>
+    <block wx:else>
+      <button class='get-price-button' @tap='queryPrice'>人保报价</button>
+    </block>
+    <!-- <button class="{{this.waitTime > 0 ? 'get-price-button-loading get-price-button' : 'get-price-button'}}" @tap='queryQuote'>{{this.waitTime > 0 ? '报价中......90s' : '完成调整，立即报价'}}</button> -->
   </scroll-view>
 
 </template>
@@ -168,20 +174,18 @@ export default class AdjustQuoteProgram extends wepy.page {
 
   data = {
     insurances: [],
-    waitTime: 0,
+    waitSecond: 90,
+    waitting: false,
     timer: null
   };
 
   computed = {};
 
   methods = {
-    queryQuote() {
-      this.waitingForquote();
-      // wepy.navigateTo({
-      //   url: 'quoteSuccess'
-      // });
-    },
     selectInsuranceOrNot(event) {
+      if (this.waitting) {
+        return;
+      }
       const code = event.currentTarget.dataset.code;
       const insurances = this.data.insurances;
       const index = code - 1;
@@ -190,6 +194,9 @@ export default class AdjustQuoteProgram extends wepy.page {
       this.insurances = insurances;
     },
     selectCompensationOrNot(event) {
+      if (this.waitting) {
+        return;
+      }
       const code = event.currentTarget.dataset.code;
       const insurances = this.data.insurances;
       const index = code - 1;
@@ -199,6 +206,9 @@ export default class AdjustQuoteProgram extends wepy.page {
       }
     },
     selectAmountStr(event) {
+      if (this.waitting) {
+        return;
+      }
       const code = event.currentTarget.dataset.code;
 
       const insurances = this.data.insurances;
@@ -206,7 +216,9 @@ export default class AdjustQuoteProgram extends wepy.page {
       if (insurances[index].isToubao) {
         const value = event.detail.value;
         const selectAry = insurances[index].selectAry;
+
         insurances[index].amountStr = selectAry[value] || '';
+
         insurances[index].selectIndex = value;
         this.insurances = insurances;
       }
@@ -214,12 +226,133 @@ export default class AdjustQuoteProgram extends wepy.page {
     reset() {
       const data = JSON.parse(JSON.stringify(defultInsurances));
       this.insurances = data;
+    },
+
+    queryPrice() {
+      if (this.waitting) {
+        return;
+      }
+      wepy.showLoading();
+      const insurances = this.$parent.globalData.insurances;
+      let touBaoAry = [];
+      insurances.map((item, index) => {
+        if (item.isToubao == true) {
+          let insurance = {
+            compensation: item.compensation,
+            isToubao: 1,
+            insuranceId: item.code
+          };
+          if (item.amountStr == '') {
+            insurance.price = 1;
+          } else if (item.amountStr == '国产') {
+            insurance.price = 1;
+          } else if (item.amountStr == '进口') {
+            insurance.price = 2;
+          } else {
+            insurance.price = item.tureAry[item.selectIndex];
+          }
+          touBaoAry.push(insurance);
+        }
+      });
+
+      wepy.request({
+        url: this.$parent.globalData.baseUrl + 'insurance/queryPrice',
+        data: {
+          ownerName: this.$parent.globalData.name,
+          licenseNumber: this.$parent.globalData.licenseNumber,
+          openId: this.$parent.globalData.openId,
+          cityCode: '320100',
+          cityName: '南京',
+          insuranceCompanyId: '2',
+          insurances: JSON.stringify(touBaoAry),
+          forceInsuranceStartTime: this.limitDate
+        },
+        method: 'POST',
+        success: res => {
+          console.log(res);
+          if (res.data.code == 0) {
+            this.startCountdown();
+            wepy.showToast({ title: '申请报价成功!' });
+          } else {
+            wepy.showToast({ title: res.data.msg, icon: 'none' });
+          }
+        },
+        complete: function() {
+          wepy.hideLoading();
+        }
+      });
     }
   };
 
   onLoad() {
-    this.insurances = this.$parent.globalData.insurances || JSON.parse(JSON.stringify(defultInsurances));
+    this.insurances =
+      JSON.parse(JSON.stringify(this.$parent.globalData.insurances)) ||
+      JSON.parse(JSON.stringify(defultInsurances));
+
+    //建立连接
+    wepy.connectSocket({
+      url: 'ws://www.xhnky.cn/carInsurance/echo'
+    });
+
+    //连接成功
+    wepy.onSocketOpen(() => {
+      let obj = {};
+      obj.openId = this.$parent.globalData.openId;
+      wx.sendSocketMessage({
+        data: JSON.stringify(obj)
+      });
+      console.log('websocket 连接成功!');
+    });
+
+    //接收数据
+    wepy.onSocketMessage(data => {
+      console.log(data);
+      const objData = JSON.parse(data.data);
+      console.log('成功接受数据');
+      console.log(objData);
+      if (objData.code == 606) {
+        clearInterval(this.timer);
+        this.waitSecond = 90;
+        this.waitting = false;
+        this.$apply();
+        wepy.redirectTo({
+          url: `quoteSuccess?data=${JSON.stringify(objData.data)}`
+        });
+      }
+    });
+
+    //连接失败
+    wepy.onSocketError(function() {
+      console.log('websocket连接失败！');
+    });
     this.$apply();
+  }
+
+  // onUnload() {
+  // wepy.switchTab({
+  //   url: '/pages/index'
+  // });
+  // }
+  onUnload() {
+    wepy.closeSocket({
+      url: 'ws://www.xhnky.cn/carInsurance/echo'
+    });
+  }
+
+  startCountdown() {
+    //开始倒计时
+    this.waitting = true;
+    this.timer = setInterval(() => {
+      let waitSecond = this.waitSecond;
+      this.waitSecond = waitSecond - 1;
+      this.$apply();
+      if (this.waitSecond < 1) {
+        this.waitSecond = 90;
+        this.waitting = false;
+        this.$apply();
+        clearInterval(this.timer);
+      }
+    }, 1000);
   }
 }
 </script>
