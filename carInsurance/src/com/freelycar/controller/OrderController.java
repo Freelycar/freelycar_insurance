@@ -36,7 +36,7 @@ public class OrderController
 	}
 	
 	//查询所有的Order	
-	@RequestMapping(value = "/list",method = RequestMethod.POST)
+	@RequestMapping(value = "/list")
 	public Map<String,Object> listOrder(InsuranceOrder order, int page,int number){
 		return orderService.listOrder(order, page, number);
 	}

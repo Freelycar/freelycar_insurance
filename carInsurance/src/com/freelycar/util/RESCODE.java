@@ -16,8 +16,9 @@ public enum RESCODE {
 	USER_NAMEPAS_ERROR(203,"用户名或密码错误"),
 	USER_EXIST(204,"用户已存在"),
 	USER_NO_PHONE(205,"新用户没有手机号"),
+	USER_NAME_LICENSENUMBER_NOT_FOUND(206,"没有查询到该车牌与姓名的续保信息"),
 	
-	
+	INSURANCE_BAOJIA_SUCCESS(300,"报价成功"),
 	
 	SMS_TIMEOUT(600,"短信验证码超时"),
 	SMS_CODE_EMPTY(601,"短信验证码为空"),

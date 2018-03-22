@@ -21,7 +21,11 @@ public class QuoteRecordController
     @Autowired
 	private QuoteRecordService quoteRecordService;
 
-    
+    /**
+     * 询价推送
+     * @param data
+     * @return
+     */
     @RequestMapping(value="/resultPush")
     public Map<String,Object> quoteRecordPush(String data){
     	return quoteRecordService.quoteRecordPushDeal(data);

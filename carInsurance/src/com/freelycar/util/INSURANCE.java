@@ -17,14 +17,14 @@ public enum INSURANCE {
 	
 	
 	//报价状态
-	QUOTESTATE_NO_1(1,"待报价"),
-	QUOTESTATE_NO_2(2,"已报价"),
-	QUOTESTATE_NO_3(3,"核保成功"),
-	QUOTESTATE_NO_4(4,"核保失败"),
-	QUOTESTATE_NO_5(5,"待配送"),
-	QUOTESTATE_NO_6(6,"已配送"),
-	QUOTESTATE_NO_7(7,"待签收"),
-	QUOTESTATE_NO_8(8,"已投保");
+	QUOTESTATE_NO_0(0,"待报价"),
+	QUOTESTATE_NO_1(1,"已报价"),
+	QUOTESTATE_NO_2(2,"核保成功"),
+	QUOTESTATE_NO_3(3,"核保失败"),
+	QUOTESTATE_NO_4(4,"待配送"),
+	QUOTESTATE_NO_5(5,"已配送"),
+	QUOTESTATE_NO_6(6,"待签收"),
+	QUOTESTATE_NO_7(7,"已投保");
 
 	private int code;// 险种名称
 	private String name;// 险种名称

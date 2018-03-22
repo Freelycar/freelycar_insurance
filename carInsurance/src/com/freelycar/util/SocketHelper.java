@@ -11,7 +11,10 @@ import javax.websocket.OnOpen;
 import javax.websocket.Session;
 import javax.websocket.server.ServerEndpoint;
 
-@ServerEndpoint("/echosdfsdgerter6665zzz")
+import org.json.JSONException;
+import org.json.JSONObject;
+
+@ServerEndpoint("/echo")
 public class SocketHelper {
 
 	private static Map<String, Session> sessions = new ConcurrentHashMap<>();
@@ -19,20 +22,31 @@ public class SocketHelper {
 	@OnOpen
 	public void onOpen(Session session) {
 		System.out.println("onopen:" + session);
-		//sessions.put(session, VALUE);
+		try {
+			session.getBasicRemote().sendText("{\"msg\":\"success\"}");
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	@OnMessage
 	public void onMessage(String message, Session session) {
 		System.out.println("message:" + message);
-		sessions.put(message, session);//message: phone
+		JSONObject json = null;
+		try {
+			 json = new JSONObject(message);
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+		sessions.put(json.getString("openId"), session);//message: phone
 	}
 	
 	
-	public static void sendMessage(String phone,String message){
+	public static void sendMessage(String openId,String message){
 		try {
 			for (Map.Entry<String ,Session> m : sessions.entrySet()) {
-				if(m.getKey().equals(phone)){
+				if(m.getKey().equals(openId)){
 					m.getValue().getBasicRemote().sendText(message);
 					break;
 				}

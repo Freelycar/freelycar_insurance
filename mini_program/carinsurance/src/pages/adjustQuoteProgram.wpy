@@ -176,10 +176,10 @@ export default class AdjustQuoteProgram extends wepy.page {
 
   methods = {
     queryQuote() {
-      this.waitingForquote();
-      // wepy.navigateTo({
-      //   url: 'quoteSuccess'
-      // });
+      // this.waitingForquote();
+      wepy.navigateTo({
+        url: 'quoteSuccess'
+      });
     },
     selectInsuranceOrNot(event) {
       const code = event.currentTarget.dataset.code;
@@ -206,7 +206,9 @@ export default class AdjustQuoteProgram extends wepy.page {
       if (insurances[index].isToubao) {
         const value = event.detail.value;
         const selectAry = insurances[index].selectAry;
+
         insurances[index].amountStr = selectAry[value] || '';
+
         insurances[index].selectIndex = value;
         this.insurances = insurances;
       }
@@ -218,8 +220,16 @@ export default class AdjustQuoteProgram extends wepy.page {
   };
 
   onLoad() {
-    this.insurances = this.$parent.globalData.insurances || JSON.parse(JSON.stringify(defultInsurances));
+    this.insurances =
+      JSON.parse(JSON.stringify(this.$parent.globalData.insurances)) ||
+      JSON.parse(JSON.stringify(defultInsurances));
     this.$apply();
+  }
+
+  onUnload() {
+    wepy.switchTab({
+      url: '/pages/index'
+    });
   }
 }
 </script>
