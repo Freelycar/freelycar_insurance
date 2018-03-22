@@ -1,10 +1,10 @@
 <style lang="less">
-.border-box{
-    box-sizing: border-box;
+.border-box {
+  box-sizing: border-box;
 }
-.scroll-view-bg{
-    height: 1120rpx;
-    width: 100%;
+.scroll-view-bg {
+  height: 1110rpx;
+  width: 100%;
 }
 .header-img {
   width: 100%;
@@ -37,12 +37,11 @@
   flex-direction: row;
   justify-content: space-between;
 }
-.flex-box-row input{
-    // line-height: 90rpx;
-    text-align: right;
-    vertical-align: middle;
-    margin-top: 20rpx;
-
+.flex-box-row input {
+  // line-height: 90rpx;
+  text-align: right;
+  vertical-align: middle;
+  margin-top: 20rpx;
 }
 .tag-view {
   font-size: 25rpx;
@@ -55,28 +54,34 @@
   width: 55%;
   margin-right: 40rpx;
 }
-.footer{
-    position: fixed;
-    bottom: 0;
-    height: 100rpx;
-    width: 100%;
-    background: #efeff4;
+.footer {
+  position: fixed;
+  bottom: 0;
+  height: 100rpx;
+  width: 100%;
+  background: #efeff4;
 }
-.footer .total-price{
-    height: 100rpx;
-    width: 100%;
-    background: white;
-    line-height: 100rpx;
+.footer .total-price {
+  height: 100rpx;
+  width: 100%;
+  background: white;
+  line-height: 100rpx;
 }
-.footer .total-price-item{
-    padding: 0 30rpx;
+.footer .total-price-item {
+  padding: 0 30rpx;
 }
-.footer .total-price .next-step{
-    height: 100rpx;
-    width: 160px;
-    color:white;
-    text-align: center;
-    background: -webkit-gradient(linear, 0% 0%, 100% 0%,from(#f8b500), to(#e7760f))
+.footer .total-price .next-step {
+  height: 100rpx;
+  width: 160px;
+  color: white;
+  text-align: center;
+  background: -webkit-gradient(
+    linear,
+    0% 0%,
+    100% 0%,
+    from(#f8b500),
+    to(#e7760f)
+  );
 }
 </style>
 <template >
@@ -87,86 +92,121 @@
             <view class='line border-bottom flex-box-row' style='margin-top: 0'>
                 <view>
                     <i class='fa fa-file-text-o'></i> 收款信息</view>
-                <view class='textColor-red' >小易现金红包金额¥1460.28</view>
+                <view class='textColor-red'>小易现金红包金额¥{{formData.cashBackMoney}}</view>
             </view>
             <view class='renewal'>
-                    <view class='line flex-box-row'>
-                        <view>开户人姓名<text class='textColor-red'>*</text></view>
-                        <input placeholder='请输入收款人姓名' />
+                <view class='line flex-box-row'>
+                    <view>开户人姓名
+                        <text class='textColor-red'>*</text>
                     </view>
-                    <view class='line flex-box-row'>
-                        <view>收款人卡号<text class='textColor-red'>*</text></view>
-                        <input placeholder='请输入卡号' />
+                    <input placeholder='请输入收款人姓名' data-type='payee' bindinput="handlaInputChange" />
+                </view>
+                <view class='line flex-box-row'>
+                    <view>收款人卡号
+                        <text class='textColor-red'>*</text>
                     </view>
-                    <view class='line flex-box-row'>
-                        <view>开户行<text class='textColor-red'>*</text></view>
-                        <input placeholder='请输入开户行' />
+                    <input placeholder='请输入卡号' data-type='account' bindinput="handlaInputChange" />
+                </view>
+                <view class='line flex-box-row'>
+                    <view>开户行
+                        <text class='textColor-red'>*</text>
                     </view>
+                    <input placeholder='请输入开户行' data-type='bankname' bindinput="handlaInputChange" />
+                </view>
             </view>
             <view class='line border-bottom' style='margin-top: 0'>
-                <view> <i class='fa fa-file-text-o'></i> 车辆信息</view>
+                <view>
+                    <i class='fa fa-file-text-o'></i> 车辆信息</view>
             </view>
             <view class='renewal'>
-                    <view class='line flex-box-row'>
-                        <view>车牌号</view>
-                        <input placeholder='请输入车牌号' value='苏A123R0' />
+                <view class='line flex-box-row'>
+                    <view>车牌号</view>
+                    <!-- <input placeholder='请输入车牌号' value='苏A123R0' /> -->
+                    <view>{{queryData.licenseNumber}}</view>
+                </view>
+                <view class='line flex-box-row'>
+                    <view>车主姓名</view>
+                    <!-- <input placeholder='请输入姓名' /> -->
+                    <view>{{queryData.ownerName}}</view>
+                </view>
+                <view class='line flex-box-row'>
+                    <view>身份证号
+                        <text class='textColor-red'>*</text>
                     </view>
-                    <view class='line flex-box-row'>
-                        <view>车主姓名</view>
-                        <input placeholder='请输入姓名' />
+                    <input placeholder='请输入身份证号' data-type='idCard' bindinput="handlaInputChange" />
+                </view>
+                <view class='line flex-box-row'>
+                    <view>车主电话
+                        <text class='textColor-red'>*</text>
                     </view>
-                    <view class='line flex-box-row'>
-                        <view>身份证号<text class='textColor-red'>*</text></view>
-                        <input placeholder='请输入身份证号' />
-                    </view>
-                    <view class='line flex-box-row'>
-                        <view>车主电话</view>
-                        <input placeholder='请输入车主电话' />
-                    </view>
+                    <input placeholder='请输入车主电话' data-type='phone' bindinput="handlaInputChange" />
+                </view>
             </view>
             <view class='line border-bottom' style='margin-top: 0'>
-                <view><i class='fa fa-file-text-o'></i> 保单收货信息</view>
+                <view>
+                    <i class='fa fa-file-text-o'></i> 保单收货信息</view>
             </view>
             <view class='renewal'>
-                    <view class='line flex-box-row'>
-                        <view>收件人姓名<text class='textColor-red'>*</text></view>
-                        <input placeholder='请输入收货人姓名' />
+                <view class='line flex-box-row'>
+                    <view>收件人姓名
+                        <text class='textColor-red'>*</text>
                     </view>
-                    <view class='line flex-box-row'>
-                        <view>手机号码<text class='textColor-red'>*</text></view>
-                        <input placeholder='请输入手机号码' />
+                    <input placeholder='请输入收货人姓名' data-type='reciver' bindinput="handlaInputChange" />
+                </view>
+                <view class='line flex-box-row'>
+                    <view>手机号码
+                        <text class='textColor-red'>*</text>
                     </view>
-                    <view class='line flex-box-row'>
-                        <view>地址<text class='textColor-red'>*</text></view>
-                        <input placeholder='请输入地址' />
+                    <input placeholder='请输入手机号码' data-type='reciverPhone' bindinput="handlaInputChange" />
+                </view>
+                <view class='line flex-box-row'>
+                    <view>地址
+                        <text class='textColor-red'>*</text>
                     </view>
-                    <view class='line flex-box-row'>
-                        <view></view>
-                        <input placeholder='请输入详细地址' />
-                    </view>
+                    <!-- <input placeholder='请输入地址' /> -->
+                    <picker mode="region" bindchange="bindRegionChange" value="{{region}}">
+                        <view>{{region[0]}}-{{region[1]}}-{{region[2]}}
+                            <i class='fa fa-angle-down'></i>
+                        </view>
+                    </picker>
+                </view>
+                <view class='line flex-box-row'>
+                    <view></view>
+                    <input placeholder='请输入详细地址' data-type='addressDetail' bindinput="handlaInputChange" style="width:100%" />
+                </view>
             </view>
             <view class='line border-bottom' style='margin-top: 0'>
-                <view><i class='fa fa-file-text-o'></i> 发票信息</view>
+                <view>
+                    <i class='fa fa-file-text-o'></i> 发票信息</view>
             </view>
             <view class='renewal'>
-                    <view class='line flex-box-row'>
-                        <view>发票类型</view>
-                        <input placeholder='请选择发票类型' />
+                <view class='line flex-box-row'>
+                    <view>发票类型</view>
+                    <picker bindchange="bindInvoiceTypeChange" value="{{invoiceType}}" range="{{array}}">
+                        <view>{{array[invoiceType]}}
+                            <i class='fa fa-angle-down'></i>
+                        </view>
+                    </picker>
+                </view>
+                <view class='line flex-box-row'>
+                    <view>发票抬头
+                        <text class='textColor-red'>*</text>
                     </view>
-                    <view class='line flex-box-row'>
-                        <view>发票抬头</view>
-                        <input placeholder='请输入发票抬头' />
+                    <input placeholder='请输入发票抬头' data-type='invoiceTitle' bindinput="handlaInputChange" />
+                </view>
+                <view class='line flex-box-row'>
+                    <view>手机号码
+                        <text class='textColor-red'>*</text>
                     </view>
-                    <view class='line flex-box-row'>
-                        <view>手机号码<text class='textColor-red'>*</text></view>
-                        <input placeholder='请输入手机号码' />
-                    </view>
+                    <input placeholder='请输入手机号码' data-type='invoicePhone' bindinput="handlaInputChange" />
+                </view>
             </view>
         </scroll-view>
         <view class='footer'>
             <view class='total-price flex-box-row'>
                 <view class='total-price-item'>
-                    合计: <text style='color: #f8b500'>¥4847.28</text>
+                    合计:
+                    <text style='color: #f8b500'>¥{{formData.currentPrice}}</text>
                 </view>
                 <view class='next-step' @tap='confirm'>
                     确认投保信息
@@ -189,19 +229,102 @@ export default class ConfirmQuoteInfo extends wepy.page {
     toast: Toast
   };
 
-  data = {};
+  data = {
+    formData: {},
+    queryData: {},
+    region: ['江苏省', '南京市', '玄武区'],
+    array: ['电子发票', '纸质发票'],
+    invoiceType: 0
+  };
 
   computed = {};
 
   methods = {
     getQuoteRecord() {},
     confirm() {
-      wepy.navigateTo({
-        url: 'submitedUnderwriting'
+      const queryData = this.queryData;
+      if (!queryData.payee) {
+        wepy.showToast({ title: '请输入开户人姓名', icon: 'none' });
+        return;
+      } else if (!queryData.account) {
+        wepy.showToast({ title: '请输入开户人账号', icon: 'none' });
+        return;
+      } else if (!queryData.bankname) {
+        wepy.showToast({ title: '请输入开户行', icon: 'none' });
+        return;
+      } else if (!queryData.idCard) {
+        wepy.showToast({ title: '请输入车主身份证号', icon: 'none' });
+        return;
+      } else if (!queryData.phone) {
+        wepy.showToast({ title: '请输入车主手机号码', icon: 'none' });
+        return;
+      } else if (!queryData.reciver) {
+        wepy.showToast({ title: '请输入收件人姓名', icon: 'none' });
+        return;
+      } else if (!queryData.reciverPhone) {
+        wepy.showToast({ title: '请输入收件人手机号码', icon: 'none' });
+        return;
+      } else if (!queryData.addressDetail) {
+        wepy.showToast({ title: '请输入收件详细地址', icon: 'none' });
+        return;
+      } else if (!queryData.invoiceTitle) {
+        wepy.showToast({ title: '请输入发票抬头', icon: 'none' });
+        return;
+      } else if (!queryData.invoicePhone) {
+        wepy.showToast({ title: '请输入收发票手机号码', icon: 'none' });
+        return;
+      }
+      wepy.showLoading();
+      wepy.request({
+        url: this.$parent.globalData.baseUrl + 'insurance/submitProposal',
+        data: queryData,
+        method: 'POST',
+        success: res => {
+          console.log(res);
+          if (res.data.code == 0) {
+            // this.startCountdown();
+            wepy.showToast({ title: '申请报价成功!' });
+            //   wepy.redirectTo({
+            //     url: `submitedUnderwriting?orderId=${res.data.data.orderId}`
+            //   });
+          } else {
+            wepy.showToast({ title: res.data.msg, icon: 'none' });
+          }
+        },
+        complete: function() {
+          wepy.hideLoading();
+        }
       });
+      //   wepy.navigateTo({
+      //     url: 'submitedUnderwriting'
+      //   });
+    },
+    handlaInputChange(event) {
+      let type = event.target.dataset.type;
+      this.queryData[type] = event.detail.value;
+      this.$apply();
+    },
+    bindRegionChange(e) {
+      console.log('picker发送选择改变，携带值为', e.detail.value);
+      this.region = e.detail.value;
+      this.provincesCities = this.region.join('');
+    },
+    bindInvoiceTypeChange(e) {
+      this.invoiceType = e.detail.value;
+      this.queryData.invoiceType = this.array[this.invoiceType];
     }
   };
 
-  onLoad() {}
+  onLoad(option) {
+    console.log(option);
+    let formData = JSON.parse(option.data);
+    this.formData = formData;
+    this.queryData.offerId = this.formData.offerId;
+    this.queryData.ownerName = this.$parent.globalData.name;
+    this.queryData.licenseNumber = this.$parent.globalData.licenseNumber;
+    this.queryData.openId = this.$parent.globalData.openId;
+    this.queryData.provincesCities = this.region.join('');
+    this.$apply();
+  }
 }
 </script>
