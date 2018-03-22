@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.freelycar.dao.CashbackRecordDao;
+import com.freelycar.entity.CashBackRate;
 import com.freelycar.entity.CashbackRecord;
 import com.freelycar.util.RESCODE;  
 /**  
@@ -65,5 +66,35 @@ public class CashbackRecordService
 	    cashbackRecordDao.updateCashbackRecord(cashbackRecord);
 	    return RESCODE.SUCCESS.getJSONRES();
 	}
+	
+	  //增加一个CashBackRate
+    public Map<String, Object> saveCashbackRecord(CashBackRate cashBackRate){
+    	//只能有一条记录
+    	List<CashBackRate> listCashbackRate = cashbackRecordDao.listCashbackRate();
+    	if(listCashbackRate.isEmpty()){
+    		cashbackRecordDao.saveCashbackRate(cashBackRate);
+    		return RESCODE.SUCCESS.getJSONRES();
+    	}
+    	return RESCODE.DATA_EXIST.getJSONRES();
+    }
+    
+	//查询所有的CashBackRate	
+	public Map<String, Object> listCashbackRate(){
+		List<CashBackRate> listCashbackRate = cashbackRecordDao.listCashbackRate();
+		return RESCODE.SUCCESS.getJSONRES(listCashbackRate);
+	}
+	
+	//删除CashBackRate	
+	public Map<String, Object> deleteCashBackRate(int id){
+		cashbackRecordDao.deleteCashBackRate(id);
+		return RESCODE.SUCCESS.getJSONRES();
+	}
+	
+	//更新CashBackRate	
+	public Map<String, Object> updateCashBackRate(CashBackRate rate){
+		cashbackRecordDao.updateCashBackRate(rate);
+		return RESCODE.SUCCESS.getJSONRES();
+	}
+	
     
 }

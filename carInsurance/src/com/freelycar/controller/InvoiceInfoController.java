@@ -2,6 +2,7 @@ package com.freelycar.controller;
 
 import com.freelycar.entity.InvoiceInfo;
 import com.freelycar.service.InvoiceInfoService;
+import com.freelycar.util.RESCODE;
 
 import java.util.Map;
 
@@ -27,6 +28,12 @@ public class InvoiceInfoController
 		return invoiceInfoService.saveInvoiceInfo(invoiceinfo);
 	}
 	
+    @RequestMapping(value = "/getInvoiceInfoByOpenId",method = RequestMethod.GET)
+    public Map<String, Object> getInvoiceInfoByOpenId(String openId){
+    	return invoiceInfoService.getInvoiceInfoByOpenId(openId);
+    }
+    
+    
 	//查询所有的InvoiceInfo	
 	@RequestMapping(value = "/list",method = RequestMethod.GET)
 	public Map<String,Object> listInvoiceInfo(InvoiceInfo invoiceInfo, int _pageNumber,int _pageSize){

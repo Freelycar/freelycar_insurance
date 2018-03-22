@@ -2,7 +2,6 @@ package com.freelycar.dao;
 
 import java.util.List;
 
-import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,7 +9,6 @@ import org.springframework.stereotype.Repository;
 
 import com.freelycar.entity.Invition;
 import com.freelycar.util.QueryUtils;
-import com.freelycar.util.SqlHelper;
 /**  
  *  操作数据库的dao层
  */  
@@ -41,6 +39,12 @@ public class InvitionDao
     public Invition getInvitionByInvcode(String invcode){
     	String hql = "from Invition where invcode = :invcode";
     	Invition result = (Invition) getSession().createQuery(hql).setString("invcode", invcode).uniqueResult();
+    	return result;
+    }
+    //根据id查询Invition
+    public Invition getInvitionByInvName(String name){
+    	String hql = "from Invition where name = :name";
+    	Invition result = (Invition) getSession().createQuery(hql).setString("name", name).uniqueResult();
     	return result;
     }
 	

@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.poi.util.SystemOutLogger;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -14,14 +15,20 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.freelycar.dao.CashbackRecordDao;
 import com.freelycar.dao.ClientDao;
 import com.freelycar.dao.InsuranceDao;
+import com.freelycar.dao.InvoiceInfoDao;
 import com.freelycar.dao.OrderDao;
 import com.freelycar.dao.QuoteRecordDao;
+import com.freelycar.dao.ReciverDao;
+import com.freelycar.entity.CashbackRecord;
 import com.freelycar.entity.Client;
 import com.freelycar.entity.Insurance;
 import com.freelycar.entity.InsuranceOrder;
+import com.freelycar.entity.InvoiceInfo;
 import com.freelycar.entity.QuoteRecord;
+import com.freelycar.entity.Reciver;
 import com.freelycar.util.Constant;
 import com.freelycar.util.HttpClientUtil;
 import com.freelycar.util.INSURANCE;
@@ -47,18 +54,36 @@ public class InsuranceService
     @Autowired
     private ClientDao clientDao;
     
+    @Autowired
+    private ReciverDao reciverDao;
+    
+    @Autowired
+    private InvoiceInfoDao invoiceInfoDao;
+    
+    @Autowired
+    private CashbackRecordDao cashbackDao;
+    
     private String LUOTUOKEY = Constant.LUOTUOKEY;
     
     private static SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     
     public Map<String, Object> queryLastYear(Client client){
     	
-    	System.out.println(client);
     	//先去查是不是老用户
     	List<Client> clientByOpenIdList = clientDao.getClientByOpenIdList(client.getOpenId());
     	if(clientByOpenIdList.isEmpty()){
     		return RESCODE.USER_NO_PHONE.getJSONRES();
     	}
+    	
+    	//这里假如他使用别的人信息去查 用自己的手机号查询续保
+    	//循环出来 已有的phone
+    	for(Client c : clientByOpenIdList){
+    		if(Tools.notEmpty(c.getPhone())){
+    			client.setPhone(c.getPhone());
+    			break;
+    		}
+    	}
+    	
     	
     	Map<String,Object> param = new HashMap<>();
     	param.put("api_key", LUOTUOKEY);
@@ -126,11 +151,15 @@ public class InsuranceService
     			
     			
     			//证明用户身份真实有效
-    			Client clientByOpenIdAndLicenseNumber = clientDao.getClientByOpenIdAndLicenseNumber(client.getLicenseNumber(), client.getOpenId());
-    			if(clientByOpenIdAndLicenseNumber == null){
+    			Client exist = clientDao.getClientByOpenIdAndLicenseNumber(client.getOpenId(),client.getLicenseNumber());
+    			if(exist == null){
     				//x询价的时候 插入客户的信息//初始状态 呆报价
-    				client.setQuoteState(INSURANCE.QUOTESTATE_NO_1.getCode()+"");
     				clientDao.saveClient(client);
+    			}else{
+    				//数据库有数据 填充其他信息 这边要注意
+    				exist.setOwnerName(client.getOwnerName());
+    				exist.setQuoteState(INSURANCE.QUOTESTATE_NO_1.getCode()+"");
+    				clientDao.saveClient(exist);
     			}
     			
     			return RESCODE.SUCCESS.getJSONRES(result);
@@ -144,25 +173,34 @@ public class InsuranceService
     
     
     //查询价格
-    public Map<String,Object> queryPrice(Client client, Insurance insurance,String cityCode,String cityName){
+    public Map<String,Object> queryPrice(Insurance.QueryPriceEntity entity){
     	Map<String,Object> param = new HashMap<>();
     	param.put("api_key", LUOTUOKEY);
     	
     	//通过openId 查手机号
-    	Client clientByOpenId = clientDao.getClientByOpenId(client.getOpenId());
+    	Client clientByOpenId = clientDao.getClientByOpenIdAndLicenseNumber(entity.getOpenId(), entity.getLicenseNumber());
+    	
+    	if(clientByOpenId == null){
+    		return RESCODE.SMS_PHONE_EMPTY.getJSONRES("没有openId为"+entity.getOpenId()+"的用户");
+    	}
+    	
+    	if(Tools.isEmpty(clientByOpenId.getPhone())){
+    		return RESCODE.SMS_PHONE_EMPTY.getJSONRES("没有openId为"+entity.getOpenId()+"的用户没有手机号");
+    	}
+    	
     	param.put("mobilePhone", clientByOpenId.getPhone());
     	
     	JSONObject createEnquiryParams = new JSONObject();
-    	createEnquiryParams.put("licenseNumber", client.getLicenseNumber());//
-    	createEnquiryParams.put("ownerName", client.getOwnerName());//
-    	createEnquiryParams.put("cityCode", cityCode);//
+    	createEnquiryParams.put("licenseNumber", entity.getLicenseNumber());//
+    	createEnquiryParams.put("ownerName", entity.getOwnerName());//
+    	createEnquiryParams.put("cityCode", entity.getCityCode());//
     	//obj.put("cityName", cityName);//cityName可以不传
-    	createEnquiryParams.put("insuranceCompanyName", insurance.getInsuranceCompanyId());//保险公司编号多加用逗号分隔
-    	createEnquiryParams.put("insuranceStartTime", Tools.isEmpty(insurance.getInsuranceBeginTime())?0:insurance.getInsuranceBeginTime());//
+    	createEnquiryParams.put("insuranceCompanyName", entity.getInsuranceCompanyId());//保险公司编号多加用逗号分隔
+    	createEnquiryParams.put("insuranceStartTime", Tools.isEmpty(entity.getInsuranceBeginTime())?0:entity.getInsuranceBeginTime());//
     	
-    	String forceInsuranceStartTime = insurance.getForceInsuranceStartTime();
+    	String forceInsuranceStartTime = entity.getForceInsuranceStartTime();
     	createEnquiryParams.put("forceInsuranceStartTime", forceInsuranceStartTime);//
-    	createEnquiryParams.put("transferDate", !client.getTransfer()?"0":client.getTransferTime());//
+    	createEnquiryParams.put("transferDate", !entity.isTransfer()?"0":entity.getTransferTime());//
     	String requestHeader = Tools.uuid()+"HLDD";
     	createEnquiryParams.put("requestHeader", requestHeader);//
     	
@@ -174,7 +212,7 @@ public class InsuranceService
     	forcePremium.put("isToubao", "1");
     	fangan1.put("forcePremium", forcePremium);
 		try {
-			fangan1.put("insurances", new JSONArray(insurance.getInsurances()));
+			fangan1.put("insurances", new JSONArray(entity.getInsurances()));
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
@@ -195,9 +233,10 @@ public class InsuranceService
     			//询价成功
     			
     			QuoteRecord qr = new QuoteRecord();
-    			qr.setCityCode(cityCode);
-    			qr.setCityName(cityName);
-    			qr.setClientId(client.getId());
+    			qr.setOpenId(entity.getOpenId());
+    			qr.setCityCode(entity.getCityCode());
+    			qr.setCityName(entity.getCityName());
+    			//qr.setClientId(entity.getcl);
     			qr.setCrateTime(System.currentTimeMillis());
     			
     			if(Tools.notEmpty(forceInsuranceStartTime)){
@@ -205,10 +244,10 @@ public class InsuranceService
     			}
     			
     			qr.setInsuranceCompanyName("人保车险");
-    			qr.setInsurances(insurance.getInsurances());
-    			qr.setInsuranceStartTime(Integer.parseInt(insurance.getForceInsuranceStartTime()));
-    			qr.setLicenseNumber(insurance.getLicenseNumber());
-    			qr.setOwnerName(client.getOwnerName());
+    			qr.setInsurances(entity.getInsurances());
+    			qr.setInsuranceStartTime(Integer.parseInt(entity.getForceInsuranceStartTime()));
+    			qr.setLicenseNumber(entity.getLicenseNumber());
+    			qr.setOwnerName(entity.getOwnerName());
     			qr.setRequestHeader(requestHeader);
     			qr.setTransferDate(0);
     			qrdao.saveQuoteRecord(qr);
@@ -220,27 +259,79 @@ public class InsuranceService
     
     
     //提交核保
-    public Map<String,Object> submitProposal(Client client, QuoteRecord record){
+    public Map<String,Object> submitProposal(Insurance.ProposalEntity entity){
+    	System.out.println("核保的参数"+entity.toString());
+    	
+    	if(Tools.isEmpty(entity.getOpenId())){
+    		return RESCODE.USER_OPENID_EMPTY.getJSONRES();
+    	}
+    	
+    	//增加/更新收款人信息
+    	Reciver reciverByOpenId = reciverDao.getReciverByOpenId(entity.getOpenId());
+    	if(reciverByOpenId ==null ){
+    		reciverByOpenId = new Reciver();
+    	}
+    	reciverByOpenId.setOpenId(entity.getOpenId());
+    	reciverByOpenId.setPhone(entity.getReciverPhone());
+    	reciverByOpenId.setProvincesCities(entity.getProvincesCities());
+    	reciverByOpenId.setAdressDetail(entity.getAddressDetail());
+    	reciverDao.saveUpdateReciver(reciverByOpenId);
+    	
+    	//更新车主的idcard
+    	if(Tools.isEmpty(entity.getLicenseNumber())){
+    		return RESCODE.USER_LICENSENUMBER_EMPTY.getJSONRES();
+    	}
+    	
+    	Client clientByOpenId = clientDao.getClientByOpenIdAndLicenseNumber(entity.getOpenId(), entity.getLicenseNumber());
+    	if(clientByOpenId == null){
+    		return RESCODE.USER_NOT_EXIST.getJSONRES();
+    	}
+    	clientByOpenId.setLicenseNumber(entity.getLicenseNumber());
+    	
+    	//收款信息
+    	CashbackRecord cashbackRecordByOpenId = cashbackDao.getCashbackRecordByOpenId(entity.getOpenId());
+    	if(cashbackRecordByOpenId ==null ){
+    		cashbackRecordByOpenId = new CashbackRecord();
+    	}
+    	cashbackRecordByOpenId.setOpenId(entity.getOpenId());
+    	cashbackRecordByOpenId.setAccount(entity.getAccount());
+    	cashbackRecordByOpenId.setBankname(entity.getBankname());
+    	cashbackRecordByOpenId.setPayee(entity.getPayee());
+    	cashbackDao.saveUpdateCashbackRecord(cashbackRecordByOpenId);
+    	
+    	//发票信息
+    	InvoiceInfo invoiceInfoByOpenId = invoiceInfoDao.getInvoiceInfoByOpenId(entity.getOpenId());
+    	if(invoiceInfoByOpenId ==null ){
+    		invoiceInfoByOpenId = new InvoiceInfo();
+    	}
+    	invoiceInfoByOpenId.setOpenId(entity.getOpenId());
+    	invoiceInfoByOpenId.setInvoiceTitle(entity.getInvoiceTitle());
+    	invoiceInfoByOpenId.setInvoiceType(entity.getInvoiceType());
+    	invoiceInfoByOpenId.setPhone(entity.getInvoicePhone());
+    	invoiceInfoDao.saveUpdateInvoiceInfo(invoiceInfoByOpenId);
+    	
+    	
+    	
     	Map<String,Object> param = new HashMap<>();
     	param.put("api_key", LUOTUOKEY);
     	
     	JSONObject params = new JSONObject();
-    	System.out.println("#######"+record.getOfferId());
-    	params.put("orderId", record.getOfferId());
-    	params.put("insuredName", client.getOwnerName());
-    	params.put("insuredIdNo", client.getIdCard());
-    	params.put("insuredPhone", client.getPhone());//保险公司编号多加用逗号分隔
-    	params.put("customerName", client.getOwnerName());//
-    	params.put("customerPhone", client.getPhone());
-    	params.put("customerIdNo", client.getIdCard());
-    	params.put("contactName", client.getOwnerName());
-    	params.put("contactPhone", client.getPhone());//
+    	System.out.println("#######"+entity.getOfferId());
+    	params.put("orderId", entity.getOfferId());
+    	params.put("insuredName", entity.getOwnerName());
+    	params.put("insuredIdNo", entity.getIdCard());
+    	params.put("insuredPhone", entity.getPhone());//保险公司编号多加用逗号分隔
+    	params.put("customerName", entity.getOwnerName());//
+    	params.put("customerPhone", entity.getPhone());
+    	params.put("customerIdNo", entity.getIdCard());
+    	params.put("contactName", entity.getOwnerName());
+    	params.put("contactPhone", entity.getPhone());//
     	
     	JSONObject address = new JSONObject();
     	address.put("acceptProvince", "");
-    	address.put("contactAddressDetail", "江苏 南京市 栖霞区紫东");
-    	address.put("address", "紫东");
-    	address.put("acceptProvinceName", "江苏 南京市 栖霞区");
+    	address.put("contactAddressDetail", entity.getAddressDetail());
+    	address.put("address", entity.getAddressDetail());
+    	address.put("acceptProvinceName", entity.getProvincesCities());
     	
     	params.put("contactAddress", address);
     	params.put("imageJson", "");
@@ -249,8 +340,8 @@ public class InsuranceService
     	invoiceInfo.put("isInvoice", 0);
     	params.put("invoiceInfo", invoiceInfo);
     	
-    	params.put("ownerIdCard", client.getIdCard());//
-    	params.put("ownerMobilePhone", client.getPhone());//
+    	params.put("ownerIdCard", entity.getIdCard());//
+    	params.put("ownerMobilePhone", entity.getPhone());//
     	
     	param.put("params", params);
     	
@@ -265,17 +356,24 @@ public class InsuranceService
     		if("success".equals(msg)){
     			//提交核保成功
     			System.out.println("提交核保成功");
-    			InsuranceOrder inorder = new InsuranceOrder();
-    			inorder.setCreateTime(System.currentTimeMillis());
-    			inorder.setInsuredIdNo(client.getIdCard());
-    			inorder.setInsuredPhone(client.getPhone());
-    			inorder.setInsureName(client.getOwnerName());
-    			inorder.setLicenseNumber(client.getLicenseNumber());
-    			inorder.setOrderId(record.getOfferId());
-    			inorder.setStateString("提交核保");
-    			orderDao.saveOrder(inorder);
     			
-    			return RESCODE.SUCCESS.getJSONRES();
+    			//保证同一个offerId 生成一个订单
+    			InsuranceOrder inorder = orderDao.getOrderByOrderId(entity.getOfferId());
+    			if(inorder == null){
+    				 inorder = new InsuranceOrder();
+    			}
+    			inorder.setCreateTime(System.currentTimeMillis());
+    			inorder.setInsuredIdNo(entity.getIdCard());
+    			inorder.setInsuredPhone(entity.getPhone());
+    			inorder.setInsureName(entity.getOwnerName());
+    			inorder.setLicenseNumber(entity.getLicenseNumber());
+    			inorder.setOrderId(entity.getOfferId());
+    			inorder.setOpenId(entity.getOpenId());
+    			inorder.setState(INSURANCE.QUOTESTATE_NO_1.getCode());
+    			inorder.setStateString(INSURANCE.QUOTESTATE_NO_1.getName());
+    			orderDao.saveUpdateOrder(inorder);
+    			
+    			return RESCODE.SUCCESS.getJSONRES(entity.getOfferId());
     		}
     	}
     	return RESCODE.FAIL.getJSONRES();

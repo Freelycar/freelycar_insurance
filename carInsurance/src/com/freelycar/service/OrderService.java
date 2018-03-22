@@ -31,6 +31,14 @@ public class OrderService
     	}
     }
     
+    public Map<String, Object> getOrderByOrderId(String orderId){
+    	InsuranceOrder orderById = orderDao.getOrderByOrderId(orderId);
+    	if(orderById != null){
+    		return RESCODE.SUCCESS.getJSONRES(orderById);
+    	}else{
+    		return RESCODE.NOT_FOUND.getJSONRES();
+    	}
+    }
     
     
     //增加一个Order

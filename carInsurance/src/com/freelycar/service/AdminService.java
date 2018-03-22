@@ -9,7 +9,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.freelycar.dao.AdminDao;
 import com.freelycar.entity.Admin;
-import com.freelycar.util.RESCODE;  
+import com.freelycar.util.RESCODE;
+import com.freelycar.util.Tools;  
 /**  
  *  
  */  
@@ -50,6 +51,14 @@ public class AdminService
     
     //登陆
     public Map<String,Object> login(String username, String password){
+    	if(Tools.isEmpty(username)){
+    		return RESCODE.USER_NAME_EMPTY.getJSONRES();
+    	}
+    	
+    	if(Tools.isEmpty(password)){
+    		return RESCODE.USER_PASS_EMPTY.getJSONRES();
+    	}
+    	
         Admin admin = adminDao.findAdminByUserAndPass(username, password);
         if (admin==null) {
         	return RESCODE.NOT_FOUND.getJSONRES();

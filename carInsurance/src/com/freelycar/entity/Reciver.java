@@ -34,6 +34,8 @@ public class Reciver
     private String provincesCities;  //省市;
 	
     private Integer clientId;  //属于哪个客户;
+    
+    private String openId;
 	
     private String adressDetail;  //详细地址;
     /********** constructors ***********/  
@@ -58,6 +60,13 @@ public class Reciver
         this.id = id;
     }
     
+	public String getOpenId() {
+		return openId;
+	}
+	
+	public void setOpenId(String openId) {
+		this.openId = openId;
+	}
 	
     public String getReciver() {  
         return reciver;  

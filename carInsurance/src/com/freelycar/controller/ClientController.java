@@ -40,20 +40,15 @@ public class ClientController
 	}
     
     
-    //获取短信验证码
+    //验证短信验证码
     @RequestMapping(value = "/sms/verification",method = RequestMethod.POST)
     public Map<String,Object> smsgetCode(@RequestBody SmsEntity entity){
     	String phone = entity.getPhone();
     	String smscode = entity.getSmscode();
     	String invCode = entity.getInvCode();
     	String openId = entity.getOpenId();
-    	System.out.println(phone);
-    	System.out.println(smscode);
-    	System.out.println(invCode);
-    	
     	Map<String, Object> res = LeanCloudSms.verifySMSCode(phone, smscode);
     	if((int)res.get("code")== 0){
-    		System.out.println("------------");
     		Client client = new Client();
     		client.setPhone(phone);
     		client.setOpenId(openId);
@@ -61,7 +56,9 @@ public class ClientController
     		if(invitionByInvcode2 != null){
     			client.setSource(invitionByInvcode2.getName());
     		}
-    		System.out.println("client :"+client);
+    		client.setLicenseNumber(entity.getLicenseNumber());
+    		
+    		System.out.println("短信验码字的client"+client);
     		return clientService.saveClient(client);
     	}
     	return res;
@@ -89,7 +86,7 @@ public class ClientController
     }
     
 	//查询所有的Client	
-	@RequestMapping(value = "/list")
+	@RequestMapping(value = "/list",method = RequestMethod.GET)
 	public Map<String,Object> listClient(Client client, int page,int number){
 		return clientService.listClient(client, page, number);
 	}
@@ -113,6 +110,15 @@ public class ClientController
 		private String smscode;
 		private String invCode;
 		private String openId;
+		private String licenseNumber;
+		
+		public String getLicenseNumber() {
+			return licenseNumber;
+		}
+		
+		public void setLicenseNumber(String licenseNumber) {
+			this.licenseNumber = licenseNumber;
+		}
 		
 		public String getOpenId() {
 			return openId;

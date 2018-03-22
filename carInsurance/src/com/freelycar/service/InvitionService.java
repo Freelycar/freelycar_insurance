@@ -9,7 +9,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.freelycar.dao.InvitionDao;
 import com.freelycar.entity.Invition;
-import com.freelycar.util.RESCODE;  
+import com.freelycar.util.RESCODE;
+import com.freelycar.util.Tools;  
 /**  
  *  
  */  
@@ -40,8 +41,24 @@ public class InvitionService
     
     //增加一个Invition
     public Map<String,Object> saveInvition(Invition invition){
-    	invition.setCreateTime(System.currentTimeMillis());
+    	if(Tools.isEmpty(invition.getName())){
+    		return RESCODE.INV_NAME_EMPTY.getJSONRES();
+    	}
+    	if(Tools.isEmpty(invition.getInvcode())){
+    		return RESCODE.INV_CODE_EMPTY.getJSONRES();
+    	}
+    	//渠道名称和马儿都不能重复
+    	Invition invitionByInvcode = invitionDao.getInvitionByInvcode(invition.getInvcode());
+    	if(invitionByInvcode != null){
+    		return RESCODE.INV_CODE_EXIST.getJSONRES();
+    	}
     	
+    	Invition invitionByInvName = invitionDao.getInvitionByInvName(invition.getName());
+    	if(invitionByInvName != null){
+    		return RESCODE.INV_NAME_EXIST.getJSONRES();
+    	}
+    	
+    	invition.setCreateTime(System.currentTimeMillis());
 		invitionDao.saveInvition(invition);
 		return RESCODE.SUCCESS.getJSONRES();
 	}
@@ -60,7 +77,7 @@ public class InvitionService
 	    	long count = invitionDao.getInvitionCount(invition);
 			return RESCODE.SUCCESS.getJSONRES(listPage,(int)Math.ceil(count/(float)number),count);
 		} 
-		return RESCODE.NOT_FOUND.getJSONRES();
+		return RESCODE.SUCCESS.getJSONRES(listPage);
     }
 	
 	

@@ -8,6 +8,7 @@ import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import com.freelycar.entity.CashBackRate;
 import com.freelycar.entity.CashbackRecord;
 import com.freelycar.util.SqlHelper;
 /**  
@@ -28,14 +29,54 @@ public class CashbackRecordDao
     public void saveCashbackRecord(CashbackRecord cashbackrecord){
 		getSession().save(cashbackrecord);
 	}
+    
+    //增加一个CashBackRate
+    public void saveUpdateCashbackRecord(CashbackRecord cashbackrecord){
+    	getSession().saveOrUpdate(cashbackrecord);
+    }
+    
 	
-	//根据id查询CashbackRecord
+    //增加一个CashBackRate
+    public void saveCashbackRate(CashBackRate cashBackRate){
+    	getSession().save(cashBackRate);
+    }
+    
+    //增加一个CashBackRate
+    public void saveUpdateCashbackRate(CashBackRate cashBackRate){
+    	getSession().saveOrUpdate(cashBackRate);
+    }
+    
+	//查询所有的CashBackRate	
+	@SuppressWarnings("unchecked")
+	public List<CashBackRate> listCashbackRate(){
+		String hql = "from CashBackRate";
+		return getSession().createQuery(hql).list();
+	}
+	
+	//删除CashBackRate	
+	public void deleteCashBackRate(int id){
+		String hql = "delete from CashBackRate where id = :id";
+		getSession().createQuery(hql).setInteger("id", id).executeUpdate();
+	}
+	
+	//更新CashBackRate	
+	public void updateCashBackRate(CashBackRate rate){
+		getSession().update(rate);
+	}
+	
+    //根据id查询CashbackRecord
     public CashbackRecord getCashbackRecordById(int id){
         String hql = "from CashbackRecord where id = :id";
         CashbackRecord result = (CashbackRecord) getSession().createQuery(hql).setInteger("id", id).uniqueResult();
         return result;
     }
 	
+    //根据id查询CashbackRecord
+    public CashbackRecord getCashbackRecordByOpenId(String openId){
+    	String hql = "from CashbackRecord where openId = :openId";
+    	CashbackRecord result = (CashbackRecord) getSession().createQuery(hql).setString("openId", openId).uniqueResult();
+    	return result;
+    }
 	
 	//查询所有的CashbackRecord	
 	@SuppressWarnings("unchecked")

@@ -23,6 +23,8 @@ public class InsuranceOrder
     private Integer id;
 	
     private String orderId;  //订单编号/报价编号;
+    
+    private String openId;//
 	
     private String ciPolicyNo;  //交强险保单号;
 	
@@ -106,6 +108,15 @@ public class InsuranceOrder
     public Integer getId() {
         return id;
     }
+    
+    public String getOpenId() {
+		return openId;
+	}
+    
+    public void setOpenId(String openId) {
+		this.openId = openId;
+	}
+    
     
     public long getTotalPrice() {
 		return totalPrice;

@@ -32,6 +32,14 @@ public class ReciverService
 		return RESCODE.SUCCESS.getJSONRES();
 	}
 	
+    // select by openid
+    public Map<String,Object> getReciverByOpenId(String openId){
+    	Reciver reciverByOpenId = reciverDao.getReciverByOpenId(openId);
+    	if(reciverByOpenId == null){
+    		return RESCODE.NOT_FOUND.getJSONRES();
+    	}
+    	return RESCODE.SUCCESS.getJSONRES(reciverByOpenId);
+    }
 	
 	/**
 		分页查询

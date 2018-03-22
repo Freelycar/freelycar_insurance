@@ -34,6 +34,8 @@ public class CashbackRecord
 	
     private String bankname;  //开户行;
     
+    private String openId;//微信openId
+    
     private String orderId;
     /********** constructors ***********/  
     public CashbackRecord() {  
@@ -48,6 +50,15 @@ public class CashbackRecord
     }  
   
     /********** get/set ***********/  
+    
+    public String getOpenId() {
+		return openId;
+	}
+    
+    public void setOpenId(String openId) {
+		this.openId = openId;
+	}
+    
     public Integer getId() {
         return id;
     }

@@ -3,7 +3,6 @@ package com.freelycar.controller;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -26,6 +25,10 @@ public class OrderController
     public Map<String, Object> getOrderById(int id){
     	System.out.println(id);
     	return orderService.getOrderById(id);
+    }
+    @RequestMapping(value = "/getOrderByOrderId",method = RequestMethod.GET)
+    public Map<String, Object> getOrderByOrderId(String orderId){
+    	return orderService.getOrderByOrderId(orderId);
     }
 
     

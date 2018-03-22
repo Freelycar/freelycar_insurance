@@ -1,8 +1,5 @@
 package com.freelycar.controller; 
 
-import com.freelycar.entity.CashbackRecord;
-import com.freelycar.service.CashbackRecordService;
-
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +7,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.freelycar.entity.CashBackRate;
+import com.freelycar.entity.CashbackRecord;
+import com.freelycar.service.CashbackRecordService;
+import com.freelycar.util.RESCODE;
 /**  
  *  
  */  
@@ -22,6 +24,30 @@ public class CashbackRecordController
 	private CashbackRecordService cashbackRecordService;
 
 
+
+	  //增加一个CashBackRate
+   public Map<String, Object> saveCashbackRecord(CashBackRate cashBackRate){
+	   cashbackRecordService.saveCashbackRecord(cashBackRate);
+	   return RESCODE.SUCCESS.getJSONRES();
+   }
+  
+	//查询所有的CashBackRate	
+	public Map<String, Object> listCashbackRate(){
+		return cashbackRecordService.listCashbackRate();
+	}
+	
+	//删除CashBackRate	
+	public Map<String, Object> deleteCashBackRate(int id){
+		cashbackRecordService.deleteCashBackRate(id);
+		return RESCODE.SUCCESS.getJSONRES();
+	}
+	
+	//更新CashBackRate	
+	public Map<String, Object> updateCashBackRate(CashBackRate rate){
+		cashbackRecordService.updateCashBackRate(rate);
+		return RESCODE.SUCCESS.getJSONRES();
+	}
+    
     
     //增加一个CashbackRecord
     @RequestMapping(value = "/save",method = RequestMethod.POST)

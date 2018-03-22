@@ -33,12 +33,17 @@ public class SocketHelper {
 	@OnMessage
 	public void onMessage(String message, Session session) {
 		System.out.println("message:" + message);
+		if(!message.startsWith("{")){
+			return;
+		}
+		
 		JSONObject json = null;
 		try {
 			 json = new JSONObject(message);
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
+		System.out.println("加入socket openId"+json.getString("openId"));
 		sessions.put(json.getString("openId"), session);//message: phone
 	}
 	
@@ -47,6 +52,7 @@ public class SocketHelper {
 		try {
 			for (Map.Entry<String ,Session> m : sessions.entrySet()) {
 				if(m.getKey().equals(openId)){
+					System.out.println("发送openId"+openId+"的推送");
 					m.getValue().getBasicRemote().sendText(message);
 					break;
 				}

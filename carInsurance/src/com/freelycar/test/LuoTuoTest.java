@@ -37,9 +37,10 @@ public class LuoTuoTest {
 	
 	@Test//询价
 	public void testcreateEnquiry(){
-		
-		Map<String,Object> obj = new HashMap<>();
-		obj.put("phone", "18362981113");
+		JSONObject obj = new JSONObject();
+		//Map<String,Object> obj = new HashMap<>();
+		//obj.put("phone", "18362981113");
+		obj.put("openId", "666666");
 		obj.put("licenseNumber", licenseNumber);
 		obj.put("ownerName", ownerName);
 		obj.put("cityCode", "320100");
@@ -68,7 +69,15 @@ public class LuoTuoTest {
 		//obj.put("insuranceBeginTime", "0");
 		
 		
-		HttpClientUtil.httpPost("http://www.xhnky.cn/carInsurance/api/insurance/queryPrice", obj);
+		try {
+			HttpClientUtil.httpPost("http://www.xhnky.cn/carInsurance/api/insurance/queryPrice", obj);
+		} catch (ClientProtocolException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		//HttpClientUtil.httpPost("http://localhost:8080/carInsurance/api/insurance/queryPrice", obj);
 	}
 	

@@ -6,6 +6,7 @@ import com.freelycar.service.AdminService;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -37,12 +38,9 @@ public class AdminController
     
     //登陆
     @RequestMapping(value = "/login",method = RequestMethod.POST)
-    public Map<String,Object> login(String username, String password){
-        return adminService.login(username, password);
+    public Map<String,Object> login(@RequestBody Admin admin){
+        return adminService.login(admin.getUsername(), admin.getPassword());
     }
-    
-
-
 
     
     //增加一个Admin

@@ -30,11 +30,24 @@ public class ReciverDao
 		getSession().save(reciver);
 	}
 	
+    //增加一个Reciver
+    public void saveUpdateReciver(Reciver reciver){
+    	getSession().saveOrUpdate(reciver);
+    }
+    
+    
 	//根据id查询Reciver
     public Reciver getReciverById(int id){
         String hql = "from Reciver where id = :id";
         Reciver result = (Reciver) getSession().createQuery(hql).setInteger("id", id).uniqueResult();
         return result;
+    }
+    
+    //根据id查询Reciver
+    public Reciver getReciverByOpenId(String openId){
+    	String hql = "from Reciver where openId = :openId";
+    	Reciver result = (Reciver) getSession().createQuery(hql).setString("openId", openId).uniqueResult();
+    	return result;
     }
 	
 	

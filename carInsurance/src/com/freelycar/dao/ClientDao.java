@@ -27,7 +27,7 @@ public class ClientDao
     
     //增加一个Client
     public void saveClient(Client client){
-		getSession().save(client);
+		getSession().saveOrUpdate(client);
 	}
 	
 	//根据id查询Client
@@ -59,7 +59,7 @@ public class ClientDao
     }
 	
     //根据openId查询Client
-    public Client getClientByOpenIdAndLicenseNumber(String licenseNumber,String openId){
+    public Client getClientByOpenIdAndLicenseNumber(String openId,String licenseNumber){
     	String hql = "from Client where openId = :openId and licenseNumber = :licenseNumber";
     	Client result = (Client) getSession().createQuery(hql)
     			.setString("openId", openId)
@@ -75,9 +75,9 @@ public class ClientDao
 		if(client != null){
 			utils = utils.addStringLike("idCard", client.getIdCard())
 			 .addStringLike("source", client.getSource())
-			 .addString("licenseNumber", client.getLicenseNumber())
+			 .addStringLike("licenseNumber", client.getLicenseNumber())
 			 .addString("nickName", client.getNickName())
-			 .addString("quoteState", client.getQuoteState())
+			 .addString("quoteStateCode", client.getQuoteState())
 			 .addBoolean("transfer", client.getTransfer())
 			 .addBoolean("toubao", client.isToubao())
 			 .addBoolean("cashback", client.isCashback())

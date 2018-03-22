@@ -32,6 +32,16 @@ public class InvoiceInfoService
 		return RESCODE.SUCCESS.getJSONRES();
 	}
 	
+    
+    
+    public Map<String, Object> getInvoiceInfoByOpenId(String openId){
+    	InvoiceInfo invoiceInfoByOpenId = invoiceInfoDao.getInvoiceInfoByOpenId(openId);
+    	if(invoiceInfoByOpenId != null){
+    		return RESCODE.SUCCESS.getJSONRES(invoiceInfoByOpenId);
+    	}
+    	return RESCODE.NOT_FOUND.getJSONRES(invoiceInfoByOpenId);
+    }
+    
 	
 	/**
 		分页查询

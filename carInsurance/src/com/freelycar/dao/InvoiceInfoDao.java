@@ -29,6 +29,10 @@ public class InvoiceInfoDao
 		getSession().save(invoiceinfo);
 	}
 	
+    //增加一个InvoiceInfo
+    public void saveUpdateInvoiceInfo(InvoiceInfo invoiceinfo){
+    	getSession().saveOrUpdate(invoiceinfo);
+    }
 	//根据id查询InvoiceInfo
     public InvoiceInfo getInvoiceInfoById(int id){
         String hql = "from InvoiceInfo where id = :id";
@@ -36,6 +40,11 @@ public class InvoiceInfoDao
         return result;
     }
 	
+    public InvoiceInfo getInvoiceInfoByOpenId(String openId){
+    	String hql = "from InvoiceInfo where openId = :openId";
+    	InvoiceInfo result = (InvoiceInfo) getSession().createQuery(hql).setString("openId", openId).uniqueResult();
+    	return result;
+    }
 	
 	//查询所有的InvoiceInfo	
 	@SuppressWarnings("unchecked")

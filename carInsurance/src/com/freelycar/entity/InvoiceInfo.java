@@ -31,6 +31,8 @@ public class InvoiceInfo
     private String invoiceType;  //发票信息;
 	
     private String invoiceTitle;  //发表抬头;
+    
+    private String openId;
 	
     private String phone;  //手机号码;
     /********** constructors ***********/  
@@ -54,6 +56,13 @@ public class InvoiceInfo
         this.id = id;
     }
     
+    public String getOpenId() {
+		return openId;
+	}
+    
+    public void setOpenId(String openId) {
+		this.openId = openId;
+	}
 	
     public Integer getClientId() {  
         return clientId;  

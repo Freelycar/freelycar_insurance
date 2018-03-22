@@ -1,16 +1,22 @@
 package com.freelycar.service; 
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.freelycar.dao.CashbackRecordDao;
 import com.freelycar.dao.QuoteRecordDao;
+import com.freelycar.entity.CashBackRate;
+import com.freelycar.entity.CashbackRecord;
 import com.freelycar.entity.QuoteRecord;
 import com.freelycar.util.RESCODE;
 import com.freelycar.util.SocketHelper;  
@@ -24,6 +30,9 @@ public class QuoteRecordService
     /********** 注入QuoteRecordDao ***********/  
     @Autowired
 	private QuoteRecordDao quoteRecordDao;
+    
+    @Autowired
+    private CashbackRecordDao cashbackDao;
     
     
     //增加一个QuoteRecord
@@ -51,7 +60,31 @@ public class QuoteRecordService
 				quoteRecordDao.update(qr);
 				
 				
-				SocketHelper.sendMessage(qr.getOfferId(), data.toString());
+				System.out.println("准备推送openId"+qr.getOpenId());
+				//处理报价明细
+				JSONObject obj = new JSONObject(offerDetail);
+				obj.put("offerId", offerId);
+				obj.put("insuranceStartTime", resultobj.getInt("insuranceStartTime"));
+				obj.put("forceInsuranceStartTime", resultobj.getInt("forceInsuranceStartTime"));
+				
+				//根据当前价格  计算 返现 金额
+				List<CashBackRate> listCashbackRate = cashbackDao.listCashbackRate();
+				if(listCashbackRate.isEmpty()){
+					obj.put("cashBackRate", 0);
+					obj.put("cashBackMoney", 0);
+				}else{
+					float rate = listCashbackRate.get(0).getRate();
+					BigDecimal   ratebig   =   new   BigDecimal(rate);
+					double ratevalue =ratebig.setScale(2,RoundingMode.HALF_UP).doubleValue();
+					
+					obj.put("cashBackRate", ratevalue);
+					double currentPrice = obj.getDouble("currentPrice");
+					double cashback = currentPrice * ratevalue;
+					BigDecimal   b   =   new   BigDecimal(cashback);
+					cashback =b.setScale(2,RoundingMode.HALF_UP).doubleValue();
+					obj.put("cashBackMoney", cashback);
+				}
+				SocketHelper.sendMessage(qr.getOpenId(),RESCODE.PUSHBACK_BAOJIA.getJSONObject(obj).toString());
 				
 				Map<String,Object> msg = new HashMap<>();
 				msg.put("offerId", offerId);

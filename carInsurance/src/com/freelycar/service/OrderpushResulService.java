@@ -20,7 +20,9 @@ import com.freelycar.entity.InsuranceOrder;
 import com.freelycar.entity.OrderpushResul;
 import com.freelycar.entity.QuoteRecord;
 import com.freelycar.util.Constant;
-import com.freelycar.util.RESCODE;  
+import com.freelycar.util.INSURANCE;
+import com.freelycar.util.RESCODE;
+import com.freelycar.util.SocketHelper;  
 /**  
  *  
  */  
@@ -101,19 +103,27 @@ public class OrderpushResulService
 			JSONObject resObj = new JSONObject(result);
 			if(resObj.getJSONObject("errorMsg").getString("code").equals("success")){
 				JSONObject resultobj = resObj.getJSONObject("data");
-				JSONObject underwritingJson = new JSONObject(resultobj.getString("underwritingJson"));
+				final String orderId = resultobj.getString("orderId");
+				//根据oferId查提交核保的那条记录
+				InsuranceOrder order = orderDao.getOrderByOrderId(orderId);
 				
+				JSONObject underwritingJson = new JSONObject(resultobj.getString("underwritingJson"));
 				if(underwritingJson.has("errorMsg")){
+					//核保异常
+					//更新订单状态
+					order.setState(INSURANCE.QUOTESTATE_NO_2.getCode());
+					order.setStateString(INSURANCE.QUOTESTATE_NO_2.getName());
+					//SocketHelper.sendMessage(order.getOpenId(), RESCODE.PUSHBACK_HEBAO_EXCEPTION.getJSONObject(underwritingJson.getString("errorMsg")).toString());
 					return RESCODE.LUOTUO_SUCCESS.getLuoTuoRes(underwritingJson.getString("errorMsg"));
 				}
 				
 				int state = resultobj.getInt("state");
-				final String orderId = resultobj.getString("orderId");
 				String licenseNumber = resultobj.getString("licenseNumber");
 				int underwritingPriceCent = resultobj.getInt("underwritingPriceCent");
 				
 				
-				InsuranceOrder order = new InsuranceOrder();
+				
+				
 				if(underwritingJson.has("biNo")){//商业险
 					String bino = underwritingJson.getJSONObject("biNo").getString("value");//保单号
 					order.setBiPolicyNo(bino);
@@ -149,9 +159,6 @@ public class OrderpushResulService
 						}else{
 							Constant.getTimeExecutor().shutdown();
 						}
-						
-						
-						System.out.println("定时器");
 					}
 				},0, 1, TimeUnit.SECONDS);
 				
@@ -161,7 +168,15 @@ public class OrderpushResulService
 				order.setTotalPrice(underwritingPriceCent);
 				order.setLicenseNumber(licenseNumber);
 				order.setOrderId(orderId);
-				orderService.updateOrderByOfferId(order);
+				//更新订单状态
+				order.setState(INSURANCE.QUOTESTATE_NO_3.getCode());
+				order.setStateString(INSURANCE.QUOTESTATE_NO_3.getName());
+				orderService.updateOrder(order);
+				
+				
+				//推给客户端
+				//SocketHelper.sendMessage(order.getOpenId(), RESCODE.PUSHBACK_HEBAO.getJSONObject(orderId).toString());
+				
 				
 				Map<String,Object> msg = new HashMap<>();
 				msg.put("orderId", orderId);

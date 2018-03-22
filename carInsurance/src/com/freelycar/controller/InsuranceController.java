@@ -43,8 +43,8 @@ public class InsuranceController
      * @return
      */
     @RequestMapping(value="/queryPrice",method = RequestMethod.POST)
-    public Map<String, Object> queryPrice(Client client, Insurance insurance,String cityCode,String cityName){
-    	return insuranceService.queryPrice(client, insurance, cityCode, cityName);
+    public Map<String, Object> queryPrice(@RequestBody Insurance.QueryPriceEntity entity){
+    	return insuranceService.queryPrice(entity);
     }
  
     
@@ -53,8 +53,8 @@ public class InsuranceController
      * @return
      */
     @RequestMapping(value="/submitProposal",method = RequestMethod.POST)
-    public Map<String, Object> submitProposal(Client client, QuoteRecord quoteRecord){
-    	return insuranceService.submitProposal(client, quoteRecord);
+    public Map<String, Object> submitProposal(@RequestBody Insurance.ProposalEntity entity){
+    	return insuranceService.submitProposal(entity);
     }
     
     
