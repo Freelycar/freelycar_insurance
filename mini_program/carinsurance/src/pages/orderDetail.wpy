@@ -224,7 +224,7 @@ export default class OrderDetail extends wepy.page {
     wepy.request({
       url: 'http://172.17.3.108:8080/carInsurance/api/order/getOrderById',
       data: {
-        orderId: params.id
+        id: params.id
       },
       header: {
         'content-type': 'application/x-www-form-urlencoded'
