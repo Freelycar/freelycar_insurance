@@ -98,9 +98,9 @@
             <view class='line border-bottom flex-box-row' style='margin-top: 0'>
                 <view>
                     <i class='fa fa-file-text-o'></i> 确认投保方案</view>
-                <view class='adjust-button' @tap='adjustQuoteProgram'>调整续保方案
+                <!-- <view class='adjust-button' @tap='adjustQuoteProgram'>调整续保方案
                     <i class='fa  fa-angle-right'></i>
-                </view>
+                </view> -->
             </view>
             <view class="quote-bg">
                 <view class='renewal'>
@@ -133,7 +133,7 @@
                     <block wx:for={{formData.insurances}}>
                         <view class='line item-bg flex-box-row'>
                             <view class='flex-box-row '>
-                                <view>{{item.insuranceName}}</view>
+                                <view style='overflow: hidden;text-overflow: ellipsis;white-space: nowrap;'>{{item.insuranceName}}</view>
                                 <view class='tag-view'>{{item.amountStr}} {{item.compensationStr}}</view>
                             </view>
                             <view>¥{{item.quotesPrice}}</view>
