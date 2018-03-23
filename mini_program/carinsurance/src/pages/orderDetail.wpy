@@ -104,15 +104,15 @@
 <template>
   <view class="container order-detail" wx:if="{{orderDetail}}">
     <image class="freelycar_logo" src="../../assets/imgs/freelycar_logo_color.png"/>
-    <view class="order-info">订单编号：6526949841215641</view>
-    <view class="order-info">订单时间：2017-12-30 18:30</view>
-    <view class="order-info">付款时间：2017-12-30 18:50</view>
-    <view class="order-info">发货时间：2018-01-03 09:14</view>
+    <view class="order-info">订单编号：{{orderDetail.id}}</view>
+    <view class="order-info">订单时间：{{odrderDetail.createTime}}</view>
+    <view class="order-info">付款时间：{{orderDetail.payTime}}</view>
+    <view class="order-info">发货时间：{{orderDetail.deliveredTime}}</view>
     <view class="order-info">返现时间：2018-01-03 14:20</view>
-    <view class="order-info">成交时间：2018-01-03 14:20</view>
-    <view class="order-info info-black">快递公司：顺丰速递</view>
-    <view class="order-info info-black">运单号码：458486187 | <text class="info-blue">复制</text></view>
-    <view class="order-info info-black">备注：<text class="info-yellow">内件：(1)工具包，吸尘器，充气泵</text></view>
+    <view class="order-info">成交时间：{{orderDetail.dealTime}}</view>
+    <view class="order-info info-black">快递公司：{{orderDetail.expressCompany}}</view>
+    <view class="order-info info-black">运单号码：{{orderDetail.expressNumber}} | <text class="info-blue">复制</text></view>
+    <view class="order-info info-black">备注：<text class="info-yellow">{{orderDetail.remark}}</text></view>
     <view class="order-detail-title">
       <text class="fa fa-file-text-o title-icon"/>投保方案
     </view>
