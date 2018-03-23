@@ -45,6 +45,12 @@ public class InvoiceInfoDao
     	InvoiceInfo result = (InvoiceInfo) getSession().createQuery(hql).setString("openId", openId).uniqueResult();
     	return result;
     }
+    
+    public InvoiceInfo getInvoiceInfoByOrderId(String orderId){
+    	String hql = "from InvoiceInfo where orderId = :orderId";
+    	InvoiceInfo result = (InvoiceInfo) getSession().createQuery(hql).setString("orderId", orderId).uniqueResult();
+    	return result;
+    }
 	
 	//查询所有的InvoiceInfo	
 	@SuppressWarnings("unchecked")

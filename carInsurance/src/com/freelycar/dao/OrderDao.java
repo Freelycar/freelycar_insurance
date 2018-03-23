@@ -45,6 +45,8 @@ public class OrderDao
     	InsuranceOrder result = (InsuranceOrder) getSession().createQuery(hql).setString("orderId", orderId).uniqueResult();
     	return result;
     }
+    
+    
 	
 	
 	//查询所有的Order	

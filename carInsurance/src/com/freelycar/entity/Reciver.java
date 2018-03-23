@@ -36,6 +36,8 @@ public class Reciver
     private Integer clientId;  //属于哪个客户;
     
     private String openId;
+    
+    private String orderId;//订单的id
 	
     private String adressDetail;  //详细地址;
     /********** constructors ***********/  
@@ -90,6 +92,15 @@ public class Reciver
         return provincesCities;  
     }  
   
+    
+    public String getOrderId() {
+		return orderId;
+	}
+    
+    public void setOrderId(String orderId) {
+		this.orderId = orderId;
+	}
+    
     public void setProvincesCities(String provincesCities) {  
         this.provincesCities = provincesCities;  
     }  

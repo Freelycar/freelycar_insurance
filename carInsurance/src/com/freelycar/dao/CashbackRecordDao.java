@@ -77,6 +77,13 @@ public class CashbackRecordDao
     	CashbackRecord result = (CashbackRecord) getSession().createQuery(hql).setString("openId", openId).uniqueResult();
     	return result;
     }
+    
+    //根据id查询CashbackRecord
+    public CashbackRecord getCashbackRecordByOrderId(String orderId){
+    	String hql = "from CashbackRecord where orderId = :orderId";
+    	CashbackRecord result = (CashbackRecord) getSession().createQuery(hql).setString("orderId", orderId).uniqueResult();
+    	return result;
+    }
 	
 	//查询所有的CashbackRecord	
 	@SuppressWarnings("unchecked")

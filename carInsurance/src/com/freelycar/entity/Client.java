@@ -57,7 +57,7 @@ public class Client
     private String source;//来源
     
     private String quoteState;//报价状态
-    private int quoteStatestateCode;
+    private int quoteStateCode;
 	
     private Long transferTime;  //过户日期;
 	
@@ -85,12 +85,13 @@ public class Client
   
     /********** get/set ***********/  
     
-    public int getQuoteStatestateCode() {
-		return quoteStatestateCode;
-	}
-    public void setQuoteStatestateCode(int quoteStatestateCode) {
-		this.quoteStatestateCode = quoteStatestateCode;
-	}
+   public int getQuoteStateCode() {
+	return quoteStateCode;
+   }
+   
+   public void setQuoteStateCode(int quoteStateCode) {
+	this.quoteStateCode = quoteStateCode;
+   }
     
     public Integer getId() {
         return id;

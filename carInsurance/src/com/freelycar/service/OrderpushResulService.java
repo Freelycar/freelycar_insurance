@@ -113,6 +113,7 @@ public class OrderpushResulService
 					//更新订单状态
 					order.setState(INSURANCE.QUOTESTATE_NO_2.getCode());
 					order.setStateString(INSURANCE.QUOTESTATE_NO_2.getName());
+					order.setHebaoMessage(underwritingJson.getString("errorMsg"));
 					//SocketHelper.sendMessage(order.getOpenId(), RESCODE.PUSHBACK_HEBAO_EXCEPTION.getJSONObject(underwritingJson.getString("errorMsg")).toString());
 					return RESCODE.LUOTUO_SUCCESS.getLuoTuoRes(underwritingJson.getString("errorMsg"));
 				}
@@ -171,12 +172,19 @@ public class OrderpushResulService
 				//更新订单状态
 				order.setState(INSURANCE.QUOTESTATE_NO_3.getCode());
 				order.setStateString(INSURANCE.QUOTESTATE_NO_3.getName());
+				
+				//更新支付二维码和失效时间
+				if(underwritingJson.has("payJson")){//较强险
+					JSONObject payQrcode = underwritingJson.getJSONObject("payJson").getJSONObject("payQrcode");//支付信息
+					order.setPaycodeurl(payQrcode.getString("content"));
+					order.setEffectiveTime(jsonObject.getString("value"));
+				}
+				
 				orderService.updateOrder(order);
 				
 				
 				//推给客户端
 				//SocketHelper.sendMessage(order.getOpenId(), RESCODE.PUSHBACK_HEBAO.getJSONObject(orderId).toString());
-				
 				
 				Map<String,Object> msg = new HashMap<>();
 				msg.put("orderId", orderId);

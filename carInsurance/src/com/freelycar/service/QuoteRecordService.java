@@ -34,31 +34,61 @@ public class QuoteRecordService
     @Autowired
     private CashbackRecordDao cashbackDao;
     
-    
     //增加一个QuoteRecord
     public Map<String,Object> quoteRecordPushDeal(String result){
     	try {
-    		System.out.println(result);
 			JSONObject resObj = new JSONObject(result);
+			
+			String openId = null;
+			String message = null;
+			System.out.println("最初报价推送的结果"+result);
 			if(resObj.getJSONObject("errorMsg").getString("code").equals("success")){
+				message = resObj.getJSONObject("errorMsg").getString("message");
+				
 				
 				JSONObject data = resObj.getJSONObject("data");
 				String requestHeader = data.getString("requestHeader");
 				
 				JSONObject resultobj = data.getJSONObject("result");
-				
 				String offerId = resultobj.getString("offerId");
+				
+				Map<String,Object> loutuomsg = new HashMap<>();
+				loutuomsg.put("offerId", offerId);
+				
+				QuoteRecord qr = quoteRecordDao.getQuoteRecordBySpecify("requestHeader",requestHeader);
+				
+				if(qr==null){
+					System.out.println("requestHeader:"+requestHeader);
+					SocketHelper.sendMessage(openId,RESCODE.PUSHBACK_BAOJIA_FAIL.getJSONObject("requestHeader:"+requestHeader).toString());
+					return RESCODE.LUOTUO_SUCCESS.getLuoTuoRes(loutuomsg);
+				}
+				openId = qr.getOpenId();
+				
+				//这里可能出现：商业险重复投保
+				if(resultobj.has("errorMsg")){
+					String string2 = resultobj.getString("errorMsg");
+					if(string2.startsWith("{")){
+						JSONObject errorMsg = new JSONObject(string2);
+						if(!errorMsg.getString("code").equals("success")){
+							System.out.println("报价推送重复投保："+resObj);
+							String string = errorMsg.getString("message");
+							SocketHelper.sendMessage(openId,RESCODE.PUSHBACK_BAOJIA_FAIL.getJSONObject(string).toString());
+							return RESCODE.LUOTUO_SUCCESS.getLuoTuoRes(loutuomsg);
+						}
+					}
+				}
+				
+				
 				System.out.println("报价推送的offerId:"+offerId);
 				String offerDetail = resultobj.getString("offerDetail");
 				int state = resultobj.getInt("state");
 				
-				QuoteRecord qr = quoteRecordDao.getQuoteRecordBySpecify("requestHeader",requestHeader);
+				
 				qr.setRequestHeader(requestHeader);
 				qr.setState(state);
 				qr.setOfferId(offerId);
 				qr.setOfferDetail(offerDetail);
 				quoteRecordDao.update(qr);
-				
 				
 				System.out.println("准备推送openId"+qr.getOpenId());
 				//处理报价明细
@@ -84,12 +114,13 @@ public class QuoteRecordService
 					cashback =b.setScale(2,RoundingMode.HALF_UP).doubleValue();
 					obj.put("cashBackMoney", cashback);
 				}
+				
 				SocketHelper.sendMessage(qr.getOpenId(),RESCODE.PUSHBACK_BAOJIA.getJSONObject(obj).toString());
+				return RESCODE.LUOTUO_SUCCESS.getLuoTuoRes(loutuomsg);
 				
-				Map<String,Object> msg = new HashMap<>();
-				msg.put("offerId", offerId);
-				return RESCODE.LUOTUO_SUCCESS.getLuoTuoRes(msg);
-				
+			}else{
+				System.out.println("报价失败推送"+openId+"---"+message);
+				SocketHelper.sendMessage(openId,RESCODE.PUSHBACK_BAOJIA_FAIL.getJSONObject(message).toString());
 			}
 			
 		} catch (JSONException e) {

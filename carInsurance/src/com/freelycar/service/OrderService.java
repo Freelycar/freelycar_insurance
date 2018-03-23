@@ -7,10 +7,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.freelycar.dao.CashbackRecordDao;
+import com.freelycar.dao.InvoiceInfoDao;
 import com.freelycar.dao.OrderDao;
+import com.freelycar.dao.QuoteRecordDao;
+import com.freelycar.entity.CashbackRecord;
 import com.freelycar.entity.InsuranceOrder;
+import com.freelycar.entity.InvoiceInfo;
+import com.freelycar.entity.QuoteRecord;
 import com.freelycar.util.INSURANCE;
 import com.freelycar.util.RESCODE;
+import com.freelycar.util.Tools;
 /**  
  *  
  */  
@@ -22,10 +29,26 @@ public class OrderService
     @Autowired
 	private OrderDao orderDao;
     
+    @Autowired
+    private InvoiceInfoDao invoiceInfoDao;
+    
+    @Autowired
+    private QuoteRecordDao quoteRecordDao;
+    
+    @Autowired
+    private CashbackRecordDao cashbackDao;
+    
     public Map<String, Object> getOrderById(int id){
     	InsuranceOrder orderById = orderDao.getOrderById(id);
     	if(orderById != null){
-    		return RESCODE.SUCCESS.getJSONRES(orderById);
+    		Map<String, Object> jsonres = RESCODE.SUCCESS.getJSONRES(orderById);
+    		String orderId = orderById.getOrderId();
+    		if(Tools.notEmpty(orderId)){
+    			Map<String, Object> res = fingOrderIdRelative(orderId);
+        		res.put("data", orderById);
+        		return res;
+    		}
+    		return jsonres;
     	}else{
     		return RESCODE.NOT_FOUND.getJSONRES();
     	}
@@ -34,11 +57,37 @@ public class OrderService
     public Map<String, Object> getOrderByOrderId(String orderId){
     	InsuranceOrder orderById = orderDao.getOrderByOrderId(orderId);
     	if(orderById != null){
-    		return RESCODE.SUCCESS.getJSONRES(orderById);
+    		Map<String, Object> res = fingOrderIdRelative(orderId);
+    		res.put("data", orderById);
+    		return res;
     	}else{
     		return RESCODE.NOT_FOUND.getJSONRES();
     	}
     }
+    
+    
+    
+    
+    //根据orderId查询发票和收件人信息 和报价记录
+    private Map<String, Object> fingOrderIdRelative(String orderId){
+    	Map<String, Object> jsonres = RESCODE.SUCCESS.getJSONRES();
+    	InvoiceInfo invoiceInfoByOrderId = invoiceInfoDao.getInvoiceInfoByOrderId(orderId);
+		if(invoiceInfoByOrderId != null){
+			jsonres.put("invoiceInfo", invoiceInfoByOrderId);
+		}
+		CashbackRecord cashbackRecordByOrderId = cashbackDao.getCashbackRecordByOrderId(orderId);
+		if(invoiceInfoByOrderId != null){
+			jsonres.put("cashbackInfo", cashbackRecordByOrderId);
+		}
+		
+		//查询报价记录
+		QuoteRecord quoteRecordBySpecify = quoteRecordDao.getQuoteRecordBySpecify("orderId", orderId);
+		if(quoteRecordBySpecify != null){
+			jsonres.put("quoteRecord", quoteRecordBySpecify);
+		}
+    	return jsonres;
+    }
+    
     
     
     //增加一个Order

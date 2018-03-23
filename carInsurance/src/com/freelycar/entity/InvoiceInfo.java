@@ -33,6 +33,8 @@ public class InvoiceInfo
     private String invoiceTitle;  //发表抬头;
     
     private String openId;
+    
+    private String orderId;
 	
     private String phone;  //手机号码;
     /********** constructors ***********/  
@@ -51,6 +53,14 @@ public class InvoiceInfo
     public Integer getId() {
         return id;
     }
+    
+    public String getOrderId() {
+		return orderId;
+	}
+    
+    public void setOrderId(String orderId) {
+		this.orderId = orderId;
+	}
     
     public void setId(Integer id) {
         this.id = id;

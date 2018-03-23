@@ -65,6 +65,8 @@ public class InsuranceOrder
     private Long deliveredTime;  //发货时间;
 	
     private Long dealTime;  //成交时间;
+    
+    private long cashbackTime;
 	
     private String expressNumber;  //快递单号;
 	
@@ -73,6 +75,14 @@ public class InsuranceOrder
     private String remark;  //备注;
     
     private long totalPrice;//总价
+    
+    private String paycodeurl;
+    
+    private String effectiveTime;//二维有效时间
+    
+    private String hebaoMessage;//核保的信息
+    
+    
     /********** constructors ***********/  
     public InsuranceOrder() {  
       
@@ -109,6 +119,14 @@ public class InsuranceOrder
         return id;
     }
     
+    public String getHebaoMessage() {
+		return hebaoMessage;
+	}
+    
+    public void setHebaoMessage(String hebaoMessage) {
+		this.hebaoMessage = hebaoMessage;
+	}
+    
     public String getOpenId() {
 		return openId;
 	}
@@ -117,6 +135,22 @@ public class InsuranceOrder
 		this.openId = openId;
 	}
     
+    public String getEffectiveTime() {
+		return effectiveTime;
+	}
+    
+    
+    public void setEffectiveTime(String effectiveTime) {
+		this.effectiveTime = effectiveTime;
+	}
+    
+    public long getCashbackTime() {
+		return cashbackTime;
+	}
+    
+    public void setCashbackTime(long cashbackTime) {
+		this.cashbackTime = cashbackTime;
+	}
     
     public long getTotalPrice() {
 		return totalPrice;
@@ -149,6 +183,14 @@ public class InsuranceOrder
     }  
       
 	
+    public String getPaycodeurl() {
+		return paycodeurl;
+	}
+    
+    public void setPaycodeurl(String paycodeurl) {
+		this.paycodeurl = paycodeurl;
+	}
+    
     public Long getCiPolicyPrice() {  
         return ciPolicyPrice;  
     }  

@@ -91,7 +91,8 @@ public class InsuranceService
     	param.put("licenseNumber", client.getLicenseNumber());
     	JSONObject resultJson = HttpClientUtil.httpGet("http://wechat.bac365.com:8081/carRisk/car_risk/carApi/queryLatestPolicy", param);
     	
-    	System.out.println("续保"+resultJson);
+    	
+    	System.out.println("查询续保结果"+resultJson);
     	if(resultJson.has("errorMsg")){
     		String msg = resultJson.getJSONObject("errorMsg").getString("code");
     		if("success".equals(msg)){
@@ -109,9 +110,12 @@ public class InsuranceService
     				JSONObject biInfo = data.getJSONObject("biInfo");
     				array.put(biInfo);
     			}
-    			if(data.has("ciInfo")){//商业险 
+    			if(data.has("ciInfo")){//交强险
     				JSONObject ciInfo = data.getJSONObject("ciInfo");
     				array.put(ciInfo);
+    			}else{
+    				//没有交强险
+    				return RESCODE.REQUEST_BAOJIA_EXCEPTION.getJSONRES("查询不到交强险");
     			}
     			List<Insurance> result = new ArrayList<>();
     			for(int i=0;i<array.length();i++){
@@ -267,10 +271,11 @@ public class InsuranceService
     	}
     	
     	//增加/更新收款人信息
-    	Reciver reciverByOpenId = reciverDao.getReciverByOpenId(entity.getOpenId());
+    	Reciver reciverByOpenId = reciverDao.getReciverByOrderId(entity.getOfferId());
     	if(reciverByOpenId ==null ){
     		reciverByOpenId = new Reciver();
     	}
+    	reciverByOpenId.setOrderId(entity.getOfferId());
     	reciverByOpenId.setOpenId(entity.getOpenId());
     	reciverByOpenId.setPhone(entity.getReciverPhone());
     	reciverByOpenId.setProvincesCities(entity.getProvincesCities());
@@ -289,10 +294,11 @@ public class InsuranceService
     	clientByOpenId.setLicenseNumber(entity.getLicenseNumber());
     	
     	//收款信息
-    	CashbackRecord cashbackRecordByOpenId = cashbackDao.getCashbackRecordByOpenId(entity.getOpenId());
+    	CashbackRecord cashbackRecordByOpenId = cashbackDao.getCashbackRecordByOrderId(entity.getOfferId());
     	if(cashbackRecordByOpenId ==null ){
     		cashbackRecordByOpenId = new CashbackRecord();
     	}
+    	cashbackRecordByOpenId.setOrderId(entity.getOfferId());
     	cashbackRecordByOpenId.setOpenId(entity.getOpenId());
     	cashbackRecordByOpenId.setAccount(entity.getAccount());
     	cashbackRecordByOpenId.setBankname(entity.getBankname());
@@ -309,7 +315,6 @@ public class InsuranceService
     	invoiceInfoByOpenId.setInvoiceType(entity.getInvoiceType());
     	invoiceInfoByOpenId.setPhone(entity.getInvoicePhone());
     	invoiceInfoDao.saveUpdateInvoiceInfo(invoiceInfoByOpenId);
-    	
     	
     	
     	Map<String,Object> param = new HashMap<>();

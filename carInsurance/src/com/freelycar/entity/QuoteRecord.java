@@ -35,6 +35,7 @@ public class QuoteRecord
 	
     private String ownerName;  //车主名称;
 	
+    @Lob
     private String insurances;  //报价方案;
 	
     private Long createTime;  //报价时间;
