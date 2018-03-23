@@ -38,7 +38,7 @@ public class InvitionController
 	}
 	
 	//根据id删除Invition
-	@RequestMapping(value = "/remove")
+	@RequestMapping(value = "/remove",method = RequestMethod.GET)
 	public Map<String,Object> removeInvitionById(@RequestParam("id") List<Integer> ids){
 		return invitionService.removeInvitionById(ids);
 	}

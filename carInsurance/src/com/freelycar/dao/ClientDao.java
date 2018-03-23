@@ -77,7 +77,7 @@ public class ClientDao
 			 .addStringLike("source", client.getSource())
 			 .addStringLike("licenseNumber", client.getLicenseNumber())
 			 .addString("nickName", client.getNickName())
-			 .addString("quoteStateCode", client.getQuoteState())
+			 .addInteger("quoteStateCode", client.getQuoteStateCode())
 			 .addBoolean("transfer", client.getTransfer())
 			 .addBoolean("toubao", client.isToubao())
 			 .addBoolean("cashback", client.isCashback())
