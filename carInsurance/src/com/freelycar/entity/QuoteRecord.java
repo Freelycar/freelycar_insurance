@@ -96,6 +96,7 @@ public class QuoteRecord
     	private String insurancePrice;
     	private boolean compensation;
     	private boolean force;//是否是强制险
+    	private String amountStr;//是否是强制险
 		public String getInsuranceName() {
 			return insuranceName;
 		}
@@ -120,7 +121,13 @@ public class QuoteRecord
 		public void setForce(boolean force) {
 			this.force = force;
 		}
+    	public String getAmountStr() {
+			return amountStr==null?"":amountStr;
+		}
     	
+    	public void setAmountStr(String amountStr) {
+			this.amountStr = amountStr;
+		}
     }
     
     
@@ -144,6 +151,7 @@ public class QuoteRecord
     			od.setForce(false);
     			od.setInsuranceName(jsonObject.getString("insuranceName"));
     			od.setInsurancePrice(jsonObject.getInt("price")+"");
+    			od.setAmountStr(jsonObject.getString("amountStr"));
     			list.add(od);
     		}
     	}
