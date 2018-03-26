@@ -155,47 +155,6 @@ const alreadyColumns = [
     }
 ];
 
-const norealData = [{
-    key: '1',
-    licenseNumber: '苏A6666',
-    ownerName: '杨威',
-    phone: '15651751173',
-    limitDate: '2018-03-25',
-    time: '2018-03-24',
-    quoteState: '3',
-    source: '微信小程序'
-}]
-
-const CreateForm = Form.create()((props) => {
-    const { modalVisible, form, handleAdd, handleModalVisible } = props;
-    const okHandle = () => {
-        form.validateFields((err, fieldsValue) => {
-            if (err) return;
-            form.resetFields();
-            handleAdd(fieldsValue);
-        });
-    };
-    return (
-        <Modal
-            title="新建规则"
-            visible={modalVisible}
-            onOk={okHandle}
-            onCancel={() => handleModalVisible()}
-        >
-            <FormItem
-                labelCol={{ span: 5 }}
-                wrapperCol={{ span: 15 }}
-                label="描述"
-            >
-                {form.getFieldDecorator('desc', {
-                    rules: [{ required: true, message: 'Please input some description...' }],
-                })(
-                    <Input placeholder="请输入" />
-                )}
-            </FormItem>
-        </Modal>
-    );
-});
 @connect(({ rule, loading }) => ({
     rule,
     loading: loading.models.rule,
@@ -203,51 +162,52 @@ const CreateForm = Form.create()((props) => {
 @Form.create()
 export default class ClientList extends PureComponent {
     state = {
-        modalVisible: false,
         expandForm: false,
         formValues: {},
         type: '0', // 0 未投保 1 已投保,
         quotingData: [],
-        quotedData: []
+        quotedData: [],
+        pagination: { total: 0 },
     };
 
     componentDidMount() {
         this.getClientList({
-            page: 1,
-            number: 99,
             toubao: false
-        });
+        }, 1);
     }
 
     getQueryData = (values) => {
         let queryData = { ...values };
         this.state.type == '0' ? queryData.toubao = false : queryData.toubao = true;
-        queryData.page = 1;
-        queryData.number = 99;
         if (values.cashback) {
             values.cashback == '0' ? queryData.cashback = false : queryData.cashback = true;
         }
         return queryData;
     }
 
-    getClientList = (values) => {
+    getClientList = (values, page) => {
         let queryData = this.getQueryData(values)
+        queryData.page = page;
+        queryData.number = 10;
+        if (page == 1) {
+            this.setState({
+                pagination: { total: 0, current: 1 }
+            })
+        }
         getClientList({
             ...queryData
         }).then(res => {
             console.log(res);
-            if (res.code == 0) {
-                if (this.state.type == '0') {
-                    this.setState({
-                        quotingData: res.data
-                    })
-                } else {
-                    this.setState({
-                        quotedData: res.data
-                    })
-                }
+            if (res && res.code == 0) {
+                res.data.map((item, index) => {
+                    res.data[index] = item.id
+                })
+                this.setState({
+                    quotingData: res.data,
+                    pagination: { total: res.counts }
+                })
             }
-        }).catch({
+        }).catch(err => {
 
         })
     }
@@ -279,20 +239,7 @@ export default class ClientList extends PureComponent {
                 updatedAt: fieldsValue.updatedAt && fieldsValue.updatedAt.valueOf(),
             };
 
-            this.getClientList(values);
-        });
-    }
-
-    handleModalVisible = (flag) => {
-        this.setState({
-            modalVisible: !!flag,
-        });
-    }
-
-    handleAdd = (fields) => {
-        message.success('添加成功');
-        this.setState({
-            modalVisible: false,
+            this.getClientList(values, 1);
         });
     }
 
@@ -397,14 +344,19 @@ export default class ClientList extends PureComponent {
         this.setState({ type: e.target.value });
     }
 
+    handleTableChange = (pagination) => {
+        const pager = { ...this.state.pagination };
+        pager.current = pagination.current;
+        this.setState({
+            pagination: pager
+        })
+        this.getChannelList(pagination.current)
+    }
+
     render() {
         // const { rule: { data }, loading } = this.props;
-        const { modalVisible, type } = this.state;
+        const { type } = this.state;
 
-        const parentMethods = {
-            handleAdd: this.handleAdd,
-            handleModalVisible: this.handleModalVisible,
-        };
         let tableColumns;
         if (type === '0') {
             tableColumns = columns;
@@ -432,13 +384,11 @@ export default class ClientList extends PureComponent {
                             // loading={loading}
                             dataSource={this.state.type == '0' ? this.state.quotingData : this.state.quotedData}
                             columns={tableColumns}
+                            onChange={(pagination) => this.handleTableChange(pagination)}
+                            pagination={this.state.pagination}
                         />
                     </div>
                 </Card>
-                <CreateForm
-                    {...parentMethods}
-                    modalVisible={modalVisible}
-                />
             </PageHeaderLayout >
         );
     }

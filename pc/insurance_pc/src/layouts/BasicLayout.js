@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { Layout, Icon, message } from 'antd';
+import { Layout, Icon, message, Modal, Input } from 'antd';
 import DocumentTitle from 'react-document-title';
 import { connect } from 'dva';
 import { Route, Redirect, Switch, routerRedux } from 'dva/router';
@@ -14,7 +14,10 @@ import NotFound from '../routes/Exception/404';
 import { getRoutes } from '../utils/utils';
 import Authorized from '../utils/Authorized';
 import { getMenuData } from '../common/menu';
-import logo from '../assets/logo.svg';
+import logo from '../assets/logo.png';
+
+import { getCurentCashBackRate, saveupdateCashBackRate } from '../services/cashback';
+import checkModal from '../utils/check';
 
 const { Content, Header, Footer } = Layout;
 const { AuthorizedRoute } = Authorized;
@@ -71,6 +74,9 @@ class BasicLayout extends React.PureComponent {
   }
   state = {
     isMobile,
+    rateModalShow: false,
+    rate: 0,
+    rateId: ''
   };
   getChildContext() {
     const { location, routerData } = this.props;
@@ -85,9 +91,9 @@ class BasicLayout extends React.PureComponent {
         isMobile: mobile,
       });
     });
-    this.props.dispatch({
-      type: 'user/fetchCurrent',
-    });
+    // this.props.dispatch({
+    //   type: 'user/fetchCurrent',
+    // }); 
   }
   getPageTitle() {
     const { routerData, location } = this.props;
@@ -136,6 +142,10 @@ class BasicLayout extends React.PureComponent {
         type: 'login/logout',
       });
     }
+    if (key == 'countSet') {
+      console.log('tap')
+      this.getCurentCashBackRate();
+    }
   }
   handleNoticeVisibleChange = (visible) => {
     if (visible) {
@@ -143,6 +153,55 @@ class BasicLayout extends React.PureComponent {
         type: 'global/fetchNotices',
       });
     }
+  }
+  getRateModal = () => {
+    return <Modal
+      title="修改返现率"
+      visible={this.state.rateModalShow}
+      onCancel={() => this.setState({rateModalShow: false})}
+      onOk={this.saveupdateCashBackRate}
+    >
+      <span>返现率：</span><Input placeholder="请输入返现率" style={{width: 200}} value={this.state.rate} onChange={(e) => this.setState({rate: e.target.value})} />  %
+      
+    </Modal>
+  }
+  getCurentCashBackRate = () => {
+    this.setState({
+      rateModalShow: true
+    })
+    getCurentCashBackRate({
+
+    }).then(res => {
+      console.log(res);
+      if (res && res.code == 0) {
+        this.setState({
+          rateModalShow: true,
+          rate: res.data.rate * 100
+        })
+      }
+    })
+  }
+
+  saveupdateCashBackRate = () => {
+    if (!checkModal.isRealNum(this.state.rate)) {
+      message.warn('请输入正确数字');
+      return;
+    }
+    saveupdateCashBackRate({
+      rate: this.state.rate / 100.00
+    }).then(res => {
+      if (res && res.code == 0) {
+        message.success('修改成功');
+        this.setState({
+          rateModalShow: false
+        })
+      } else {
+        message.warn(res.msg || '修改失败');
+      }
+    }).catch(err => {
+      message.warn('修改失败');
+      console.log(err);
+    })
   }
   render() {
     const {
@@ -205,24 +264,6 @@ class BasicLayout extends React.PureComponent {
           </Content>
           <Footer style={{ padding: 0 }}>
             <GlobalFooter
-            //   links={
-            //     [{
-            //     key: 'Pro 首页',
-            //     title: 'Pro 首页',
-            //     href: 'http://pro.ant.design',
-            //     blankTarget: true,
-            //   }, {
-            //     key: 'github',
-            //     title: <Icon type="github" />,
-            //     href: 'https://github.com/ant-design/ant-design-pro',
-            //     blankTarget: true,
-            //   }, {
-            //     key: 'Ant Design',
-            //     title: 'Ant Design',
-            //     href: 'http://ant.design',
-            //     blankTarget: true,
-            //   }]
-            // }
               copyright={
                 <Fragment>
                   Copyright <Icon type="copyright" /> 2018 小易爱车车险技术部出品
@@ -230,6 +271,7 @@ class BasicLayout extends React.PureComponent {
               }
             />
           </Footer>
+          {this.getRateModal()}
         </Layout>
       </Layout>
     );

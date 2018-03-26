@@ -111,26 +111,32 @@ export default class ChannelManage extends PureComponent {
                         </Popconfirm>
                     </div>
                 }
-            }]
+            }],
+        pagination: { total: 0 },
     };
 
     showModifyModal = (item) => {
         this.setState({
-            modifyData: JSON.parse(JSON.stringify(item)) ,
+            modifyData: JSON.parse(JSON.stringify(item)),
             modifyModalVisible: true
         })
     }
 
     componentDidMount() {
-        this.getChannelList();
+        this.getChannelList(1);
     }
 
-    getChannelList = () => {
+    getChannelList = (page) => {
+        if (page == 1) {
+            this.setState({
+                pagination: { total: 0, current: 1 }
+            })
+        }
         getChannelList({
             invcode: this.state.invcode,
             name: this.state.name,
-            page: 1,
-            number: 99
+            page: page,
+            number: 10
         }).then((res) => {
             if (res.code == 0) {
                 res.data.map((item, index) => {
@@ -138,10 +144,14 @@ export default class ChannelManage extends PureComponent {
                     item.createTime = moment.unix(item.createTime / 1000).format('YYYY-MM-DD hh:mm');
                 })
                 this.setState({
-                    listData: res.data
+                    listData: res.data,
+                    pagination: { total: res.counts }
                 })
             } else {
-
+                this.setState({
+                    listData: [],
+                    pagination: { total: 0 }
+                })
             }
         }).catch((error) => {
             console.log(error)
@@ -173,7 +183,7 @@ export default class ChannelManage extends PureComponent {
                     modalVisible: false,
                 });
                 message.success('添加成功');
-                this.getChannelList()
+                this.getChannelList(1)
             } else {
                 message.error(res.msg);
             }
@@ -208,7 +218,7 @@ export default class ChannelManage extends PureComponent {
                     }
                 });
                 message.success('修改成功');
-                this.getChannelList()
+                this.getChannelList(1)
             } else {
                 message.error(res.msg);
             }
@@ -219,7 +229,7 @@ export default class ChannelManage extends PureComponent {
     }
 
     deleteChannel = (ids) => {
-        if (ids.length < 0) {
+        if (ids.length <= 0) {
             return;
         }
         const id = ids.join(',');
@@ -228,7 +238,7 @@ export default class ChannelManage extends PureComponent {
         }).then(res => {
             if (res.code == 0) {
                 message.success('删除成功');
-                this.getChannelList();
+                this.getChannelList(1);
             } else {
                 message.error(res.msg);
             }
@@ -267,7 +277,7 @@ export default class ChannelManage extends PureComponent {
 
                     <Col md={8} sm={24}>
                         <span className={styles.submitButtons}>
-                            <Button type="primary" htmlType="submit" onClick={this.getChannelList} >查询</Button>
+                            <Button type="primary" htmlType="submit" onClick={() => this.getChannelList(1)} >查询</Button>
                             <Button style={{ marginLeft: 30 }} onClick={this.handleFormReset}>重置</Button>
                         </span>
                     </Col>
@@ -281,28 +291,28 @@ export default class ChannelManage extends PureComponent {
             title="修改渠道"
             visible={this.state.modifyModalVisible}
             onOk={this.handleModify}
-            onCancel={() => {this.setState({modifyModalVisible: false, modifyData: {}})}}
+            onCancel={() => { this.setState({ modifyModalVisible: false, modifyData: {} }) }}
         >
             <FormItem
                 labelCol={{ span: 5 }}
                 wrapperCol={{ span: 15 }}
                 label="渠道名称: "
             >
-                <Input placeholder="请输入渠道名称" value={this.state.modifyData.name || ''} onChange={(e) => {this.handleModifyData(e.target.value, 'name')}} />
+                <Input placeholder="请输入渠道名称" value={this.state.modifyData.name || ''} onChange={(e) => { this.handleModifyData(e.target.value, 'name') }} />
             </FormItem>
             <FormItem
                 labelCol={{ span: 5 }}
                 wrapperCol={{ span: 15 }}
                 label="邀请码: "
             >
-                <Input placeholder="请输入邀请码" value={this.state.modifyData.invcode || ''} onChange={(e) => {this.handleModifyData(e.target.value, 'invcode')}} />
+                <Input placeholder="请输入邀请码" value={this.state.modifyData.invcode || ''} onChange={(e) => { this.handleModifyData(e.target.value, 'invcode') }} />
             </FormItem>
             <FormItem
                 labelCol={{ span: 5 }}
                 wrapperCol={{ span: 15 }}
                 label="备注: "
             >
-                <Input placeholder="请输入备注" value={this.state.modifyData.remark || ''} onChange={(e) => {this.handleModifyData(e.target.value, 'remark')}} />
+                <Input placeholder="请输入备注" value={this.state.modifyData.remark || ''} onChange={(e) => { this.handleModifyData(e.target.value, 'remark') }} />
             </FormItem>
         </Modal>
     }
@@ -318,7 +328,16 @@ export default class ChannelManage extends PureComponent {
     onSelectChange = (selectedRowKeys) => {
         console.log('selectedRowKeys changed: ', selectedRowKeys);
         this.setState({ selectedRowKeys });
-      }
+    }
+
+    handleTableChange = (pagination) => {
+        const pager = { ...this.state.pagination };
+        pager.current = pagination.current;
+        this.setState({
+            pagination: pager
+        })
+        this.getChannelList(pagination.current)
+    }
 
     render() {
 
@@ -349,6 +368,8 @@ export default class ChannelManage extends PureComponent {
                             dataSource={this.state.listData}
                             columns={this.state.columns}
                             rowSelection={rowSelection}
+                            onChange={(pagination) => this.handleTableChange(pagination)}
+                            pagination={this.state.pagination}
                         />
                     </div>
                 </Card>

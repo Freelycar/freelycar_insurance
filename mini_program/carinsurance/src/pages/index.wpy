@@ -209,99 +209,100 @@
 }
 </style>
 <template >
-    <view class="container">
-        <swiper indicator-dots="true" autoplay="true" interval="5000" duration="1000" class="banner-bg">
-            <block wx:for="{{imgUrls}}" wx:key='index'>
-                <swiper-item>
-                    <image src="{{item}}" class="slide-image" style="height:373rpx;width:750rpx" />
-                </swiper-item>
-            </block>
-        </swiper>
-        <view class='quote-bg'>
-            <view class='line' style="flex-direction:row;">
-                <div class='line-key'>车牌号码
-                    <text style="color: red">*</text>
-                </div>
-                <picker bindchange="bindPickerChange" value="{{index}}" range="{{array}}">
-                    <view class='region-select'>{{region}}
-                        <!-- <image src='../../assets/imgs/arrow_down.png' class='down-icon'></image> -->
-                        <text class='region-select-icon'>│</text>
-                    </view>
-                </picker>
+  <view class="container">
+    <swiper indicator-dots="true" autoplay="true" interval="5000" duration="1000" class="banner-bg">
+      <block wx:for="{{imgUrls}}" wx:key='index'>
+        <swiper-item>
+          <image src="{{item}}" class="slide-image" style="height:373rpx;width:750rpx" />
+        </swiper-item>
+      </block>
+    </swiper>
+    <view class='quote-bg'>
+      <view class='line' style="flex-direction:row;">
+        <div class='line-key'>车牌号码
+          <text style="color: red">*</text>
+        </div>
+        <picker bindchange="bindPickerChange" value="{{index}}" range="{{array}}">
+          <view class='region-select'>{{region}}
+            <!-- <image src='../../assets/imgs/arrow_down.png' class='down-icon'></image> -->
+            <text class='region-select-icon'>│</text>
+          </view>
+        </picker>
 
-                <input class='line-input' placeholder='请输入车牌号码' bindinput="bindNumberInput" />
-            </view>
-            <view class='line' style="flex-direction:row;">
-                <view class='line-key'>车主姓名
-                    <text style="color: red">*</text>
-                </view>
-                <input class='line-input' placeholder='请输入车主姓名' bindinput="bindNameInput" />
-            </view>
-            <view class='right-text'>
-                <picker bindchange='transferCarSelected' value="{{isTransferCar}}" range="{{transferCarArray}}">
-                    <view class='left'>
-                        <text>是否过户车 </text>
-                        <i class='fa fa-angle-down'></i>
-                    </view>
-                </picker>
-                您的信息将被严格保密
-            </view>
-            <view class='recently-quoted'>
-                <text @tap="checkQouteRecord">最近报价记录</text>
-            </view>
-            <button class='confirm-button' @tap="getQuote">获取报价</button>
-            <view class='quote-record-bg'>
-                <text style="color: red">*</text>
-                现仅开通南京市内个人9座以下客车人保在线报价，其他情况可人工咨询
-            </view>
+        <input class='line-input' placeholder='请输入车牌号码' bindinput="bindNumberInput" />
+      </view>
+      <view class='line' style="flex-direction:row;">
+        <view class='line-key'>车主姓名
+          <text style="color: red">*</text>
         </view>
-        <view class='cooperation-agencies-title'>
-            <text>合作机构</text>
-        </view>
-        <view class='cooperation-agencies'>
-            <image class='cooperation-agencies-img' src='/assets/imgs/insurance_logo1.png' />
-            <image class='cooperation-agencies-img' src='/assets/imgs/insurance_logo2.png' />
-            <image class='cooperation-agencies-img' src='/assets/imgs/insurance_logo3.png' />
-            <image class='cooperation-agencies-img' src='/assets/imgs/insurance_logo4.png' />
-            <image class='cooperation-agencies-img' src='/assets/imgs/insurance_logo5.png' />
-            <image class='cooperation-agencies-img' src='/assets/imgs/insurance_logo6.png' />
-        </view>
-        <view class='call-button' @tap='makePhoneCall'>
-            <image class='call-button-img' src='/assets/imgs/manual_consultation.png' />
-        </view>
+        <input class='line-input' placeholder='请输入车主姓名' bindinput="bindNameInput" />
+      </view>
+      <view class='right-text'>
+        <picker bindchange='transferCarSelected' value="{{isTransferCar}}" range="{{transferCarArray}}">
+          <view class='left'>
+            <text>是否过户车 </text>
+            <i class='fa fa-angle-down'></i>
+          </view>
+        </picker>
+        您的信息将被严格保密
+      </view>
+      <view class='recently-quoted'>
+        <text @tap="checkQouteRecord">最近报价记录</text>
+      </view>
+      <button class='confirm-button' @tap="getQuote">获取报价</button>
+      <view class='quote-record-bg'>
+        <text style="color: red">*</text>
+        现仅开通南京市内个人9座以下客车人保在线报价，其他情况可人工咨询
+      </view>
     </view>
-    <view wx:if={{showModal}} class='verification-bg'>
-        <view class='modal-bg'>
-            <veiw class='tip-title'>由于监管要求，初次报价需要通过信息真实性验证</veiw>
-            <view class='row'>
-                <input placeholder='请输入手机号码' bindinput="bindPhoneNumberInput" />
-            </view>
-            <view class='row'>
-                <input placeholder='请输入邀请码(选填)' bindinput="bindInvcodeInput" />
-            </view>
-            <view class='row flex-box'>
-                <input placeholder='请输入验证码' bindinput="bindverificationCodeInput" />\
-                <block wx:if={{waitting}}>
-                    <view class='getcode-view'>
-                        {{wait}}s后重试
-                    </view>
-                </block>
-                <block wx:else>
-                    <view class='getcode-view' @tap='getVerificatCode'>
-                        获取验证码
-                    </view>
-                </block>
+    <view class='cooperation-agencies-title'>
+      <text>合作机构</text>
+    </view>
+    <view class='cooperation-agencies'>
+      <image class='cooperation-agencies-img' src='/assets/imgs/insurance_logo1.png' />
+      <image class='cooperation-agencies-img' src='/assets/imgs/insurance_logo2.png' />
+      <image class='cooperation-agencies-img' src='/assets/imgs/insurance_logo3.png' />
+      <image class='cooperation-agencies-img' src='/assets/imgs/insurance_logo4.png' />
+      <image class='cooperation-agencies-img' src='/assets/imgs/insurance_logo5.png' />
+      <image class='cooperation-agencies-img' src='/assets/imgs/insurance_logo6.png' />
+    </view>
+    <view class='call-button' @tap='makePhoneCall'>
+      <image class='call-button-img' src='/assets/imgs/manual_consultation.png' />
+    </view>
+  </view>
+  <view wx:if={{showModal}} class='verification-bg'>
+    <view class='modal-bg'>
+      <veiw class='tip-title'>由于监管要求，初次报价需要通过信息真实性验证</veiw>
+      <view class='row'>
+        <input placeholder='请输入手机号码' bindinput="bindPhoneNumberInput" />
+      </view>
+      <view class='row'>
+        <input placeholder='请输入邀请码(选填)' bindinput="bindInvcodeInput" />
+      </view>
+      <view class='row flex-box'>
+        <input placeholder='请输入验证码' bindinput="bindverificationCodeInput" />\
+        <block wx:if={{waitting}}>
+          <view class='getcode-view'>
+            {{wait}}s后重试
+          </view>
+        </block>
+        <block wx:else>
+          <view class='getcode-view' @tap='getVerificatCode'>
+            获取验证码
+          </view>
+        </block>
 
-            </view>
-            <view class='confirm' @tap='verificationPhone'> 确定 </view>
-        </view>
+      </view>
+      <view class='confirm' @tap='verificationPhone'> 确定 </view>
     </view>
+  </view>
 </template>
 
 <script>
 import wepy from 'wepy';
 import { connect } from 'wepy-redux';
 import Toast from 'wepy-com-toast';
+import checkModal from '../util/check.js';
 
 @connect({
   num(state) {
@@ -348,11 +349,6 @@ export default class Index extends wepy.page {
 
   methods = {
     getQuote() {
-        //  wepy.navigateTo({
-        //       url: 'quote'
-        //     });
-        //     return;
-      //   this.showModal = true;
       if (this.data.licenseNumber === '') {
         wepy.showToast({ title: '请输入车牌号码', icon: 'none' });
         return;
@@ -360,13 +356,17 @@ export default class Index extends wepy.page {
         wepy.showToast({ title: '请输入车主姓名', icon: 'none' });
         return;
       }
+      if (!checkModal.isLicenseNumber(this.data.region + this.data.licenseNumber)) {
+        wepy.showToast({ title: '请输入正确车牌号码', icon: 'none' });
+        return;
+      }
 
       this.$parent.globalData.name = this.name;
       this.$parent.globalData.licenseNumber = this.region + this.licenseNumber;
-      console.log(this.$parent.globalData)
+      console.log(this.$parent.globalData);
       wepy.showLoading();
       wepy.request({
-        url: this.$parent.globalData.baseUrl +  'client/isExistByOpenId',
+        url: this.$parent.globalData.baseUrl + 'client/isExistByOpenId',
         data: {
           openId: this.$parent.globalData.openId,
           ownerName: this.name,
@@ -384,11 +384,10 @@ export default class Index extends wepy.page {
             this.$apply();
           } else {
             wepy.showModal({
-                title: '提示',
-                content: '为能查到您的续保信息，请检查车牌号或车主姓名是否正确!',
-                showCancel: false
-
-            })
+              title: '提示',
+              content: '为能查到您的续保信息，请检查车牌号或车主姓名是否正确!',
+              showCancel: false
+            });
           }
         },
         complete: function() {
@@ -447,7 +446,7 @@ export default class Index extends wepy.page {
 
       wepy.showLoading();
       wepy.request({
-        url: this.$parent.globalData.baseUrl +  'client/sms/verification',
+        url: this.$parent.globalData.baseUrl + 'client/sms/verification',
         data: {
           phone: this.data.phoneNumber,
           smscode: this.data.verificationCode,
@@ -482,7 +481,7 @@ export default class Index extends wepy.page {
       }
       wepy.showLoading();
       wepy.request({
-        url: this.$parent.globalData.baseUrl +  'client/sms/getCode',
+        url: this.$parent.globalData.baseUrl + 'client/sms/getCode',
         data: {
           phone: this.data.phoneNumber + ''
         },

@@ -34,6 +34,7 @@ const menuData = [{
   icon: 'user',
   path: 'user',
   authority: 'guest',
+  hideInMenu: true,
   children: [{
     name: '登录',
     path: 'login',
