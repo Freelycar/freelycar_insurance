@@ -108,8 +108,8 @@ public class OrderService
     }
     
     
-    public Map<String, Object> getCountBySourId(String orderId,Date startTime,Date endTime){
-    	List<Object[]> list = orderDao.getCountBySourId(orderId, startTime, endTime);
+    public Map<String, Object> getCountBySourId(Date startTime,Date endTime){
+    	List<Object[]> list = orderDao.getCountBySourId(startTime, endTime);
     	
     	List<CountBySource> newlist = new ArrayList<>();
     	if(list.isEmpty()){
