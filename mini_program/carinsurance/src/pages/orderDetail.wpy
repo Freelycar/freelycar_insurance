@@ -207,7 +207,7 @@
         <text>{{invoiceInfo.phone}}</text>
       </view>
     </view> 
-    <view wx:if="{{orderDetail.state==7}}" class="order-confirm" @tap="takeDelivery">
+    <view wx:if="{{state==7}}" class="order-confirm" @tap="takeDelivery">
       确认收货
     </view>
   </view>
@@ -225,7 +225,7 @@ export default class OrderDetail extends wepy.page {
   components = {};
 
   data = {
-    id:'',
+    id: '',
     orderDetail: '',
     reciver: '',
     quoteRecord: '',
@@ -233,23 +233,29 @@ export default class OrderDetail extends wepy.page {
     qiangzhiTotalPrice: 0,
     shangyeTotalPrice: 0,
     totalPrice: 0,
-    cashback: 0
+    cashback: 0,
+    state: 0
   };
 
   methods = {
     takeDelivery: () => {
       wepy.request({
-        url: 'http://172.17.3.105:8080/carInsurance/api/order/getOrderById',
+        url: 'http://172.17.3.105:8080/carInsurance/api/order/update',
+
         data: {
-          id :this.id
+          id: this.id,
           state: 8
         },
         header: {
           'content-type': 'application/x-www-form-urlencoded'
         },
-        method: 'GET',
+        method: 'POST',
         success: res => {
-
+          console.log(res);
+          if (res.data.code === 0) {
+            this.state = 8;
+            this.$apply();
+          }
         }
       });
     },
@@ -275,7 +281,7 @@ export default class OrderDetail extends wepy.page {
 
   onLoad(params) {
     console.log(params);
-    this.id = params.id
+    this.id = params.id;
     wepy.request({
       url: 'http://172.17.3.105:8080/carInsurance/api/order/getOrderById',
       data: {
@@ -288,6 +294,7 @@ export default class OrderDetail extends wepy.page {
       success: res => {
         console.log(res.data);
         justifyNull(res.data.data);
+        this.state = res.data.data.state;
         this.orderDetail = res.data.data;
         justifyNull(res.data.reciver);
         this.reciver = res.data.reciver;
