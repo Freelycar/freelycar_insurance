@@ -5,6 +5,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -146,6 +148,9 @@ public class OrderService
 		QuoteRecord quoteRecordBySpecify = quoteRecordDao.getQuoteRecordBySpecify("offerId", orderId);
 		if(quoteRecordBySpecify != null){
 			//处理offerDetail的字符串
+			String offerDetail = quoteRecordBySpecify.getOfferDetail();
+			quoteRecordBySpecify.setOfferDetailList(QuoteRecord.getOfferDetailJsonObj(offerDetail));
+			
 			jsonres.put("quoteRecord", quoteRecordBySpecify);
 		}
 		

@@ -1,10 +1,14 @@
 package com.freelycar.entity;  
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Lob;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import org.hibernate.annotations.GenericGenerator;
 import org.json.JSONArray;
@@ -33,6 +37,9 @@ public class QuoteRecord
     
     @Lob
     private String offerDetail;//报价详细
+    
+    @Transient
+    private List<OfferDetail> offerDetailList;
     
     private String licenseNumber;  //车牌号;
 	
@@ -83,8 +90,45 @@ public class QuoteRecord
     }  
     
     
+    
+    static class OfferDetail{
+    	private String insuranceName;
+    	private String insurancePrice;
+    	private boolean compensation;
+    	private boolean force;//是否是强制险
+		public String getInsuranceName() {
+			return insuranceName;
+		}
+		public void setInsuranceName(String insuranceName) {
+			this.insuranceName = insuranceName;
+		}
+		public String getInsurancePrice() {
+			return insurancePrice;
+		}
+		public void setInsurancePrice(String insurancePrice) {
+			this.insurancePrice = insurancePrice;
+		}
+		public boolean isCompensation() {
+			return compensation;
+		}
+		public void setCompensation(boolean compensation) {
+			this.compensation = compensation;
+		}
+		public boolean isForce() {
+			return force;
+		}
+		public void setForce(boolean force) {
+			this.force = force;
+		}
+    	
+    }
+    
+    
+    
     //offerDetail的详细
-    /*private JSONObject getOfferDetailJsonObj(String offerDetail){
+    public static List<OfferDetail> getOfferDetailJsonObj(String offerDetail){
+    	List<OfferDetail> list = new ArrayList<>();
+    	
     	JSONObject obj = null;
     	try {
 			obj = new JSONObject(offerDetail);
@@ -93,9 +137,51 @@ public class QuoteRecord
 		}
     	if(obj.has("insurances")){
     		JSONArray jsonArray = obj.getJSONArray("insurances");
+    		for(int i=0;i<jsonArray.length();i++){
+    			JSONObject jsonObject = jsonArray.getJSONObject(i);
+    			OfferDetail od = new OfferDetail();
+    			od.setCompensation(jsonObject.getBoolean("compensation"));
+    			od.setForce(false);
+    			od.setInsuranceName(jsonObject.getString("insuranceName"));
+    			od.setInsurancePrice(jsonObject.getInt("price")+"");
+    			list.add(od);
+    		}
     	}
-    }*/
+    	
+    	
+    	//强制险
+    	if(obj.has("forcePremium")){
+    		JSONObject jsonObject = obj.getJSONObject("forcePremium");
+    		OfferDetail od = new OfferDetail();
+			od.setCompensation(false);
+			od.setForce(true);
+			od.setInsuranceName("强制险");
+			od.setInsurancePrice(jsonObject.getInt("quotesPrice")+"");
+			list.add(od);
+    	}
+    	
+    	//强制险
+    	if(obj.has("taxPrice")){
+    		JSONObject jsonObject = obj.getJSONObject("taxPrice");
+    		OfferDetail od = new OfferDetail();
+    		od.setCompensation(false);
+    		od.setForce(true);
+    		od.setInsuranceName("车船税");
+    		od.setInsurancePrice(jsonObject.getInt("quotesPrice")+"");
+    		list.add(od);
+    	}
+    	return list;
+    	
+    }
     
+    public List<OfferDetail> getOfferDetailList() {
+		return offerDetailList;
+	}
+    
+    
+    public void setOfferDetailList(List<OfferDetail> offerDetailList) {
+		this.offerDetailList = offerDetailList;
+	}
     
   
     /********** get/set ***********/  
