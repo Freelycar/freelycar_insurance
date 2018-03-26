@@ -111,15 +111,15 @@
     <view class="order-info">返现时间：2018-01-03 14:20</view>
     <view class="order-info">成交时间：{{orderDetail.dealTime}}</view>
     <view class="order-info info-black">快递公司：{{orderDetail.expressCompany}}</view>
-    <view class="order-info info-black">运单号码：{{orderDetail.expressNumber}} | <text class="info-blue">复制</text></view>
+    <view class="order-info info-black">运单号码：{{orderDetail.expressNumber}} | <text class="info-blue" @tap="copyTBL">复制</text></view>
     <view class="order-info info-black">备注：<text class="info-yellow">{{orderDetail.remark}}</text></view>
     <view class="order-detail-title">
       <text class="fa fa-file-text-o title-icon"/>投保方案
     </view>
-    <view class="order-detail-way">
+    <view class="order-detail-way" wx:if="{{quoteRecord}}">
       <view class="insurance-title">
         <text>强制险</text>
-        <text>起保日期：2017-12-30</text>
+        <text>起保日期：{{quoteRecord.forceInsuranceStartTime}}</text>
       </view>
       <view class="insurance-detail">
         <view class="detail-line">
@@ -136,10 +136,10 @@
         <text>小计：￥1250</text>
       </view>
     </view>
-    <view class="order-detail-way">
+    <view class="order-detail-way" wx:if="{{quoteRecord}}">
       <view class="insurance-title">
         <text>商业险</text>
-        <text>起保日期：2017-12-30</text>
+        <text>起保日期：{{quoteRecord.insuranceStartTime}}</text>
       </view>
       <view class="insurance-detail">
         <view class="detail-line">
@@ -166,38 +166,38 @@
     <view class="order-detail-title">
       <text class="fa fa-address-card-o title-icon"/>保单收货信息
     </view>
-    <view class="order-detail-way order-side-padding">
+    <view class="order-detail-way order-side-padding" wx:if="{{reciver}}">
       <view class="insurance-title title-bottom-line">
         <text>收件人姓名</text>
-        <text>张蕾西</text>
+        <text>{{reciver.reciver}}</text>
       </view>
       <view class="insurance-title title-bottom-line">
         <text>手机号码</text>
-        <text>15188947877</text>
+        <text>{{reciver.phone}}</text>
       </view>
       <view class="insurance-title title-bottom-line">
         <text>地址</text>
         <view class="insurance-address">
-          <text>江苏省-南京市-玄武区</text>
-          <text>苏宁青创园D206</text>
+          <text>{{reciver.provincesCities}}</text>
+          <text>{{reciver.adressDetail}}</text>
         </view>
       </view>
     </view>
     <view class="order-detail-title">
       <text class="fa fa-newspaper-o title-icon"/>发票信息
     </view> 
-    <view class="order-detail-way order-side-padding">
+    <view class="order-detail-way order-side-padding"  wx:if="{{invoiceInfo}}">
       <view class="insurance-title title-bottom-line">
         <text>发票类型</text>
-        <text>电子发票</text>
+        <text>{{invoiceInfo.invoiceType}}</text>
       </view>
       <view class="insurance-title title-bottom-line">
         <text>发票抬头</text>
-        <text>张蕾西</text>
+        <text>{{invoiceInfo.invoiceTitle}}</text>
       </view>
       <view class="insurance-title title-bottom-line">
         <text>手机号码</text>
-        <text>15188947877</text>
+        <text>{{invoiceInfo.phone}}</text>
       </view>
     </view> 
     <view class="order-confirm">
@@ -208,6 +208,8 @@
 
 <script>
 import wepy from 'wepy';
+import justifyNull from '../util/justifyNull.js';
+import timestampToTime from '../util/timestampToTime.js';
 export default class OrderDetail extends wepy.page {
   config = {
     navigationBarTitleText: '订单详情'
@@ -216,15 +218,37 @@ export default class OrderDetail extends wepy.page {
   components = {};
 
   data = {
-    orderDetail: ''
+    orderDetail: '',
+    reciver: '',
+    quoteRecord: '',
+    invoiceInfo: ''
   };
 
-  methods = {};
+  methods = {
+    copyTBL: () => {
+      wepy.setClipboardData({
+        data: this.orderDetail.expressNumber,
+        success: res => {
+          wepy.showModal({
+            title: '提示',
+            content: '复制成功',
+            success: res => {
+              if (res.confirm) {
+                console.log('确定');
+              } else if (res.cancel) {
+                console.log('取消');
+              }
+            }
+          });
+        }
+      });
+    }
+  };
 
   onLoad(params) {
     console.log(params);
     wepy.request({
-      url: 'http://172.17.3.106:8080/carInsurance/api/order/getOrderById',
+      url: 'http://172.17.3.105:8080/carInsurance/api/order/getOrderById',
       data: {
         id: params.id
       },
@@ -233,8 +257,21 @@ export default class OrderDetail extends wepy.page {
       },
       method: 'GET',
       success: res => {
-        console.log(res);
+        justifyNull(res.data.data);
         this.orderDetail = res.data.data;
+        justifyNull(res.data.reciver);
+        this.reciver = res.data.reciver;
+        justifyNull(res.data.quoteRecord);
+        console.log(res.data.quoteRecord);
+        res.data.quoteRecord.forceInsuranceStartTime = timestampToTime(
+          res.data.quoteRecord.forceInsuranceStartTime
+        );
+        res.data.quoteRecord.insuranceStartTime = timestampToTime(
+          res.data.quoteRecord.insuranceStartTime
+        );
+        this.quoteRecord = res.data.quoteRecord;
+        justifyNull(res.data.invoiceInfo);
+        this.invoiceInfo = res.data.invoiceInfo;
         this.$apply();
       }
     });
