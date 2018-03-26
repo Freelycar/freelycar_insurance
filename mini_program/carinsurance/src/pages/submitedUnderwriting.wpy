@@ -1,38 +1,39 @@
 <style lang="less">
-.border-box{
-    box-sizing: border-box;
-    padding: 360rpx 115rpx 0rpx 115rpx;
+.border-box {
+  box-sizing: border-box;
+  padding: 360rpx 115rpx 0rpx 115rpx;
 }
-.waiting-img{
-    width: 80rpx;
-    height: 80rpx;
-    margin: 0 auto;
+.waiting-img {
+  width: 80rpx;
+  height: 80rpx;
+  margin: 0 auto;
 }
-.tip-view{
-    color: #b5b5b5;
-    margin-top: 45rpx;
+.tip-view {
+  color: #b5b5b5;
+  margin-top: 45rpx;
 }
-.tip-view text{
-    color: #ce1826
+.tip-view text {
+  color: #ce1826;
 }
-.check-button{
-    width: 400rpx;
-    height: 90rpx;
-    line-height: 90rpx;
-    text-align: center;
-    color: #f8b500;
-    border-radius: 20rxp;
-    border: 1rpx solid #f8b500;
-    margin: 80rpx auto;
+.check-button {
+  width: 400rpx;
+  height: 90rpx;
+  line-height: 90rpx;
+  text-align: center;
+  color: #f8b500;
+  border-radius: 20rxp;
+  border: 1rpx solid #f8b500;
+  margin: 80rpx auto;
 }
 </style>
 <template >
     <view class="container border-box">
-        <image class='waiting-img' src='/assets/imgs/order_waiting.png'  />
+        <image class='waiting-img' src='/assets/imgs/order_waiting.png' />
         <view class='tip-view'>
-            我们已经为您向<text>中国人保</text>发出核保申请，
-            需要核实您上一年度的<text>出险状况</text>和<text>交通违章情况</text>,
-            请您耐性等待几分钟
+            我们已经为您向
+            <text>中国人保</text>发出核保申请， 需要核实您上一年度的
+            <text>出险状况</text>和
+            <text>交通违章情况</text>, 请您耐性等待几分钟
         </view>
         <view @tap="checkOrder" class='check-button'>查看订单</view>
     </view>
@@ -46,10 +47,11 @@ export default class submitedUnderwriting extends wepy.page {
   config = {
     navigationBarTitleText: '提交核保'
   };
-  components = {
-  };
+  components = {};
 
-  data = {};
+  data = {
+      orderId: ''
+  };
 
   computed = {};
 
@@ -57,11 +59,21 @@ export default class submitedUnderwriting extends wepy.page {
     getQuoteRecord() {},
     checkOrder() {
       wepy.navigateTo({
-        url: 'orderDetail'
+        url: `orderDetail?id=${this.orderId}`
       });
     }
   };
 
-  onLoad() {}
+  onLoad(opiton) {
+    let data = JSON.parse(option.data);
+    this.orderId = data.orderId;
+    this.$apply();
+  }
+
+  onUnload() {
+    wx.switchTab({
+      url: 'index'
+    });
+  }
 }
 </script>

@@ -168,11 +168,11 @@
           <view class='lastyear-record-item'>
             <view class='lastyear-record-header'> {{item.insuranceName}}</view>
             <view class='lastyear-record-detail'>
-              <view class='item'>保单号:{{item.policyNo}}</view>
-              <view class='item'>终保时间:{{item.insuranceEndTime}}</view>
+              <view class='item'>保单号:{{item.policyNo || ''}}</view>
+              <view class='item'>终保时间:{{item.insuranceEndTime || ''}}</view>
             </view>
             <view class='lastyear-record-money'>
-              ￥{{item.price}}
+              ￥{{item.price || '0'}}
             </view>
           </view>
         </block>
@@ -264,7 +264,7 @@ export default class Quote extends wepy.page {
   methods = {
     adjustQuoteProgram() {
       wepy.navigateTo({
-        url: 'adjustQuoteProgram'
+        url: `adjustQuoteProgram?startTime=${this.limitDate}`
       });
     },
     selectInsuranceOrNot(event) {
@@ -385,9 +385,11 @@ export default class Quote extends wepy.page {
         if (res.data.code == 0) {
           for (let i = 0; i < res.data.data.length; i++) {
             if (res.data.data[i].commercial) {
-              this.limitDate = res.data.data[i].insuranceEndTime;
-              this.$apply();
+              this.limitDate = res.data.data[i].insuranceEndTime || 0;
+            } else {
+              this.limitDate = 0;
             }
+            this.$apply();
             res.data.data[i].insuranceEndTime = moment(
               res.data.data[i].insuranceEndTime * 1000
             ).format('YYYY-MM-DD hh:mm');
@@ -430,12 +432,6 @@ export default class Quote extends wepy.page {
       console.log(data);
       const objData = JSON.parse(data.data);
 
-      // if (objData.data) {
-      //   const info = JSON.parse(objData.data);
-      //   wepy.navigateTo({
-      //     url: 'quoteSuccess'
-      //   });
-      // }
       console.log('成功接受数据');
       console.log(objData);
       if (objData.code == 606) {
@@ -446,6 +442,12 @@ export default class Quote extends wepy.page {
         wepy.redirectTo({
           url: `quoteSuccess?data=${JSON.stringify(objData.data)}`
         });
+      } else if (objData.code == 609) {
+        clearInterval(this.timer);
+        this.waitSecond = 90;
+        this.waitting = false;
+        this.$apply();
+        wepy.showToast({ title: objData.data, icon: 'none' });
       }
     });
 

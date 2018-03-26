@@ -152,7 +152,7 @@
     <view class='reset-program-button' @tap='reset'>
       <i class='fa fa-undo'></i>重置投保方案</view>
     <block wx:if={{waitting}}>
-      <button class='get-price-button get-price-button-unable'>报价中......{{waitSecond}}s</button>
+      <button class='get-price-button get-price-button-loading'>报价中......{{waitSecond}}s</button>
     </block>
     <block wx:else>
       <button class='get-price-button' @tap='queryPrice'>人保报价</button>
@@ -176,7 +176,8 @@ export default class AdjustQuoteProgram extends wepy.page {
     insurances: [],
     waitSecond: 90,
     waitting: false,
-    timer: null
+    timer: null,
+    limitDate: 0
   };
 
   computed = {};
@@ -224,6 +225,9 @@ export default class AdjustQuoteProgram extends wepy.page {
       }
     },
     reset() {
+      if (this.waitting) {
+        return;
+      }
       const data = JSON.parse(JSON.stringify(defultInsurances));
       this.insurances = data;
     },
@@ -233,7 +237,7 @@ export default class AdjustQuoteProgram extends wepy.page {
         return;
       }
       wepy.showLoading();
-      const insurances = this.$parent.globalData.insurances;
+      const insurances = this.insurances;
       let touBaoAry = [];
       insurances.map((item, index) => {
         if (item.isToubao == true) {
@@ -284,11 +288,12 @@ export default class AdjustQuoteProgram extends wepy.page {
     }
   };
 
-  onLoad() {
+  onLoad(option) {
     this.insurances =
       JSON.parse(JSON.stringify(this.$parent.globalData.insurances)) ||
       JSON.parse(JSON.stringify(defultInsurances));
 
+    this.limitDate = option.startTime || 0;
     //建立连接
     wepy.connectSocket({
       url: 'ws://www.xhnky.cn/carInsurance/echo'
@@ -318,6 +323,12 @@ export default class AdjustQuoteProgram extends wepy.page {
         wepy.redirectTo({
           url: `quoteSuccess?data=${JSON.stringify(objData.data)}`
         });
+      }  else if (objData.code == 609) {
+        clearInterval(this.timer);
+        this.waitSecond = 90;
+        this.waitting = false;
+        this.$apply();
+        wepy.showToast({ title: objData.data, icon: 'none' });
       }
     });
 
