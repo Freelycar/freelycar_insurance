@@ -187,8 +187,11 @@ public class OrderpushResulService
 				//推给客户端
 				//SocketHelper.sendMessage(order.getOpenId(), RESCODE.PUSHBACK_HEBAO.getJSONObject(orderId).toString());
 				//小程序模版消息推送
-				//HTTP
-				HttpClientUtil.httpPost(, params);
+				String sendModelMessageUrl = Constant.getSendModelMessageUrl();
+				
+				
+				
+				//HttpClientUtil.httpPost(, params);
 				
 				Map<String,Object> msg = new HashMap<>();
 				msg.put("orderId", orderId);
