@@ -64,6 +64,10 @@ public class CashbackRecordDao
 		getSession().update(rate);
 	}
 	
+	//更新CashBackRate	
+	public void saveupdateCashBackRate(CashBackRate rate){
+		getSession().saveOrUpdate(rate);
+	}
     //根据id查询CashbackRecord
     public CashbackRecord getCashbackRecordById(int id){
         String hql = "from CashbackRecord where id = :id";

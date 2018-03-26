@@ -7,7 +7,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.poi.util.SystemOutLogger;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -162,7 +161,7 @@ public class InsuranceService
     			}else{
     				//数据库有数据 填充其他信息 这边要注意
     				exist.setOwnerName(client.getOwnerName());
-    				exist.setQuoteState(INSURANCE.QUOTESTATE_NO_1.getCode()+"");
+    				exist.setQuoteState(INSURANCE.QUOTESTATE_NO_YIBAOJIA.getCode()+"");
     				clientDao.saveClient(exist);
     			}
     			
@@ -374,8 +373,9 @@ public class InsuranceService
     			inorder.setLicenseNumber(entity.getLicenseNumber());
     			inorder.setOrderId(entity.getOfferId());
     			inorder.setOpenId(entity.getOpenId());
-    			inorder.setState(INSURANCE.QUOTESTATE_NO_1.getCode());
-    			inorder.setStateString(INSURANCE.QUOTESTATE_NO_1.getName());
+    			inorder.setState(INSURANCE.QUOTESTATE_NO_YITJHB.getCode());
+    			inorder.setStateString(INSURANCE.QUOTESTATE_NO_YITJHB.getName());
+    			inorder.setCreateTime(System.currentTimeMillis());
     			orderDao.saveUpdateOrder(inorder);
     			
     			return RESCODE.SUCCESS.getJSONRES(entity.getOfferId());

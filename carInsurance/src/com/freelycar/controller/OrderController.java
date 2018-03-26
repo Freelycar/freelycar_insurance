@@ -1,5 +1,6 @@
 package com.freelycar.controller; 
 
+import java.util.Date;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +33,14 @@ public class OrderController
     	return orderService.getOrderByOrderId(orderId);
     }
 
+    
+    
+    //渠道统计 根据sourceId 统计订单 饼图
+    @RequestMapping(value = "/getPieChart",method = RequestMethod.GET)
+    public Map<String, Object> getPieChart(String sourceId,Date startTime,Date endTime){
+    	return orderService.getCountBySourId(sourceId,startTime, endTime);
+    }
+    
     
     //增加一个Order
     @RequestMapping(value = "/save",method = RequestMethod.POST)

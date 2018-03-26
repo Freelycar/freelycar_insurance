@@ -102,10 +102,13 @@ public class HttpClientUtil {
 	}
 	
 	
+	public static JSONObject httpGet(String url) {
+		return httpGet(url, null, null);
+	}
+	
 	public static JSONObject httpGet(String url,Map<String,Object> param) {
 		return httpGet(url, param, null);
 	}
-	
 
 	public static JSONObject httpGet(String url,Map<String,Object> param,Map<String,String> head) {
 		
@@ -269,7 +272,8 @@ public class HttpClientUtil {
 
 	public static void main(String[] args) {
 		//HttpClientTest.httpGet("http://odds.500.com/static/info/odds/json/live/summary.txt");
-		downLoadPicture("http://p4lhabum1.bkt.clouddn.com/19e94611f03f41c2b2a40e09827f9b28.mp4?e=1519838929&token=u3OsilIqOFcyyXlPGgBHoyq-fe8ZHLAcL34mwSAz:FNGGKU4xg5kEq_Ejwq9jU-djPF0=","C://bookimg\\sdf");
+		HttpClientUtil.httpGet("https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=wx1394f2d5a7311394&secret=7a22adabbbd8b41d101f9604a42a5292");
+		//downLoadPicture("http://p4lhabum1.bkt.clouddn.com/19e94611f03f41c2b2a40e09827f9b28.mp4?e=1519838929&token=u3OsilIqOFcyyXlPGgBHoyq-fe8ZHLAcL34mwSAz:FNGGKU4xg5kEq_Ejwq9jU-djPF0=","C://bookimg\\sdf");
 	}
 
 }

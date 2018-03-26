@@ -59,6 +59,8 @@ public class AdminService
     		return RESCODE.USER_PASS_EMPTY.getJSONRES();
     	}
     	
+    	password = Tools.getMD5Str(password);
+    	System.out.println("jiami password"+password);
         Admin admin = adminDao.findAdminByUserAndPass(username, password);
         if (admin==null) {
         	return RESCODE.NOT_FOUND.getJSONRES();

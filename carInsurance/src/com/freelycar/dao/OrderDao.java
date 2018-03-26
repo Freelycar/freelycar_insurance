@@ -1,5 +1,7 @@
 package com.freelycar.dao; 
 
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.hibernate.Session;
@@ -46,7 +48,18 @@ public class OrderDao
     	return result;
     }
     
+   
     
+    //根据id查询Order
+    public List<Object[]> getCountBySourId(String sourceId, Date startTime, Date endTime){
+    	String sql = "select sourceId, source, sum(totalPrice) from InsuranceOrder where dealTime > :startTime and dealTime<= :endTime group by sourceId";
+    	@SuppressWarnings("unchecked")
+		List<Object[]> list = getSession().createQuery(sql)
+    							.setLong("startTime", startTime.getTime())
+    							.setLong("endTime", endTime.getTime())
+    							.list();
+    	return list;
+    }
 	
 	
 	//查询所有的Order	
