@@ -87,6 +87,9 @@ public class CashbackRecordService
 	//查询当前返现率
 	public Map<String, Object> getCurentCashBackRate(){
 		List<CashBackRate> listCashbackRate = cashbackRecordDao.listCashbackRate();
+		if(listCashbackRate.isEmpty()){
+			return RESCODE.NOT_FOUND.getJSONRES();
+		}
 		return RESCODE.SUCCESS.getJSONRES(listCashbackRate.get(0));
 	}
 	
