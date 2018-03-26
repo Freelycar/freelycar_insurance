@@ -7,6 +7,9 @@ import javax.persistence.Lob;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.GenericGenerator;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 /**  
  *  
@@ -78,6 +81,22 @@ public class QuoteRecord
         this.transferDate = transferDate;  
         this.requestHeader = requestHeader;  
     }  
+    
+    
+    //offerDetail的详细
+    /*private JSONObject getOfferDetailJsonObj(String offerDetail){
+    	JSONObject obj = null;
+    	try {
+			obj = new JSONObject(offerDetail);
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+    	if(obj.has("insurances")){
+    		JSONArray jsonArray = obj.getJSONArray("insurances");
+    	}
+    }*/
+    
+    
   
     /********** get/set ***********/  
     public Integer getId() {

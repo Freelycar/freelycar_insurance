@@ -52,8 +52,12 @@ public class OrderDao
     
     //根据id查询Order
     public List<Object[]> getCountBySourId(String sourceId, Date startTime, Date endTime){
-    	String sql = "select sourceId, source, sum(totalPrice) from InsuranceOrder group by sourceId";
-    	List<Object[]> list = getSession().createQuery(sql).list();
+    	String sql = "select sourceId, source, sum(totalPrice) from InsuranceOrder where dealTime > :startTime and dealTime<= :endTime group by sourceId";
+    	@SuppressWarnings("unchecked")
+		List<Object[]> list = getSession().createQuery(sql)
+    							.setLong("startTime", startTime.getTime())
+    							.setLong("endTime", endTime.getTime())
+    							.list();
     	return list;
     }
 	
@@ -64,7 +68,6 @@ public class OrderDao
 		QueryUtils utils = new QueryUtils(getSession(), "from InsuranceOrder");
 		
 		if(order != null){
-			System.out.println("sssssssssssssssssss"+);
 			utils = utils.addInteger("state", order.getState());
 		}
 		

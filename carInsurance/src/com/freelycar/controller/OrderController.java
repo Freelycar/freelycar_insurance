@@ -35,12 +35,11 @@ public class OrderController
 
     
     
-    //渠道统计 根据sourceId 统计订单
-    @RequestMapping(value = "/getCountBySourId",method = RequestMethod.GET)
-    public Map<String, Object> getCountBySourId(String sourceId,Date startTime,Date endTime){
+    //渠道统计 根据sourceId 统计订单 饼图
+    @RequestMapping(value = "/getPieChart",method = RequestMethod.GET)
+    public Map<String, Object> getPieChart(String sourceId,Date startTime,Date endTime){
     	return orderService.getCountBySourId(sourceId,startTime, endTime);
     }
-    
     
     
     //增加一个Order

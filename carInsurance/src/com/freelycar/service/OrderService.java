@@ -145,9 +145,7 @@ public class OrderService
 		//查询报价记录
 		QuoteRecord quoteRecordBySpecify = quoteRecordDao.getQuoteRecordBySpecify("offerId", orderId);
 		if(quoteRecordBySpecify != null){
-			
-			
-			
+			//处理offerDetail的字符串
 			jsonres.put("quoteRecord", quoteRecordBySpecify);
 		}
 		
