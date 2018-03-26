@@ -81,7 +81,7 @@ public class OrderService
 		}
 		
 		//查询报价记录
-		QuoteRecord quoteRecordBySpecify = quoteRecordDao.getQuoteRecordBySpecify("orderId", orderId);
+		QuoteRecord quoteRecordBySpecify = quoteRecordDao.getQuoteRecordBySpecify("offerId", orderId);
 		if(quoteRecordBySpecify != null){
 			jsonres.put("quoteRecord", quoteRecordBySpecify);
 		}
