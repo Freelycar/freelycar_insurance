@@ -121,19 +121,17 @@
         <text>强制险</text>
         <text>起保日期：{{quoteRecord.forceInsuranceStartTime}}</text>
       </view>
-      <view class="insurance-detail">
-        <view class="detail-line">
-          <text>交强险</text>
-          <text>￥950</text>
-        </view>
-        <view class="detail-line">
-          <text>车船税</text>
-          <text>￥300</text>
-        </view>
+      <view class="insurance-detail" >
+        <block wx:for-index="index" wx:for-item="item" wx:key="index" wx:for-items="{{quoteRecord.qiangzhiList}}">
+          <view class="detail-line">
+            <text>{{item.insuranceName}}</text>
+            <text>￥{{item.insurancePrice}}</text>
+          </view>
+        </block>
       </view>
       <view class="insurance-title">
         <text></text>
-        <text>小计：￥1250</text>
+        <text>小计：￥{{qiangzhiTotalPrice}}</text>
       </view>
     </view>
     <view class="order-detail-way" wx:if="{{quoteRecord}}">
@@ -142,26 +140,35 @@
         <text>起保日期：{{quoteRecord.insuranceStartTime}}</text>
       </view>
       <view class="insurance-detail">
-        <view class="detail-line">
-          <text>车辆损失险 <text class="detail-line-info">不计免赔</text></text>
+        <block wx:for-index="index" wx:for-item="item" wx:key="index" wx:for-items="{{quoteRecord.shangyeList}}">
+          <view class="detail-line">
+            <text>{{item.insuranceName}}<text wx:if="{{item.compensation}}" class="detail-line-info">不计免赔</text>
+            <text wx:if="{{item.amountStr&&item.insuranceId!=2}}" class="detail-line-info">{{item.amountStr}}</text>
+            <text wx:if="{{item.amountStr&&item.insuranceId==2}}" class="detail-line-info">{{item.amountStr/10000+'万'}}</text>
+            </text>
+            <text>￥{{item.insurancePrice}}</text>
+          </view>
+        </block>
+        <!-- <view class="detail-line">
+          <text>车辆损失险 <text  class="detail-line-info">不计免赔</text></text>
           <text>￥950</text>
         </view>
         <view class="detail-line">
           <text>第三者责任险 <text class="detail-line-info">100万</text></text>
           <text>￥300 </text>
-        </view>
+        </view> -->
       </view>
       <view class="insurance-title">
         <text></text>
-        <text>小计：￥1250</text>
+        <text>小计：￥{{shangyeTotalPrice}}</text>
       </view>
     </view>
     <view class="insurance-total">
       <view class="insurance-discount">
-        (<text class="insurance-discount-red">￥1460.28</text>
+        (<text class="insurance-discount-red">￥{{cashback}}</text>
         现金红包已到账)
       </view>
-      <text class="insurance-total-price">合计：￥4582.28</text>
+      <text class="insurance-total-price">合计：￥{{totalPrice}}</text>
     </view>
     <view class="order-detail-title">
       <text class="fa fa-address-card-o title-icon"/>保单收货信息
@@ -221,7 +228,11 @@ export default class OrderDetail extends wepy.page {
     orderDetail: '',
     reciver: '',
     quoteRecord: '',
-    invoiceInfo: ''
+    invoiceInfo: '',
+    qiangzhiTotalPrice: 0,
+    shangyeTotalPrice: 0,
+    totalPrice: 0,
+    cashback: 0
   };
 
   methods = {
@@ -257,18 +268,32 @@ export default class OrderDetail extends wepy.page {
       },
       method: 'GET',
       success: res => {
+        console.log(res.data);
         justifyNull(res.data.data);
         this.orderDetail = res.data.data;
         justifyNull(res.data.reciver);
         this.reciver = res.data.reciver;
         justifyNull(res.data.quoteRecord);
-        console.log(res.data.quoteRecord);
         res.data.quoteRecord.forceInsuranceStartTime = timestampToTime(
           res.data.quoteRecord.forceInsuranceStartTime
         );
         res.data.quoteRecord.insuranceStartTime = timestampToTime(
           res.data.quoteRecord.insuranceStartTime
         );
+        let qiangzhiTotalPrice = 0;
+        let shangyeTotalPrice = 0;
+        let totalPrice = 0;
+        res.data.quoteRecord.qiangzhiList.map((item, index) => {
+          qiangzhiTotalPrice = Number(item.insurancePrice) + qiangzhiTotalPrice;
+        });
+        res.data.quoteRecord.shangyeList.map((item, index) => {
+          shangyeTotalPrice = Number(item.insurancePrice) + shangyeTotalPrice;
+        });
+        totalPrice = qiangzhiTotalPrice + shangyeTotalPrice;
+        this.cashback = res.data.data.cashback || 0;
+        this.totalPrice = totalPrice;
+        this.qiangzhiTotalPrice = qiangzhiTotalPrice;
+        this.shangyeTotalPrice = shangyeTotalPrice;
         this.quoteRecord = res.data.quoteRecord;
         justifyNull(res.data.invoiceInfo);
         this.invoiceInfo = res.data.invoiceInfo;
