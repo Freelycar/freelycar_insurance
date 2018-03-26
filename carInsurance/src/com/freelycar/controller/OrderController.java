@@ -38,6 +38,8 @@ public class OrderController
     //渠道统计 根据sourceId 统计订单 饼图
     @RequestMapping(value = "/getPieChart",method = RequestMethod.GET)
     public Map<String, Object> getPieChart(Date startTime,Date endTime){
+    	System.out.println(startTime.getTime());
+    	System.out.println(endTime.getTime());
     	return orderService.getCountBySourId(startTime, endTime);
     }
     

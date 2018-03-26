@@ -218,7 +218,9 @@ public class OrderService
 	}
 	//更新Order
 	public Map<String,Object> updateOrder(InsuranceOrder order){
-		orderDao.updateOrder(order);
+		InsuranceOrder orderById = orderDao.getOrderById(order.getId());
+		orderById.setState(order.getState());
+		orderDao.updateOrder(orderById);
 		return RESCODE.SUCCESS.getJSONRES();
 	}
     

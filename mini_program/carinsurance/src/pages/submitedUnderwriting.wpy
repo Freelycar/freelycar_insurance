@@ -71,7 +71,7 @@ export default class submitedUnderwriting extends wepy.page {
   }
 
   onUnload() {
-    wx.switchTab({
+    wepy.switchTab({
       url: 'index'
     });
   }

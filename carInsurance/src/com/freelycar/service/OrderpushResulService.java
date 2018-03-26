@@ -187,8 +187,14 @@ public class OrderpushResulService
 				//推给客户端
 				//SocketHelper.sendMessage(order.getOpenId(), RESCODE.PUSHBACK_HEBAO.getJSONObject(orderId).toString());
 				//小程序模版消息推送
+				//https://mp.weixin.qq.com/debug/wxadoc/dev/api/notice.html#%E5%8F%91%E9%80%81%E6%A8%A1%E6%9D%BF%E6%B6%88%E6%81%AF
 				String sendModelMessageUrl = Constant.getSendModelMessageUrl();
-				
+				Map<String,String> param = new HashMap<>();
+				param.put("touser", qr.getOfferId());
+				param.put("template_id", "drbANk9wFCJGH-aXl_iPqBd0HtM156z1wypVa-phtYQ");
+				param.put("form_id", "");
+				param.put("data", "");
+				param.put("", "");
 				
 				
 				//HttpClientUtil.httpPost(, params);
