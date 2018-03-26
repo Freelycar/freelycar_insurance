@@ -39,7 +39,9 @@ public class QuoteRecord
     private String offerDetail;//报价详细
     
     @Transient
-    private List<OfferDetail> offerDetailList;
+    private List<OfferDetail> shangyeList;
+    @Transient
+    private List<OfferDetail> qiangzhiList;
     
     private String licenseNumber;  //车牌号;
 	
@@ -133,9 +135,8 @@ public class QuoteRecord
     
     
     //offerDetail的详细
-    public static List<OfferDetail> getOfferDetailJsonObj(String offerDetail){
-    	List<OfferDetail> list = new ArrayList<>();
-    	
+    public static List<OfferDetail> getShangYeJsonObj(String offerDetail){
+    	List<OfferDetail> shangye = new ArrayList<>();
     	JSONObject obj = null;
     	try {
 			obj = new JSONObject(offerDetail);
@@ -152,20 +153,31 @@ public class QuoteRecord
     			od.setInsuranceName(jsonObject.getString("insuranceName"));
     			od.setInsurancePrice(jsonObject.getInt("price")+"");
     			od.setAmountStr(jsonObject.getString("amountStr"));
-    			list.add(od);
+    			shangye.add(od);
     		}
     	}
-    	
+    	return shangye;
+    }
+    
+    //offerDetail的详细
+    public static List<OfferDetail> getQiangzhiJsonObj(String offerDetail){
+    	List<OfferDetail> qiangzhi = new ArrayList<>();
+    	JSONObject obj = null;
+    	try {
+    		obj = new JSONObject(offerDetail);
+    	} catch (JSONException e) {
+    		e.printStackTrace();
+    	}
     	
     	//强制险
     	if(obj.has("forcePremium")){
     		JSONObject jsonObject = obj.getJSONObject("forcePremium");
     		OfferDetail od = new OfferDetail();
-			od.setCompensation(false);
-			od.setForce(true);
-			od.setInsuranceName("强制险");
-			od.setInsurancePrice(jsonObject.getInt("quotesPrice")+"");
-			list.add(od);
+    		od.setCompensation(false);
+    		od.setForce(true);
+    		od.setInsuranceName("强制险");
+    		od.setInsurancePrice(jsonObject.getInt("quotesPrice")+"");
+    		qiangzhi.add(od);
     	}
     	
     	//强制险
@@ -176,23 +188,37 @@ public class QuoteRecord
     		od.setForce(true);
     		od.setInsuranceName("车船税");
     		od.setInsurancePrice(jsonObject.getInt("quotesPrice")+"");
-    		list.add(od);
+    		qiangzhi.add(od);
     	}
-    	return list;
-    	
+    	return qiangzhi;
     }
-    
-    public List<OfferDetail> getOfferDetailList() {
-		return offerDetailList;
-	}
-    
-    
-    public void setOfferDetailList(List<OfferDetail> offerDetailList) {
-		this.offerDetailList = offerDetailList;
-	}
-    
+ 
   
-    /********** get/set ***********/  
+    public List<OfferDetail> getShangyeList() {
+		return shangyeList;
+	}
+
+	public void setShangyeList(List<OfferDetail> shangyeList) {
+		this.shangyeList = shangyeList;
+	}
+
+	public List<OfferDetail> getQiangzhiList() {
+		return qiangzhiList;
+	}
+
+	public void setQiangzhiList(List<OfferDetail> qiangzhiList) {
+		this.qiangzhiList = qiangzhiList;
+	}
+
+	public Long getCreateTime() {
+		return createTime;
+	}
+
+	public void setCreateTime(Long createTime) {
+		this.createTime = createTime;
+	}
+
+	/********** get/set ***********/  
     public Integer getId() {
         return id;
     }

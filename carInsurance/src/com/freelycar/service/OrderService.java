@@ -149,8 +149,8 @@ public class OrderService
 		if(quoteRecordBySpecify != null){
 			//处理offerDetail的字符串
 			String offerDetail = quoteRecordBySpecify.getOfferDetail();
-			quoteRecordBySpecify.setOfferDetailList(QuoteRecord.getOfferDetailJsonObj(offerDetail));
-			
+			quoteRecordBySpecify.setShangyeList(QuoteRecord.getShangYeJsonObj(offerDetail));
+			quoteRecordBySpecify.setQiangzhiList(QuoteRecord.getQiangzhiJsonObj(offerDetail));
 			jsonres.put("quoteRecord", quoteRecordBySpecify);
 		}
 		
