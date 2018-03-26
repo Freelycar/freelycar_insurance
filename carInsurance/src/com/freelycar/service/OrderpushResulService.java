@@ -21,8 +21,7 @@ import com.freelycar.entity.OrderpushResul;
 import com.freelycar.entity.QuoteRecord;
 import com.freelycar.util.Constant;
 import com.freelycar.util.INSURANCE;
-import com.freelycar.util.RESCODE;
-import com.freelycar.util.SocketHelper;  
+import com.freelycar.util.RESCODE;  
 /**  
  *  
  */  
@@ -105,14 +104,14 @@ public class OrderpushResulService
 				JSONObject resultobj = resObj.getJSONObject("data");
 				final String orderId = resultobj.getString("orderId");
 				//根据oferId查提交核保的那条记录
-				InsuranceOrder order = orderDao.getOrderByOrderId(orderId);
+				final InsuranceOrder order = orderDao.getOrderByOrderId(orderId);
 				
 				JSONObject underwritingJson = new JSONObject(resultobj.getString("underwritingJson"));
 				if(underwritingJson.has("errorMsg")){
 					//核保异常
 					//更新订单状态
-					order.setState(INSURANCE.QUOTESTATE_NO_2.getCode());
-					order.setStateString(INSURANCE.QUOTESTATE_NO_2.getName());
+					order.setState(INSURANCE.QUOTESTATE_NO_HEBAOSHIBAI.getCode());
+					order.setStateString(INSURANCE.QUOTESTATE_NO_HEBAOSHIBAI.getName());
 					order.setHebaoMessage(underwritingJson.getString("errorMsg"));
 					//SocketHelper.sendMessage(order.getOpenId(), RESCODE.PUSHBACK_HEBAO_EXCEPTION.getJSONObject(underwritingJson.getString("errorMsg")).toString());
 					return RESCODE.LUOTUO_SUCCESS.getLuoTuoRes(underwritingJson.getString("errorMsg"));
@@ -121,9 +120,6 @@ public class OrderpushResulService
 				int state = resultobj.getInt("state");
 				String licenseNumber = resultobj.getString("licenseNumber");
 				int underwritingPriceCent = resultobj.getInt("underwritingPriceCent");
-				
-				
-				
 				
 				if(underwritingJson.has("biNo")){//商业险
 					String bino = underwritingJson.getJSONObject("biNo").getString("value");//保单号
@@ -153,6 +149,9 @@ public class OrderpushResulService
 						if(proposalMap.get(orderId) > System.currentTimeMillis()){
 							Map<String, Object> confirmChengbao = insuranceService.confirmChengbao(orderId);
 							if(confirmChengbao.get("code").equals("0")){//用户交钱了
+								//更新支付时间
+								order.setPayTime(System.currentTimeMillis());
+								
 								//等待骆驼推送
 								Constant.getTimeExecutor().shutdown();
 							}
@@ -170,8 +169,8 @@ public class OrderpushResulService
 				order.setLicenseNumber(licenseNumber);
 				order.setOrderId(orderId);
 				//更新订单状态
-				order.setState(INSURANCE.QUOTESTATE_NO_3.getCode());
-				order.setStateString(INSURANCE.QUOTESTATE_NO_3.getName());
+				order.setState(INSURANCE.QUOTESTATE_NO_HEBAOCHENGGONG.getCode());
+				order.setStateString(INSURANCE.QUOTESTATE_NO_HEBAOCHENGGONG.getName());
 				
 				//更新支付二维码和失效时间
 				if(underwritingJson.has("payJson")){//较强险

@@ -17,14 +17,15 @@ public enum INSURANCE {
 	
 	
 	//报价状态
-	QUOTESTATE_NO_0(0,"待报价"),
-	QUOTESTATE_NO_1(1,"已报价"),
-	QUOTESTATE_NO_2(2,"核保失败"),
-	QUOTESTATE_NO_3(3,"核保成功"),
-	QUOTESTATE_NO_4(4,"待配送"),
-	QUOTESTATE_NO_5(5,"已配送"),
-	QUOTESTATE_NO_6(6,"待签收"),
-	QUOTESTATE_NO_7(7,"已投保");
+	QUOTESTATE_NO_DAIBAOJIA(0,"待报价"),
+	QUOTESTATE_NO_YIBAOJIA(1,"已报价"),
+	QUOTESTATE_NO_YITJHB(2,"已提交核保"),
+	QUOTESTATE_NO_HEBAOSHIBAI(3,"核保失败"),
+	QUOTESTATE_NO_HEBAOCHENGGONG(4,"核保成功"),
+	QUOTESTATE_NO_DAIPEISONG(5,"待配送"),
+	QUOTESTATE_NO_YIPEISONG(6,"已配送"),
+	QUOTESTATE_NO_DAIJIANSHOU(7,"待签收"),
+	QUOTESTATE_NO_YITOUBAO(8,"已投保");
 
 	private int code;// 险种名称
 	private String name;// 险种名称
@@ -37,7 +38,7 @@ public enum INSURANCE {
 	}
 	
 	//根据number得到名称
-	public static String getInsuranceTypeName(int number){
+	/*public static String getInsuranceTypeName(int number){
 		return INSURANCE.valueOf("INSURANCE_NO_"+number).name;
 	}
 	
@@ -45,7 +46,7 @@ public enum INSURANCE {
 	public static String getQuotestateName(int number){
 		return INSURANCE.valueOf("QUOTESTATE_NO_"+number).name;
 	}
-	
+	*/
 	
 	
 	public int getCode() {

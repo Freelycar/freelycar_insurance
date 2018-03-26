@@ -26,28 +26,46 @@ public class CashbackRecordController
 
 
 	  //增加一个CashBackRate
-   public Map<String, Object> saveCashbackRecord(CashBackRate cashBackRate){
+    @RequestMapping(value = "/saveCashbackRecord",method = RequestMethod.POST)
+    public Map<String, Object> saveCashbackRecord(CashBackRate cashBackRate){
 	   cashbackRecordService.saveCashbackRecord(cashBackRate);
 	   return RESCODE.SUCCESS.getJSONRES();
-   }
+    }
   
 	//查询所有的CashBackRate	
+    @RequestMapping(value = "/listCashbackRate",method = RequestMethod.GET)
 	public Map<String, Object> listCashbackRate(){
 		return cashbackRecordService.listCashbackRate();
 	}
 	
 	//删除CashBackRate	
+    @RequestMapping(value = "/deleteCashBackRate",method = RequestMethod.GET)
 	public Map<String, Object> deleteCashBackRate(int id){
 		cashbackRecordService.deleteCashBackRate(id);
 		return RESCODE.SUCCESS.getJSONRES();
 	}
 	
-	//更新CashBackRate	
+	//更新CashBackRate
+    @RequestMapping(value = "/updateCashBackRate",method = RequestMethod.POST)
 	public Map<String, Object> updateCashBackRate(CashBackRate rate){
 		cashbackRecordService.updateCashBackRate(rate);
 		return RESCODE.SUCCESS.getJSONRES();
 	}
     
+    
+    //目前使用
+	//更新或增加CashBackRate
+    @RequestMapping(value = "/saveupdateCashBackRate",method = RequestMethod.POST)
+	public Map<String, Object> saveupdateCashBackRate(CashBackRate rate){
+		cashbackRecordService.saveupdateCashBackRate(rate);
+		return RESCODE.SUCCESS.getJSONRES();
+	}
+    
+    //查看当前返现率
+    @RequestMapping(value = "/getCurentCashBackRate",method = RequestMethod.GET)
+    public Map<String, Object> getCurentCashBackRate(){
+    	return cashbackRecordService.getCurentCashBackRate();
+    }
     
     //增加一个CashbackRecord
     @RequestMapping(value = "/save",method = RequestMethod.POST)

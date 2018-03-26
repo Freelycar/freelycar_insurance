@@ -82,12 +82,15 @@ public class InsuranceOrder
     
     private String hebaoMessage;//核保的信息
     
+    private String source;
+    
+    private int sourceId;
     
     /********** constructors ***********/  
     public InsuranceOrder() {  
       
     }  
-  
+   
     public InsuranceOrder(String orderId, String ciPolicyNo, Long ciPolicyPrice, Long taxPrice, String biPolicyNo, Long biPolicyPrice, String offerDetail, String insureName, String insuredIdNo, String insuredPhone, String licenseNumber, boolean cashback, Long backmoney, String invoiceInfo, Integer addressId, int state, Long createTime, Long payTime, Long deliveredTime, Long dealTime, String expressNumber, String expressCompany, String remark) {  
         this.orderId = orderId;  
         this.ciPolicyNo = ciPolicyNo;  
@@ -125,6 +128,22 @@ public class InsuranceOrder
     
     public void setHebaoMessage(String hebaoMessage) {
 		this.hebaoMessage = hebaoMessage;
+	}
+    
+    public String getSource() {
+		return source;
+	}
+    
+    public void setSource(String source) {
+		this.source = source;
+	}
+    
+    public int getSourceId() {
+		return sourceId;
+	}
+    
+    public void setSourceId(int sourceId) {
+		this.sourceId = sourceId;
 	}
     
     public String getOpenId() {

@@ -1,5 +1,7 @@
 package com.freelycar.service; 
 
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -11,11 +13,12 @@ import com.freelycar.dao.CashbackRecordDao;
 import com.freelycar.dao.InvoiceInfoDao;
 import com.freelycar.dao.OrderDao;
 import com.freelycar.dao.QuoteRecordDao;
+import com.freelycar.dao.ReciverDao;
 import com.freelycar.entity.CashbackRecord;
 import com.freelycar.entity.InsuranceOrder;
 import com.freelycar.entity.InvoiceInfo;
 import com.freelycar.entity.QuoteRecord;
-import com.freelycar.util.INSURANCE;
+import com.freelycar.entity.Reciver;
 import com.freelycar.util.RESCODE;
 import com.freelycar.util.Tools;
 /**  
@@ -37,6 +40,9 @@ public class OrderService
     
     @Autowired
     private CashbackRecordDao cashbackDao;
+    
+    @Autowired
+    private ReciverDao reciverDao;
     
     public Map<String, Object> getOrderById(int id){
     	InsuranceOrder orderById = orderDao.getOrderById(id);
@@ -66,6 +72,61 @@ public class OrderService
     }
     
     
+     static class CountBySource{
+    	private String source;
+    	private int sourceId;
+    	private long price;
+    	private double price_yuan;
+    	
+		public String getSource() {
+			return source;
+		}
+		public void setSource(String source) {
+			this.source = source;
+		}
+		public int getSourceId() {
+			return sourceId;
+		}
+		public void setSourceId(int sourceId) {
+			this.sourceId = sourceId;
+		}
+		public long getPrice() {
+			return price;
+		}
+		public void setPrice(long price) {
+			this.price = price;
+		}
+		public double getPrice_yuan() {
+			return price_yuan;
+		}
+		public void setPrice_yuan(double price_yuan) {
+			this.price_yuan = price_yuan;
+		}
+    	
+    }
+    
+    
+    public Map<String, Object> getCountBySourId(String orderId,Date startTime,Date endTime){
+    	List<Object[]> list = orderDao.getCountBySourId(orderId, startTime, endTime);
+    	
+    	List<CountBySource> newlist = new ArrayList<>();
+    	if(list.isEmpty()){
+    		return RESCODE.NOT_FOUND.getJSONRES();
+    	}
+    	
+    	for(Object[] obj : list){
+    		System.out.println(obj);
+    		CountBySource count = new CountBySource();
+    		count.setSourceId((int)obj[0]);
+    		count.setSource((String)obj[1]);
+    		count.setPrice((long)obj[2]);
+    		count.setPrice_yuan((long)obj[2]/100.0);
+    		newlist.add(count);
+    	}
+    	
+    	return RESCODE.SUCCESS.getJSONRES(newlist);
+    }
+    
     
     
     //根据orderId查询发票和收件人信息 和报价记录
@@ -75,6 +136,7 @@ public class OrderService
 		if(invoiceInfoByOrderId != null){
 			jsonres.put("invoiceInfo", invoiceInfoByOrderId);
 		}
+		
 		CashbackRecord cashbackRecordByOrderId = cashbackDao.getCashbackRecordByOrderId(orderId);
 		if(invoiceInfoByOrderId != null){
 			jsonres.put("cashbackInfo", cashbackRecordByOrderId);
@@ -83,8 +145,18 @@ public class OrderService
 		//查询报价记录
 		QuoteRecord quoteRecordBySpecify = quoteRecordDao.getQuoteRecordBySpecify("offerId", orderId);
 		if(quoteRecordBySpecify != null){
+			
+			
+			
 			jsonres.put("quoteRecord", quoteRecordBySpecify);
 		}
+		
+		//收获信息
+		Reciver reciverByOrderId = reciverDao.getReciverByOrderId(orderId);
+		if(reciverByOrderId != null){
+			jsonres.put("reciver", reciverByOrderId);
+		}
+		
     	return jsonres;
     }
     
@@ -108,10 +180,6 @@ public class OrderService
 	    int from = (page-1)*number;
 	    List<InsuranceOrder> listPage = orderDao.listOrder(order,from, number);
 	    if(listPage !=null && !listPage.isEmpty()){
-	    	for(InsuranceOrder io : listPage){
-	    		io.setStateString(INSURANCE.getQuotestateName(io.getState()));
-	    	}
-	    	
 	    	long count = orderDao.getOrderCount(order);
 			return RESCODE.SUCCESS.getJSONRES(listPage,(int)Math.ceil(count/(float)number),count);
 		} 

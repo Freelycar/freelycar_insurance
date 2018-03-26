@@ -84,6 +84,12 @@ public class CashbackRecordService
 		return RESCODE.SUCCESS.getJSONRES(listCashbackRate);
 	}
 	
+	//查询当前返现率
+	public Map<String, Object> getCurentCashBackRate(){
+		List<CashBackRate> listCashbackRate = cashbackRecordDao.listCashbackRate();
+		return RESCODE.SUCCESS.getJSONRES(listCashbackRate.get(0));
+	}
+	
 	//删除CashBackRate	
 	public Map<String, Object> deleteCashBackRate(int id){
 		cashbackRecordDao.deleteCashBackRate(id);
@@ -96,5 +102,10 @@ public class CashbackRecordService
 		return RESCODE.SUCCESS.getJSONRES();
 	}
 	
+	//更新CashBackRate	
+	public Map<String, Object> saveupdateCashBackRate(CashBackRate rate){
+		cashbackRecordDao.saveupdateCashBackRate(rate);
+		return RESCODE.SUCCESS.getJSONRES();
+	}
     
 }
