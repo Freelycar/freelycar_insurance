@@ -4,13 +4,16 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.freelycar.entity.InsuranceOrder;
+import com.freelycar.entity.Invition;
 import com.freelycar.util.QueryUtils;
+import com.freelycar.util.Tools;
 /**  
  *  操作数据库的dao层
  */  
@@ -61,6 +64,24 @@ public class OrderDao
     	return list;
     }
 	
+    //根据id查询Order
+    @SuppressWarnings("unchecked")
+	public List<Object[]> listCount(Invition invition, int page,int number,Date startTime, Date endTime){
+    	String sql = "select sourceId, source, sum(totalPrice) from InsuranceOrder where dealTime > :startTime and dealTime<= :endTime";
+    	if(Tools.notEmpty(invition.getName())){
+    		sql += " and source like  :invName";
+    	}
+    	sql += " group by sourceId";
+    	
+    	Query query = getSession().createQuery(sql)
+    	.setLong("startTime", startTime.getTime())
+    	.setLong("endTime", endTime.getTime());
+    	if(Tools.notEmpty(invition.getName())){
+    		query.setString("invName", "%"+invition.getName()+"%");
+    	}
+    	
+    	return query.list();
+    }
 	
 	//查询所有的Order	
 	@SuppressWarnings("unchecked")

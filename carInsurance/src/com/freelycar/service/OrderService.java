@@ -5,8 +5,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-import org.json.JSONException;
-import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,6 +16,7 @@ import com.freelycar.dao.QuoteRecordDao;
 import com.freelycar.dao.ReciverDao;
 import com.freelycar.entity.CashbackRecord;
 import com.freelycar.entity.InsuranceOrder;
+import com.freelycar.entity.Invition;
 import com.freelycar.entity.InvoiceInfo;
 import com.freelycar.entity.QuoteRecord;
 import com.freelycar.entity.Reciver;
@@ -107,8 +106,14 @@ public class OrderService
     	
     }
     
-    
     public Map<String, Object> getCountBySourId(Date startTime,Date endTime){
+    	if(startTime.getTime()==endTime.getTime()){
+    		//表示同一题
+    		startTime = Tools.setTimeToBeginningOfDay(startTime);
+    		endTime = Tools.setTimeToEndofDay(endTime);
+    	}
+    	
+    	
     	List<Object[]> list = orderDao.getCountBySourId(startTime, endTime);
     	
     	List<CountBySource> newlist = new ArrayList<>();
@@ -129,6 +134,34 @@ public class OrderService
     	return RESCODE.SUCCESS.getJSONRES(newlist);
     }
     
+    
+    
+    public Map<String, Object> listCount(Invition invition, int page,int number,Date startTime,Date endTime){
+    	if(startTime.getTime()==endTime.getTime()){
+    		//表示同一天
+    		startTime = Tools.setTimeToBeginningOfDay(startTime);
+    		endTime = Tools.setTimeToEndofDay(endTime);
+    	}
+    	
+    	List<Object[]> list = orderDao.listCount(invition, page, number, startTime, endTime);
+    	
+    	List<CountBySource> newlist = new ArrayList<>();
+    	if(list.isEmpty()){
+    		return RESCODE.NOT_FOUND.getJSONRES();
+    	}
+    	
+    	for(Object[] obj : list){
+    		System.out.println(obj);
+    		CountBySource count = new CountBySource();
+    		count.setSourceId((int)obj[0]);
+    		count.setSource((String)obj[1]);
+    		count.setPrice((long)obj[2]);
+    		count.setPrice_yuan((long)obj[2]/100.0);
+    		newlist.add(count);
+    	}
+    	
+    	return RESCODE.SUCCESS.getJSONRES(newlist);
+    }
     
     
     //根据orderId查询发票和收件人信息 和报价记录

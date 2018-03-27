@@ -9,6 +9,7 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.UUID;
 
@@ -135,6 +136,57 @@ public class Tools {
 	        return "";
 	    }
 	}
+	
+	
+	
+	
+	
+	/**
+	 * 设置一天的开始
+	 */
+	public static Calendar setTimeToBeginningOfDay(Calendar calendar) {
+		if(calendar == null) return null;
+		calendar.set(Calendar.HOUR_OF_DAY, 0);
+		calendar.set(Calendar.MINUTE, 0);
+		calendar.set(Calendar.SECOND, 0);
+		calendar.set(Calendar.MILLISECOND, 0);
+		return calendar;
+	}
+	
+	public static Date setTimeToBeginningOfDay(Date date) {
+		if(date == null) return null;
+		Calendar instance = Calendar.getInstance();
+		instance.setTime(date);
+		setTimeToBeginningOfDay(instance);
+		return instance.getTime();
+	}
+	
+
+	/**
+	 * 设置一天的结束
+	 */
+	public static Calendar setTimeToEndofDay(Calendar calendar) {
+		if(calendar == null) return null;
+		calendar.set(Calendar.HOUR_OF_DAY, 23);
+		calendar.set(Calendar.MINUTE, 59);
+		calendar.set(Calendar.SECOND, 59);
+		calendar.set(Calendar.MILLISECOND, 999);
+		return calendar;
+	}
+	
+	public static Date setTimeToEndofDay(Date date) {
+		if(date == null) return null;
+		Calendar instance = Calendar.getInstance();
+		instance.setTime(date);
+		setTimeToEndofDay(instance);
+		return instance.getTime();
+	}
+	
+	
+	
+	
+	
+	
 	
 	
 	/**
