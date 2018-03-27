@@ -385,7 +385,7 @@ export default class Index extends wepy.page {
           } else {
             wepy.showModal({
               title: '提示',
-              content: '为能查到您的续保信息，请检查车牌号或车主姓名是否正确!',
+              content: '未能查到您的续保信息，请检查车牌号或车主姓名是否正确!',
               showCancel: false
             });
           }
