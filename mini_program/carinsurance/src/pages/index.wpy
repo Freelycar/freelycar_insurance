@@ -12,10 +12,11 @@
   display: flex;
   flex-direction: row;
   height: 92rpx;
-  width: 750rpx;
+  width: 100%;
   border-bottom: 1px solid #e7e7e7;
   line-height: 92rpx;
   padding-left: 15rpx;
+  box-sizing: border-box;
 }
 
 .line .line-key {

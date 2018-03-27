@@ -5,7 +5,7 @@ import { Row, Col, Card, Form, Input, Select, Icon, Button, Radio, Dropdown, Men
 import StandardTable from 'components/StandardTable';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 import { getClientDetail } from '../../services/client';
-import { getQuoteRecordList } from '../../services/record';
+import { getQuoteRecordList, getClientOrderByLicenseNumber } from '../../services/record';
 
 import styles from './ClientDetail.less';
 
@@ -132,6 +132,7 @@ export default class ClientDetail extends PureComponent {
         this.queryClientDetail();
         this.getQuoteRecordList();
         this.getOrderList();
+        this.getClientOrderByLicenseNumber(1);
     }
 
     queryClientDetail = () => {
@@ -177,8 +178,21 @@ export default class ClientDetail extends PureComponent {
         })
     }
 
+    getClientOrderByLicenseNumber = (page) => {
+        getClientOrderByLicenseNumber({
+            licenseNumber : '苏A4PZ99',
+            page: 1,
+            number: 5
+        }).then(res => {
+            console.log(res);
+        }).catch(err => {
+            console.log(res);
+            message.error('请求失败');
+        })
+    }
+
     getOrderList = () => {
-        
+
     }
 
     handleWaybillModalVisible = (flag) => {
