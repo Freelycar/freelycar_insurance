@@ -144,7 +144,7 @@ export default class OrderList extends wepy.page {
   }
   queryList() {
     wepy.request({
-      url: 'http://172.17.3.105:8080/carInsurance/api/order/list',
+      url: this.$parent.globalData.baseUrl + 'order/list',
       data: {
         state: -1,
         page: 1,
