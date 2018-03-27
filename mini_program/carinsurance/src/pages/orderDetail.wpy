@@ -145,7 +145,7 @@
           <view class="detail-line">
             <text>{{item.insuranceName}}<text wx:if="{{item.compensation}}" class="detail-line-info">不计免赔</text>
             <text wx:if="{{item.amountStr&&item.insuranceId!=2}}" class="detail-line-info">{{item.amountStr}}</text>
-            <text wx:if="{{item.amountStr&&item.insuranceId==2}}" class="detail-line-info">{{item.amountStr}}</text>
+            <text wx:if="{{item.amountStr&&item.insuranceId===2}}" class="detail-line-info">{{item.amountStr}}</text>
             </text>
             <text>￥{{item.insurancePrice}}</text>
           </view>
@@ -208,7 +208,7 @@
         <text>{{invoiceInfo.phone}}</text>
       </view>
     </view> 
-    <view wx:if="{{state==7}}" class="order-confirm" @tap="takeDelivery">
+    <view wx:if="{{state===7}}" class="order-confirm" @tap="takeDelivery">
       确认收货
     </view>
   </view>

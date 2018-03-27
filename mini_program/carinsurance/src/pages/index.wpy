@@ -375,11 +375,11 @@ export default class Index extends wepy.page {
         method: 'POST',
         success: res => {
           console.log(res);
-          if (res.data.code == 0) {
+          if (res.data.code === 0) {
             wepy.navigateTo({
               url: 'quote'
             });
-          } else if (res.data.code == 205) {
+          } else if (res.data.code === 205) {
             this.showModal = true;
             this.$apply();
           } else {
@@ -457,7 +457,7 @@ export default class Index extends wepy.page {
         method: 'POST',
         success: res => {
           console.log(res);
-          if (res.data.code == 0) {
+          if (res.data.code === 0) {
             this.showModal = false;
             this.phoneNumber = '';
             this.verificationCode = '';
@@ -488,7 +488,7 @@ export default class Index extends wepy.page {
         method: 'POST',
         success: res => {
           console.log(res.data);
-          if (res.data.code == 0) {
+          if (res.data.code === 0) {
             wepy.showToast({ title: '验证码发送成功' });
             this.startCountdown();
           } else {

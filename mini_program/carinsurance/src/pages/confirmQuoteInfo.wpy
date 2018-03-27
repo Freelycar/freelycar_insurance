@@ -281,7 +281,7 @@ export default class ConfirmQuoteInfo extends wepy.page {
         method: 'POST',
         success: res => {
           console.log(res);
-          if (res.data.code == 0) {
+          if (res.data.code === 0) {
             // this.startCountdown();
             wepy.showToast({ title: '申请报价成功!' });
               wepy.redirectTo({
