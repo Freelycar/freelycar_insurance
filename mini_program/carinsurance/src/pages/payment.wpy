@@ -125,7 +125,7 @@
   <view class="container payment-box">
     <view class="verify-code-bac">
       <image class="freelycar_logo" src="https://www.howmuchweb.com/carInsurance/imgs/freelycar_logo_white.png"/>
-      <image class="pay-qrcode" src="https://www.howmuchweb.com/carInsurance/imgs/test_pay_QRcode.png"/>
+      <image class="pay-qrcode"  @tap="previewImg" data-pay-url="{{orderDetail.paycodeurl}}" src="{{orderDetail.paycodeurl}}"/>
     </view>
     <view class="wechart-pay-box">
       <image class="wechart_pay" src="https://www.howmuchweb.com/carInsurance/imgs/wechart_pay.png"/>
@@ -228,6 +228,13 @@ export default class Payment extends wepy.page {
     dragDown() {
       this.down = !this.down;
       this.$apply();
+    },
+    previewImg(e) {
+      console.log(e.currentTarget.dataset.payUrl);
+      wepy.previewImage({
+        current: e.currentTarget.dataset.payUrl, // 当前显示图片的http链接
+        urls: [e.currentTarget.dataset.payUrl + ''] // 需要预览的图片http链接列表
+      });
     }
   };
   onLoad(params) {

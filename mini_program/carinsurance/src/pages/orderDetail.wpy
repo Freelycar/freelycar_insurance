@@ -172,7 +172,7 @@
       <text class="insurance-total-price">合计：￥{{totalPrice}}</text>
     </view>
     <view class="order-detail-title">
-      <text class="fa fa-address-card-o title-icon"/>保单收货信息
+      <text class="fa fa-address-card-o title-icon" wx:if="{{reciver}}"/>保单收货信息
     </view>
     <view class="order-detail-way order-side-padding" wx:if="{{reciver}}">
       <view class="insurance-title title-bottom-line">
@@ -191,7 +191,7 @@
         </view>
       </view>
     </view>
-    <view class="order-detail-title">
+    <view class="order-detail-title"  wx:if="{{invoiceInfo}}">
       <text class="fa fa-newspaper-o title-icon"/>发票信息
     </view> 
     <view class="order-detail-way order-side-padding"  wx:if="{{invoiceInfo}}">
@@ -241,7 +241,7 @@ export default class OrderDetail extends wepy.page {
   methods = {
     takeDelivery: () => {
       wepy.request({
-        url: this.$parent.globalData.baseUrl+'api/' + 'order/update',
+        url: this.$parent.globalData.baseUrl + 'api/' + 'order/update',
         data: {
           id: this.id,
           state: 8
@@ -283,7 +283,7 @@ export default class OrderDetail extends wepy.page {
     console.log(params);
     this.id = params.id;
     wepy.request({
-      url: this.$parent.globalData.baseUrl+'api/' + 'order/getOrderById',
+      url: this.$parent.globalData.baseUrl + 'api/' + 'order/getOrderById',
       data: {
         id: params.id
       },
