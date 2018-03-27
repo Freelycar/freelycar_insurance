@@ -216,7 +216,7 @@
                   <view class="{{item.compensation ? 'bujimianpei  bujimianpei-select' : 'bujimianpei'}}" @tap="selectCompensationOrNot" data-code='{{item.code}}'>不计免赔</view>
                   <view class='select-img' style="background-image: url({{item.isToubao? '/assets/imgs/select-yes.png' : '/assets/imgs/select-no.png'}});" @tap="selectInsuranceOrNot" data-code='{{item.code}}'></view>
                 </view>
-              </view>
+              </view> 
             </block>
           </block>
         </view>
