@@ -1,7 +1,7 @@
 <style lang="less">
 .banner-bg {
   height: 373rpx;
-  /* width: 750rpx; */
+  width: 750rpx; 
 }
 
 .quote-bg {
