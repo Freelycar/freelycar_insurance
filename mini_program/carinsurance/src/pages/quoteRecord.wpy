@@ -89,7 +89,7 @@ export default class QuoteRecord extends wepy.page {
       method: 'GET',
       success: res => {
         console.log(res);
-        if (res.data.code == 0) {
+        if (res.data.code === 0) {
           for (let i = 0; i < res.data.data.length; i++) {
             res.data.data[i].crateTime = moment(
               res.data.data[i].crateTime

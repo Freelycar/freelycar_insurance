@@ -236,12 +236,12 @@ export default class QuoteSuccess extends wepy.page {
     for (let i = 0; i < formData.insurances.length; i++) {
       let item = formData.insurances[i];
       if (
-        item.insuranceId == 1 ||
-        item.insuranceId == 3 ||
-        item.insuranceId == 8 ||
-        item.insuranceId == 9 ||
-        item.insuranceId == 10 ||
-        item.insuranceId == 11
+        item.insuranceId === 1 ||
+        item.insuranceId === 3 ||
+        item.insuranceId === 8 ||
+        item.insuranceId === 9 ||
+        item.insuranceId === 10 ||
+        item.insuranceId === 11
       ) {
         formData.insurances[i].amountStr = '';
       } else {

@@ -73,20 +73,20 @@
 }
 </style>
 <template>
-  <emptyList  wx:if="{{orderlist.length==0}}"/> 
+  <emptyList  wx:if="{{orderlist.length===0}}"/> 
   <view class="container">
     <block wx:for="{{orderlist}}" wx:key="{{index}}">
       <view class="order-list-box" data-order-id="{{item.id}}"  @tap="goToDetail">
         <view class="order-list order-list-title">
           <view class="list-title">{{item.insureName}}</view>
-          <view wx:if="{{item.state==0}}" class="pay-state"><image class="orderlist_check" src="https://www.howmuchweb.com/carInsurance/imgs/orderlist_check.png"/>核保中</view> 
-          <view wx:if="{{item.state==1}}"  class="pay-state error">核保失败</view>
-          <view wx:if="{{item.state==2}}" data-order-id="{{item.id}}" @tap.stop="goToPay" class="pay-btn">支付</view>
-          <view wx:if="{{item.state==3}}" class="pay-state"><image class="orderlist_wait" src="https://www.howmuchweb.com/carInsurance/imgs/orderlist_chengbao.png"/>承保中</view>
-          <view wx:if="{{item.state==4}}"  class="pay-state error">承保失败</view>
-          <view wx:if="{{item.state==5}}" class="pay-state"><image class="orderlist_wait" src="https://www.howmuchweb.com/carInsurance/imgs/orderlist_wait.png"/>待配送</view>
-          <view wx:if="{{item.state==6}}" class="pay-state"><image class="orderlist_dispatch" src="https://www.howmuchweb.com/carInsurance/imgs/orderlist_dispatch.png"/>代签收</view>
-          <view wx:if="{{item.state==7}}" class="pay-state"><image class="orderlist_success" src="https://www.howmuchweb.com/carInsurance/imgs/orderlist_success.png"/>已投保</view>      
+          <view wx:if="{{item.state===0}}" class="pay-state"><image class="orderlist_check" src="https://www.howmuchweb.com/carInsurance/imgs/orderlist_check.png"/>核保中</view> 
+          <view wx:if="{{item.state===1}}"  class="pay-state error">核保失败</view>
+          <view wx:if="{{item.state===2}}" data-order-id="{{item.id}}" @tap.stop="goToPay" class="pay-btn">支付</view>
+          <view wx:if="{{item.state===3}}" class="pay-state"><image class="orderlist_wait" src="https://www.howmuchweb.com/carInsurance/imgs/orderlist_chengbao.png"/>承保中</view>
+          <view wx:if="{{item.state===4}}"  class="pay-state error">承保失败</view>
+          <view wx:if="{{item.state===5}}" class="pay-state"><image class="orderlist_wait" src="https://www.howmuchweb.com/carInsurance/imgs/orderlist_wait.png"/>待配送</view>
+          <view wx:if="{{item.state===6}}" class="pay-state"><image class="orderlist_dispatch" src="https://www.howmuchweb.com/carInsurance/imgs/orderlist_dispatch.png"/>代签收</view>
+          <view wx:if="{{item.state===7}}" class="pay-state"><image class="orderlist_success" src="https://www.howmuchweb.com/carInsurance/imgs/orderlist_success.png"/>已投保</view>      
         </view>
         <view class="order-list order-list-item">
           <text class="list-item">车牌号：{{item.licenseNumber}}</text>
