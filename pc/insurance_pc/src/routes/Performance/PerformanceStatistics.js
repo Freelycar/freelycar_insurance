@@ -4,7 +4,7 @@ import moment from 'moment';
 import { Row, Col, Card, Input, Icon, Button, Radio, message, Table, DatePicker } from 'antd';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 import ReactEcharts from 'echarts-for-react';
-import { getPieChart } from '../../services/order';
+import { getPieChart, getListCount } from '../../services/order';
 
 const { RangePicker } = DatePicker;
 const Search = Input.Search;
@@ -18,8 +18,8 @@ const columns = [
     },
     {
         title: '销售额（元）',
-        dataIndex: 'money',
-        key: 'money',
+        dataIndex: 'price_yuan',
+        key: 'price_yuan',
     }
 ];
 
@@ -33,11 +33,15 @@ export default class PerformanceStatistics extends PureComponent {
         type: '0',
         startTime: moment().format('YYYY/MM/DD'),
         endTime: moment().format('YYYY/MM/DD'),
-        allData: []
+        allData: [],
+        listData: [],
+        searchName: '',
+        pagination: { total: 0 },
     };
 
     componentDidMount() {
         this.getPieChart();
+        this.getListCount('', 1);
     }
 
     getPieChart = () => {
@@ -51,6 +55,9 @@ export default class PerformanceStatistics extends PureComponent {
                     allData: res.data
                 })
             } else {
+                this.setState({
+                    allData: []
+                })
                 message.warn(res.msg || '请求失败')
             }
         }).catch(err => {
@@ -58,27 +65,66 @@ export default class PerformanceStatistics extends PureComponent {
         })
     }
 
-    handleSearch = (e) => {
-        console.log(e.target.value)
+    getListCount = (name, page) => {
+        if (page == 1) {
+            this.setState({
+                pagination: { total: 0, current: 1 }
+            })
+        }
+        getListCount({
+            name: name,
+            page: page,
+            number: 10,
+            startTime: this.state.startTime,
+            endTime: this.state.endTime
+        }).then(res => {
+            console.log(res);
+            if (res && res.code == 0) {
+                this.setState({
+                    listData: res.data,
+                    pagination: { total: res.counts }
+                })
+            } else {
+                this.setState({
+                    listData: []
+                })
+                message.warn(res.msg || '请求失败')
+            }
+        }).catch(err => {
+
+        })
+    }
+
+    handleSearch = (value) => {
+        this.getListCount(value, 1);
     }
 
     handleTypeChange = (e) => {   //0 今日  1 本月  2 区间查找
         if (type == this.state.type) {
             return;
         }
-        this.setState({ type: e.target.value });
+        this.setState({ 
+            type: e.target.value, 
+            searchName: '' 
+        });
         const type = e.target.value;
         if (type == 0) {
             this.setState({
                 startTime: moment().format('YYYY/MM/DD'),
                 endTime: moment().format('YYYY/MM/DD')
-            }, () => this.getPieChart())    
+            }, () => {
+                this.getPieChart();
+                this.getListCount(this.state.searchName, 1)
+            })    
         } else if (type == 1) {
             let time = moment();
             this.setState({
                 startTime: time.format('YYYY/MM/DD'),
                 endTime: time.subtract(1, "months").format("YYYY/MM/DD")
-            }, () => this.getPieChart()) 
+            }, () => {
+                this.getPieChart();
+                this.getListCount(this.state.searchName, 1)
+            })  
         } else if (type == 2) {
             this.setState({
                 startTime: '',
@@ -92,11 +138,13 @@ export default class PerformanceStatistics extends PureComponent {
         this.setState({
             startTime: dateString[0].replace(/-/g, '/'),
             endTime: dateString[1].replace(/-/g, '/')
-        }, () => this.getPieChart())
+        }, () => {
+            this.getPieChart();
+            this.getListCount(this.state.searchName, 1)
+        }) 
     }
 
     getOption = () => {
-        // var data = genData(10);
         const data =  genData(this.state.allData);
         function genData(data) {
             var legendData = [];
@@ -111,10 +159,6 @@ export default class PerformanceStatistics extends PureComponent {
                 });
                 selected[item.source] = true;
             })
-            for (let i = 0; i < data.length; i++) {
-                legendData.push()
-            }
-            console.log(legendData, seriesData, selected)
             return {
                 legendData: legendData,
                 seriesData: seriesData,
@@ -160,6 +204,16 @@ export default class PerformanceStatistics extends PureComponent {
         }
     }
 
+    handleTableChange = (pagination) => {
+        const pager = { ...this.state.pagination };
+        pager.current = pagination.current;
+        this.setState({
+            pagination: pager
+        })
+        console.log(pagination)
+        this.getListCount(this.state.searchName, pagination.current)
+    }
+
     render() {
         return (
             <PageHeaderLayout title="业绩统计">
@@ -176,29 +230,28 @@ export default class PerformanceStatistics extends PureComponent {
                             {/* <DatePicker onChange={this.handleTimeChange} /> */}
                             <RangePicker onChange={this.handleTimeChange} />
                         </Col> : ''}
-                        
                     </Row>
                     <Row gutter={{ md: 8, lg: 24, xl: 48 }} style={{ marginTop: 50 }}>
-                        <Col md={16} sm={24}>
+                        <Col md={12} sm={24}>
                             {this.state.allData.length > 0 ? <ReactEcharts
                                 option={this.getOption()}
                                 lazyUpdate={true}
                             />: '暂无数据'}
                         </Col>
-                    </Row>
-                    <Row gutter={{ md: 8, lg: 24, xl: 48 }} style={{ marginTop: 50 }}>
-                        
                         <Col md={12} sm={24}>
                             <Search
                                 placeholder="输入业务渠道名称"
-                                onSearch={this.handleSearch}
+                                value={this.state.searchName}
+                                onChange={(e) => this.setState({searchName: e.target.value})}
+                                onSearch={(value) => this.handleSearch(value)}
                                 enterButton
                             />
                             <Table
-                                // loading={loading}
-                                dataSource={testData}
+                                dataSource={this.state.listData}
                                 columns={columns}
                                 style={{ marginTop: 20 }}
+                                onChange={(pagination) => this.handleTableChange(pagination)}
+                                pagination={this.state.pagination}
                             />
                         </Col>
                     </Row>

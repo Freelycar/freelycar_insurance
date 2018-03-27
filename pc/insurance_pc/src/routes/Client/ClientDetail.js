@@ -24,13 +24,13 @@ const recordColumns = [
     },
     {
         title: '报价时间',
-        dataIndex: 'time',
-        key: 'time',
+        dataIndex: 'createTime',
+        key: 'createTime',
     },
     {
         title: '报价编号',
-        dataIndex: 'orderCode',
-        key: 'orderCode',
+        dataIndex: 'offerId',
+        key: 'offerId',
     }
 ];
 const orderColumns = [
@@ -154,10 +154,13 @@ export default class ClientDetail extends PureComponent {
     getQuoteRecordList = () => {
         getQuoteRecordList({
             page: 1,
-            number: 99,
+            number: 3,
             clientId: this.state.clientId
         }).then(res => {
             if (res.code == 0) {
+                res.data.map((item, index) => {
+                    res.data[index].key = index;
+                })
                 this.setState({
                     recordData: res.data
                 })
@@ -175,7 +178,7 @@ export default class ClientDetail extends PureComponent {
     }
 
     getOrderList = () => {
-
+        
     }
 
     handleWaybillModalVisible = (flag) => {

@@ -155,10 +155,10 @@ const alreadyColumns = [
     }
 ];
 
-@connect(({ rule, loading }) => ({
-    rule,
-    loading: loading.models.rule,
-}))
+// @connect(({ rule, loading }) => ({
+//     rule,
+//     loading: loading.models.rule,
+// }))
 @Form.create()
 export default class ClientList extends PureComponent {
     state = {
@@ -200,7 +200,7 @@ export default class ClientList extends PureComponent {
             console.log(res);
             if (res && res.code == 0) {
                 res.data.map((item, index) => {
-                    res.data[index] = item.id
+                    res.data[index].key = item.id
                 })
                 this.setState({
                     quotingData: res.data,
@@ -217,12 +217,6 @@ export default class ClientList extends PureComponent {
         form.resetFields();
         this.setState({
             formValues: {},
-        });
-    }
-
-    toggleForm = () => {
-        this.setState({
-            expandForm: !this.state.expandForm,
         });
     }
 
@@ -341,7 +335,7 @@ export default class ClientList extends PureComponent {
     }
 
     handleTypeChange = (e) => {
-        this.setState({ type: e.target.value });
+        this.setState({ type: e.target.value }, () => this.getClientList({}, 1));
     }
 
     handleTableChange = (pagination) => {
@@ -350,11 +344,15 @@ export default class ClientList extends PureComponent {
         this.setState({
             pagination: pager
         })
-        this.getChannelList(pagination.current)
+        console.log(pagination)
+        this.getClientList({}, pagination.current)
+    }
+
+    exprotExcel = () => {   //导出excel
+
     }
 
     render() {
-        // const { rule: { data }, loading } = this.props;
         const { type } = this.state;
 
         let tableColumns;
@@ -378,7 +376,7 @@ export default class ClientList extends PureComponent {
                             {this.renderForm()}
                         </div>
                         <div className={styles.tableListOperator}>
-                            <Button type="primary" icon="download" size='large'>导出</Button>
+                            <Button type="primary" icon="download" size='large' onClick={this.exprotExcel} >导出</Button>
                         </div>
                         <Table
                             // loading={loading}
