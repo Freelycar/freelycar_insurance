@@ -24,7 +24,7 @@ export default {
   hash: true,
   proxy:{
     '/api':{
-      target: "http://172.17.3.106:8080/carInsurance/api",
+      target: "http://172.17.3.105:8080/carInsurance/api",
       changeOrigin: true,
       pathRewrite: { "^/api": "" }
     } 

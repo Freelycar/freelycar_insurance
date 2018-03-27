@@ -18,9 +18,9 @@ export default {
         payload: response,
       });
       // Login successfully
-      if (response.status === 'ok') {
-        reloadAuthorized();
-        yield put(routerRedux.push('/'));
+      if (response.code == 0) {
+        // reloadAuthorized();
+        yield put(routerRedux.push('/client/list'));
       }
     },
     *logout(_, { put, select }) {

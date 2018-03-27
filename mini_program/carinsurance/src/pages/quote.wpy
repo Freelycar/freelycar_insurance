@@ -421,7 +421,7 @@ export default class Quote extends wepy.page {
     wepy.onSocketOpen(() => {
       let obj = {};
       obj.openId = this.$parent.globalData.openId;
-      wx.sendSocketMessage({
+      wepy.sendSocketMessage({
         data: JSON.stringify(obj)
       });
       console.log('websocket 连接成功!');
