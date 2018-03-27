@@ -28,7 +28,7 @@ page {
 </style>
 <template>
     <view class="container orderList">
-      <image class="empty_orderList" src="/assets/imgs/empty_orderList.png"/>
+      <image class="empty_orderList" src="https://www.howmuchweb.com/carInsurance/imgs/empty_orderList.png"/>
       <text class="empty_indo">您还没有相关的车险订单</text>
       <view @tap="goto_offer" class="goto_offer">去报价</view>
     </view>
