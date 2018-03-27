@@ -160,7 +160,7 @@ export default class OrderList extends wepy.page {
           let resArray = res.data.data;
           resArray.forEach(arrayItem => {
             justifyNull(arrayItem);
-            arrayItem.payTime = timestampToTime(arrayItem.payTime); 
+            arrayItem.payTime = timestampToTime(arrayItem.payTime);
           }, this);
           this.orderlist = resArray;
           this.$apply();
