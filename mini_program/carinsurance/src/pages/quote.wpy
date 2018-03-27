@@ -338,7 +338,7 @@ export default class Quote extends wepy.page {
       });
 
       wepy.request({
-        url: this.$parent.globalData.baseUrl+'api/' + 'insurance/queryPrice',
+        url: this.$parent.globalData.baseUrl + 'api/' + 'insurance/queryPrice',
         data: {
           ownerName: this.$parent.globalData.name,
           licenseNumber: this.$parent.globalData.licenseNumber,
@@ -373,7 +373,7 @@ export default class Quote extends wepy.page {
     this.$apply();
     wepy.showLoading();
     wepy.request({
-      url: this.$parent.globalData.baseUrl+'api/' + 'insurance/queryLastYear',
+      url: this.$parent.globalData.baseUrl + 'api/' + 'insurance/queryLastYear',
       data: {
         ownerName: this.$parent.globalData.name,
         licenseNumber: this.$parent.globalData.licenseNumber,
@@ -414,7 +414,7 @@ export default class Quote extends wepy.page {
 
     //建立连接
     wepy.connectSocket({
-      url: 'ws://www.howmuchweb.com/carInsurance/echo'
+      url: 'wss://www.howmuchweb.com/carInsurance/echo'
     });
 
     //连接成功
@@ -459,7 +459,7 @@ export default class Quote extends wepy.page {
 
   onUnload() {
     wepy.closeSocket({
-      url: 'ws://www.howmuchweb.com/carInsurance/echo'
+      url: 'wss://www.howmuchweb.com/carInsurance/echo'
     });
   }
 

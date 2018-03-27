@@ -296,7 +296,7 @@ export default class AdjustQuoteProgram extends wepy.page {
     this.limitDate = option.startTime || 0;
     //建立连接
     wepy.connectSocket({
-      url: 'ws://www.howmuchweb.com/carInsurance/echo'
+      url: 'wss://www.howmuchweb.com/carInsurance/echo'
     });
 
     //连接成功
@@ -346,7 +346,7 @@ export default class AdjustQuoteProgram extends wepy.page {
   // }
   onUnload() {
     wepy.closeSocket({
-      url: 'ws://www.howmuchweb.com/carInsurance/echo'
+      url: 'wss://www.howmuchweb.com/carInsurance/echo'
     });
   }
 
