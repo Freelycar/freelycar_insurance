@@ -503,7 +503,7 @@ export default class Index extends wepy.page {
 
     makePhoneCall() {
       wepy.makePhoneCall({
-        phoneNumber: '15651751173' //仅为示例，并非真实的电话号码
+        phoneNumber: '58803353‬' //仅为示例，并非真实的电话号码
       });
     }
   };
