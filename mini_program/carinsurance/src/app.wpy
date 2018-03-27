@@ -78,7 +78,7 @@ export default class extends wepy.app {
     name: '',
     licenseNumber: '',
     insurances: [],
-    baseUrl: 'https://www.howmuchweb.com/carInsurance/api/'
+    baseUrl: 'https://www.howmuchweb.com/carInsurance/'
   };
 
   constructor() {

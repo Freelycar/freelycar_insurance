@@ -234,7 +234,7 @@ export default class Payment extends wepy.page {
     console.log(params);
     this.id = params.id;
     wepy.request({
-      url: this.$parent.globalData.baseUrl + 'order/getOrderById',
+      url: this.$parent.globalData.baseUrl+'api/' + 'order/getOrderById',
       data: {
         id: params.id
       },

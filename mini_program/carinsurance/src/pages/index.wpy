@@ -366,7 +366,7 @@ export default class Index extends wepy.page {
       console.log(this.$parent.globalData);
       wepy.showLoading();
       wepy.request({
-        url: this.$parent.globalData.baseUrl + 'client/isExistByOpenId',
+        url: this.$parent.globalData.baseUrl+'api/' + 'client/isExistByOpenId',
         data: {
           openId: this.$parent.globalData.openId,
           ownerName: this.name,
@@ -446,7 +446,7 @@ export default class Index extends wepy.page {
 
       wepy.showLoading();
       wepy.request({
-        url: this.$parent.globalData.baseUrl + 'client/sms/verification',
+        url: this.$parent.globalData.baseUrl+'api/' + 'client/sms/verification',
         data: {
           phone: this.data.phoneNumber,
           smscode: this.data.verificationCode,
@@ -481,7 +481,7 @@ export default class Index extends wepy.page {
       }
       wepy.showLoading();
       wepy.request({
-        url: this.$parent.globalData.baseUrl + 'client/sms/getCode',
+        url: this.$parent.globalData.baseUrl+'api/' + 'client/sms/getCode',
         data: {
           phone: this.data.phoneNumber + ''
         },

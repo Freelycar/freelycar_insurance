@@ -241,7 +241,7 @@ export default class OrderDetail extends wepy.page {
   methods = {
     takeDelivery: () => {
       wepy.request({
-        url: this.$parent.globalData.baseUrl + 'order/update',
+        url: this.$parent.globalData.baseUrl+'api/' + 'order/update',
         data: {
           id: this.id,
           state: 8
@@ -283,7 +283,7 @@ export default class OrderDetail extends wepy.page {
     console.log(params);
     this.id = params.id;
     wepy.request({
-      url: this.$parent.globalData.baseUrl + 'order/getOrderById',
+      url: this.$parent.globalData.baseUrl+'api/' + 'order/getOrderById',
       data: {
         id: params.id
       },

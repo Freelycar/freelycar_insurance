@@ -276,7 +276,7 @@ export default class ConfirmQuoteInfo extends wepy.page {
       }
       wepy.showLoading();
       wepy.request({
-        url: this.$parent.globalData.baseUrl + 'insurance/submitProposal',
+        url: this.$parent.globalData.baseUrl+'api/' + 'insurance/submitProposal',
         data: queryData,
         method: 'POST',
         success: res => {
