@@ -205,7 +205,7 @@
                     <picker bindchange='selectAmountStr' data-code='{{item.code}}' value="{{item.selectIndex}}" range="{{item.selectAry}}" disabled='{{!item.isToubao}}'>
                       <view class='select-type-button'>{{item.amountStr}}
                         <i class='fa fa-angle-down'></i>
-                      </view>
+                      </view> 
                     </picker>
                   </view>
                 </block>
