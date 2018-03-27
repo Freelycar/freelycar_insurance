@@ -89,7 +89,7 @@
   display: flex;
   justify-content: space-between;
   margin-top: 25rpx;
-  padding:0 22rpx;
+  padding: 0 22rpx;
   line-height: 88rpx;
   background: #fff;
   color: #1e1e1e;
@@ -101,7 +101,7 @@
   .drag-down {
     font-size: 22rpx;
   }
-}  
+}
 .insurance-total {
   display: flex;
   justify-content: space-between;
@@ -129,17 +129,16 @@
     </view>
     <view class="wechart-pay-box">
       <image class="wechart_pay" src="../../assets/imgs/wechart_pay.png"/>
-      <text class="wechart-pay-info">请于2017-12-31 19:41:00之前使用微信扫一扫进行支付！ </text>
+      <text class="wechart-pay-info">请于{{orderDetail.effectiveTime}}之前使用微信扫一扫进行支付！ </text>
     </view>
     <view class="order-detail-title">
       <view><text class="fa fa-credit-card title-icon"/>结算信息</view>
     </view>
-    <view class="order-detail-way cost-info-box">
-      <view class="cost-info">金额：￥4582.28</view>
-      <view class="cost-info">姓名：张蕾西</view>
-      <view class="cost-info">车牌号：苏A123R0</view>
-      <view class="cost-info">流水号：JSBX-41854551657489</view>
-      <view class="cost-info">缴费通知单号：41648941631</view>
+    <view class="order-detail-way cost-info-box" wx:if="{{orderDetail}}">
+      <view class="cost-info">金额：￥{{orderDetail.totalPrice}}</view>
+      <view class="cost-info">姓名：{{orderDetail.insureName}}</view>
+      <view class="cost-info">车牌号：{{orderDetail.licenseNumber}}</view>
+      <view class="cost-info">流水号：{{orderDetail.orderId}}</view>
     </view>
     <view class="order-detail-title" @tap="dragDown">
       <view><text class="fa fa-file-text-o title-icon"/>投保方案</view>
@@ -149,79 +148,132 @@
     <view wx:if="{{down}}" class="order-detail-way">
       <view class="insurance-title">
         <text>强制险</text>
-        <text>起保日期：2017-12-30</text>
+        <text>起保日期：{{quoteRecord.forceInsuranceStartTime}}</text>
       </view>
       <view class="insurance-detail">
-        <view class="detail-line">
-          <text>交强险</text>
-          <text>￥950</text>
+        <block wx:for-index="index" wx:for-item="item" wx:key="index" wx:for-items="{{quoteRecord.qiangzhiList}}">
+          <view class="detail-line">
+            <text>{{item.insuranceName}}</text>
+            <text>￥{{item.insurancePrice}}</text>
+          </view>
+        </block>
+        <view class="insurance-title">
+          <text></text>
+          <text>小计：￥{{qiangzhiTotalPrice}}</text>
         </view>
-        <view class="detail-line">
-          <text>车船税</text>
-          <text>￥300</text>
-        </view>
-      </view>
-      <view class="insurance-title">
-        <text></text>
-        <text>小计：￥1250</text>
       </view>
     </view>
     <view wx:if="{{down}}" class="order-detail-way">
       <view class="insurance-title">
         <text>商业险</text>
-        <text>起保日期：2017-12-30</text>
+        <text>起保日期：{{quoteRecord.insuranceStartTime}}</text>
       </view>
       <view class="insurance-detail">
-        <view class="detail-line">
-          <text>车辆损失险 <text class="detail-line-info">不计免赔</text></text>
-          <text>￥950</text>
-        </view>
-        <view class="detail-line">
-          <text>第三者责任险 <text class="detail-line-info">100万</text></text>
-          <text>￥300 </text>
-        </view>
+        <block wx:for-index="index" wx:for-item="item" wx:key="index" wx:for-items="{{quoteRecord.shangyeList}}">
+          <view class="detail-line">
+            <text>{{item.insuranceName}}<text wx:if="{{item.compensation}}" class="detail-line-info">不计免赔</text>
+            <text wx:if="{{item.amountStr&&item.insuranceId!=2}}" class="detail-line-info">{{item.amountStr}}</text>
+            <text wx:if="{{item.amountStr&&item.insuranceId==2}}" class="detail-line-info">{{item.amountStr}}</text>
+            </text>
+            <text>￥{{item.insurancePrice}}</text>
+          </view>
+        </block>
       </view>
       <view class="insurance-title">
         <text></text>
-        <text>小计：￥1250</text>
+        <text>小计：￥{{shangyeTotalPrice}}</text>
       </view>
     </view>
     <view wx:if="{{down}}" class="insurance-total">
       <view class="insurance-discount">
-        (<text class="insurance-discount-red">￥1460.28</text>
+        (<text class="insurance-discount-red">￥{{cashback}}</text>
         现金红包已到账)
       </view>
-      <text class="insurance-total-price">合计：￥4582.28</text>
+      <text class="insurance-total-price">合计：￥{{totalPrice}}</text>
     </view>
   </view>
 </template>
 
 <script>
 import wepy from 'wepy';
+import justifyNull from '../util/justifyNull.js';
+import timestampToTime from '../util/timestampToTime.js';
 
 export default class Payment extends wepy.page {
   config = {
     navigationBarTitleText: '订单支付'
   };
 
-  components = {
-  };
+  components = {};
 
   data = {
-    down: false
+    down: false,
+    id: '',
+    orderDetail: '',
+    quoteRecord: '',
+    invoiceInfo: '',
+    qiangzhiTotalPrice: 0,
+    shangyeTotalPrice: 0,
+    totalPrice: 0,
+    cashback: 0,
+    state: 0
   };
 
   methods = {
     goToDetail() {
       wepy.navigateTo({
         url: `orderDetail?id=111`
-      })
+      });
     },
     dragDown() {
-      this.down = !(this.down)
-      this.$apply()
+      this.down = !this.down;
+      this.$apply();
     }
   };
-  onLoad() {}
+  onLoad(params) {
+    console.log(params);
+    this.id = params.id;
+    wepy.request({
+      url: 'http://172.17.3.105:8080/carInsurance/api/order/getOrderById',
+      data: {
+        id: params.id
+      },
+      header: {
+        'content-type': 'application/x-www-form-urlencoded'
+      },
+      method: 'GET',
+      success: res => {
+        console.log(res.data);
+        justifyNull(res.data.data);
+        this.state = res.data.data.state;
+        this.orderDetail = res.data.data;
+        justifyNull(res.data.quoteRecord);
+        res.data.quoteRecord.forceInsuranceStartTime = timestampToTime(
+          res.data.quoteRecord.forceInsuranceStartTime
+        );
+        res.data.quoteRecord.insuranceStartTime = timestampToTime(
+          res.data.quoteRecord.insuranceStartTime
+        );
+        let qiangzhiTotalPrice = 0;
+        let shangyeTotalPrice = 0;
+        let totalPrice = 0;
+        res.data.quoteRecord.qiangzhiList.map((item, index) => {
+          qiangzhiTotalPrice = Number(item.insurancePrice) + qiangzhiTotalPrice;
+        });
+        res.data.quoteRecord.shangyeList.map((item, index) => {
+          shangyeTotalPrice = Number(item.insurancePrice) + shangyeTotalPrice;
+        });
+        totalPrice = qiangzhiTotalPrice + shangyeTotalPrice;
+        this.cashback = res.data.data.cashback || 0;
+        this.totalPrice = totalPrice;
+        this.qiangzhiTotalPrice = qiangzhiTotalPrice;
+        this.shangyeTotalPrice = shangyeTotalPrice;
+        this.quoteRecord = res.data.quoteRecord;
+        justifyNull(res.data.invoiceInfo);
+        this.invoiceInfo = res.data.invoiceInfo;
+        this.$apply();
+      }
+    });
+  }
 }
 </script>

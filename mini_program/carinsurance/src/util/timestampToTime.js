@@ -1,4 +1,4 @@
-export default function timestampToTime(timestamp) {
+export default function timestampToTime(timestamp, sec) {
   if (!timestamp) {
     return ''
   }
@@ -9,6 +9,8 @@ export default function timestampToTime(timestamp) {
   let h = date.getHours() + ':';
   let m = date.getMinutes() + ':';
   let s = date.getSeconds();
-//   return Y + M + D + h + m + s;
-  return Y + M + D ;
+  if (sec) {
+    return Y + M + D + h + m + s;
+  }
+  return Y + M + D;
 }
