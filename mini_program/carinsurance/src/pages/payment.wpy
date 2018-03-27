@@ -234,7 +234,7 @@ export default class Payment extends wepy.page {
     console.log(params);
     this.id = params.id;
     wepy.request({
-      url: 'http://172.17.3.105:8080/carInsurance/api/order/getOrderById',
+      url: this.$parent.globalData.baseUrl + 'order/getOrderById',
       data: {
         id: params.id
       },

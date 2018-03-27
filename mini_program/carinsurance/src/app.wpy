@@ -78,7 +78,7 @@ export default class extends wepy.app {
     name: '',
     licenseNumber: '',
     insurances: [],
-    baseUrl: 'http://www.xhnky.cn/carInsurance/api/'
+    baseUrl: 'https://www.howmuchweb.com/carInsurance/api/'
   };
 
   constructor() {
@@ -111,19 +111,21 @@ export default class extends wepy.app {
       wepy.login({
         success: res => {
           wepy.request({
-            //获取openid接口
+            // 获取openid接口
             url: 'https://api.weixin.qq.com/sns/jscode2session',
             data: {
               appid: 'wx1394f2d5a7311394',
               secret: ' 7a22adabbbd8b41d101f9604a42a5292',
               js_code: res.code,
-              grant_type: 'authorization_code' 
+              grant_type: 'authorization_code'
             },
             method: 'GET',
             success(res) {
               console.log(res.data);
-              that.globalData.openId = res.data.openid || that.globalData.openId; //获取到的openid
-              that.globalData.session_key = res.data.session_key || that.globalData.session_key; //获取到session_key
+              that.globalData.openId =
+                res.data.openid || that.globalData.openId; // 获取到的openid
+              that.globalData.session_key =
+                res.data.session_key || that.globalData.session_key; // 获取到session_key
             }
           });
         }
