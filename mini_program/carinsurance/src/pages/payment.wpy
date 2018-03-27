@@ -124,11 +124,11 @@
 <template>
   <view class="container payment-box">
     <view class="verify-code-bac">
-      <image class="freelycar_logo" src="../../assets/imgs/freelycar_logo_white.png"/>
-      <image class="pay-qrcode" src="../../assets/imgs/test_pay_QRcode.png"/>
+      <image class="freelycar_logo" src="https://www.howmuchweb.com/carInsurance/imgs/freelycar_logo_white.png"/>
+      <image class="pay-qrcode" src="https://www.howmuchweb.com/carInsurance/imgs/test_pay_QRcode.png"/>
     </view>
     <view class="wechart-pay-box">
-      <image class="wechart_pay" src="../../assets/imgs/wechart_pay.png"/>
+      <image class="wechart_pay" src="https://www.howmuchweb.com/carInsurance/imgs/wechart_pay.png"/>
       <text class="wechart-pay-info">请于{{orderDetail.effectiveTime}}之前使用微信扫一扫进行支付！ </text>
     </view>
     <view class="order-detail-title">
@@ -234,7 +234,7 @@ export default class Payment extends wepy.page {
     console.log(params);
     this.id = params.id;
     wepy.request({
-      url: this.$parent.globalData.baseUrl+'api/' + 'order/getOrderById',
+      url: this.$parent.globalData.baseUrl + 'api/' + 'order/getOrderById',
       data: {
         id: params.id
       },
