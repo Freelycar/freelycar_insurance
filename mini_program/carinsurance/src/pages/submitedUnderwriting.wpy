@@ -28,7 +28,7 @@
 </style>
 <template >
     <view class="container border-box">
-        <image class='waiting-img' src='/assets/imgs/order_waiting.png' />
+        <image class='waiting-img' src='https://www.howmuchweb.com/carInsurance/imgs/order_waiting.png' />
         <view class='tip-view'>
             我们已经为您向
             <text>中国人保</text>发出核保申请， 需要核实您上一年度的

@@ -260,7 +260,7 @@ export default class AdjustQuoteProgram extends wepy.page {
       });
 
       wepy.request({
-        url: this.$parent.globalData.baseUrl+'api/' + 'insurance/queryPrice',
+        url: this.$parent.globalData.baseUrl + 'insurance/queryPrice',
         data: {
           ownerName: this.$parent.globalData.name,
           licenseNumber: this.$parent.globalData.licenseNumber,

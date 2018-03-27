@@ -259,15 +259,15 @@
       <text>合作机构</text>
     </view>
     <view class='cooperation-agencies'>
-      <image class='cooperation-agencies-img' src='/assets/imgs/insurance_logo1.png' />
-      <image class='cooperation-agencies-img' src='/assets/imgs/insurance_logo2.png' />
-      <image class='cooperation-agencies-img' src='/assets/imgs/insurance_logo3.png' />
-      <image class='cooperation-agencies-img' src='/assets/imgs/insurance_logo4.png' />
-      <image class='cooperation-agencies-img' src='/assets/imgs/insurance_logo5.png' />
-      <image class='cooperation-agencies-img' src='/assets/imgs/insurance_logo6.png' />
+      <image class='cooperation-agencies-img' src='https://www.howmuchweb.com/carInsurance/imgs/insurance_logo1.png' />
+      <image class='cooperation-agencies-img' src='https://www.howmuchweb.com/carInsurance/imgs/insurance_logo2.png' />
+      <image class='cooperation-agencies-img' src='https://www.howmuchweb.com/carInsurance/imgs/insurance_logo3.png' />
+      <image class='cooperation-agencies-img' src='https://www.howmuchweb.com/carInsurance/imgs/insurance_logo4.png' />
+      <image class='cooperation-agencies-img' src='https://www.howmuchweb.com/carInsurance/imgs/insurance_logo5.png' />
+      <image class='cooperation-agencies-img' src='https://www.howmuchweb.com/carInsurance/imgs/insurance_logo6.png' />
     </view>
     <view class='call-button' @tap='makePhoneCall'>
-      <image class='call-button-img' src='/assets/imgs/manual_consultation.png' />
+      <image class='call-button-img' src='https://www.howmuchweb.com/carInsurance/imgs/manual_consultation.png' />
     </view>
   </view>
   <view wx:if={{showModal}} class='verification-bg'>
@@ -325,9 +325,9 @@ export default class Index extends wepy.page {
 
   data = {
     imgUrls: [
-      '/assets/imgs/banner.jpg',
-      '/assets/imgs/banner.jpg',
-      '/assets/imgs/banner.jpg'
+      'https://www.howmuchweb.com/carInsurance/imgs/banner.jpg',
+      'https://www.howmuchweb.com/carInsurance/imgs/banner.jpg',
+      'https://www.howmuchweb.com/carInsurance/imgs/banner.jpg'
     ],
 
     //报价的信息
