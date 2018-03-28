@@ -64,8 +64,7 @@ export default class submitedUnderwriting extends wepy.page {
   };
 
   onLoad(option) {
-    let data = JSON.parse(option.data);
-    this.orderId = data.orderId;
+    this.orderId = option.orderId || '';
     this.$apply();
   }
 
