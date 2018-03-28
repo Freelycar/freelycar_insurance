@@ -447,7 +447,7 @@ export default class Quote extends wepy.page {
         this.waitSecond = 90;
         this.waitting = false;
         this.$apply();
-        wepy.showToast({ title: objData.data, icon: 'none' });
+        wepy.showToast({ title: objData.data, icon: 'none' }, 2);
       }
     });
 
