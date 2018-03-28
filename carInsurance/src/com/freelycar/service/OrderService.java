@@ -283,9 +283,11 @@ public class OrderService
 			order.setQuoteRecord(quoteRecordBylicenseNumberAndOfferId);
 			
 			Reciver reciverByOrderId = reciverDao.getReciverByOrderId(order.getOrderId());
-			reciverByOrderId.setExpressCompany(order.getExpressCompany());
-			reciverByOrderId.setExpressNumber(order.getExpressNumber());
-			reciverByOrderId.setRemark(order.getRemark());
+			if(reciverByOrderId != null){
+				reciverByOrderId.setExpressCompany(order.getExpressCompany());
+				reciverByOrderId.setExpressNumber(order.getExpressNumber());
+				reciverByOrderId.setRemark(order.getRemark());
+			}
 			order.setReciver(reciverByOrderId);
 		}
 		
