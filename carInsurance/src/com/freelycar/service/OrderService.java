@@ -280,6 +280,7 @@ public class OrderService
 			String offerDetail = quoteRecordBylicenseNumberAndOfferId.getOfferDetail();
 			quoteRecordBylicenseNumberAndOfferId.setQiangzhiList(QuoteRecord.getQiangzhiJsonObj(offerDetail));
 			quoteRecordBylicenseNumberAndOfferId.setShangyeList(QuoteRecord.getShangYeJsonObj(offerDetail));
+			quoteRecordBylicenseNumberAndOfferId.setTotalPrice(order.getTotalPrice()+"");
 			order.setQuoteRecord(quoteRecordBylicenseNumberAndOfferId);
 			
 			Reciver reciverByOrderId = reciverDao.getReciverByOrderId(order.getOrderId());

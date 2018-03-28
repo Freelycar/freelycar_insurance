@@ -395,7 +395,6 @@ public class InsuranceService
     //7、确认是否承保接口
     public Map<String,Object> confirmChengbao(String orderId){
     	
-    	System.out.println("orderId");
     	Map<String,Object> param = new HashMap<>();
     	param.put("api_key", LUOTUOKEY);
     	

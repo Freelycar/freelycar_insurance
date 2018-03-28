@@ -145,22 +145,21 @@ public class OrderpushResulService
 				//在这里我们在过期时间之内定时调用 7、确认是否承保接口
 				Constant.getTimeExecutor().scheduleAtFixedRate(new Runnable() {
 					public void run() {
-						
 						if(proposalMap.get(orderId) > System.currentTimeMillis()){
 							Map<String, Object> confirmChengbao = insuranceService.confirmChengbao(orderId);
-							if(confirmChengbao.get("code").equals("0")){//用户交钱了
-								//更新支付时间
-								order.setPayTime(System.currentTimeMillis());
+							if(confirmChengbao.get("code").equals("0")){//
 								
 								//等待骆驼推送
+								proposalMap.remove(orderId);
 								Constant.getTimeExecutor().shutdown();
 							}
 							
 						}else{
+							proposalMap.remove(orderId);
 							Constant.getTimeExecutor().shutdown();
 						}
 					}
-				},0, 1, TimeUnit.SECONDS);
+				},0, 1, TimeUnit.MINUTES);
 				
 				
 				QuoteRecord qr = quoteRecordDao.getQuoteRecordBySpecify("offerId", orderId);
