@@ -295,9 +295,6 @@ export default class ConfirmQuoteInfo extends wepy.page {
           wepy.hideLoading();
         }
       });
-      //   wepy.navigateTo({
-      //     url: 'submitedUnderwriting'
-      //   });
     },
     handlaInputChange(event) {
       let type = event.target.dataset.type;
