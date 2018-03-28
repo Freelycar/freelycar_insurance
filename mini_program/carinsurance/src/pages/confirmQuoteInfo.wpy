@@ -87,7 +87,7 @@
 <template >
     <view class="container border-box">
         <scroll-view scroll-y="true" class="scroll-view-bg">
-            <image class='header-img' src='/assets/imgs/remind-bg.png'>
+            <image class='header-img' src='https://www.howmuchweb.com/carInsurance/imgs/remind-bg.png'>
             </image>
             <view class='line border-bottom flex-box-row' style='margin-top: 0'>
                 <view>
@@ -276,12 +276,12 @@ export default class ConfirmQuoteInfo extends wepy.page {
       }
       wepy.showLoading();
       wepy.request({
-        url: this.$parent.globalData.baseUrl + 'insurance/submitProposal',
+        url: this.$parent.globalData.baseUrl+'api/' + 'insurance/submitProposal',
         data: queryData,
         method: 'POST',
         success: res => {
           console.log(res);
-          if (res.data.code == 0) {
+          if (res.data.code === 0) {
             // this.startCountdown();
             wepy.showToast({ title: '申请报价成功!' });
               wepy.redirectTo({

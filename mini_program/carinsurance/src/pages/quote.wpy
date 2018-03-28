@@ -190,22 +190,22 @@
           <view class='line'>强制险</view>
           <view class='line item-bg flex-box-row'>
             <view> 交强险、车船税</view>
-            <view class='select-img' style='background-image: url(/assets/imgs/select-defult.png);'></view>
+            <view class='select-img' style='background-image: url(/assets/imgs/select_defult.png);'></view>
           </view>
         </view>
         <view>
 
           <view class='line'>商业险</view>
           <block wx:for='{{insurances}}' wx:key='index'>
-            <block wx:if='{{item.code == 1 || item.code == 2 || item.code == 6}}'>
+            <block wx:if='{{item.code === 1 || item.code === 2 || item.code === 6}}'>
               <view class='line item-bg flex-box-row'>
-                <block wx:if='{{item.code == 2 || item.code == 6}}'>
+                <block wx:if='{{item.code === 2 || item.code === 6}}'>
                   <view class='flex-box-row width-60percent'>
                     <view>{{item.name}}</view>
                     <picker bindchange='selectAmountStr' data-code='{{item.code}}' value="{{item.selectIndex}}" range="{{item.selectAry}}" disabled='{{!item.isToubao}}'>
                       <view class='select-type-button'>{{item.amountStr}}
                         <i class='fa fa-angle-down'></i>
-                      </view>
+                      </view> 
                     </picker>
                   </view>
                 </block>
@@ -214,9 +214,9 @@
                 </block>
                 <view class='flex-box-row'>
                   <view class="{{item.compensation ? 'bujimianpei  bujimianpei-select' : 'bujimianpei'}}" @tap="selectCompensationOrNot" data-code='{{item.code}}'>不计免赔</view>
-                  <view class='select-img' style="background-image: url({{item.isToubao? '/assets/imgs/select-yes.png' : '/assets/imgs/select-no.png'}});" @tap="selectInsuranceOrNot" data-code='{{item.code}}'></view>
+                  <view class='select-img' style="background-image: url({{item.isToubao? '/assets/imgs/select_yes.png' : '/assets/imgs/select_no.png'}});" @tap="selectInsuranceOrNot" data-code='{{item.code}}'></view>
                 </view>
-              </view>
+              </view> 
             </block>
           </block>
         </view>
@@ -318,17 +318,17 @@ export default class Quote extends wepy.page {
       const insurances = this.$parent.globalData.insurances;
       let touBaoAry = [];
       insurances.map((item, index) => {
-        if (item.isToubao == true) {
+        if (item.isToubao === true) {
           let insurance = {
             compensation: item.compensation,
             isToubao: 1,
             insuranceId: item.code
           };
-          if (item.amountStr == '') {
+          if (item.amountStr === '') {
             insurance.price = 1;
-          } else if (item.amountStr == '国产') {
+          } else if (item.amountStr === '国产') {
             insurance.price = 1;
-          } else if (item.amountStr == '进口') {
+          } else if (item.amountStr === '进口') {
             insurance.price = 2;
           } else {
             insurance.price = item.tureAry[item.selectIndex];
@@ -338,7 +338,7 @@ export default class Quote extends wepy.page {
       });
 
       wepy.request({
-        url: this.$parent.globalData.baseUrl + 'insurance/queryPrice',
+        url: this.$parent.globalData.baseUrl + 'api/' + 'insurance/queryPrice',
         data: {
           ownerName: this.$parent.globalData.name,
           licenseNumber: this.$parent.globalData.licenseNumber,
@@ -352,7 +352,7 @@ export default class Quote extends wepy.page {
         method: 'POST',
         success: res => {
           console.log(res);
-          if (res.data.code == 0) {
+          if (res.data.code === 0) {
             this.startCountdown();
             wepy.showToast({ title: '申请报价成功!' });
           } else {
@@ -373,7 +373,7 @@ export default class Quote extends wepy.page {
     this.$apply();
     wepy.showLoading();
     wepy.request({
-      url: this.$parent.globalData.baseUrl + 'insurance/queryLastYear',
+      url: this.$parent.globalData.baseUrl + 'api/' + 'insurance/queryLastYear',
       data: {
         ownerName: this.$parent.globalData.name,
         licenseNumber: this.$parent.globalData.licenseNumber,
@@ -382,7 +382,7 @@ export default class Quote extends wepy.page {
       method: 'POST',
       success: res => {
         console.log(res);
-        if (res.data.code == 0) {
+        if (res.data.code === 0) {
           for (let i = 0; i < res.data.data.length; i++) {
             if (res.data.data[i].commercial) {
               this.limitDate = res.data.data[i].insuranceEndTime || 0;
@@ -414,7 +414,7 @@ export default class Quote extends wepy.page {
 
     //建立连接
     wepy.connectSocket({
-      url: 'ws://www.xhnky.cn/carInsurance/echo'
+      url: 'wss://www.howmuchweb.com/carInsurance/echo'
     });
 
     //连接成功
@@ -434,7 +434,7 @@ export default class Quote extends wepy.page {
 
       console.log('成功接受数据');
       console.log(objData);
-      if (objData.code == 606) {
+      if (objData.code === 606) {
         clearInterval(this.timer);
         this.waitSecond = 90;
         this.waitting = false;
@@ -442,7 +442,7 @@ export default class Quote extends wepy.page {
         wepy.redirectTo({
           url: `quoteSuccess?data=${JSON.stringify(objData.data)}`
         });
-      } else if (objData.code == 609) {
+      } else if (objData.code === 609) {
         clearInterval(this.timer);
         this.waitSecond = 90;
         this.waitting = false;
@@ -459,7 +459,7 @@ export default class Quote extends wepy.page {
 
   onUnload() {
     wepy.closeSocket({
-      url: 'ws://www.xhnky.cn/carInsurance/echo'
+      url: 'wss://www.howmuchweb.com/carInsurance/echo'
     });
   }
 

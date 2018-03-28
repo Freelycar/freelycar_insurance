@@ -8,3 +8,7 @@ export async function getQuoteRecordList(params) {
 export async function getClientDetail(params) {
   return request(`/api/client/detail?${stringify(params)}`);
 }
+
+export async function getClientOrderByLicenseNumber(params) {
+  return request(`api/order/getClientOrderByLicenseNumber?${stringify(params)}`);
+}

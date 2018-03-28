@@ -5,7 +5,7 @@ import { Row, Col, Card, Form, Input, Select, Icon, Button, Radio, Dropdown, Men
 import StandardTable from 'components/StandardTable';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 import { getClientDetail } from '../../services/client';
-import { getQuoteRecordList } from '../../services/record';
+import { getQuoteRecordList, getClientOrderByLicenseNumber } from '../../services/record';
 
 import styles from './ClientDetail.less';
 
@@ -24,13 +24,13 @@ const recordColumns = [
     },
     {
         title: '报价时间',
-        dataIndex: 'time',
-        key: 'time',
+        dataIndex: 'createTime',
+        key: 'createTime',
     },
     {
         title: '报价编号',
-        dataIndex: 'orderCode',
-        key: 'orderCode',
+        dataIndex: 'offerId',
+        key: 'offerId',
     }
 ];
 const orderColumns = [
@@ -132,6 +132,7 @@ export default class ClientDetail extends PureComponent {
         this.queryClientDetail();
         this.getQuoteRecordList();
         this.getOrderList();
+        this.getClientOrderByLicenseNumber(1);
     }
 
     queryClientDetail = () => {
@@ -154,10 +155,13 @@ export default class ClientDetail extends PureComponent {
     getQuoteRecordList = () => {
         getQuoteRecordList({
             page: 1,
-            number: 99,
+            number: 3,
             clientId: this.state.clientId
         }).then(res => {
             if (res.code == 0) {
+                res.data.map((item, index) => {
+                    res.data[index].key = index;
+                })
                 this.setState({
                     recordData: res.data
                 })
@@ -171,6 +175,19 @@ export default class ClientDetail extends PureComponent {
             console.log(res);
         }).catch(err => {
             console.log(err);
+        })
+    }
+
+    getClientOrderByLicenseNumber = (page) => {
+        getClientOrderByLicenseNumber({
+            licenseNumber : '苏A4PZ99',
+            page: 1,
+            number: 5
+        }).then(res => {
+            console.log(res);
+        }).catch(err => {
+            console.log(res);
+            message.error('请求失败');
         })
     }
 

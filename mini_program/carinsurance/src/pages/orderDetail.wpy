@@ -103,8 +103,9 @@
 </style>
 <template>
   <view class="container order-detail" wx:if="{{orderDetail}}">
-    <image class="freelycar_logo" src="../../assets/imgs/freelycar_logo_color.png"/>
+    <image class="freelycar_logo" src="https://www.howmuchweb.com/carInsurance/imgs/freelycar_logo_color.png"/>
     <view class="order-info">订单编号：{{orderDetail.id}}</view>
+    <view class="order-info">订单状态：{{orderDetail.stateString}}</view>
     <view class="order-info">订单时间：{{odrderDetail.createTime}}</view>
     <view class="order-info">付款时间：{{orderDetail.payTime}}</view>
     <view class="order-info">发货时间：{{orderDetail.deliveredTime}}</view>
@@ -144,7 +145,7 @@
           <view class="detail-line">
             <text>{{item.insuranceName}}<text wx:if="{{item.compensation}}" class="detail-line-info">不计免赔</text>
             <text wx:if="{{item.amountStr&&item.insuranceId!=2}}" class="detail-line-info">{{item.amountStr}}</text>
-            <text wx:if="{{item.amountStr&&item.insuranceId==2}}" class="detail-line-info">{{item.amountStr/10000+'万'}}</text>
+            <text wx:if="{{item.amountStr&&item.insuranceId===2}}" class="detail-line-info">{{item.amountStr}}</text>
             </text>
             <text>￥{{item.insurancePrice}}</text>
           </view>
@@ -171,7 +172,7 @@
       <text class="insurance-total-price">合计：￥{{totalPrice}}</text>
     </view>
     <view class="order-detail-title">
-      <text class="fa fa-address-card-o title-icon"/>保单收货信息
+      <text class="fa fa-address-card-o title-icon" wx:if="{{reciver}}"/>保单收货信息
     </view>
     <view class="order-detail-way order-side-padding" wx:if="{{reciver}}">
       <view class="insurance-title title-bottom-line">
@@ -190,7 +191,7 @@
         </view>
       </view>
     </view>
-    <view class="order-detail-title">
+    <view class="order-detail-title"  wx:if="{{invoiceInfo}}">
       <text class="fa fa-newspaper-o title-icon"/>发票信息
     </view> 
     <view class="order-detail-way order-side-padding"  wx:if="{{invoiceInfo}}">
@@ -207,7 +208,7 @@
         <text>{{invoiceInfo.phone}}</text>
       </view>
     </view> 
-    <view wx:if="{{state==7}}" class="order-confirm" @tap="takeDelivery">
+    <view wx:if="{{state===7}}" class="order-confirm" @tap="takeDelivery">
       确认收货
     </view>
   </view>
@@ -240,8 +241,7 @@ export default class OrderDetail extends wepy.page {
   methods = {
     takeDelivery: () => {
       wepy.request({
-        url: 'http://172.17.3.105:8080/carInsurance/api/order/update',
-
+        url: this.$parent.globalData.baseUrl + 'api/' + 'order/update',
         data: {
           id: this.id,
           state: 8
@@ -283,7 +283,7 @@ export default class OrderDetail extends wepy.page {
     console.log(params);
     this.id = params.id;
     wepy.request({
-      url: 'http://172.17.3.105:8080/carInsurance/api/order/getOrderById',
+      url: this.$parent.globalData.baseUrl + 'api/' + 'order/getOrderById',
       data: {
         id: params.id
       },

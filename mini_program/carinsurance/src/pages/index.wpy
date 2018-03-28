@@ -1,7 +1,7 @@
 <style lang="less">
 .banner-bg {
   height: 373rpx;
-  /* width: 750rpx; */
+  width: 750rpx; 
 }
 
 .quote-bg {
@@ -12,10 +12,11 @@
   display: flex;
   flex-direction: row;
   height: 92rpx;
-  width: 750rpx;
+  width: 100%;
   border-bottom: 1px solid #e7e7e7;
   line-height: 92rpx;
   padding-left: 15rpx;
+  box-sizing: border-box;
 }
 
 .line .line-key {
@@ -259,15 +260,15 @@
       <text>合作机构</text>
     </view>
     <view class='cooperation-agencies'>
-      <image class='cooperation-agencies-img' src='/assets/imgs/insurance_logo1.png' />
-      <image class='cooperation-agencies-img' src='/assets/imgs/insurance_logo2.png' />
-      <image class='cooperation-agencies-img' src='/assets/imgs/insurance_logo3.png' />
-      <image class='cooperation-agencies-img' src='/assets/imgs/insurance_logo4.png' />
-      <image class='cooperation-agencies-img' src='/assets/imgs/insurance_logo5.png' />
-      <image class='cooperation-agencies-img' src='/assets/imgs/insurance_logo6.png' />
+      <image class='cooperation-agencies-img' src='https://www.howmuchweb.com/carInsurance/imgs/insurance_logo1.png' />
+      <image class='cooperation-agencies-img' src='https://www.howmuchweb.com/carInsurance/imgs/insurance_logo2.png' />
+      <image class='cooperation-agencies-img' src='https://www.howmuchweb.com/carInsurance/imgs/insurance_logo3.png' />
+      <image class='cooperation-agencies-img' src='https://www.howmuchweb.com/carInsurance/imgs/insurance_logo4.png' />
+      <image class='cooperation-agencies-img' src='https://www.howmuchweb.com/carInsurance/imgs/insurance_logo5.png' />
+      <image class='cooperation-agencies-img' src='https://www.howmuchweb.com/carInsurance/imgs/insurance_logo6.png' />
     </view>
     <view class='call-button' @tap='makePhoneCall'>
-      <image class='call-button-img' src='/assets/imgs/manual_consultation.png' />
+      <image class='call-button-img' src='https://www.howmuchweb.com/carInsurance/imgs/manual_consultation.png' />
     </view>
   </view>
   <view wx:if={{showModal}} class='verification-bg'>
@@ -325,9 +326,9 @@ export default class Index extends wepy.page {
 
   data = {
     imgUrls: [
-      '/assets/imgs/banner.jpg',
-      '/assets/imgs/banner.jpg',
-      '/assets/imgs/banner.jpg'
+      'https://www.howmuchweb.com/carInsurance/imgs/banner.jpg',
+      'https://www.howmuchweb.com/carInsurance/imgs/banner.jpg',
+      'https://www.howmuchweb.com/carInsurance/imgs/banner.jpg'
     ],
 
     //报价的信息
@@ -366,7 +367,7 @@ export default class Index extends wepy.page {
       console.log(this.$parent.globalData);
       wepy.showLoading();
       wepy.request({
-        url: this.$parent.globalData.baseUrl + 'client/isExistByOpenId',
+        url: this.$parent.globalData.baseUrl+'api/' + 'client/isExistByOpenId',
         data: {
           openId: this.$parent.globalData.openId,
           ownerName: this.name,
@@ -375,17 +376,17 @@ export default class Index extends wepy.page {
         method: 'POST',
         success: res => {
           console.log(res);
-          if (res.data.code == 0) {
+          if (res.data.code === 0) {
             wepy.navigateTo({
               url: 'quote'
             });
-          } else if (res.data.code == 205) {
+          } else if (res.data.code === 205) {
             this.showModal = true;
             this.$apply();
           } else {
             wepy.showModal({
               title: '提示',
-              content: '为能查到您的续保信息，请检查车牌号或车主姓名是否正确!',
+              content: '未能查到您的续保信息，请检查车牌号或车主姓名是否正确!',
               showCancel: false
             });
           }
@@ -446,7 +447,7 @@ export default class Index extends wepy.page {
 
       wepy.showLoading();
       wepy.request({
-        url: this.$parent.globalData.baseUrl + 'client/sms/verification',
+        url: this.$parent.globalData.baseUrl+'api/' + 'client/sms/verification',
         data: {
           phone: this.data.phoneNumber,
           smscode: this.data.verificationCode,
@@ -457,7 +458,7 @@ export default class Index extends wepy.page {
         method: 'POST',
         success: res => {
           console.log(res);
-          if (res.data.code == 0) {
+          if (res.data.code === 0) {
             this.showModal = false;
             this.phoneNumber = '';
             this.verificationCode = '';
@@ -481,14 +482,14 @@ export default class Index extends wepy.page {
       }
       wepy.showLoading();
       wepy.request({
-        url: this.$parent.globalData.baseUrl + 'client/sms/getCode',
+        url: this.$parent.globalData.baseUrl+'api/' + 'client/sms/getCode',
         data: {
           phone: this.data.phoneNumber + ''
         },
         method: 'POST',
         success: res => {
           console.log(res.data);
-          if (res.data.code == 0) {
+          if (res.data.code === 0) {
             wepy.showToast({ title: '验证码发送成功' });
             this.startCountdown();
           } else {
@@ -503,7 +504,7 @@ export default class Index extends wepy.page {
 
     makePhoneCall() {
       wepy.makePhoneCall({
-        phoneNumber: '15651751173' //仅为示例，并非真实的电话号码
+        phoneNumber: '58803353‬' //仅为示例，并非真实的电话号码
       });
     }
   };

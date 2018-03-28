@@ -45,6 +45,9 @@
       font-size: 28rpx;
       display: flex;
       align-items: center;
+      &.error {
+        color: #ce1826;
+      }
       .orderlist_dispatch {
         width: 30rpx;
         height: 26rpx;
@@ -70,17 +73,20 @@
 }
 </style>
 <template>
-  <emptyList  wx:if="{{orderlist.length==0}}"/> 
+  <emptyList  wx:if="{{orderlist.length===0}}"/> 
   <view class="container">
     <block wx:for="{{orderlist}}" wx:key="{{index}}">
       <view class="order-list-box" data-order-id="{{item.id}}"  @tap="goToDetail">
         <view class="order-list order-list-title">
           <view class="list-title">{{item.insureName}}</view>
-          <view wx:if="{{item.state>2&&item.state<5}}" class="pay-btn">支付</view>
-            <view wx:if="{{item.state==7}}" class="pay-state"><image class="orderlist_dispatch" src="../../assets/imgs/orderlist_dispatch.png"/>配送中</view>
-          <view wx:if="{{item.state==6}}" class="pay-state"><image class="orderlist_wait" src="../../assets/imgs/orderlist_wait.png"/>待配送</view>
-          <view wx:if="{{item.state==8}}" class="pay-state"><image class="orderlist_success" src="../../assets/imgs/orderlist_success.png"/>已投保</view>      
-        <view wx:if="{{item.state==2}}" class="pay-state"><image class="orderlist_check" src="../../assets/imgs/orderlist_check.png"/>核保中</view>   
+          <view wx:if="{{item.state===0}}" class="pay-state"><image class="orderlist_check" src="https://www.howmuchweb.com/carInsurance/imgs/orderlist_check.png"/>核保中</view> 
+          <view wx:if="{{item.state===1}}"  class="pay-state error">核保失败</view>
+          <view wx:if="{{item.state===2}}" data-order-id="{{item.id}}" @tap.stop="goToPay" class="pay-btn">支付</view>
+          <view wx:if="{{item.state===3}}" class="pay-state"><image class="orderlist_wait" src="https://www.howmuchweb.com/carInsurance/imgs/orderlist_chengbao.png"/>承保中</view>
+          <view wx:if="{{item.state===4}}"  class="pay-state error">承保失败</view>
+          <view wx:if="{{item.state===5}}" class="pay-state"><image class="orderlist_wait" src="https://www.howmuchweb.com/carInsurance/imgs/orderlist_wait.png"/>待配送</view>
+          <view wx:if="{{item.state===6}}" class="pay-state"><image class="orderlist_dispatch" src="https://www.howmuchweb.com/carInsurance/imgs/orderlist_dispatch.png"/>代签收</view>
+          <view wx:if="{{item.state===7}}" class="pay-state"><image class="orderlist_success" src="https://www.howmuchweb.com/carInsurance/imgs/orderlist_success.png"/>已投保</view>      
         </view>
         <view class="order-list order-list-item">
           <text class="list-item">车牌号：{{item.licenseNumber}}</text>
@@ -97,11 +103,11 @@
     </block>
   </view>
 </template>
-
 <script>
 import wepy from 'wepy';
 import List from '../components/list'; // aliasFields example
 import EmptyOrderList from '../components/empty_list';
+import timestampToTime from '../util/timestampToTime.js';
 import justifyNull from '../util/justifyNull.js';
 export default class OrderList extends wepy.page {
   config = {
@@ -124,6 +130,13 @@ export default class OrderList extends wepy.page {
       wepy.navigateTo({
         url: `orderDetail?id=${orderId}`
       });
+    },
+    goToPay(e) {
+      let orderId = e.currentTarget.dataset.orderId;
+      console.log(orderId);
+      wepy.navigateTo({
+        url: `payment?id=${orderId}`
+      });
     }
   };
   onLoad() {
@@ -131,9 +144,10 @@ export default class OrderList extends wepy.page {
   }
   queryList() {
     wepy.request({
-      url: 'http://172.17.3.105:8080/carInsurance/api/order/list',
+      url: this.$parent.globalData.baseUrl + 'api/' + 'order/list',
       data: {
         state: -1,
+        openId: this.$parent.globalData.openId,
         page: 1,
         number: 99
       },
@@ -147,6 +161,7 @@ export default class OrderList extends wepy.page {
           let resArray = res.data.data;
           resArray.forEach(arrayItem => {
             justifyNull(arrayItem);
+            arrayItem.payTime = timestampToTime(arrayItem.payTime);
           }, this);
           this.orderlist = resArray;
           this.$apply();
