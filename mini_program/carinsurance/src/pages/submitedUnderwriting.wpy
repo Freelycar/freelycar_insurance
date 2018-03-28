@@ -50,7 +50,7 @@ export default class submitedUnderwriting extends wepy.page {
   components = {};
 
   data = {
-      orderId: ''
+    orderId: ''
   };
 
   computed = {};
