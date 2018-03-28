@@ -11,111 +11,128 @@ import styles from './ClientDetail.less';
 
 const FormItem = Form.Item;
 const { Option } = Select;
-const recordColumns = [
-    {
-        title: '车牌号',
-        dataIndex: 'licenseNumber',
-        key: 'licenseNumber',
-    },
-    {
-        title: '车主姓名',
-        dataIndex: 'ownerName',
-        key: 'ownerName',
-    },
-    {
-        title: '报价时间',
-        dataIndex: 'createTime',
-        key: 'createTime',
-    },
-    {
-        title: '报价编号',
-        dataIndex: 'offerId',
-        key: 'offerId',
-    }
-];
-const orderColumns = [
-    {
-        title: '订单时间',
-        dataIndex: 'createTime',
-        render: val => {
-            return moment(val * 1000).format('YYYY-MM-DD hh:mm');
-        }
-    }, {
-        title: '订单编号',
-        dataIndex: 'orderId',
-    }, {
-        title: '订单总额(元)',
-        dataIndex: 'totalPrice',
-    },
-    {
-        title: '订单状态',
-        dataIndex: 'stateString',
-    },
-    {
-        title: '返现金额(元)',
-        dataIndex: 'returnMoney',
-    },
-    {
-        title: '是否返现',
-        dataIndex: 'cashback',
-        render: val => {
-            return val ? '是': '否'
-        }
-    },
-    {
-        title: '返现时间',
-        dataIndex: 'cashbackTime',
-        render: val => {
-            return moment(val * 1000).format('YYYY-MM-DD hh:mm'); 
-        }
-    },
-    {
-        title: '付款时间',
-        dataIndex: 'payTime',
-        render: val => {
-            return moment(val * 1000).format('YYYY-MM-DD hh:mm');
-        }
-    },
-    {
-        title: '运单编号',
-        // dataIndex: 'expressNumber',
-        render: (item, index) => {
-            if (item.expressNumber != 'undefined') {
-                return <a onClick={() => {
-                    this.setState({
-                        waybillData: item.reciver,
-                        waybillModalVisible: true
-                    })
-                }} >{item.expressNumber}</a>
-            } else {
-                return ''
-            }
-            
-        }
-    }
-];
+
 
 const WaybillDetail = Form.create()((props) => {
-    const { modalVisible, form, handleAdd, handleModalVisible } = props;
-    const okHandle = () => {
-        form.validateFields((err, fieldsValue) => {
-            if (err) return;
-            form.resetFields();
-            handleAdd(fieldsValue);
-        });
-    };
+    const { modalVisible, form, handleModalVisible } = props;
     return (
         <Modal
             title="运单详细"
             visible={modalVisible}
             onCancel={() => handleModalVisible()}
+            onOk={() => handleModalVisible()}
         >
-            <Row ><Col span={12} offset={6}>收件人姓名：臭傻逼</Col></Row>
-            <Row ><Col span={12} offset={6}>1231231231</Col></Row>
-            <Row ><Col span={12} offset={6}>收件地址：南京市玄武区仙岭大道1号苏宁青创园爱打飞机啊动法</Col></Row>
-            <Row ><Col span={12} offset={6}>快递公司：顺丰速运</Col></Row>
-            <Row ><Col span={12} offset={6}>运单编号：8989798</Col></Row>
-            <Row ><Col span={12} offset={6}>备注：内件：（1）工具包，吸尘器，充气泵</Col></Row>
+            <Row style={{ marginBottom: '15px' }}><Col span={12} offset={6}>收件人姓名：{form.reciver}</Col></Row>
+            <Row style={{ marginBottom: '15px' }}><Col span={12} offset={6}>收件人手机: {form.phone}</Col></Row>
+            <Row style={{ marginBottom: '15px' }}><Col span={12} offset={6}>收件地址：{form.provincesCities}{form.adressDetail}</Col></Row>
+            <Row style={{ marginBottom: '15px' }}><Col span={12} offset={6}>快递公司：{form.expressCompany}</Col></Row>
+            <Row style={{ marginBottom: '15px' }}><Col span={12} offset={6}>运单编号：{form.expressNumber}</Col></Row>
+            <Row style={{ marginBottom: '15px' }}><Col span={12} offset={6}>备注：{form.remark}</Col></Row>
+        </Modal>
+    );
+});
+
+const InsuranceDetail = Form.create()((props) => {
+    const { modalVisible, form, handleModalVisible } = props;
+    let dataAry = [];
+    if (form.qiangzhiList) {
+        form.qiangzhiList.map((item, index) => {
+            let insurance = {
+                offerId: form.offerId,
+                type: '强制险',
+                insuranceStartTime: moment(form.insuranceStartTime * 1000).format('YYYY-MM-DD hh:mm'),
+                insuranceName: item.insuranceName || '',
+                insurancePrice: item.insurancePrice || '',
+                totalPrice: form.totalPrice || '',
+                pay: form.totalPrice || ''
+            }
+            dataAry.push(insurance);
+        })
+    }
+    if (form.shangyeList) {
+        form.shangyeList.map((item, index) => {
+            let insurance = {
+                offerId: form.offerId,
+                type: '商业险',
+                insuranceStartTime: moment(form.insuranceStartTime * 1000).format('YYYY-MM-DD hh:mm'),
+                insuranceName: item.insuranceName || '',
+                insurancePrice: item.insurancePrice || '',
+                totalPrice: form.totalPrice || '',
+                pay: form.totalPrice || ''
+            }
+            dataAry.push(insurance);
+        })
+    }
+    const renderContent = (value, row, index) => {
+        const obj = {
+            children: value,
+            props: {},
+        };
+        // if (form.qiangzhiList && form.shangyeList) {
+            
+        // }
+        if (index == 0) {
+            obj.props.rowSpan = form.qiangzhiList.length;
+        } else if ( index < form.qiangzhiList.length) {
+            obj.props.rowSpan = 0;
+        } else if (index == form.qiangzhiList.length) {
+            obj.props.rowSpan = form.shangyeList.length;
+        } else {
+            obj.props.rowSpan = 0;
+        }
+        return obj;
+    };
+
+    const allRenderContent = (value, row, index) => {
+        const obj = {
+            children: value,
+            props: {},
+        };
+        if (index == 0) {
+            obj.props.rowSpan = dataAry.length
+        } else {
+            obj.props.rowSpan = 0
+        }
+        return obj;
+    };
+
+    const columns = [{
+        title: '订单编号',
+        dataIndex: 'offerId',
+        render: allRenderContent
+    }, {
+        title: '险种',
+        dataIndex: 'type',
+        render: renderContent,
+    }, {
+        title: '起保日期',
+        dataIndex: 'insuranceStartTime',
+        render: renderContent,
+    }, {
+        title: '险种明细',
+        dataIndex: 'insuranceName',
+    }, {
+        title: '金额(元)',
+        dataIndex: 'insurancePrice',
+    },{
+        title: '合计(元)',
+        dataIndex: 'totalPrice',
+        render: allRenderContent
+    },{
+        title: '实付(元)',
+        dataIndex: 'pay',
+        render: allRenderContent
+    }];
+   
+    return (
+        <Modal
+            title="投保明细"
+            visible={modalVisible}
+            onCancel={() => handleModalVisible()}
+            onOk={() => handleModalVisible()}
+            width={800}
+        >
+            <Table columns={columns} dataSource={dataAry} pagination={false} bordered />
         </Modal>
     );
 });
@@ -125,9 +142,9 @@ export default class ClientDetail extends PureComponent {
     constructor(props) {
         super(props);
         this.state = {
-            clientId : props.match.params.id,
+            clientId: props.match.params.id,
             waybillModalVisible: false,
-            orderModalVisible: false,
+            insuranceDetailModalVisible: false,
             expandForm: false,
             formValues: {},
             type: '0', // 0 未投保 1 已投保
@@ -149,10 +166,12 @@ export default class ClientDetail extends PureComponent {
                 returnMoney: '200',
                 isReturn: '是',
                 returnTime: '2016-40-30',
-            }]
+            }],
+            waybillData: {},
+            insuranceDetailData: {}
         };
     }
-    
+
     componentDidMount() {
         this.queryClientDetail();
         this.getQuoteRecordList();
@@ -171,7 +190,7 @@ export default class ClientDetail extends PureComponent {
                 message.error(res.msg);
             }
         }).catch(err => {
-            message.error( '系统出错，请重试');
+            message.error('系统出错，请重试');
             console.log(err);
         })
     }
@@ -204,7 +223,7 @@ export default class ClientDetail extends PureComponent {
 
     getClientOrderByLicenseNumber = (page) => {
         getClientOrderByLicenseNumber({
-            licenseNumber : '苏A4PZ99',
+            licenseNumber: '苏A4PZ99',
             page: 1,
             number: 5
         }).then(res => {
@@ -224,13 +243,129 @@ export default class ClientDetail extends PureComponent {
         this.setState({
             waybillModalVisible: !!flag,
         });
+        if (!flag) {
+            this.setState({
+                waybillData: {}
+            })
+        }
+    }
+
+    handleInsuranceDetailModalVisible = (flag) => {
+        this.setState({
+            insuranceDetailModalVisible: !!flag,
+        });
+        if (!flag) {
+            this.setState({
+                insuranceDetailData: {}
+            })
+        }
     }
 
     render() {
-        const waybillModalVisible = this.state.waybillModalVisible
+        const recordColumns = [
+            {
+                title: '车牌号',
+                dataIndex: 'licenseNumber',
+                key: 'licenseNumber',
+            },
+            {
+                title: '车主姓名',
+                dataIndex: 'ownerName',
+                key: 'ownerName',
+            },
+            {
+                title: '报价时间',
+                dataIndex: 'createTime',
+                key: 'createTime',
+            },
+            {
+                title: '报价编号',
+                dataIndex: 'offerId',
+                key: 'offerId',
+            }
+        ];
+        const orderColumns = [
+            {
+                title: '订单时间',
+                dataIndex: 'createTime',
+                render: val => {
+                    return moment(val * 1000).format('YYYY-MM-DD hh:mm');
+                }
+            }, {
+                title: '订单编号',
+                dataIndex: 'orderId',
+                render: (text, record, index) => {
+                    if (record.quoteRecord) {
+                        return <a onClick={() => {
+                            this.setState({
+                                insuranceDetailData: record.quoteRecord,
+                                insuranceDetailModalVisible: true
+                            })
+                        }} >{text}</a>
+                    } else {
+                        return <a >{text}</a>
+                    }
+                }
+            }, {
+                title: '订单总额(元)',
+                dataIndex: 'totalPrice',
+            },
+            {
+                title: '订单状态',
+                dataIndex: 'stateString',
+            },
+            {
+                title: '返现金额(元)',
+                dataIndex: 'backmoney',
+            },
+            {
+                title: '是否返现',
+                dataIndex: 'cashback',
+                render: val => {
+                    return val ? '是' : '否'
+                }
+            },
+            {
+                title: '返现时间',
+                dataIndex: 'cashbackTime',
+                render: val => {
+                    return moment(val * 1000).format('YYYY-MM-DD hh:mm');
+                }
+            },
+            {
+                title: '付款时间',
+                dataIndex: 'payTime',
+                render: val => {
+                    return moment(val * 1000).format('YYYY-MM-DD hh:mm');
+                }
+            },
+            {
+                title: '运单编号',
+                dataIndex: 'expressNumber',
+                render: (text, record, index) => {
+                    if (record.expressNumber && record.reciver) {
+                        return <a onClick={() => {
+                            this.setState({
+                                waybillData: record.reciver,
+                                waybillModalVisible: true
+                            })
+                        }} >{record.expressNumber}</a>
+                    } else {
+                        return ''
+                    }
+                }
+            }
+        ];
+        const waybillModalVisible = this.state.waybillModalVisible;
+        const insuranceDetailModalVisible = this.state.insuranceDetailModalVisible;
         const parentMethods = {
-            handleModalVisible: this.handleModalVisible,
+            form: this.state.waybillData,
+            handleModalVisible: this.handleWaybillModalVisible,
         };
+        const insuranceParentMethods = {
+            form: this.state.insuranceDetailData,
+            handleModalVisible: this.handleInsuranceDetailModalVisible,
+        }
         return (
             <PageHeaderLayout >
                 <Card title="客户信息" className={styles.card} bordered={false}>
@@ -243,7 +378,7 @@ export default class ClientDetail extends PureComponent {
                             </Col>
                             <Col xl={{ span: 6, offset: 2 }} lg={{ span: 8 }} md={{ span: 12 }} sm={24}>
                                 <Form.Item label='联系电话'>
-                                {this.state.clientInfo.phone || '暂无信息'}
+                                    {this.state.clientInfo.phone || '暂无信息'}
                                 </Form.Item>
                             </Col>
                             <Col xl={{ span: 8, offset: 2 }} lg={{ span: 10 }} md={{ span: 24 }} sm={24}>
@@ -255,18 +390,18 @@ export default class ClientDetail extends PureComponent {
                         <Row gutter={16}>
                             <Col lg={6} md={12} sm={24}>
                                 <Form.Item label='车牌号'>
-                                {this.state.clientInfo.licenseNumber || '暂无信息'}
-                </Form.Item>
+                                    {this.state.clientInfo.licenseNumber || '暂无信息'}
+                                </Form.Item>
                             </Col>
                             <Col xl={{ span: 6, offset: 2 }} lg={{ span: 8 }} md={{ span: 12 }} sm={24}>
                                 <Form.Item label='保险到期'>
-                                {moment(this.state.clientInfo.insuranceDeadline).format('YYYY-MM-DD') || '暂无信息'}
-                </Form.Item>
+                                    {moment(this.state.clientInfo.insuranceDeadline).format('YYYY-MM-DD') || '暂无信息'}
+                                </Form.Item>
                             </Col>
                             <Col xl={{ span: 8, offset: 2 }} lg={{ span: 10 }} md={{ span: 24 }} sm={24}>
                                 <Form.Item label='来源渠道'>
-                                {this.state.clientInfo.source || '暂无信息'}
-                </Form.Item>
+                                    {this.state.clientInfo.source || '暂无信息'}
+                                </Form.Item>
                             </Col>
                         </Row>
                     </Form>
@@ -285,11 +420,16 @@ export default class ClientDetail extends PureComponent {
                         // loading={loading}
                         dataSource={this.state.orderList}
                         columns={orderColumns}
+                        pagination={false}
                     />
                 </Card>
                 <WaybillDetail
                     {...parentMethods}
                     modalVisible={waybillModalVisible}
+                />
+                <InsuranceDetail
+                    {...insuranceParentMethods}
+                    modalVisible={insuranceDetailModalVisible}
                 />
 
             </PageHeaderLayout >
