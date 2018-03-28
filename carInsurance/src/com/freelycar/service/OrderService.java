@@ -273,6 +273,20 @@ public class OrderService
 	//报价记录
 	public Map<String,Object> getClientOrderByLicenseNumber(String licenseNumber,int page,int number){
 		List<InsuranceOrder> orderByLicenseNumber = orderDao.getOrderByLicenseNumber(licenseNumber,page,number);
+		//循环出来这单的报价记录
+		for(InsuranceOrder order : orderByLicenseNumber){
+			QuoteRecord quoteRecordBylicenseNumberAndOfferId = quoteRecordDao.getQuoteRecordBylicenseNumberAndOfferId(licenseNumber, order.getOrderId());
+			
+			String offerDetail = quoteRecordBylicenseNumberAndOfferId.getOfferDetail();
+			quoteRecordBylicenseNumberAndOfferId.setQiangzhiList(QuoteRecord.getQiangzhiJsonObj(offerDetail));
+			quoteRecordBylicenseNumberAndOfferId.setShangyeList(QuoteRecord.getShangYeJsonObj(offerDetail));
+			order.setQuoteRecord(quoteRecordBylicenseNumberAndOfferId);
+			
+			Reciver reciverByOrderId = reciverDao.getReciverByOrderId(order.getOrderId());
+			order.setReciver(reciverByOrderId);
+		}
+		
+		
 		return RESCODE.SUCCESS.getJSONRES(orderByLicenseNumber);
 	}
 	

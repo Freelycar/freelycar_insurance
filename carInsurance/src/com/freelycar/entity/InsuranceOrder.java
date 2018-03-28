@@ -5,6 +5,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Lob;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import org.hibernate.annotations.GenericGenerator;
 
@@ -86,6 +87,11 @@ public class InsuranceOrder
     
     private int sourceId;
     
+    @Transient
+    private QuoteRecord quoteRecord;
+    @Transient
+    private Reciver reciver;
+    
     /********** constructors ***********/  
     public InsuranceOrder() {  
       
@@ -121,6 +127,23 @@ public class InsuranceOrder
     public Integer getId() {
         return id;
     }
+    
+    
+    public Reciver getReciver() {
+		return reciver;
+	}
+    
+    public void setReciver(Reciver reciver) {
+		this.reciver = reciver;
+	}
+    
+    public QuoteRecord getQuoteRecord() {
+		return quoteRecord;
+	}
+    
+    public void setQuoteRecord(QuoteRecord quoteRecord) {
+		this.quoteRecord = quoteRecord;
+	}
     
     public String getHebaoMessage() {
 		return hebaoMessage;

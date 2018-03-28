@@ -58,10 +58,19 @@ public class QuoteRecordDao
     //指定cloumn
     public List<QuoteRecord> getQuoteRecordBylicenseNumber(String licenseNumber){
     	String hql = "from QuoteRecord where licenseNumber = :licenseNumber order by createTime,id desc";
-    	List<QuoteRecord> list = getSession().createQuery(hql).setString("licenseNumber", licenseNumber).setMaxResults(3).list();
+    	@SuppressWarnings("unchecked")
+		List<QuoteRecord> list = getSession().createQuery(hql).setString("licenseNumber", licenseNumber).setMaxResults(3).list();
     	return list;
     }
 	
+    public QuoteRecord getQuoteRecordBylicenseNumberAndOfferId(String licenseNumber,String offerId){
+    	String hql = "from QuoteRecord where licenseNumber = :licenseNumber and offerId =:offerId";
+    	QuoteRecord uniqueResult = (QuoteRecord) getSession().createQuery(hql)
+    			.setString("licenseNumber", licenseNumber)
+    			.setString("offerId", offerId)
+    			.uniqueResult();
+    	return uniqueResult;
+    }
     
 	//查询所有的QuoteRecord	
 	@SuppressWarnings("unchecked")
