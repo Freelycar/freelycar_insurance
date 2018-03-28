@@ -77,7 +77,7 @@ public class ExcelController {
 			row.add(c.get);*/
 		}
 		
-		//ExcelHandler.generateExcel(titles, list, response);
+		ExcelHandler.generateExcel(titles, list, response);
 		//return insuranceService.queryLastYear(client);
 		return null;
 		
