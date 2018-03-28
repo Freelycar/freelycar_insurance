@@ -256,5 +256,39 @@ public class OrderService
 		orderDao.updateOrder(orderById);
 		return RESCODE.SUCCESS.getJSONRES();
 	}
-    
+	
+	//车险订单
+	/*public Map<String,Object> getOrderByLicenseNumber(String licenseNumber){
+		List<InsuranceOrder> orderByLicenseNumber = orderDao.getOrderByLicenseNumber(licenseNumber);
+		return RESCODE.SUCCESS.getJSONRES(orderByLicenseNumber);
+	}*/
+	
+	
+	//报价记录
+	public Map<String,Object> getClientQuoteRecordByLicenseNumber(String licenseNumber){
+		List<QuoteRecord> quoteRecordBylicenseNumber = quoteRecordDao.getQuoteRecordBylicenseNumber(licenseNumber);
+		return RESCODE.SUCCESS.getJSONRES(quoteRecordBylicenseNumber);
+	}
+	
+	//报价记录
+	public Map<String,Object> getClientOrderByLicenseNumber(String licenseNumber,int page,int number){
+		List<InsuranceOrder> orderByLicenseNumber = orderDao.getOrderByLicenseNumber(licenseNumber,page,number);
+		//循环出来这单的报价记录
+		for(InsuranceOrder order : orderByLicenseNumber){
+			QuoteRecord quoteRecordBylicenseNumberAndOfferId = quoteRecordDao.getQuoteRecordBylicenseNumberAndOfferId(licenseNumber, order.getOrderId());
+			
+			String offerDetail = quoteRecordBylicenseNumberAndOfferId.getOfferDetail();
+			quoteRecordBylicenseNumberAndOfferId.setQiangzhiList(QuoteRecord.getQiangzhiJsonObj(offerDetail));
+			quoteRecordBylicenseNumberAndOfferId.setShangyeList(QuoteRecord.getShangYeJsonObj(offerDetail));
+			order.setQuoteRecord(quoteRecordBylicenseNumberAndOfferId);
+			
+			Reciver reciverByOrderId = reciverDao.getReciverByOrderId(order.getOrderId());
+			order.setReciver(reciverByOrderId);
+		}
+		
+		
+		return RESCODE.SUCCESS.getJSONRES(orderByLicenseNumber);
+	}
+	
+	
 }

@@ -44,6 +44,19 @@ public class OrderDao
         InsuranceOrder result = (InsuranceOrder) getSession().createQuery(hql).setInteger("id", id).uniqueResult();
         return result;
     }
+    
+    //根据id查询Order
+    public List<InsuranceOrder> getOrderByLicenseNumber(String licenseNumber,int page,int number){
+    	String hql = "from InsuranceOrder where licenseNumber = :licenseNumber";
+    	@SuppressWarnings("unchecked")
+		List<InsuranceOrder> result = getSession().createQuery(hql).setString("licenseNumber", licenseNumber)
+		.setFirstResult(page)
+		.setMaxResults(number)
+		.list();
+    	return result;
+    }
+    
+    
     //根据id查询Order
     public InsuranceOrder getOrderByOrderId(String orderId){
     	String hql = "from InsuranceOrder where orderId = :orderId";
@@ -89,7 +102,8 @@ public class OrderDao
 		QueryUtils utils = new QueryUtils(getSession(), "from InsuranceOrder");
 		
 		if(order != null){
-			utils = utils.addInteger("state", order.getState());
+			utils = utils.addInteger("state", order.getState())
+					.addString("openId", order.getOpenId());
 		}
 		
 		return utils.setFirstResult(from)

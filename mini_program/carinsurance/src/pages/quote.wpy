@@ -164,7 +164,7 @@
       </view>
 
       <view class='lastyear-record-bg'>
-        <block wx:for={{lastYearRecord}}>
+        <block wx:for={{lastYearRecord}}  wx:key='index'>
           <view class='lastyear-record-item'>
             <view class='lastyear-record-header'> {{item.insuranceName}}</view>
             <view class='lastyear-record-detail'>
@@ -447,7 +447,7 @@ export default class Quote extends wepy.page {
         this.waitSecond = 90;
         this.waitting = false;
         this.$apply();
-        wepy.showToast({ title: objData.data, icon: 'none' });
+        wepy.showToast({ title: objData.data, icon: 'none' }, 2);
       }
     });
 

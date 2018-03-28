@@ -51,8 +51,6 @@ public class OrderController
 	}
     
     
-    
-    
     //增加一个Order
     @RequestMapping(value = "/save",method = RequestMethod.POST)
     public Map<String,Object> saveOrder(InsuranceOrder order){
@@ -76,5 +74,16 @@ public class OrderController
 	public Map<String,Object> updateOrder(InsuranceOrder order){
 	    return orderService.updateOrder(order);
 	}
-    
+
+	//根据clientId查询订单
+	@RequestMapping(value = "/getClientQuoteRecordByLicenseNumber",method = RequestMethod.GET)
+	public Map<String,Object> getClientQuoteRecordByLicenseNumber(String licenseNumber){
+	    return orderService.getClientQuoteRecordByLicenseNumber(licenseNumber);
+	}
+	
+	//根据clientId查询订单
+	@RequestMapping(value = "/getClientOrderByLicenseNumber",method = RequestMethod.GET)
+	public Map<String,Object> getClientOrderByLicenseNumber(String licenseNumber,int page,int number){
+		return orderService.getClientOrderByLicenseNumber(licenseNumber,page,number);
+	}
 }

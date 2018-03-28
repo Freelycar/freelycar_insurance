@@ -36,6 +36,16 @@ public class QuoteRecordDao
         QuoteRecord result = (QuoteRecord) getSession().createQuery(hql).setInteger("id", id).uniqueResult();
         return result;
     }
+    
+    //查询最新的查询QuoteRecord
+    public QuoteRecord getLatestQuoteRecordByNameLice(String ownerName,String licenseNumber){
+    	String hql = "from QuoteRecord where ownerName = :ownerName and licenseNumber = :licenseNumber ORDER BY createTime,id desc LIMIT 1";
+    	QuoteRecord result = (QuoteRecord) getSession().createQuery(hql)
+    			.setString("ownerName", ownerName)
+    			.setString("licenseNumber", licenseNumber)
+    			.uniqueResult();
+    	return result;
+    }
 	
     //指定cloumn
     public QuoteRecord getQuoteRecordBySpecify(String specify,String value){
@@ -43,7 +53,25 @@ public class QuoteRecordDao
     	QuoteRecord result = (QuoteRecord) getSession().createQuery(hql).setString(specify, value).uniqueResult();
     	return result;
     }
+    
+    
+    //指定cloumn
+    public List<QuoteRecord> getQuoteRecordBylicenseNumber(String licenseNumber){
+    	String hql = "from QuoteRecord where licenseNumber = :licenseNumber order by createTime,id desc";
+    	@SuppressWarnings("unchecked")
+		List<QuoteRecord> list = getSession().createQuery(hql).setString("licenseNumber", licenseNumber).setMaxResults(3).list();
+    	return list;
+    }
 	
+    public QuoteRecord getQuoteRecordBylicenseNumberAndOfferId(String licenseNumber,String offerId){
+    	String hql = "from QuoteRecord where licenseNumber = :licenseNumber and offerId =:offerId";
+    	QuoteRecord uniqueResult = (QuoteRecord) getSession().createQuery(hql)
+    			.setString("licenseNumber", licenseNumber)
+    			.setString("offerId", offerId)
+    			.uniqueResult();
+    	return uniqueResult;
+    }
+    
 	//查询所有的QuoteRecord	
 	@SuppressWarnings("unchecked")
 	public List<QuoteRecord> listQuoteRecord(QuoteRecord quoteRecord,int from, int num){

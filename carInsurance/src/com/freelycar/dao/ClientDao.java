@@ -89,6 +89,13 @@ public class ClientDao
 			 .getQuery().list();
 	}
 	
+	//查询所有的Client	
+	@SuppressWarnings("unchecked")
+	public List<Client> listAllClient(){
+		QueryUtils utils = new QueryUtils(getSession(), "from Client");
+		return utils.getQuery().list();
+	}
+	
 	
 	/**
 	 * 查询Client的总数

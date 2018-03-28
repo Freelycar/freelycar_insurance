@@ -105,16 +105,17 @@ public class InsuranceService
 				}
 				
     			JSONArray array = new JSONArray();
-    			if(data.has("biInfo")){//商业险 
-    				JSONObject biInfo = data.getJSONObject("biInfo");
-    				array.put(biInfo);
-    			}
     			if(data.has("ciInfo")){//交强险
     				JSONObject ciInfo = data.getJSONObject("ciInfo");
     				array.put(ciInfo);
     			}else{
     				//没有交强险
     				return RESCODE.REQUEST_BAOJIA_EXCEPTION.getJSONRES("查询不到交强险");
+    			}
+    			
+    			if(data.has("biInfo")){//商业险 
+    				JSONObject biInfo = data.getJSONObject("biInfo");
+    				array.put(biInfo);
     			}
     			List<Insurance> result = new ArrayList<>();
     			for(int i=0;i<array.length();i++){
@@ -134,8 +135,12 @@ public class InsuranceService
     				String totalAmount = info.getString("totalAmount");
     				String insuranceJson = info.has("insurances")?info.getJSONArray("insurances").toString():null;
     				
+    				//根据车主姓名和车牌 保持只有一条查询续保记录
+    				Insurance insurance = insuranceDao.getInsuranceByNameLiceAndState(client.getOwnerName(), client.getLicenseNumber(), i==1);
+    				if(insurance == null){
+    					insurance = new Insurance();
+    				}
     				
-    				Insurance insurance = new Insurance();
     				insurance.setPolicyNo(policyNo);
     				insurance.setCommercial(i==1);
     				insurance.setInsurances(insuranceJson);
@@ -148,7 +153,7 @@ public class InsuranceService
     				insurance.setOwnerName(client.getOwnerName());
     				insurance.setTotalOpenId(client.getOpenId());
     				insurance.setPrice(totalAmount);
-    				saveInsurance(insurance);
+    				saveUpdateInsurance(insurance);
     				result.add(insurance);
     			}
     			
@@ -161,7 +166,7 @@ public class InsuranceService
     			}else{
     				//数据库有数据 填充其他信息 这边要注意
     				exist.setOwnerName(client.getOwnerName());
-    				exist.setQuoteState(INSURANCE.QUOTESTATE_NO_YIBAOJIA.getCode()+"");
+    				//exist.setQuoteState(INSURANCE.QUOTESTATE_NO_YIBAOJIA.getCode()+"");
     				clientDao.saveClient(exist);
     			}
     			
@@ -373,8 +378,8 @@ public class InsuranceService
     			inorder.setLicenseNumber(entity.getLicenseNumber());
     			inorder.setOrderId(entity.getOfferId());
     			inorder.setOpenId(entity.getOpenId());
-    			inorder.setState(INSURANCE.QUOTESTATE_NO_YITJHB.getCode());
-    			inorder.setStateString(INSURANCE.QUOTESTATE_NO_YITJHB.getName());
+    			inorder.setState(INSURANCE.QUOTESTATE_HEBAOING.getCode());
+    			inorder.setStateString(INSURANCE.QUOTESTATE_HEBAOING.getName());
     			inorder.setCreateTime(System.currentTimeMillis());
     			orderDao.saveUpdateOrder(inorder);
     			
@@ -412,7 +417,11 @@ public class InsuranceService
     }
     
     
-    
+    //根据姓名 车牌 和商业险还是交强险来定
+    public Insurance getInsuranceByNameLiceAndState(String ownerName,String licenseNumber,boolean commercial){
+    	Insurance insurance = insuranceDao.getInsuranceByNameLiceAndState(ownerName, licenseNumber, commercial);
+    	return insurance;
+    }
     
 	
     //增加一个Insurance
@@ -421,6 +430,11 @@ public class InsuranceService
     	return RESCODE.SUCCESS.getJSONRES();
     }
 	
+    //增加一个Insurance
+    public Map<String,Object> saveUpdateInsurance(Insurance insurance){
+    	insuranceDao.saveUpdateInsurance(insurance);
+    	return RESCODE.SUCCESS.getJSONRES();
+    }
 	/**
 		分页查询
 	 * @param page 从第几页开始查询

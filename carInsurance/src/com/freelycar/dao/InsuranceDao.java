@@ -29,6 +29,10 @@ public class InsuranceDao
 		getSession().save(insurance);
 	}
 	
+    //增加一个Insurance
+    public void saveUpdateInsurance(Insurance insurance){
+    	getSession().saveOrUpdate(insurance);
+    }
 	//根据id查询Insurance
     public Insurance getInsuranceById(int id){
         String hql = "from Insurance where id = :id";
@@ -36,6 +40,16 @@ public class InsuranceDao
         return result;
     }
 	
+    //根据姓名 车牌 和商业险还是交强险来定
+    public Insurance getInsuranceByNameLiceAndState(String ownerName,String licenseNumber,boolean commercial){
+    	String hql = "from Insurance where ownerName = :ownerName and licenseNumber = :licenseNumber and commercial= :commercial";
+    	Insurance result = (Insurance) getSession().createQuery(hql)
+    						.setString("ownerName", ownerName)
+    						.setString("licenseNumber", licenseNumber)
+    						.setBoolean("commercial", commercial)
+    						.uniqueResult();
+    	return result;
+    }
 	
 	//查询所有的Insurance	
 	@SuppressWarnings("unchecked")
