@@ -102,7 +102,8 @@ public class OrderDao
 		QueryUtils utils = new QueryUtils(getSession(), "from InsuranceOrder");
 		
 		if(order != null){
-			utils = utils.addInteger("state", order.getState());
+			utils = utils.addInteger("state", order.getState())
+					.addString("openId", order.getOpenId());
 		}
 		
 		return utils.setFirstResult(from)
