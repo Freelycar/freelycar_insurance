@@ -5,10 +5,14 @@ import com.freelycar.entity.Invition;
 import com.freelycar.service.ClientService;
 import com.freelycar.service.InsuranceService;
 import com.freelycar.service.InvitionService;
+import com.freelycar.util.Constant;
+import com.freelycar.util.HttpClientUtil;
 import com.freelycar.util.LeanCloudSms;
 
+import java.util.HashMap;
 import java.util.Map;
 
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -64,6 +68,11 @@ public class ClientController
     	return res;
     }
     
+    @RequestMapping(value = "/getSmallWeixinInfo")
+    public String getSmallWeixinInfo(String code){
+    	JSONObject httpGet = HttpClientUtil.httpGet("https://api.weixin.qq.com/sns/jscode2session?appid="+Constant.APPID+"&secret="+Constant.APPSECRET+"&js_code="+code+"&grant_type=authorization_code");
+    	return httpGet.toString();
+    }
     
     
     @RequestMapping(value = "/isExistByOpenId",method = RequestMethod.POST)

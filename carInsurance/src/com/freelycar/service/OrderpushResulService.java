@@ -7,7 +7,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
-import org.apache.http.protocol.HTTP;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +20,6 @@ import com.freelycar.entity.InsuranceOrder;
 import com.freelycar.entity.OrderpushResul;
 import com.freelycar.entity.QuoteRecord;
 import com.freelycar.util.Constant;
-import com.freelycar.util.HttpClientUtil;
 import com.freelycar.util.INSURANCE;
 import com.freelycar.util.RESCODE;  
 /**  
@@ -112,8 +110,8 @@ public class OrderpushResulService
 				if(underwritingJson.has("errorMsg")){
 					//核保异常
 					//更新订单状态
-					order.setState(INSURANCE.QUOTESTATE_NO_HEBAOSHIBAI.getCode());
-					order.setStateString(INSURANCE.QUOTESTATE_NO_HEBAOSHIBAI.getName());
+					order.setState(INSURANCE.QUOTESTATE_HEBAOFAIL.getCode());
+					order.setStateString(INSURANCE.QUOTESTATE_HEBAOFAIL.getName());
 					order.setHebaoMessage(underwritingJson.getString("errorMsg"));
 					//SocketHelper.sendMessage(order.getOpenId(), RESCODE.PUSHBACK_HEBAO_EXCEPTION.getJSONObject(underwritingJson.getString("errorMsg")).toString());
 					return RESCODE.LUOTUO_SUCCESS.getLuoTuoRes(underwritingJson.getString("errorMsg"));
@@ -171,8 +169,8 @@ public class OrderpushResulService
 				order.setLicenseNumber(licenseNumber);
 				order.setOrderId(orderId);
 				//更新订单状态
-				order.setState(INSURANCE.QUOTESTATE_NO_HEBAOCHENGGONG.getCode());
-				order.setStateString(INSURANCE.QUOTESTATE_NO_HEBAOCHENGGONG.getName());
+				order.setState(INSURANCE.QUOTESTATE_NOTPAY.getCode());
+				order.setStateString(INSURANCE.QUOTESTATE_NOTPAY.getName());
 				
 				//更新支付二维码和失效时间
 				if(underwritingJson.has("payJson")){//较强险

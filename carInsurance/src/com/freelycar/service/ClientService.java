@@ -60,6 +60,10 @@ public class ClientService
 		return RESCODE.SUCCESS.getJSONRES(listPage);
     }
 	
+	public List<Client> listAllClient(){
+		List<Client> allClient = clientDao.listAllClient();
+		return allClient;
+	}
 	
 	//根据id删除Client
 	public Map<String,Object> removeClientById(String id){

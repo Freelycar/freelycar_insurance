@@ -47,6 +47,17 @@ public class Tools {
 	 * @param date
 	 * @return yyyy-MM-dd HH:mm:ss
 	 */
+	public static String date2Str(long time) {
+		Date date = new Date(time);
+		return date2Str(date, "yyyy-MM-dd HH:mm:ss");
+	}
+	
+	/**
+	 * 按照yyyy-MM-dd HH:mm:ss的格式，日期转字符串
+	 * 
+	 * @param date
+	 * @return yyyy-MM-dd HH:mm:ss
+	 */
 	public static String date2Str(Date date) {
 		return date2Str(date, "yyyy-MM-dd HH:mm:ss");
 	}

@@ -76,8 +76,8 @@ public class Constant {
     }
     
     //wetchat 接口相关
-    private static final String APPID = prop.getProperty("appid");
-    private static final String APPSECRET = prop.getProperty("appsecret");
+    public static final String APPID = prop.getProperty("appid");
+    public static final String APPSECRET = prop.getProperty("appsecret");
     //正确返回{"access_token": "ACCESS_TOKEN", "expires_in": 7200}
     public static final String tokenUrl = "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid="+APPID+"&secret="+APPSECRET;
     

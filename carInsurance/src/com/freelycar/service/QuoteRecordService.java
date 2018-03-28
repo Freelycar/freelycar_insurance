@@ -6,7 +6,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +15,6 @@ import org.springframework.transaction.annotation.Transactional;
 import com.freelycar.dao.CashbackRecordDao;
 import com.freelycar.dao.QuoteRecordDao;
 import com.freelycar.entity.CashBackRate;
-import com.freelycar.entity.CashbackRecord;
 import com.freelycar.entity.QuoteRecord;
 import com.freelycar.util.RESCODE;
 import com.freelycar.util.SocketHelper;  
@@ -153,6 +151,17 @@ public class QuoteRecordService
 		} 
 		return RESCODE.NOT_FOUND.getJSONRES();
     }
+	/**
+	 * 查询最新一条数据
+	 * @param quoteRecord
+	 * @param page
+	 * @param number
+	 * @return
+	 */
+	public QuoteRecord findLatestQuoteRecord(String ownerName,String licenseNumber){
+		QuoteRecord latestQuoteRecordByNameLice = quoteRecordDao.getLatestQuoteRecordByNameLice(ownerName,licenseNumber);
+		return latestQuoteRecordByNameLice;
+	}
 	
 	
 	//根据id删除QuoteRecord

@@ -256,5 +256,25 @@ public class OrderService
 		orderDao.updateOrder(orderById);
 		return RESCODE.SUCCESS.getJSONRES();
 	}
-    
+	
+	//车险订单
+	/*public Map<String,Object> getOrderByLicenseNumber(String licenseNumber){
+		List<InsuranceOrder> orderByLicenseNumber = orderDao.getOrderByLicenseNumber(licenseNumber);
+		return RESCODE.SUCCESS.getJSONRES(orderByLicenseNumber);
+	}*/
+	
+	
+	//报价记录
+	public Map<String,Object> getClientQuoteRecordByLicenseNumber(String licenseNumber){
+		List<QuoteRecord> quoteRecordBylicenseNumber = quoteRecordDao.getQuoteRecordBylicenseNumber(licenseNumber);
+		return RESCODE.SUCCESS.getJSONRES(quoteRecordBylicenseNumber);
+	}
+	
+	//报价记录
+	public Map<String,Object> getClientOrderByLicenseNumber(String licenseNumber,int page,int number){
+		List<InsuranceOrder> orderByLicenseNumber = orderDao.getOrderByLicenseNumber(licenseNumber,page,number);
+		return RESCODE.SUCCESS.getJSONRES(orderByLicenseNumber);
+	}
+	
+	
 }
