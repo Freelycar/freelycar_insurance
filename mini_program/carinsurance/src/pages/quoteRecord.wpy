@@ -41,7 +41,7 @@
             <view class='header-time'>报价时间</view>
         </view>
         <scroll-view scroll-y="true" class='scroll-view-bg'>
-            <block wx:for="{{record}}">
+            <block wx:for="{{record}}"  wx:key='index'>
                 <view class='scroll-view-item'>
                     <text class='carNmuber'>{{item.licenseNumber}}</text>
                     <text class='time'>{{item.crateTime}}</text>

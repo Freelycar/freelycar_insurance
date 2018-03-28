@@ -130,7 +130,7 @@
                                 <i class='fa fa-calendar' style='color:lightgray'></i> 起保日期:{{insuranceDate}}</view>
                         </picker>
                     </view>
-                    <block wx:for={{formData.insurances}}>
+                    <block wx:for={{formData.insurances}}  wx:key='index'>
                         <view class='line item-bg flex-box-row'>
                             <view class='flex-box-row '>
                                 <view style='overflow: hidden;text-overflow: ellipsis;white-space: nowrap;'>{{item.insuranceName}}</view>

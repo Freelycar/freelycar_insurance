@@ -36,17 +36,20 @@ const recordColumns = [
 const orderColumns = [
     {
         title: '订单时间',
-        dataIndex: 'time',
+        dataIndex: 'createTime',
+        render: val => {
+            return moment(val * 1000).format('YYYY-MM-DD hh:mm');
+        }
     }, {
         title: '订单编号',
-        dataIndex: 'orderCode',
+        dataIndex: 'orderId',
     }, {
         title: '订单总额(元)',
-        dataIndex: 'total',
+        dataIndex: 'totalPrice',
     },
     {
-        title: '支付状态',
-        dataIndex: 'status',
+        title: '订单状态',
+        dataIndex: 'stateString',
     },
     {
         title: '返现金额(元)',
@@ -54,19 +57,41 @@ const orderColumns = [
     },
     {
         title: '是否返现',
-        dataIndex: 'isReturn',
+        dataIndex: 'cashback',
+        render: val => {
+            return val ? '是': '否'
+        }
     },
     {
         title: '返现时间',
-        dataIndex: 'returnTime',
+        dataIndex: 'cashbackTime',
+        render: val => {
+            return moment(val * 1000).format('YYYY-MM-DD hh:mm'); 
+        }
     },
     {
         title: '付款时间',
         dataIndex: 'payTime',
+        render: val => {
+            return moment(val * 1000).format('YYYY-MM-DD hh:mm');
+        }
     },
     {
         title: '运单编号',
-        dataIndex: 'kuaidiCode',
+        // dataIndex: 'expressNumber',
+        render: (item, index) => {
+            if (item.expressNumber != 'undefined') {
+                return <a onClick={() => {
+                    this.setState({
+                        waybillData: item.reciver,
+                        waybillModalVisible: true
+                    })
+                }} >{item.expressNumber}</a>
+            } else {
+                return ''
+            }
+            
+        }
     }
 ];
 
@@ -131,7 +156,6 @@ export default class ClientDetail extends PureComponent {
     componentDidMount() {
         this.queryClientDetail();
         this.getQuoteRecordList();
-        this.getOrderList();
         this.getClientOrderByLicenseNumber(1);
     }
 
@@ -185,14 +209,15 @@ export default class ClientDetail extends PureComponent {
             number: 5
         }).then(res => {
             console.log(res);
+            if (res && res.code === 0) {
+                this.setState({
+                    orderList: res.data
+                })
+            }
         }).catch(err => {
             console.log(res);
             message.error('请求失败');
         })
-    }
-
-    getOrderList = () => {
-
     }
 
     handleWaybillModalVisible = (flag) => {
