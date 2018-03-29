@@ -37,6 +37,14 @@ public class OrderDao
     public void saveUpdateOrder(InsuranceOrder order){
     	getSession().saveOrUpdate(order);
     }
+    
+    public String saveUpdateOrder(InsuranceOrder order,boolean saveOrupdate){
+    	if(saveOrupdate){
+    		return getSession().save(order).toString();
+    	}
+    	getSession().update(order);
+    	return null;
+    }
 	
 	//根据id查询Order
     public InsuranceOrder getOrderById(int id){

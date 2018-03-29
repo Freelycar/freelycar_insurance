@@ -280,9 +280,15 @@ public class OrderService
 			String offerDetail = quoteRecordBylicenseNumberAndOfferId.getOfferDetail();
 			quoteRecordBylicenseNumberAndOfferId.setQiangzhiList(QuoteRecord.getQiangzhiJsonObj(offerDetail));
 			quoteRecordBylicenseNumberAndOfferId.setShangyeList(QuoteRecord.getShangYeJsonObj(offerDetail));
+			quoteRecordBylicenseNumberAndOfferId.setTotalPrice(order.getTotalPrice()+"");
 			order.setQuoteRecord(quoteRecordBylicenseNumberAndOfferId);
 			
 			Reciver reciverByOrderId = reciverDao.getReciverByOrderId(order.getOrderId());
+			if(reciverByOrderId != null){
+				reciverByOrderId.setExpressCompany(order.getExpressCompany());
+				reciverByOrderId.setExpressNumber(order.getExpressNumber());
+				reciverByOrderId.setRemark(order.getRemark());
+			}
 			order.setReciver(reciverByOrderId);
 		}
 		

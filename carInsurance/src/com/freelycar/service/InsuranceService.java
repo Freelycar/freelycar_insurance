@@ -367,8 +367,10 @@ public class InsuranceService
     			System.out.println("提交核保成功");
     			
     			//保证同一个offerId 生成一个订单
+    			boolean save = false;
     			InsuranceOrder inorder = orderDao.getOrderByOrderId(entity.getOfferId());
     			if(inorder == null){
+    				 save = true;
     				 inorder = new InsuranceOrder();
     			}
     			inorder.setCreateTime(System.currentTimeMillis());
@@ -381,9 +383,9 @@ public class InsuranceService
     			inorder.setState(INSURANCE.QUOTESTATE_HEBAOING.getCode());
     			inorder.setStateString(INSURANCE.QUOTESTATE_HEBAOING.getName());
     			inorder.setCreateTime(System.currentTimeMillis());
-    			orderDao.saveUpdateOrder(inorder);
+    			String saveId = orderDao.saveUpdateOrder(inorder,save);
     			
-    			return RESCODE.SUCCESS.getJSONRES(entity.getOfferId());
+    			return RESCODE.SUCCESS.getJSONRES(save?saveId:inorder.getId());
     		}
     	}
     	return RESCODE.FAIL.getJSONRES();
@@ -393,7 +395,6 @@ public class InsuranceService
     //7、确认是否承保接口
     public Map<String,Object> confirmChengbao(String orderId){
     	
-    	System.out.println("orderId");
     	Map<String,Object> param = new HashMap<>();
     	param.put("api_key", LUOTUOKEY);
     	

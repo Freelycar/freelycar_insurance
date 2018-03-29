@@ -143,24 +143,15 @@ public class OrderpushResulService
 				}
 				
 				//在这里我们在过期时间之内定时调用 7、确认是否承保接口
-				Constant.getTimeExecutor().scheduleAtFixedRate(new Runnable() {
-					public void run() {
-						
-						if(proposalMap.get(orderId) > System.currentTimeMillis()){
-							Map<String, Object> confirmChengbao = insuranceService.confirmChengbao(orderId);
-							if(confirmChengbao.get("code").equals("0")){//用户交钱了
-								//更新支付时间
-								order.setPayTime(System.currentTimeMillis());
-								
-								//等待骆驼推送
-								Constant.getTimeExecutor().shutdown();
-							}
-							
-						}else{
-							Constant.getTimeExecutor().shutdown();
-						}
+				if(proposalMap.get(orderId) > System.currentTimeMillis()){
+					Map<String, Object> confirmChengbao = insuranceService.confirmChengbao(orderId);
+					if(!confirmChengbao.get("code").equals("0")){
+						System.out.println("请求是否承保失败！。。");
 					}
-				},0, 1, TimeUnit.SECONDS);
+					
+				}else{
+					proposalMap.remove(orderId);
+				}
 				
 				
 				QuoteRecord qr = quoteRecordDao.getQuoteRecordBySpecify("offerId", orderId);
@@ -216,17 +207,50 @@ public class OrderpushResulService
 			JSONObject resObj = new JSONObject(result);
 			if(resObj.getJSONObject("errorMsg").getString("code").equals("success")){
 				JSONObject resultobj = resObj.getJSONObject("data");
+				String orderId = resultobj.getString("orderId");
+				InsuranceOrder orderByOrderId = orderDao.getOrderByOrderId(orderId);
+				
+				//这里根据resultObj中的未付款来不断轮询
+				Map<String, Long> proposalMap = Constant.getProposalMap();
+				
+				boolean pay = false;
+				
+				if(pay){
+					if(proposalMap.get(orderId) > System.currentTimeMillis()){
+						Map<String, Object> confirmChengbao = insuranceService.confirmChengbao(orderId);
+						if(!confirmChengbao.get("code").equals("0")){
+							System.out.println("请求是否承保失败。。。");
+						}
+						
+					}else{
+						//timeout移除订单
+						proposalMap.remove(orderId);
+					}
+				}else{
+					//yonghu支付
+					//更新订单状态
+					orderByOrderId.setPayTime(System.currentTimeMillis());
+					orderByOrderId.setState(INSURANCE.QUOTESTATE_CHENGBAOING.getCode());
+					orderByOrderId.setStateString(INSURANCE.QUOTESTATE_CHENGBAOING.getName());
+				}
+				
+				
+				boolean fail = false;
+				if(fail){
+					orderByOrderId.setState(INSURANCE.QUOTESTATE_CHENGBAOFAIL.getCode());
+					orderByOrderId.setStateString(INSURANCE.QUOTESTATE_CHENGBAOFAIL.getName());
+				}else{
+					orderByOrderId.setState(INSURANCE.QUOTESTATE_NOTDELIVER.getCode());
+					orderByOrderId.setStateString(INSURANCE.QUOTESTATE_NOTDELIVER.getName());
+				}
 				
 				
 				int state = resultobj.getInt("state");
-				String orderId = resultobj.getString("orderId");
 				String ciPolicyNo = resultobj.getString("ciPolicyNo");
 				String biPolicyNo = resultobj.getString("biPolicyNo");
 				
 				
-				InsuranceOrder orderByOrderId = orderDao.getOrderByOrderId(orderId);
-				orderByOrderId.setState(state);
-				orderDao.updateOrder(orderByOrderId);
+				//orderDao.updateOrder(orderByOrderId);
 				
 				Map<String,Object> msg = new HashMap<>();
 				msg.put("orderId", orderId);

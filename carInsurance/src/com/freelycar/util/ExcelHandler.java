@@ -151,21 +151,27 @@ public class ExcelHandler {
 	}
     
     
+    public static HSSFWorkbook getInstanceOfWb(){
+    	HSSFWorkbook wb = new HSSFWorkbook();
+    	return wb;
+    }
+    
+    
     /**
      * 生成excel 并下载
      * @param titles
      * @param list
      * @param response
      */
-    public static void generateExcel(List<String> titles, List<List<String>> list, HttpServletResponse response) {
+    public static void generateExcelSheet(HSSFWorkbook wb, List<String> titles, List<List<String>> list) {
 
 	    // 第一步，创建一个webbook，对应一个Excel文件  
-	    HSSFWorkbook wb = new HSSFWorkbook();
+	    //HSSFWorkbook wb = new HSSFWorkbook();
 	    
     	// 第二步，在webbook中添加一个sheet,对应Excel文件中的sheet 
-    	HSSFSheet sheet = wb.createSheet();  
+    	HSSFSheet sheet = wb.createSheet();
         // 第三步，在sheet中添加表头第0行,注意老版本poi对Excel的行数列数有限制short  
-        HSSFRow row = sheet.createRow(0);  
+        HSSFRow row = sheet.createRow(0);
         // 第四步，创建单元格，并设置值表头 设置表头居中  
         HSSFCellStyle style = wb.createCellStyle();  
         //style.setAlignment(HorizontalAlignment.CENTER); // 创建一个居中格式  
@@ -184,14 +190,11 @@ public class ExcelHandler {
         for (int i = 0,rowlen = list.size(); i < rowlen; i++) {  
             row = sheet.createRow(i + 1);
             List<String> rowItems = list.get(i);
-            
             for(int j = 0,collen = rowItems.size(); j < collen; j++){
                 row.createCell(j).setCellValue(rowItems.get(j));
             }
-            
         }  
         
-        downExcel(wb, response);
 	}
 	
     

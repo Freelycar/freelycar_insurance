@@ -10,6 +10,7 @@ import javax.persistence.Id;
 	
 
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import org.hibernate.annotations.GenericGenerator;
 
@@ -38,6 +39,19 @@ public class Reciver
     private String openId;
     
     private String orderId;//订单的id
+    
+    
+    //在订单里面有这里只做返回
+    @Transient
+    private String expressNumber;  //快递单号;
+	
+    @Transient
+    private String expressCompany;  //快递公司;
+	
+    @Transient
+    private String remark;  //备注;
+    
+    
 	
     private String adressDetail;  //详细地址;
     /********** constructors ***********/  
@@ -123,6 +137,31 @@ public class Reciver
         this.adressDetail = adressDetail;  
     }  
       
+    
+
+	public String getExpressNumber() {
+		return expressNumber;
+	}
+
+	public void setExpressNumber(String expressNumber) {
+		this.expressNumber = expressNumber;
+	}
+
+	public String getExpressCompany() {
+		return expressCompany;
+	}
+
+	public void setExpressCompany(String expressCompany) {
+		this.expressCompany = expressCompany;
+	}
+
+	public String getRemark() {
+		return remark;
+	}
+
+	public void setRemark(String remark) {
+		this.remark = remark;
+	}
 
 	@Override
 	public String toString() {

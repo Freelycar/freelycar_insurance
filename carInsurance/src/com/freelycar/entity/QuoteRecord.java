@@ -68,6 +68,9 @@ public class QuoteRecord
 	
     private String requestHeader;  //第三方信息(可以是任意信息比如;
     
+    @Transient
+    private String totalPrice;
+    
     private int state;
     /********** constructors ***********/  
     public QuoteRecord() {  
@@ -91,7 +94,13 @@ public class QuoteRecord
         this.requestHeader = requestHeader;  
     }  
     
+    public String getTotalPrice() {
+		return totalPrice;
+	}
     
+    public void setTotalPrice(String totalPrice) {
+		this.totalPrice = totalPrice;
+	}
     
     static class OfferDetail{
     	private String insuranceName;
