@@ -38,11 +38,49 @@ public class ExcelController {
 	private OrderService orderService;
 	
 	
-	private List<String> titles = Arrays.asList("车牌号码","车主姓名","手机号码","保险到期","报价时间","报价状态","报价编号","来源渠道","订单编号","订单时间","订单状态","付款时间","是否返现","返现金额","返现时间","配送时间","运单编号","签收时间");
+	private List<String> daitoubao = Arrays.asList("车牌号码","车主姓名","手机号码","保险到期","报价时间","报价状态","报价编号","来源渠道");
+	private List<String> yitoubao = Arrays.asList("车牌号码","车主姓名","手机号码","保险到期","来源渠道","订单编号","订单时间","订单状态","付款时间","是否返现","返现金额","返现时间","配送时间","运单编号","签收时间");
 	
 	@RequestMapping(value = "/exportClient",method = RequestMethod.POST)
     public Map<String,Object> isExistByOpenId(@RequestBody Client client){
     	
+		List<List<String>> daitoubao =  new ArrayList<>();
+		List<QuoteRecord> listExcelQuoteRecord = quoteRecordService.listExcelQuoteRecord();
+		
+		
+		
+		
+		for(QuoteRecord qr : listExcelQuoteRecord){
+			List<String> row = new ArrayList<>();
+			row.add(qr.getLicenseNumber());
+			row.add(qr.getOwnerName());
+			
+			Client ct = clientService.getClientDetail(qr.getOpenId(), qr.getLicenseNumber(), qr.getOwnerName());
+			row.add(ct.getPhone());
+			row.add(qr.getForceInsuranceStartTime()+"");//质保日期
+			row.add(qr.getCreateTime()+"");
+		/*	row.add(qr.getState());
+			row.add(qr.);
+			row.add(qr.);
+			row.add(qr.);
+			row.add(qr.);*/
+		}
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
 		List<Client> listAllClient = clientService.listAllClient();
 		
 		for(Client c : listAllClient){

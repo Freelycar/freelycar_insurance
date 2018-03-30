@@ -107,7 +107,14 @@ public class CashbackRecordService
 	
 	//更新CashBackRate	
 	public Map<String, Object> saveupdateCashBackRate(CashBackRate rate){
-		cashbackRecordDao.saveupdateCashBackRate(rate);
+		List<CashBackRate> listCashbackRate = cashbackRecordDao.listCashbackRate();
+		if(listCashbackRate.isEmpty()){
+			cashbackRecordDao.saveupdateCashBackRate(rate);
+		}else{
+			CashBackRate cashBackRate = listCashbackRate.get(0);
+			cashBackRate.setRate(rate.getRate());
+			cashbackRecordDao.saveupdateCashBackRate(cashBackRate);
+		}
 		return RESCODE.SUCCESS.getJSONRES();
 	}
     

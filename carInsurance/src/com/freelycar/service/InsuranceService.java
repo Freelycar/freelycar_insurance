@@ -204,7 +204,7 @@ public class InsuranceService
     	createEnquiryParams.put("cityCode", entity.getCityCode());//
     	//obj.put("cityName", cityName);//cityName可以不传
     	createEnquiryParams.put("insuranceCompanyName", entity.getInsuranceCompanyId());//保险公司编号多加用逗号分隔
-    	createEnquiryParams.put("insuranceStartTime", Tools.isEmpty(entity.getInsuranceBeginTime())?0:entity.getInsuranceBeginTime());//
+    	createEnquiryParams.put("insuranceStartTime", Tools.isEmpty(entity.getInsuranceStartTime())?0:entity.getInsuranceStartTime());//
     	
     	String forceInsuranceStartTime = entity.getForceInsuranceStartTime();
     	createEnquiryParams.put("forceInsuranceStartTime", forceInsuranceStartTime);//
@@ -274,6 +274,7 @@ public class InsuranceService
     		return RESCODE.USER_OPENID_EMPTY.getJSONRES();
     	}
     	
+    	
     	//增加/更新收款人信息
     	Reciver reciverByOpenId = reciverDao.getReciverByOrderId(entity.getOfferId());
     	if(reciverByOpenId ==null ){
@@ -296,6 +297,8 @@ public class InsuranceService
     		return RESCODE.USER_NOT_EXIST.getJSONRES();
     	}
     	clientByOpenId.setLicenseNumber(entity.getLicenseNumber());
+    	
+    	
     	
     	//收款信息
     	CashbackRecord cashbackRecordByOpenId = cashbackDao.getCashbackRecordByOrderId(entity.getOfferId());
@@ -326,30 +329,30 @@ public class InsuranceService
     	
     	JSONObject params = new JSONObject();
     	System.out.println("#######"+entity.getOfferId());
-    	params.put("orderId", entity.getOfferId());
-    	params.put("insuredName", entity.getOwnerName());
-    	params.put("insuredIdNo", entity.getIdCard());
-    	params.put("insuredPhone", entity.getPhone());//保险公司编号多加用逗号分隔
-    	params.put("customerName", entity.getOwnerName());//
-    	params.put("customerPhone", entity.getPhone());
-    	params.put("customerIdNo", entity.getIdCard());
-    	params.put("contactName", entity.getOwnerName());
-    	params.put("contactPhone", entity.getPhone());//
+    	params.put("orderId", entity.getOfferId());/////
+    	params.put("insuredName", entity.getOwnerName());/////
+    	params.put("insuredIdNo", entity.getIdCard());/////
+    	params.put("insuredPhone", entity.getPhone());////
+    	params.put("customerName", entity.getOwnerName());////
+    	params.put("customerPhone", entity.getPhone());/////
+    	params.put("customerIdNo", entity.getIdCard());/////
+    	params.put("contactName", entity.getOwnerName());////
+    	params.put("contactPhone", entity.getPhone());////
     	
     	JSONObject address = new JSONObject();
     	address.put("acceptProvince", "");
-    	address.put("contactAddressDetail", entity.getAddressDetail());
+    	address.put("contactAddressDetail",entity.getProvincesCities()+ entity.getAddressDetail());
     	address.put("address", entity.getAddressDetail());
     	address.put("acceptProvinceName", entity.getProvincesCities());
+    	params.put("contactAddress", address.toString());/////
+    	params.put("imageJson", "");///
     	
-    	params.put("contactAddress", address);
-    	params.put("imageJson", "");
     	
     	JSONObject invoiceInfo = new JSONObject();
-    	invoiceInfo.put("isInvoice", 0);
-    	params.put("invoiceInfo", invoiceInfo);
+    	invoiceInfo.put("isInvoice", "0");
+    	params.put("invoiceInfo", invoiceInfo.toString());////
     	
-    	params.put("ownerIdCard", entity.getIdCard());//
+    	params.put("ownerIdCard", entity.getIdCard());//////
     	params.put("ownerMobilePhone", entity.getPhone());//
     	
     	param.put("params", params);
@@ -397,10 +400,8 @@ public class InsuranceService
     	
     	Map<String,Object> param = new HashMap<>();
     	param.put("api_key", LUOTUOKEY);
-    	
-    	JSONObject params = new JSONObject();
-    	System.out.println("#######"+orderId);
-    	params.put("orderId", orderId);
+    	System.out.println("##确认是否承保接口#####"+orderId);
+    	param.put("orderId", orderId);
     	JSONObject resultJson = HttpClientUtil.httpGet("http://wechat.bac365.com:8081/carRisk/car_risk/carApi/confirmChengbao", param);
     	
     	if(resultJson.has("errorMsg")){

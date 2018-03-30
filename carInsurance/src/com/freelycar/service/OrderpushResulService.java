@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
+import org.apache.log4j.Logger;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,6 +46,7 @@ public class OrderpushResulService
     @Autowired
     private InsuranceService insuranceService;
     
+    private static Logger log = Logger.getLogger(OrderpushResulService.class);
 
     private static SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     
@@ -98,6 +100,7 @@ public class OrderpushResulService
 	//核保结果推送
 	public Map<String, Object> orderpushResult(String result) {
 		try {
+			log.error("核保推送结果： "+result);
     		System.out.println("核保推送结果： "+result);
 			JSONObject resObj = new JSONObject(result);
 			if(resObj.getJSONObject("errorMsg").getString("code").equals("success")){
@@ -177,13 +180,17 @@ public class OrderpushResulService
 				//SocketHelper.sendMessage(order.getOpenId(), RESCODE.PUSHBACK_HEBAO.getJSONObject(orderId).toString());
 				//小程序模版消息推送
 				//https://mp.weixin.qq.com/debug/wxadoc/dev/api/notice.html#%E5%8F%91%E9%80%81%E6%A8%A1%E6%9D%BF%E6%B6%88%E6%81%AF
-				String sendModelMessageUrl = Constant.getSendModelMessageUrl();
+				/*String sendModelMessageUrl = Constant.getSendModelMessageUrl();
 				Map<String,String> param = new HashMap<>();
 				param.put("touser", qr.getOfferId());
 				param.put("template_id", "drbANk9wFCJGH-aXl_iPqBd0HtM156z1wypVa-phtYQ");
 				param.put("form_id", "");
 				param.put("data", "");
-				param.put("", "");
+				param.put("", "");*/
+				
+				
+				
+				
 				
 				
 				//HttpClientUtil.httpPost(, params);
@@ -203,7 +210,8 @@ public class OrderpushResulService
 	//承保接口推送
 	public Map<String, Object> chenbaopPushResult(String result) {
 		try {
-			System.out.println(result);
+			log.error("承保推送："+result);
+			System.out.println("承保推送："+result);
 			JSONObject resObj = new JSONObject(result);
 			if(resObj.getJSONObject("errorMsg").getString("code").equals("success")){
 				JSONObject resultobj = resObj.getJSONObject("data");
@@ -215,7 +223,7 @@ public class OrderpushResulService
 				
 				boolean pay = false;
 				
-				if(pay){
+				if(!pay){
 					if(proposalMap.get(orderId) > System.currentTimeMillis()){
 						Map<String, Object> confirmChengbao = insuranceService.confirmChengbao(orderId);
 						if(!confirmChengbao.get("code").equals("0")){

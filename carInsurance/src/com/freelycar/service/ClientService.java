@@ -36,6 +36,11 @@ public class ClientService
     	return RESCODE.SUCCESS.getJSONRES(clientById);
     }
     
+    public Client getClientDetail(String openId,String licenseNumber, String ownerName){
+    	Client clientById = clientDao.getClient(openId, licenseNumber, ownerName);
+    	return clientById;
+    }
+    
     public Map<String,Object> isExistByOpenId(String openId){
     	Client client = clientDao.getClientByOpenId(openId);
     	if(client == null){

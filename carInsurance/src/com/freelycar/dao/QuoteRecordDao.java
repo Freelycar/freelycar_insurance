@@ -84,6 +84,13 @@ public class QuoteRecordDao
 			 .getQuery().list();
 	}
 	
+	//查看每辆车最新的报价记录
+	@SuppressWarnings("unchecked")
+	public List<QuoteRecord> listExcelQuoteRecord(){
+		String sql = "SELECT * FROM QuoteRecord WHERE id IN ( SELECT MAX(id) FROM QuoteRecord GROUP BY licenseNumber)";
+		List <QuoteRecord> list = getSession().createSQLQuery(sql).list();
+		return list;
+	}
 	
 	/**
 	 * 查询QuoteRecord的总数

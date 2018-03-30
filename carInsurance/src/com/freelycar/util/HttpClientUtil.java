@@ -38,8 +38,11 @@ import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.ssl.SSLContextBuilder;
 import org.apache.http.util.EntityUtils;
+import org.apache.log4j.Logger;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import sun.util.logging.resources.logging;
 
 public class HttpClientUtil {
 	// 池化管理
@@ -49,6 +52,7 @@ public class HttpClientUtil {
 	// 请求器的配置
 	private static RequestConfig requestConfig;
 
+	private static Logger log = Logger.getLogger(HttpClientUtil.class);
 	static {
 
 		try {
@@ -138,7 +142,7 @@ public class HttpClientUtil {
 		httpGet.setHeader("Cache-Control", "no-cache");
 
 		CloseableHttpResponse response = null;
-		String result ="{}";
+		String result ="";
 		try {
 			response = httpClient.execute(httpGet);
 			HttpEntity entity = response.getEntity();
@@ -158,8 +162,9 @@ public class HttpClientUtil {
 		
 		JSONObject obj = null;
 		try {
-			obj = new JSONObject(result);
+			obj = new JSONObject(Tools.isEmpty(result)?"{}":result);
 		} catch (JSONException e) {
+			log.error("http get请求"+url+"的结果 json解析报错 。可能结果不是json格式");
 			e.printStackTrace();
 		}
 		return obj;

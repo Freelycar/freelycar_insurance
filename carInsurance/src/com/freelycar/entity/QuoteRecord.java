@@ -290,11 +290,6 @@ public class QuoteRecord
         this.insurances = insurances;  
     }  
       
-	
-    public Long getCrateTime() {  
-        return createTime;  
-    }  
-  
     public void setCrateTime(Long createTime) {  
         this.createTime = createTime;  
     }  
