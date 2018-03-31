@@ -19,7 +19,7 @@
     <div class="container payment-box">
         <div class="verify-code-bac">
             <span class="wechart-pay-info">请于<span id="time"></span>之前长按识别二维码进行支付！ </span>
-            <img class="pay-qrcode" src="" />
+            <img class="pay-qrcode" src="" id="pay-qrcode"/>
         </div>
         <div class="wechart-pay-box">
             <div>
@@ -56,7 +56,7 @@
                 </block>
                 <div class="insurance-title">
                     <span></span>
-                    <span>小计：￥<span id="qiangzhiTotalPrice"></span>{{qiangzhiTotalPrice}}</span>
+                    <span>小计：￥<span id="qiangzhiTotalPrice"></span></span>
                 </div>
             </div>
         </div>
@@ -85,10 +85,10 @@
         <div class="insurance-total">
             <div class="insurance-discount">
                 (
-                <span class="insurance-discount-red">￥<span id="cashback">{{cashback}}</span></span>
+                <span class="insurance-discount-red">￥<span id="cashback"></span></span>
                 现金红包已到账)
             </div>
-            <span class="insurance-total-price">合计：<span id="totalPrice">￥{{totalPrice}}</span></span>
+            <span class="insurance-total-price">合计：￥<span id="totalPrice"></span></span>
         </div>
     </div>
 </body>

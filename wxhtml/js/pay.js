@@ -20,7 +20,7 @@ $(function () {
             if (data.code == 0) {
                 justifyNull(data.data);
                 this.orderDetail = data.data;
-
+                $("#pay-qrcode").attr('src', data.data.paycodeurl)
                 $("#pay_money").append(data.data.totalPrice / 100)
                 $("#pay_name").append(data.data.insureName)
                 $("#pay_carplate").append(data.data.licenseNumber)
