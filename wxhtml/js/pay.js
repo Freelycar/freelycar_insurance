@@ -47,9 +47,39 @@ $(function () {
                 $('#qiangzhiTotalPrice').append(qiangzhiTotalPrice)
                 $('#shangyeTotalPrice').append(shangyeTotalPrice)
                 justifyNull(data.invoiceInfo);
-                for (var item of data.quoteRecord.shangyeList) {
-
+                var html = "";
+                for (var item of data.quoteRecord.qiangzhiList) {
+                    html += '<div class="detail-line">'
+                    +'<span>'+item.insuranceName+'</span>'
+                    +'<span>￥'+item.insurancePrice+'</span>'
+                    +'</div>';
                 }
+
+                document.getElementById('insurance-div').innerHTML = html;
+
+
+                var html1 = "";
+                for (var item of data.quoteRecord.shangyeList) {
+                    html1 += '<div class="detail-line">'
+                    +'<span>'+item.insuranceName;
+
+                    if(item.compensation){
+                        html1 += '<span class="detail-line-info">不计免赔</span>';
+                    }
+                    if(item.amountStr&&item.insuranceId!=2){
+                        html1 += '<span  class="detail-line-info">'+item.amountStr+'</span>';
+                    }
+                    if(item.amountStr&&item.insuranceId===2){
+                        html1 += '<span  class="detail-line-info">'+item.amountStr+'</span>';
+                    }
+                    html +='</span>'
+                    +'<span>'+item.insurancePrice+'</span>'
+                    +'</div>';
+                   
+                }
+
+                document.getElementById('insurance-div2').innerHTML = html1;
+
             }
         },
         error: function (data) {

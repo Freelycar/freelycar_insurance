@@ -48,12 +48,13 @@
                 <span>起保日期：<span id="start_time"></span></span>
             </div>
             <div class="insurance-detail">
-                <block wx:for-index="index" wx:for-item="item" wx:key="index" wx:for-items="{{quoteRecord.qiangzhiList}}">
+                <!-- <block wx:for-index="index" wx:for-item="item" wx:key="index" wx:for-items="{{quoteRecord.qiangzhiList}}">
                     <div class="detail-line">
                         <span>{{item.insuranceName}}</span>
                         <span>￥{{item.insurancePrice}}</span>
                     </div>
-                </block>
+                </block> -->
+                <div id="insurance-div"></div>
                 <div class="insurance-title">
                     <span></span>
                     <span>小计：￥<span id="qiangzhiTotalPrice"></span></span>
@@ -65,8 +66,8 @@
                 <span>商业险</span>
                 <span>起保日期：<span id="insuranceStartTime"></span></span>
             </div>
-            <div class="insurance-detail">
-                <block wx:for-index="index" wx:for-item="item" wx:key="index" wx:for-items="{{quoteRecord.shangyeList}}">
+            <div  class="insurance-detail">
+                <!-- <block wx:for-index="index" wx:for-item="item" wx:key="index" wx:for-items="{{quoteRecord.shangyeList}}">
                     <div class="detail-line">
                         <span>{{item.insuranceName}}
                             <span wx:if="{{item.compensation}}" class="detail-line-info">不计免赔</span>
@@ -76,6 +77,9 @@
                         <span>￥{{item.insurancePrice}}</span>
                     </div>
                 </block>
+             -->
+
+            <div id='insurance-div2'></div>
             </div>
             <div class="insurance-title">
                 <span></span>
