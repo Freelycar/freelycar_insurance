@@ -128,14 +128,14 @@
       <image class="pay-qrcode"  @tap="previewImg" data-pay-url="{{orderDetail.paycodeurl}}" src="{{orderDetail.paycodeurl}}"/>
     </view>
     <view class="wechart-pay-box">
-      <image class="wechart_pay" src="https://www.howmuchweb.com/carInsurance/imgs/wechart_pay.png"/>
+      <image class="wechart_pay" @tap="saoyisao" src="https://www.howmuchweb.com/carInsurance/imgs/wechart_pay.png"/>
       <text class="wechart-pay-info">请于{{orderDetail.effectiveTime}}之前使用微信扫一扫进行支付！ </text>
     </view>
     <view class="order-detail-title">
       <view><text class="fa fa-credit-card title-icon"/>结算信息</view>
     </view>
     <view class="order-detail-way cost-info-box" wx:if="{{orderDetail}}">
-      <view class="cost-info">金额：￥{{orderDetail.totalPrice}}</view>
+      <view class="cost-info">金额：￥{{orderDetail.totalPrice/100}}</view>
       <view class="cost-info">姓名：{{orderDetail.insureName}}</view>
       <view class="cost-info">车牌号：{{orderDetail.licenseNumber}}</view>
       <view class="cost-info">流水号：{{orderDetail.orderId}}</view>
@@ -223,6 +223,14 @@ export default class Payment extends wepy.page {
     goToDetail() {
       wepy.navigateTo({
         url: `orderDetail?id=111`
+      });
+    },
+    saoyisao() {
+      wepy.scanCode({
+        onlyFromCamera: false,
+        success: res => {
+          console.log(res);
+        }
       });
     },
     dragDown() {
