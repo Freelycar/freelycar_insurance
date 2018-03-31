@@ -51,7 +51,6 @@ public class Insurance
     private String price;//该险种的钱
     
     
-    
     //核保	
     public static class ProposalEntity{
     	private String offerId;
@@ -209,7 +208,7 @@ public class Insurance
 		private String insurances;
 		private String licenseNumber;
 		private String ownerName;
-		private String insuranceBeginTime;
+		private String insuranceStartTime;
 		
 		private boolean transfer;
 		private String transferTime;
@@ -229,12 +228,13 @@ public class Insurance
 		public void setTransfer(boolean transfer) {
 			this.transfer = transfer;
 		}
-		public String getInsuranceBeginTime() {
-			return insuranceBeginTime;
+	
+		public String getInsuranceStartTime() {
+			return insuranceStartTime;
 		}
 		
-		public void setInsuranceBeginTime(String insuranceBeginTime) {
-			this.insuranceBeginTime = insuranceBeginTime;
+		public void setInsuranceStartTime(String insuranceStartTime) {
+			this.insuranceStartTime = insuranceStartTime;
 		}
 		
 		public String getCityCode() {
@@ -291,7 +291,7 @@ public class Insurance
 			return "QueryPriceEntity [cityCode=" + cityCode + ", cityName=" + cityName + ", openId=" + openId
 					+ ", forceInsuranceStartTime=" + forceInsuranceStartTime + ", insuranceCompanyId="
 					+ insuranceCompanyId + ", insurances=" + insurances + ", licenseNumber=" + licenseNumber
-					+ ", ownerName=" + ownerName + ", insuranceBeginTime=" + insuranceBeginTime + ", transfer="
+					+ ", ownerName=" + ownerName + ", insuranceBeginTime=" + insuranceStartTime + ", transfer="
 					+ transfer + ", transferTime=" + transferTime + "]";
 		}
 		

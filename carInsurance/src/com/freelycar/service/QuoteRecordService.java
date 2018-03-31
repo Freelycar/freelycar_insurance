@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.log4j.Logger;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,14 +33,22 @@ public class QuoteRecordService
     @Autowired
     private CashbackRecordDao cashbackDao;
     
+    private static Logger log = Logger.getLogger(QuoteRecordService.class);
+    
     //增加一个QuoteRecord
     public Map<String,Object> quoteRecordPushDeal(String result){
     	try {
+    		if(!result.startsWith("{")){
+    			return RESCODE.LUOTUO_FAIL.getLuoTuoRes(false);
+    		}
+    		
+    		
 			JSONObject resObj = new JSONObject(result);
 			
 			String openId = null;
 			String message = null;
 			System.out.println("最初报价推送的结果"+result);
+			log.error("最初报价推送的结果： "+result+"\n\n");
 			if(resObj.getJSONObject("errorMsg").getString("code").equals("success")){
 				message = resObj.getJSONObject("errorMsg").getString("message");
 				
@@ -94,6 +103,9 @@ public class QuoteRecordService
 				obj.put("offerId", offerId);
 				obj.put("insuranceStartTime", resultobj.getInt("insuranceStartTime"));
 				obj.put("forceInsuranceStartTime", resultobj.getInt("forceInsuranceStartTime"));
+				//加上商业险 强制险 价格
+				obj.put("totalPrice", resultobj.getInt("ciBasePrice")+resultobj.getInt("currentPrice"));
+				
 				
 				//根据当前价格  计算 返现 金额
 				List<CashBackRate> listCashbackRate = cashbackDao.listCashbackRate();
@@ -151,6 +163,18 @@ public class QuoteRecordService
 		} 
 		return RESCODE.NOT_FOUND.getJSONRES();
     }
+	
+	/**
+		分页查询
+	 * @param page 从第几页开始查询
+	 * @param number 每页数量
+	 * @return
+	 */
+	public List<QuoteRecord> listExcelQuoteRecord(){
+		List<QuoteRecord> listExcelQuoteRecord = quoteRecordDao.listExcelQuoteRecord();
+		return listExcelQuoteRecord;
+	}
+	
 	/**
 	 * 查询最新一条数据
 	 * @param quoteRecord

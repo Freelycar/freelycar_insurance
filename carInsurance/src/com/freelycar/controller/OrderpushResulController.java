@@ -37,8 +37,8 @@ public class OrderpushResulController
     * @return
     */
     @RequestMapping(value="/chengbaoPush")
-    public Map<String,Object> chengbaoResult(String result){
-    	return orderpushResulService.chenbaopPushResult(result);
+    public Map<String,Object> chengbaoResult(String data){
+    	return orderpushResulService.chenbaopPushResult(data);
     }
     
     @RequestMapping(value="/payPush")

@@ -37,6 +37,16 @@ public class ClientDao
         return result;
     }
     
+    public Client getClient(String openId,String licenseNumber, String ownerName){
+    	String hql = "from Client where openId = :openId and licenseNumber = :licenseNumber and ownerName = :ownerName";
+    	Client result = (Client) getSession().createQuery(hql)
+    			.setString("openId", openId)
+    			.setString("licenseNumber", licenseNumber)
+    			.setString("ownerName", ownerName)
+    			.uniqueResult();
+    	return result;
+    }
+    
     //根据phone查询Client
     public Client getClientByPhone(String phone){
     	String hql = "from Client where phone = :phone";

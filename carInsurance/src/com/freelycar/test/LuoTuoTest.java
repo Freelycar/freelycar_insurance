@@ -15,9 +15,9 @@ import com.freelycar.util.HttpClientUtil;
 
 public class LuoTuoTest {
 
-	private static String licenseNumber = "苏A88G87";
-	private static String ownerName = "许亮";
-	private static String idNumber = "320107198502275014";
+	private static String licenseNumber = "苏A4PZ99";
+	private static String ownerName = "刘杨";
+	private static String idNumber = "320112198807021630";
 	private static String forceInsuranceStartTime = "1524153600";
 	private static String offerId = "109-20180319180754-e5c52";
 	
@@ -31,7 +31,7 @@ public class LuoTuoTest {
 		obj.put("ownerName", "朱祥珍");
 *//*		obj.put("licenseNumber", "苏A4PZ99");
 		obj.put("ownerName", "刘扬");
-*/		HttpClientUtil.httpPost("http://www.xhnky.cn/carInsurance/api/insurance/queryLastYear", obj);
+*/		HttpClientUtil.httpPost("http://www.howmuchweb.com/carInsurance/api/insurance/queryLastYear", obj);
 	}
 //{"errorMsg":{"code":"success","message":"操作成功"},"data":"{\"ciInfo\":{\"insuranceCompany\":\"人保保险\",\"insuranceCompanyId\":2,\"policyNo\":\"PDZA201732010000301315\",\"totalAmount\":\"855.00\",\"insuranceEndTime\":\"2018-04-2023:59:59\",\"planCode\":\"C51\"},\"needCompleteCarInfo\":false,\"biInfo\":{\"insuranceCompany\":\"人保保险\",\"insuranceCompanyId\":2,\"policyNo\":\"PDAA201732010000270296\",\"totalAmount\":\"3340.19\",\"insuranceEndTime\":\"2018-04-2023:59:59\",\"planCode\":\"C01\",\"insurances\":[{\"insuranceId\":1,\"insuranceName\":\"车辆损失险\",\"type\":2,\"isToubao\":\"1\",\"compensation\":true,\"price\":1,\"englishName\":\"车损\",\"state\":1,\"retCode\":0,\"remark\":\"{\\\"buyingRate\\\":\\\"86.19%\\\",\\\"description\\\":\\\"承保本车车辆损失，强烈推荐购买\\\",\\\"insuranceCoverage\\\":\\\"您自己的车辆因碰撞、倾覆、火灾、爆炸、自然灾害、外界物体坠落或倒塌等发生的损失，保险公司按照条款规定进行赔偿。\\\"}\",\"amountStr\":\"投保\",\"isSupported\":true,\"weixinSource\":\"xiaoma\",\"dependRuleJson\":\"\"},{\"insuranceId\":2,\"insuranceName\":\"第三者责任险\",\"type\":3,\"isToubao\":\"1\",\"compensation\":true,\"price\":1000000,\"options\":\"50000,100000,200000,300000,500000,1000000\",\"englishName\":\"三者\",\"state\":1,\"retCode\":0,\"remark\":\"{\\\"buyingRate\\\":\\\"93.67%\\\",\\\"description\\\":\\\"承保车外第三方人身财产损失，强烈推荐购买\\\",\\\"insuranceCoverage\\\":\\\"若发生意外事故，保险公司将按照条款规定进行赔偿您对第三者造成的人身伤亡与财产损失。\\\"}\",\"amountStr\":\"100万\",\"isSupported\":true,\"weixinSource\":\"xiaoma\",\"dependRuleJson\":\"\"}]}}","time":null,"successful":true}
 	
@@ -110,9 +110,9 @@ public class LuoTuoTest {
 	public void testconfirmChengbao(){
 		
 		Map<String,Object> obj = new HashMap<>();
-		obj.put("orderId", offerId);
+		obj.put("orderId", "109-20180329151717-be1fd");
 		
-		HttpClientUtil.httpPost("http://www.xhnky.cn/carInsurance/api/insurance/confirmChengbao", obj);
+		HttpClientUtil.httpPost("http://www.howmuchweb.com/carInsurance/api/insurance/confirmChengbao", obj);
 		//HttpClientUtil.httpPost("http://localhost:8080/carInsurance/api/insurance/queryPrice", obj);
 	}
 	@Test
