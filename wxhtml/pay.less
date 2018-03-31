@@ -1,0 +1,122 @@
+@rpx : 1/100rem;
+.payment-box {
+    position: relative;
+    height: auto !important;
+  }
+  .verify-code-bac {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    // justify-content: center;
+    width: 120%;
+    left: 50%;
+    background: #ce1826;
+    height: 600rpx;
+    overflow: visible;
+    border-radius: 100%;
+    transform: translate(-50%, -50%);
+    z-index: 0;
+    .freelycar_logo {
+      margin-top: 340rpx;
+      width: 286rpx;
+      height: 88rpx;
+    }
+    .pay-qrcode {
+      position: absolute;
+      top: 480rpx;
+      width: 180rpx;
+      height: 180rpx;
+      // margin-top: 340rpx;
+    }
+  }
+  .wechart-pay-box {
+    margin-top: 380rpx;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    .wechart_pay {
+      width: 286rpx;
+      height: 58rpx;
+    }
+    .wechart-pay-info {
+      margin-top: 25rpx;
+      font-size: 28rpx;
+      color: #ce1826;
+    }
+  }
+  .order-detail-way {
+    margin: 10rpx 30rpx;
+    padding: 0 30rpx;
+    border-radius: 8rpx;
+    background: #fff;
+    &.cost-info-box {
+      padding: 20rpx 30rpx;
+    }
+    .cost-info {
+      font-size: 32rpx;
+      line-height: 60rpx;
+    }
+    &.order-side-padding {
+      padding: 0;
+    }
+    .insurance-title {
+      display: flex;
+      justify-content: space-between;
+      line-height: 88rpx;
+      &.title-bottom-line {
+        padding: 0 30rpx;
+        border-bottom: 1px solid #dcdcdc;
+      }
+    }
+    .insurance-detail {
+      line-height: 88rpx;
+      .detail-line {
+        padding: 0 30rpx;
+        display: flex;
+        justify-content: space-between;
+        background: #f2f2f2;
+        margin-bottom: 1px;
+        .detail-line-info {
+          font-size: 24rpx;
+          margin-left: 10rpx;
+        }
+      }
+    }
+  }
+  .order-detail-title {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 25rpx;
+    padding: 0 22rpx;
+    line-height: 88rpx;
+    background: #fff;
+    color: #1e1e1e;
+    .title-icon {
+      color: #1e1e1e;
+      margin-right: 10rpx;
+      border-bottom: 1px solid #b5b5b5;
+    }
+    .drag-down {
+      font-size: 22rpx;
+    }
+  }
+  .insurance-total {
+    display: flex;
+    justify-content: space-between;
+    background: #fff;
+    margin: 10rpx 0;
+    padding: 0 30rpx;
+    font-size: 32rpx;
+    line-height: 88rpx;
+    .insurance-discount {
+      color: #b5b5b5;
+      .insurance-discount-red {
+        color: #ce1826;
+      }
+    }
+    .insurance-total-price {
+      color: #1e1e1e;
+    }
+  }
