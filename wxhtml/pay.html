@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="./index.css" />
     <script type="text/javascript" src="js/jquery-1.11.3.min.js"></script>
     <script type="text/javascript" src="js/pub_fuc.js"></script>
-    <link href="http://netdna.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <link href="https://netdna.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
     <script type="text/javascript" src="js/flexible.js"></script>
     <script type="text/javascript" src="js/pay.js"></script>
     <title>小易车险</title>
@@ -18,8 +18,9 @@
 <body>
     <div class="container payment-box">
         <div class="verify-code-bac">
-            <span class="wechart-pay-info">请于<span id="time"></span>之前长按识别二维码进行支付！ </span>
-            <img class="pay-qrcode" src="" id="pay-qrcode"/>
+            <span class="wechart-pay-info">请于
+                <span id="effectiveTime"></span>之前长按识别二维码进行支付！ </span>
+            <img class="pay-qrcode" src="" id="pay-qrcode" />
         </div>
         <div class="wechart-pay-box">
             <div>
@@ -28,24 +29,55 @@
             <div> 1.我们将于60秒内以微信消息通知您人保承保结果。</div>
             <div> 2.您也可以60秒后，长按识别小易车险小程序码，进入查看订单状态。 </div>
         </div>
-        <div class="order-detail-title">
-            <div>
-                <span class="fa fa-credit-card title-icon" />结算信息</div>
-            </div>
-        <div class="order-detail-way cost-info-box" >
-            <div class="cost-info">金额：￥<span id="pay_money"></span></div>
-            <div class="cost-info">姓名：<span id="pay_name"></span></div>
-            <div class="cost-info">车牌号：<span id="pay_carplate"></span></div>
-            <div class="cost-info">流水号：<span id="pay_number"></span></div>
+        <div style="text-align:center;">
+            <img class="pro-logo" src="./imgs/pro_logo.jpg" />
         </div>
         <div class="order-detail-title">
             <div>
-                <span class="fa fa-file-text-o title-icon" ></span>投保方案</div>
+                <span class="fa fa-credit-card title-icon" />结算信息</div>
+        </div>
+        <div class="order-detail-way cost-info-box">
+            <div class="cost-info">金额：￥
+                <span id="pay_money"></span>
+            </div>
+            <div class="cost-info">姓名：
+                <span id="pay_name"></span>
+            </div>
+            <div class="cost-info">车牌号：
+                <span id="pay_carplate"></span>
+            </div>
+            <div class="cost-info">流水号：
+                <span id="pay_number"></span>
+            </div>
+        </div>
+        <div class="order-detail-title">
+            <div>
+                <span class="fa fa-money title-icon" ></span>收款信息</div>
+            <div style="color:#ce1826">小易现金红包金额￥
+                <span id="pay_cashback"></span>
+            </div>
+        </div>
+        <div class="order-detail-way cost-info-box">
+            <div class="cost-info">收款人姓名：
+                <span id="pay_name"></span>
+            </div>
+            <div class="cost-info">收款人卡号：
+                <span id="pay_cardid"></span>
+            </div>
+            <div class="cost-info">开户行：
+                <span id="pay_bank"></span>
+            </div>
+        </div>
+        <div class="order-detail-title">
+            <div>
+                <span class="fa fa-file-text-o title-icon"></span>投保方案</div>
         </div>
         <div class="order-detail-way">
             <div class="insurance-title">
                 <span>强制险</span>
-                <span>起保日期：<span id="start_time"></span></span>
+                <span>起保日期：
+                    <span id="start_time"></span>
+                </span>
             </div>
             <div class="insurance-detail">
                 <!-- <block wx:for-index="index" wx:for-item="item" wx:key="index" wx:for-items="{{quoteRecord.qiangzhiList}}">
@@ -57,16 +89,20 @@
                 <div id="insurance-div"></div>
                 <div class="insurance-title">
                     <span></span>
-                    <span>小计：￥<span id="qiangzhiTotalPrice"></span></span>
+                    <span>小计：￥
+                        <span id="qiangzhiTotalPrice"></span>
+                    </span>
                 </div>
             </div>
         </div>
         <div class="order-detail-way">
             <div class="insurance-title">
                 <span>商业险</span>
-                <span>起保日期：<span id="insuranceStartTime"></span></span>
+                <span>起保日期：
+                    <span id="insuranceStartTime"></span>
+                </span>
             </div>
-            <div  class="insurance-detail">
+            <div class="insurance-detail">
                 <!-- <block wx:for-index="index" wx:for-item="item" wx:key="index" wx:for-items="{{quoteRecord.shangyeList}}">
                     <div class="detail-line">
                         <span>{{item.insuranceName}}
@@ -79,20 +115,26 @@
                 </block>
              -->
 
-            <div id='insurance-div2'></div>
+                <div id='insurance-div2'></div>
             </div>
             <div class="insurance-title">
                 <span></span>
-                <span>小计：￥<span id="shangyeTotalPrice"></span></span>
+                <span>小计：￥
+                    <span id="shangyeTotalPrice"></span>
+                </span>
             </div>
         </div>
         <div class="insurance-total">
             <div class="insurance-discount">
                 (
-                <span class="insurance-discount-red">￥<span id="cashback"></span></span>
+                <span class="insurance-discount-red">￥
+                    <span id="cashback"></span>
+                </span>
                 现金红包已到账)
             </div>
-            <span class="insurance-total-price">合计：￥<span id="totalPrice"></span></span>
+            <span class="insurance-total-price">合计：￥
+                <span id="totalPrice"></span>
+            </span>
         </div>
     </div>
 </body>

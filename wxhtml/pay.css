@@ -1,3 +1,7 @@
+.pro-logo {
+  width: 2rem;
+  height: 2rem;
+}
 .payment-box {
   position: relative;
   height: auto !important;

@@ -1,19 +1,11 @@
 $(function () {
-    // var id = getParameterByName("id");
+    var id = getParameterByName("id");
     $.ajax({
-        url: "https://www.howmuchweb.com/carInsurance/api/order/getOrderById",
-        dataType: 'jsonp',
+        url: "api/order/getOrderById",
+        dataType: 'json',
         type: "get",
-        async: false,
-        header: {
-            'Access-Control-Allow-origin': 'https://www.howmuchweb.com',
-        },
-        crossDomain: true,
-        xhrFields: {
-            withCredentials: true
-        },
         data: {
-            id: 54
+            id: id
         },
         success: function (data) {
             console.log(data)
@@ -22,7 +14,11 @@ $(function () {
                 this.orderDetail = data.data;
                 $("#pay-qrcode").attr('src', data.data.paycodeurl)
                 $("#pay_money").append(data.data.totalPrice / 100)
+                $('#pay_cashback').append(data.data.cashback||0)
                 $("#pay_name").append(data.data.insureName)
+                $('#pay_cardid').append(data.data.expressNumber)
+                $('#pay_bank').append(data.data.expressCompany)
+                $('#effectiveTime').append(data.data.effectiveTime)
                 $("#pay_carplate").append(data.data.licenseNumber)
                 $("#pay_number").append(data.data.orderId)
                 justifyNull(data.quoteRecord);
@@ -49,10 +45,10 @@ $(function () {
                 justifyNull(data.invoiceInfo);
                 var html = "";
                 for (var item of data.quoteRecord.qiangzhiList) {
-                    html += '<div class="detail-line">'
-                    +'<span>'+item.insuranceName+'</span>'
-                    +'<span>￥'+item.insurancePrice+'</span>'
-                    +'</div>';
+                    html += '<div class="detail-line">' +
+                        '<span>' + item.insuranceName + '</span>' +
+                        '<span>￥' + item.insurancePrice + '</span>' +
+                        '</div>';
                 }
 
                 document.getElementById('insurance-div').innerHTML = html;
@@ -60,22 +56,22 @@ $(function () {
 
                 var html1 = "";
                 for (var item of data.quoteRecord.shangyeList) {
-                    html1 += '<div class="detail-line">'
-                    +'<span>'+item.insuranceName;
+                    html1 += '<div class="detail-line">' +
+                        '<span>' + item.insuranceName;
 
-                    if(item.compensation){
+                    if (item.compensation) {
                         html1 += '<span class="detail-line-info">不计免赔</span>';
                     }
-                    if(item.amountStr&&item.insuranceId!=2){
-                        html1 += '<span  class="detail-line-info">'+item.amountStr+'</span>';
+                    if (item.amountStr && item.insuranceId != 2) {
+                        html1 += '<span  class="detail-line-info">' + item.amountStr + '</span>';
                     }
-                    if(item.amountStr&&item.insuranceId===2){
-                        html1 += '<span  class="detail-line-info">'+item.amountStr+'</span>';
+                    if (item.amountStr && item.insuranceId === 2) {
+                        html1 += '<span  class="detail-line-info">' + item.amountStr + '</span>';
                     }
-                    html +='</span>'
-                    +'<span>'+item.insurancePrice+'</span>'
-                    +'</div>';
-                   
+                    html += '</span>' +
+                        '<span>' + item.insurancePrice + '</span>' +
+                        '</div>';
+
                 }
 
                 document.getElementById('insurance-div2').innerHTML = html1;
