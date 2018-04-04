@@ -6,7 +6,7 @@ export async function getQuoteRecordList(params) {
 }
 
 export async function getClientDetail(params) {
-  return request(`/api/client/detail?${stringify(params)}`);
+  return request(`api/client/detail?${stringify(params)}`);
 }
 
 export async function getClientOrderByLicenseNumber(params) {
