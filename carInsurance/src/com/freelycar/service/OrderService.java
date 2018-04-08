@@ -221,6 +221,13 @@ public class OrderService
 		} 
 		return RESCODE.NOT_FOUND.getJSONRES();
     }
+	/**
+	 * @return
+	 */
+	public List<InsuranceOrder> listValidOrder(InsuranceOrder order){
+		List<InsuranceOrder> listPage = orderDao.listValidOrder(order);
+		return listPage;
+	}
 	
 	
 	//根据id删除Order

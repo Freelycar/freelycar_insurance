@@ -44,6 +44,13 @@ public class ExcelController {
 	@RequestMapping(value = "/exportClient",method = RequestMethod.POST)
     public Map<String,Object> isExistByOpenId(@RequestBody Client client){
     	
+		List<Client> listAllClient2 = clientService.listAllClient();
+		
+		for(Client c : listAllClient2){
+			
+		}
+		
+		
 		List<List<String>> daitoubao =  new ArrayList<>();
 		List<QuoteRecord> listExcelQuoteRecord = quoteRecordService.listExcelQuoteRecord();
 		

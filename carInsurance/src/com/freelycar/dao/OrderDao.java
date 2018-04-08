@@ -1,6 +1,5 @@
 package com.freelycar.dao; 
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -119,6 +118,27 @@ public class OrderDao
 			 .getQuery().list();
 	}
 	
+	@SuppressWarnings("unchecked")
+	public List<InsuranceOrder> listValidOrder(InsuranceOrder order){
+		
+		String hql = "from InsuranceOrder where state = :state and effetiveTimeLong > :effetiveTimeLong";
+		return getSession().createQuery(hql)
+				.setInteger("state", order.getState())
+				.setLong("effetiveTimeLong", order.getEffetiveTimeLong())
+		.list();
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<InsuranceOrder> listOrder(InsuranceOrder order){
+		QueryUtils utils = new QueryUtils(getSession(), "from InsuranceOrder");
+		
+		if(order != null){
+			utils = utils.addInteger("state", order.getState())
+					.addString("openId", order.getOpenId());
+		}
+		
+		return utils.getQuery().list();
+	}
 	
 	/**
 	 * 查询Order的总数

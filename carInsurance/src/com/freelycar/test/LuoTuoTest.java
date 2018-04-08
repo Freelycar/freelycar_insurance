@@ -6,12 +6,16 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
+import java.util.concurrent.TimeUnit;
 
 import org.apache.http.client.ClientProtocolException;
 import org.json.JSONObject;
 import org.junit.Test;
 
+import com.freelycar.util.Constant;
 import com.freelycar.util.HttpClientUtil;
+import com.freelycar.util.Tools;
 
 public class LuoTuoTest {
 
@@ -131,4 +135,46 @@ public class LuoTuoTest {
 		}
 		
 	}
+	
+	
+	//java test
+	@Test
+	public void testTimeExecutor(){
+		final Map<String,Thread> map = new HashMap<>();
+		
+		for(int i=0; i<10; i++){
+			Constant.getTimeExecutor().scheduleAtFixedRate(new Runnable() {
+				@Override
+				public void run() {
+					// TODO Auto-generated method stub
+					//System.out.println(Thread.currentThread().getName());
+					map.put(Thread.currentThread().getName(), Thread.currentThread());
+					System.out.println("-----"+Thread.currentThread().getName()+Tools.date2Str(new Date()));
+				}
+			},0, 2, TimeUnit.SECONDS);
+		}
+		
+		System.out.println("#########");
+		//Constant.getTimeExecutor().shutdown();
+		try {
+			Thread.sleep(5000);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		System.out.println("ddddddddddd");
+		
+		
+		try {
+			Thread.sleep(5000);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	
+	
+	
 }

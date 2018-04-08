@@ -145,8 +145,14 @@ public class OrderpushResulService
 					e.printStackTrace();
 				}
 				
-				//在这里我们在过期时间之内定时调用 7、确认是否承保接口
-				if(proposalMap.get(orderId) > System.currentTimeMillis()){
+				//在另外一个计时器中 循环 map中的订单
+				//理论上 他是不可能在推送过来就立即支付的 因此注释掉
+				/*我:
+					我在问个小问题 他没支付 我掉是否承保接口 在掉了承保接口之后 他支付了。我需要再次掉用才会返回是吧
+					那一年:
+					是的*/
+				/*if(proposalMap.get(orderId) > System.currentTimeMillis()){
+					
 					Map<String, Object> confirmChengbao = insuranceService.confirmChengbao(orderId);
 					if(!confirmChengbao.get("code").equals("0")){
 						System.out.println("请求是否承保失败！。。");
@@ -154,10 +160,10 @@ public class OrderpushResulService
 					
 				}else{
 					proposalMap.remove(orderId);
-				}
-				
+				}*/
 				
 				QuoteRecord qr = quoteRecordDao.getQuoteRecordBySpecify("offerId", orderId);
+				//设置报价详细
 				order.setOfferDetail(qr.getOfferDetail());
 				order.setTotalPrice(underwritingPriceCent);
 				order.setLicenseNumber(licenseNumber);
@@ -171,6 +177,7 @@ public class OrderpushResulService
 					JSONObject payQrcode = underwritingJson.getJSONObject("payJson").getJSONObject("payQrcode");//支付信息
 					order.setPaycodeurl(payQrcode.getString("content"));
 					order.setEffectiveTime(jsonObject.getString("value"));
+					order.setEffetiveTimeLong(proposalMap.get(orderId));
 				}
 				
 				orderService.updateOrder(order);
@@ -187,7 +194,7 @@ public class OrderpushResulService
 				param.put("form_id", "");
 				param.put("data", "");
 				param.put("", "");*/
-				
+				//发送短息通知
 				
 				
 				
@@ -208,6 +215,7 @@ public class OrderpushResulService
 	}
     
 	//承保接口推送
+	//推送过来就说明支付用户支付
 	public Map<String, Object> chenbaopPushResult(String result) {
 		try {
 			log.error("承保推送："+result);
@@ -218,29 +226,11 @@ public class OrderpushResulService
 				String orderId = resultobj.getString("orderId");
 				InsuranceOrder orderByOrderId = orderDao.getOrderByOrderId(orderId);
 				
-				//这里根据resultObj中的未付款来不断轮询
-				Map<String, Long> proposalMap = Constant.getProposalMap();
-				
-				boolean pay = false;
-				
-				if(!pay){
-					if(proposalMap.get(orderId) > System.currentTimeMillis()){
-						Map<String, Object> confirmChengbao = insuranceService.confirmChengbao(orderId);
-						if(!confirmChengbao.get("code").equals("0")){
-							System.out.println("请求是否承保失败。。。");
-						}
-						
-					}else{
-						//timeout移除订单
-						proposalMap.remove(orderId);
-					}
-				}else{
-					//yonghu支付
-					//更新订单状态
-					orderByOrderId.setPayTime(System.currentTimeMillis());
-					orderByOrderId.setState(INSURANCE.QUOTESTATE_CHENGBAOING.getCode());
-					orderByOrderId.setStateString(INSURANCE.QUOTESTATE_CHENGBAOING.getName());
-				}
+				//yonghu支付
+				//更新订单状态
+				orderByOrderId.setPayTime(System.currentTimeMillis());
+				orderByOrderId.setState(INSURANCE.QUOTESTATE_CHENGBAOING.getCode());
+				orderByOrderId.setStateString(INSURANCE.QUOTESTATE_CHENGBAOING.getName());
 				
 				
 				boolean fail = false;
