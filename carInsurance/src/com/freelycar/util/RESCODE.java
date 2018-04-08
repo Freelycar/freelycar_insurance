@@ -38,7 +38,7 @@ public enum RESCODE {
 	SMS_ERROR(602,"短信验证码错误"),
 	SMS_SEND_FAIL(603,"短信验证码发送失败"),
 	SMS_PHONE_EMPTY(604,"手机号码为空"),
-	SMS_PHONE_ERROR(605,"手机号码为空"),
+	SMS_PHONE_ERROR(605,"手机号码错误"),
 	
 	
 	PUSHBACK_BAOJIA(606,"报价推送"),

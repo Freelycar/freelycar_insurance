@@ -67,6 +67,16 @@ public class InsuranceService
     private static SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     
     public Map<String, Object> queryLastYear(Client client){
+    	if(Tools.notEmpty(client.getOpenId())){
+    		return RESCODE.USER_OPENID_EMPTY.getJSONRES();
+    	}
+    	if(Tools.notEmpty(client.getOwnerName())){
+    		return RESCODE.USER_NAME_EMPTY.getJSONRES();
+    	}
+    	if(Tools.notEmpty(client.getLicenseNumber())){
+    		return RESCODE.USER_LICENSENUMBER_EMPTY.getJSONRES();
+    	}
+    	
     	
     	//先去查是不是老用户
     	List<Client> clientByOpenIdList = clientDao.getClientByOpenIdList(client.getOpenId());
