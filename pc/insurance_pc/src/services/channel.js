@@ -2,23 +2,23 @@ import { stringify } from 'qs';
 import request from '../utils/request';
 
 export async function addChannel(params) {
-    return request('/api/invition/save', {
+    return request('api/invition/save', {
       method: 'POST',
       body: params,
     });
 }
 
 export async function modifyChannel(params) {
-    return request('/api/invition/update', {
+    return request('api/invition/update', {
       method: 'POST',
       body: params,
     });
 }
 
 export async function removeChannels(params) {
-    return request(`/api/invition/remove?${stringify(params)}`);
+    return request(`api/invition/remove?${stringify(params)}`);
 }
 
 export async function getChannelList(params) {
-    return request(`/api/invition/list?${stringify(params)}`);
+    return request(`api/invition/list?${stringify(params)}`);
 }

@@ -1,0 +1,136 @@
+@rpx : 1/100rem;
+.pro-logo {
+  width: 200*@rpx;
+  height: 200*@rpx;
+}
+.payment-box {
+    position: relative;
+    height: auto !important;
+  }
+  .verify-code-bac {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    // justify-content: center;
+    width: 120%;
+    left: 50%;
+    background: #ce1826;
+    height: 600*@rpx;
+    overflow: visible;
+    border-radius: 100%;
+    transform: translate(-50%, -50%);
+    z-index: 0;
+
+    .wechart-pay-info {
+      margin-top: 380*@rpx;
+      font-size: 28*@rpx;
+      color: #fff;
+    }
+    
+    .pay-qrcode {
+      position: absolute;
+      top: 480*@rpx;
+      width: 180*@rpx;
+      height: 180*@rpx;
+      // margin-top: 340*@rpx;
+    }
+  }
+
+  .wechart-pay-box {
+    margin-top: 400*@rpx;
+    margin-bottom: 50*@rpx;
+    padding:0 30*@rpx;
+    line-height: 60*@rpx;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    .wechart_pay {
+      width: 286*@rpx;
+      height: 58*@rpx;
+    }
+  }
+  .order-detail-way {
+    margin: 10*@rpx 30*@rpx;
+    padding: 0 30*@rpx;
+    border-radius: 8*@rpx;
+    background: #fff;
+    &.cost-info-box {
+      padding: 20*@rpx 30*@rpx;
+    }
+    .cost-info {
+      font-size: 32*@rpx;
+      line-height: 60*@rpx;
+    }
+    &.order-side-padding {
+      padding: 0;
+    }
+    .insurance-title {
+      display: flex;
+      justify-content: space-between;
+      line-height: 88*@rpx;
+      &.title-bottom-line {
+        padding: 0 30*@rpx;
+        border-bottom: 1px solid #dcdcdc;
+      }
+    }
+    .insurance-detail {
+      line-height: 88*@rpx;
+      .detail-line {
+        padding: 0 30*@rpx;
+        display: flex;
+        justify-content: space-between;
+        background: #f2f2f2;
+        margin-bottom: 1px;
+        .detail-line-info {
+          font-size: 24*@rpx;
+          margin-left: 10*@rpx;
+        }
+      }
+    }
+  }
+  .order-detail-title {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 25*@rpx;
+    padding: 0 22*@rpx;
+    line-height: 88*@rpx;
+    background: #fff;
+    color: #1e1e1e;
+    .title-icon {
+      color: #1e1e1e;
+      margin-right: 10*@rpx;
+      border-bottom: 1px solid #b5b5b5;
+    }
+    .drag-down {
+      font-size: 22*@rpx;
+    }
+  }
+  .insurance-total {
+    display: flex;
+    justify-content: space-between;
+    background: #fff;
+    margin: 10*@rpx 0;
+    padding: 0 30*@rpx;
+    font-size: 32*@rpx;
+    line-height: 88*@rpx;
+    .insurance-discount {
+      color: #b5b5b5;
+      .insurance-discount-red {
+        color: #ce1826;
+      }
+    }
+    .insurance-total-price {
+      color: #1e1e1e;
+    }
+  }
+  .container {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    background: #efeff4;
+    font-size: 34*@rpx;
+    font-family: 'SimHei';
+  }

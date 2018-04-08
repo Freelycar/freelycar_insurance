@@ -276,7 +276,8 @@ export default class ConfirmQuoteInfo extends wepy.page {
       }
       wepy.showLoading();
       wepy.request({
-        url: this.$parent.globalData.baseUrl+'api/' + 'insurance/submitProposal',
+        url:
+          this.$parent.globalData.baseUrl + 'api/' + 'insurance/submitProposal',
         data: queryData,
         method: 'POST',
         success: res => {
@@ -284,9 +285,9 @@ export default class ConfirmQuoteInfo extends wepy.page {
           if (res.data.code === 0) {
             // this.startCountdown();
             wepy.showToast({ title: '申请报价成功!' });
-              wepy.redirectTo({
-                url: `submitedUnderwriting?orderId=${res.data.data}`
-              });
+            wepy.redirectTo({
+              url: `submitedUnderwriting?orderId=${res.data.data}`
+            });
           } else {
             wepy.showToast({ title: res.data.msg, icon: 'none' });
           }
