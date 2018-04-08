@@ -81,6 +81,8 @@ public class InsuranceOrder
     
     private String effectiveTime;//二维有效时间
     
+    private long effetiveTimeLong;//时间戳
+    
     private String hebaoMessage;//核保的信息
     
     private String source;
@@ -184,6 +186,15 @@ public class InsuranceOrder
     
     public void setEffectiveTime(String effectiveTime) {
 		this.effectiveTime = effectiveTime;
+	}
+    
+    public long getEffetiveTimeLong() {
+		return effetiveTimeLong;
+	}
+    
+    
+    public void setEffetiveTimeLong(long effetiveTimeLong) {
+		this.effetiveTimeLong = effetiveTimeLong;
 	}
     
     public long getCashbackTime() {

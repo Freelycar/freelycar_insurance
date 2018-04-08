@@ -2,7 +2,6 @@ package com.freelycar.dao;
 
 import java.util.List;
 
-import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,7 +9,6 @@ import org.springframework.stereotype.Repository;
 
 import com.freelycar.entity.Reciver;
 import com.freelycar.util.QueryUtils;
-import com.freelycar.util.SqlHelper;
 /**  
  *  操作数据库的dao层
  */  
@@ -98,13 +96,7 @@ public class ReciverDao
 	
 	//更新Reciver
 	public void updateReciver(Reciver reciver){
-	    String hql = SqlHelper.genUpdateSql(reciver, Reciver.class);
-		
-		Query query = getSession().createQuery(hql);
-		query = SqlHelper.getQuery(reciver, Reciver.class, query);
-		
-		query.executeUpdate();
-	    
+		getSession().update(reciver);
 	}
     
 }

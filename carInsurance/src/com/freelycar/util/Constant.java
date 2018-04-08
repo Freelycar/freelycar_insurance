@@ -68,7 +68,7 @@ public class Constant {
     
     //定时器
     private static class TimeExecutorHolder{
-    	private static final ScheduledExecutorService scheduledExecutor = Executors.newScheduledThreadPool(1000);
+    	private static final ScheduledExecutorService scheduledExecutor = Executors.newScheduledThreadPool(10);
     }
     
     public static ScheduledExecutorService getTimeExecutor(){
