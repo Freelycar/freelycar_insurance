@@ -10,7 +10,8 @@ import org.springframework.transaction.annotation.Transactional;
 import com.freelycar.dao.CashbackRecordDao;
 import com.freelycar.entity.CashBackRate;
 import com.freelycar.entity.CashbackRecord;
-import com.freelycar.util.RESCODE;  
+import com.freelycar.util.RESCODE;
+import com.freelycar.util.Tools;  
 /**  
  *  
  */  
@@ -28,7 +29,16 @@ public class CashbackRecordService
     
     //增加一个CashbackRecord
     public Map<String,Object> saveCashbackRecord(CashbackRecord cashbackRecord){
-		
+		if(Tools.isEmpty(cashbackRecord.getPayee())){
+			return RESCODE.CASH_PAYEE_EMPTY.getJSONRES();
+		}
+		if(Tools.isEmpty(cashbackRecord.getAccount())){
+			return RESCODE.CASH_ACCOUNT_EMPTY.getJSONRES();
+		}
+		if(Tools.isEmpty(cashbackRecord.getBankname())){
+			return RESCODE.CASH_BANKNAME_EMPTY.getJSONRES();
+		}
+    	
 		cashbackRecordDao.saveCashbackRecord(cashbackRecord);
 		return RESCODE.SUCCESS.getJSONRES();
 	}

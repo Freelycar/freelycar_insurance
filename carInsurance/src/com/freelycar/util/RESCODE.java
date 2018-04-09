@@ -29,6 +29,9 @@ public enum RESCODE {
 	INV_CODE_EXIST(210,"邀请码已存在"),
 	USER_LICENSENUMBER_EMPTY(211,"用户车牌为空"),
 	USER_OPENID_EMPTY(212,"用户openid为空"),
+	CASH_PAYEE_EMPTY(21,"收款人姓名为空"),
+	CASH_ACCOUNT_EMPTY(21,"收款人账户为空"),
+	CASH_BANKNAME_EMPTY(21,"收款人银行名称为空"),
 	
 	
 	INSURANCE_BAOJIA_SUCCESS(300,"报价成功"),

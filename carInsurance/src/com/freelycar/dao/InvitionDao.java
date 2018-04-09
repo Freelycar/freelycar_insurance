@@ -41,6 +41,14 @@ public class InvitionDao
     	Invition result = (Invition) getSession().createQuery(hql).setString("invcode", invcode).uniqueResult();
     	return result;
     }
+    
+    public List<Invition> getListInvitionByInvcode(String invcode){
+    	String hql = "from Invition where invcode = :invcode";
+    	@SuppressWarnings("unchecked")
+		List<Invition> result = (List<Invition>) getSession().createQuery(hql).setString("invcode", invcode).list();
+    	return result;
+    }
+    
     //根据id查询Invition
     public Invition getInvitionByInvName(String name){
     	String hql = "from Invition where name = :name";
@@ -48,6 +56,12 @@ public class InvitionDao
     	return result;
     }
 	
+    public List<Invition> getListInvitionByInvName(String name){
+    	String hql = "from Invition where name = :name";
+    	@SuppressWarnings("unchecked")
+		List<Invition> result = (List<Invition>) getSession().createQuery(hql).setString("name", name).list();
+    	return result;
+    }
 	
 	//查询所有的Invition	
 	@SuppressWarnings("unchecked")

@@ -28,6 +28,10 @@ public class InvoiceInfoService
     //增加一个InvoiceInfo
     public Map<String,Object> saveInvoiceInfo(InvoiceInfo invoiceInfo){
 		
+    	
+    	
+    	
+    	
 		invoiceInfoDao.saveInvoiceInfo(invoiceInfo);
 		return RESCODE.SUCCESS.getJSONRES();
 	}

@@ -23,9 +23,7 @@ public class Schedule {
     private static final SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
     @Scheduled(fixedRate=1000*60*20)
     public void reportCurrentTime() {
-       System.out.println("The time is now " + dateFormat.format(new Date()));
-       
-       
+       /*System.out.println("The time is now " + dateFormat.format(new Date()));
        
        //查寻未支付的订单，调用承保变成已支付
        InsuranceOrder order = new InsuranceOrder();
@@ -39,6 +37,6 @@ public class Schedule {
 		   Map<String,Object> obj = new HashMap<>();
 		   obj.put("orderId", inorder.getOrderId());
 		   HttpClientUtil.httpPost("http://www.howmuchweb.com/carInsurance/api/insurance/confirmChengbao", obj);
-       }
+       }*/
     }
 }

@@ -89,6 +89,37 @@ public class InvitionService
 	
 	//更新Invition
 	public Map<String,Object> updateInvition(Invition invition){
+		if(Tools.isEmpty(invition.getInvcode())){
+			return RESCODE.INV_CODE_EMPTY.getJSONRES();
+		}
+		
+		if(Tools.isEmpty(invition.getName())){
+			return RESCODE.INV_NAME_EMPTY.getJSONRES();
+		}
+		
+		
+		List<Invition> listInvitionByInvcode = invitionDao.getListInvitionByInvcode(invition.getInvcode());
+		int size = listInvitionByInvcode.size();
+		if(size == 1){
+			if(invition.getId() != listInvitionByInvcode.get(0).getId()){
+				return RESCODE.INV_CODE_EXIST.getJSONRES();
+			}
+		}else if(size>1){
+			return RESCODE.INV_CODE_EXIST.getJSONRES();
+		}
+		
+		List<Invition> listInvitionByName = invitionDao.getListInvitionByInvName(invition.getName());
+		int namesize = listInvitionByName.size();
+		if(namesize == 1){
+			if(invition.getId() != listInvitionByName.get(0).getId()){
+				return RESCODE.INV_NAME_EXIST.getJSONRES();
+			}
+		}else if(namesize>1){
+			return RESCODE.INV_NAME_EXIST.getJSONRES();
+		}
+		
+		
+		
 	    invitionDao.updateInvition(invition);
 	    return RESCODE.SUCCESS.getJSONRES();
 	}
