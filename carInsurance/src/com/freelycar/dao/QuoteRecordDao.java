@@ -79,6 +79,7 @@ public class QuoteRecordDao
 		if(quoteRecord != null){
 			utils = utils.addStringLike("openId", quoteRecord.getOpenId());
 		}
+		utils.addOrderByDesc("createTime");
 		return utils.setFirstResult(from)
 			 .setMaxResults(num)
 			 .getQuery().list();

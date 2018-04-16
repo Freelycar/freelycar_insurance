@@ -11,6 +11,7 @@ import org.springframework.stereotype.Repository;
 
 import com.freelycar.entity.InsuranceOrder;
 import com.freelycar.entity.Invition;
+import com.freelycar.entity.QuoteRecord;
 import com.freelycar.util.QueryUtils;
 import com.freelycar.util.Tools;
 /**  
@@ -64,6 +65,17 @@ public class OrderDao
     }
     
     
+    //查询最新的查询Order
+    public QuoteRecord getLatestOrderByNameLice(String ownerName,String licenseNumber){
+    	String hql = "from QuoteRecord where ownerName = :ownerName and licenseNumber = :licenseNumber ORDER BY createTime,id desc LIMIT 1";
+    	QuoteRecord result = (QuoteRecord) getSession().createQuery(hql)
+    			.setString("ownerName", ownerName)
+    			.setString("licenseNumber", licenseNumber)
+    			.uniqueResult();
+    	return result;
+    }
+    
+    
     //根据id查询Order
     public InsuranceOrder getOrderByOrderId(String orderId){
     	String hql = "from InsuranceOrder where orderId = :orderId";
@@ -73,7 +85,7 @@ public class OrderDao
     
    
     
-    //根据id查询Order
+    //根据id查询Order dealtime ：成交时间
     public List<Object[]> getCountBySourId(Date startTime, Date endTime){
     	String sql = "select sourceId, source, sum(totalPrice) from InsuranceOrder where dealTime > :startTime and dealTime<= :endTime group by sourceId";
     	@SuppressWarnings("unchecked")

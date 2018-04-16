@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.freelycar.dao.CashbackRecordDao;
+import com.freelycar.dao.InvitionDao;
 import com.freelycar.dao.InvoiceInfoDao;
 import com.freelycar.dao.OrderDao;
 import com.freelycar.dao.QuoteRecordDao;
@@ -44,6 +45,9 @@ public class OrderService
     
     @Autowired
     private ReciverDao reciverDao;
+    
+    @Autowired
+    private InvitionDao invitionDao;
     
     public Map<String, Object> getOrderById(int id){
     	InsuranceOrder orderById = orderDao.getOrderById(id);
@@ -113,19 +117,26 @@ public class OrderService
     		endTime = Tools.setTimeToEndofDay(endTime);
     	}
     	
-    	
     	List<Object[]> list = orderDao.getCountBySourId(startTime, endTime);
-    	
-    	List<CountBySource> newlist = new ArrayList<>();
     	if(list.isEmpty()){
     		return RESCODE.NOT_FOUND.getJSONRES();
     	}
     	
+    	List<CountBySource> newlist = new ArrayList<>();
+    	
     	for(Object[] obj : list){
     		System.out.println(obj);
     		CountBySource count = new CountBySource();
-    		count.setSourceId((int)obj[0]);
-    		count.setSource((String)obj[1]);
+    		int sourceId = (int)obj[0];
+    		count.setSourceId(sourceId);
+    		//如果表里面没查到source 保险一点再去查invition表
+    		String source = (String)obj[1];
+    		if(Tools.isEmpty(source)){
+    			Invition invitionById = invitionDao.getInvitionById(sourceId);
+    			source = invitionById.getName();
+    			
+    		}
+    		count.setSource(source);
     		count.setPrice((long)obj[2]);
     		count.setPrice_yuan((long)obj[2]/100.0);
     		newlist.add(count);
@@ -282,8 +293,6 @@ public class OrderService
 		if(Tools.isEmpty(licenseNumber)){
 			return RESCODE.USER_LICENSENUMBER_EMPTY.getJSONRES();
 		}
-		
-		
 		
 		List<InsuranceOrder> orderByLicenseNumber = orderDao.getOrderByLicenseNumber(licenseNumber,page,number);
 		//循环出来这单的报价记录

@@ -2,18 +2,14 @@ package com.freelycar.util;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
-import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.ThreadPoolExecutor;
 
 import org.json.JSONObject;
 
-import net.sf.ehcache.constructs.nonstop.store.ExecutorServiceStore;
 import net.sf.ehcache.store.chm.ConcurrentHashMap;
 
 public class Constant {
@@ -34,8 +30,12 @@ public class Constant {
 
       }
     
+    public static final String INTERFACE_BASE_URL = prop.getProperty("domain_url")+"/";
+    
+    
     //骆驼加油的接口 key
     public static final String LUOTUOKEY = prop.getProperty("luotuo_key");
+    public static final String LUOTUO_INTERFACE_URL = prop.getProperty("luotuo_interface_url")+"/";
     
     
     //核保的 key :单号  value 过期时间戳
@@ -74,6 +74,12 @@ public class Constant {
     public static ScheduledExecutorService getTimeExecutor(){
     	return TimeExecutorHolder.scheduledExecutor;
     }
+    
+    //承保频率 多久去看看他有咩有付款
+    public static final int CONFIRM_CHENGBAO_RATE = Integer.parseInt(prop.getProperty("luotuo_confirmchengbao_rate"));
+    public static final boolean CONFIRM_CHENGBAO_SWITCH = Boolean.parseBoolean(prop.getProperty("luotuo_confirmchengbao_switch"));
+    
+    
     
     //wetchat 接口相关
     public static final String APPID = prop.getProperty("appid");

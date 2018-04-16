@@ -65,6 +65,9 @@ public class Client
     
     @Transient
     private String contactAddress;
+    
+    @Transient
+    private String carTypeCode;//号牌种类(01 大型车、02 小型车)
     /********** constructors ***********/  
     public Client() {  
       
@@ -108,6 +111,14 @@ public class Client
   
     public String getContactAddress() {
 		return contactAddress;
+	}
+    
+    public String getCarTypeCode() {
+		return carTypeCode;
+	}
+    
+    public void setCarTypeCode(String carTypeCode) {
+		this.carTypeCode = carTypeCode;
 	}
     
     

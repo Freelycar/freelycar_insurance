@@ -62,7 +62,8 @@ public class InsuranceService
     @Autowired
     private CashbackRecordDao cashbackDao;
     
-    private String LUOTUOKEY = Constant.LUOTUOKEY;
+    private static final String LUOTUOKEY = Constant.LUOTUOKEY;
+    private static final String LUOTUO_INTERFACE_BASEURL = Constant.LUOTUO_INTERFACE_URL;
     
     private static SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     
@@ -98,9 +99,9 @@ public class InsuranceService
     	param.put("api_key", LUOTUOKEY);
     	param.put("ownerName", client.getOwnerName());
     	param.put("licenseNumber", client.getLicenseNumber());
-    	param.put("carTypeCode", "02");
+    	param.put("carTypeCode", client.getCarTypeCode());
     	
-    	JSONObject resultJson = HttpClientUtil.httpGet("http://wechat.bac365.com:8081/carRisk/car_risk/carApi/queryLatestPolicy", param);
+    	JSONObject resultJson = HttpClientUtil.httpGet(LUOTUO_INTERFACE_BASEURL+"queryLatestPolicy", param);
     	
     	
     	System.out.println("查询续保结果："+resultJson);
@@ -212,6 +213,7 @@ public class InsuranceService
     	
     	JSONObject createEnquiryParams = new JSONObject();
     	createEnquiryParams.put("licenseNumber", entity.getLicenseNumber());//
+    	createEnquiryParams.put("carTypeCode", entity.getCarTypeCode());//
     	createEnquiryParams.put("ownerName", entity.getOwnerName());//
     	createEnquiryParams.put("cityCode", entity.getCityCode());//前端写死
     	//obj.put("cityName", cityName);//cityName可以不传
@@ -245,7 +247,7 @@ public class InsuranceService
     		System.out.println(p.getKey()+"------"+p.getValue());
     	}
     	
-    	JSONObject resultJson = HttpClientUtil.httpGet("http://wechat.bac365.com:8081/carRisk/car_risk/carApi/createEnquiry", param);
+    	JSONObject resultJson = HttpClientUtil.httpGet(LUOTUO_INTERFACE_BASEURL+"createEnquiry", param);
     	
     	if(resultJson.has("errorMsg")){
     		String msg = resultJson.getJSONObject("errorMsg").getString("code");
@@ -373,7 +375,7 @@ public class InsuranceService
     	for(Map.Entry<String, Object> p : param.entrySet()){
     		System.out.println(p.getKey()+"------"+p.getValue());
     	}
-    	JSONObject resultJson = HttpClientUtil.httpGet("http://wechat.bac365.com:8081/carRisk/car_risk/carApi/submitProposal", param);
+    	JSONObject resultJson = HttpClientUtil.httpGet(LUOTUO_INTERFACE_BASEURL+"submitProposal", param);
     	
     	if(resultJson.has("errorMsg")){
     		String msg = resultJson.getJSONObject("errorMsg").getString("code");
@@ -414,7 +416,7 @@ public class InsuranceService
     	param.put("api_key", LUOTUOKEY);
     	System.out.println("##确认是否承保接口#####"+orderId);
     	param.put("orderId", orderId);
-    	JSONObject resultJson = HttpClientUtil.httpGet("http://wechat.bac365.com:8081/carRisk/car_risk/carApi/confirmChengbao", param);
+    	JSONObject resultJson = HttpClientUtil.httpGet(LUOTUO_INTERFACE_BASEURL+"confirmChengbao", param);
     	
     	if(resultJson.has("errorMsg")){
     		String msg = resultJson.getJSONObject("errorMsg").getString("code");

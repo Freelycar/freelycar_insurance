@@ -32,6 +32,7 @@ public class Invition
 	
     private String remark;  //备注;
 	
+    
     private Long createTime;  //创建时间;
     /********** constructors ***********/  
     public Invition() {  

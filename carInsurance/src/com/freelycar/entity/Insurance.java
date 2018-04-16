@@ -212,6 +212,16 @@ public class Insurance
 		
 		private boolean transfer;
 		private String transferTime;
+		private String carTypeCode;
+		
+		
+		public String getCarTypeCode() {
+			return carTypeCode;
+		}
+		
+		public void setCarTypeCode(String carTypeCode) {
+			this.carTypeCode = carTypeCode;
+		}
 		
 		public String getTransferTime() {
 			return transferTime;

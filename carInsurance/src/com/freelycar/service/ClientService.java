@@ -8,7 +8,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.freelycar.dao.ClientDao;
+import com.freelycar.dao.OrderDao;
+import com.freelycar.dao.QuoteRecordDao;
 import com.freelycar.entity.Client;
+import com.freelycar.entity.InsuranceOrder;
+import com.freelycar.entity.QuoteRecord;
 import com.freelycar.util.RESCODE;  
 /**  
  *  
@@ -21,8 +25,11 @@ public class ClientService
     @Autowired
 	private ClientDao clientDao;
     
+    @Autowired
+    private QuoteRecordDao qrdao;
     
-    
+    @Autowired
+    private OrderDao orderDao;
     
     
     //增加一个Client
@@ -33,6 +40,14 @@ public class ClientService
 	
     public Map<String,Object> getClientDetail(int id){
     	Client clientById = clientDao.getClientById(id);
+    	
+    	//查看他最近成交的订单
+    	//orderDao.getOrderByLicenseNumber(licenseNumber, page, number)
+    	
+    	
+    	//找到他最近的报价记录
+    	/*QuoteRecord latest = qrdao.getLatestQuoteRecordByNameLice(clientById.getNickName(), clientById.getLicenseNumber());
+    	clientById.setInsuranceDeadline(latest.getin);*/
     	return RESCODE.SUCCESS.getJSONRES(clientById);
     }
     
