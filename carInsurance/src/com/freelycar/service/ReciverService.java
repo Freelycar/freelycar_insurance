@@ -9,7 +9,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.freelycar.dao.ReciverDao;
 import com.freelycar.entity.Reciver;
-import com.freelycar.util.RESCODE;  
+import com.freelycar.util.RESCODE;
+import com.freelycar.util.Tools;  
 /**  
  *  
  */  
@@ -27,7 +28,32 @@ public class ReciverService
     
     //增加一个Reciver
     public Map<String,Object> saveReciver(Reciver reciver){
-		
+		if(Tools.isEmpty(reciver.getReciver())){
+			return RESCODE.PARAM_EMPTY.getJSONRES();
+		}
+		if(Tools.isEmpty(reciver.getAdressDetail())){
+			return RESCODE.PARAM_EMPTY.getJSONRES();
+		}
+		if(Tools.isEmpty(reciver.getExpressCompany())){
+			return RESCODE.PARAM_EMPTY.getJSONRES();
+		}
+		if(Tools.isEmpty(reciver.getOpenId())){
+			return RESCODE.PARAM_EMPTY.getJSONRES();
+		}
+		if(Tools.isEmpty(reciver.getExpressNumber())){
+			return RESCODE.PARAM_EMPTY.getJSONRES();
+		}
+		if(Tools.isEmpty(reciver.getPhone())){
+			return RESCODE.PARAM_EMPTY.getJSONRES();
+		}
+		if(Tools.isEmpty(reciver.getProvincesCities())){
+			return RESCODE.PARAM_EMPTY.getJSONRES();
+		}
+		if(reciver.getClientId()==0){
+			return RESCODE.PARAM_EMPTY.getJSONRES();
+		}
+    	
+    	
 		reciverDao.saveReciver(reciver);
 		return RESCODE.SUCCESS.getJSONRES();
 	}

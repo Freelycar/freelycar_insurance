@@ -40,7 +40,7 @@ public class QuoteRecordController
 	
 	//查询所有的QuoteRecord	
 	@RequestMapping(value = "/list",method = RequestMethod.GET)
-	public Map<String,Object> listQuoteRecord(@RequestBody(required = false) QuoteRecord quoteRecord, int page,int number){
+	public Map<String,Object> listQuoteRecord(QuoteRecord quoteRecord, int page,int number){
 		return quoteRecordService.listQuoteRecord(quoteRecord, page, number);
 	}
 	

@@ -155,6 +155,13 @@ public class QuoteRecordService
 	 * @return
 	 */
 	public Map<String,Object> listQuoteRecord(QuoteRecord quoteRecord, int page,int number){
+		System.out.println(quoteRecord.getClientId());
+		if(quoteRecord !=null){
+			if(quoteRecord.getClientId()==null || quoteRecord.getClientId()==0){
+				return RESCODE.USER_NOT_EXIST.getJSONRES("clientId 为空");
+			}
+		}
+		
 	    int from = (page-1)*number;
 	    List<QuoteRecord> listPage = quoteRecordDao.listQuoteRecord(quoteRecord,from, number);
 	    if(listPage !=null && !listPage.isEmpty()){

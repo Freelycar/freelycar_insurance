@@ -67,13 +67,13 @@ public class InsuranceService
     private static SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     
     public Map<String, Object> queryLastYear(Client client){
-    	if(Tools.notEmpty(client.getOpenId())){
+    	if(Tools.isEmpty(client.getOpenId())){
     		return RESCODE.USER_OPENID_EMPTY.getJSONRES();
     	}
-    	if(Tools.notEmpty(client.getOwnerName())){
+    	if(Tools.isEmpty(client.getOwnerName())){
     		return RESCODE.USER_NAME_EMPTY.getJSONRES();
     	}
-    	if(Tools.notEmpty(client.getLicenseNumber())){
+    	if(Tools.isEmpty(client.getLicenseNumber())){
     		return RESCODE.USER_LICENSENUMBER_EMPTY.getJSONRES();
     	}
     	
@@ -98,10 +98,12 @@ public class InsuranceService
     	param.put("api_key", LUOTUOKEY);
     	param.put("ownerName", client.getOwnerName());
     	param.put("licenseNumber", client.getLicenseNumber());
+    	param.put("carTypeCode", "02");
+    	
     	JSONObject resultJson = HttpClientUtil.httpGet("http://wechat.bac365.com:8081/carRisk/car_risk/carApi/queryLatestPolicy", param);
     	
     	
-    	System.out.println("查询续保结果"+resultJson);
+    	System.out.println("查询续保结果："+resultJson);
     	if(resultJson.has("errorMsg")){
     		String msg = resultJson.getJSONObject("errorMsg").getString("code");
     		if("success".equals(msg)){
@@ -211,7 +213,7 @@ public class InsuranceService
     	JSONObject createEnquiryParams = new JSONObject();
     	createEnquiryParams.put("licenseNumber", entity.getLicenseNumber());//
     	createEnquiryParams.put("ownerName", entity.getOwnerName());//
-    	createEnquiryParams.put("cityCode", entity.getCityCode());//
+    	createEnquiryParams.put("cityCode", entity.getCityCode());//前端写死
     	//obj.put("cityName", cityName);//cityName可以不传
     	createEnquiryParams.put("insuranceCompanyName", entity.getInsuranceCompanyId());//保险公司编号多加用逗号分隔
     	createEnquiryParams.put("insuranceStartTime", Tools.isEmpty(entity.getInsuranceStartTime())?0:entity.getInsuranceStartTime());//
@@ -254,7 +256,7 @@ public class InsuranceService
     			qr.setOpenId(entity.getOpenId());
     			qr.setCityCode(entity.getCityCode());
     			qr.setCityName(entity.getCityName());
-    			//qr.setClientId(entity.getcl);
+    			qr.setClientId(clientByOpenId.getId());
     			qr.setCrateTime(System.currentTimeMillis());
     			
     			if(Tools.notEmpty(forceInsuranceStartTime)){

@@ -55,7 +55,7 @@ public class CashbackRecordController
     
     //目前使用
 	//更新或增加CashBackRate
-    @RequestMapping(value = "/saveupdateCashBackRate",method = RequestMethod.POST)
+    @RequestMapping(value = "/saveupdateCashBackRate",method = RequestMethod.GET)
 	public Map<String, Object> saveupdateCashBackRate(CashBackRate rate){
 		cashbackRecordService.saveupdateCashBackRate(rate);
 		return RESCODE.SUCCESS.getJSONRES();

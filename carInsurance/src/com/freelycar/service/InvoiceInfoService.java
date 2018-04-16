@@ -9,7 +9,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.freelycar.dao.InvoiceInfoDao;
 import com.freelycar.entity.InvoiceInfo;
-import com.freelycar.util.RESCODE;  
+import com.freelycar.util.RESCODE;
+import com.freelycar.util.Tools;  
 /**  
  *  
  */  
@@ -27,9 +28,21 @@ public class InvoiceInfoService
     
     //增加一个InvoiceInfo
     public Map<String,Object> saveInvoiceInfo(InvoiceInfo invoiceInfo){
+		if(Tools.isEmpty(invoiceInfo.getInvoiceTitle())){
+			RESCODE.INVOICE_TITLE_EMPTY.getJSONRES();
+		}
+    	
+		if(Tools.isEmpty(invoiceInfo.getInvoiceType())){
+			RESCODE.INVOICE_TYPE_EMPTY.getJSONRES();
+		}
+    	
+		if(Tools.isEmpty(invoiceInfo.getPhone())){
+			RESCODE.INVOICE_PHONE_EMPTY.getJSONRES();
+		}
 		
-    	
-    	
+		if(invoiceInfo.getClientId() == 0){
+			RESCODE.USER_NOT_EXIST.getJSONRES();
+		}
     	
     	
 		invoiceInfoDao.saveInvoiceInfo(invoiceInfo);

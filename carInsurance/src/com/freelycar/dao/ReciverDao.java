@@ -59,13 +59,13 @@ public class ReciverDao
 	//查询所有的Reciver	
 	@SuppressWarnings("unchecked")
 	public List<Reciver> listReciver(Reciver reciver,int from, int num){
-		QueryUtils utils = new QueryUtils(getSession(), "from Client");
+		QueryUtils utils = new QueryUtils(getSession(), "from Reciver");
 		
 		if(reciver != null){
 			utils = utils
 			 .addInteger("clientId", reciver.getClientId());
 		}
-		
+		System.out.println(utils.getQuery().getQueryString());
 		return utils.setFirstResult(from)
 			 .setMaxResults(num)
 			 .getQuery().list();
@@ -78,7 +78,7 @@ public class ReciverDao
 	 * @return
 	 */
 	public long getReciverCount(Reciver reciver){
-		QueryUtils utils = new QueryUtils(getSession(), "select count(*) from Client");
+		QueryUtils utils = new QueryUtils(getSession(), "select count(*) from Reciver");
 		
 		if(reciver != null){
 			utils = utils.addInteger("clientId", reciver.getClientId());

@@ -77,6 +77,7 @@ public class ClientController
     
     @RequestMapping(value = "/isExistByOpenId",method = RequestMethod.POST)
     public Map<String,Object> isExistByOpenId(@RequestBody Client client){
+    	
     	return insuranceService.queryLastYear(client);
     }
 

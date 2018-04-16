@@ -19,18 +19,19 @@ import com.freelycar.util.Tools;
 
 public class LuoTuoTest {
 
-	private static String licenseNumber = "苏A4PZ99";
-	private static String ownerName = "刘杨";
-	private static String idNumber = "320112198807021630";
-	private static String forceInsuranceStartTime = "1524153600";
-	private static String offerId = "109-20180319180754-e5c52";
+	private static String licenseNumber = "苏A7W0M9";
+	private static String ownerName = "梁艳";
+	private static String idNumber = "37091119841025482X";
+	private static String forceInsuranceStartTime = "1526227199";
+	private static String offerId = "109-20180411164142-1bded";
+	private static String openId = "oziV35H727Dec0pp_cYcJYODSGkk";
 	
 	@Test
 	public void testXunBao() throws ClientProtocolException, IOException{
 		JSONObject obj = new JSONObject();
 		obj.put("licenseNumber", licenseNumber);
 		obj.put("ownerName", ownerName);
-		obj.put("openId", "666666");
+		obj.put("openId", openId);
 /*		obj.put("licenseNumber", "苏A129B0");
 		obj.put("ownerName", "朱祥珍");
 *//*		obj.put("licenseNumber", "苏A4PZ99");
@@ -44,10 +45,10 @@ public class LuoTuoTest {
 		JSONObject obj = new JSONObject();
 		//Map<String,Object> obj = new HashMap<>();
 		//obj.put("phone", "18362981113");
-		obj.put("openId", "666666");
+		obj.put("openId", openId);
 		obj.put("licenseNumber", licenseNumber);
 		obj.put("ownerName", ownerName);
-		obj.put("cityCode", "320100");
+		obj.put("cityCode", "32010002");
 		obj.put("cityName", "南京");
 		obj.put("insuranceCompanyId", "2");
 		obj.put("forceInsuranceStartTime", forceInsuranceStartTime);
@@ -74,7 +75,8 @@ public class LuoTuoTest {
 		
 		
 		try {
-			HttpClientUtil.httpPost("http://www.xhnky.cn/carInsurance/api/insurance/queryPrice", obj);
+			System.out.println("----");
+			HttpClientUtil.httpPost("http://www.howmuchweb.com/carInsurance/api/insurance/queryPrice", obj);
 		} catch (ClientProtocolException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -88,7 +90,23 @@ public class LuoTuoTest {
 	@Test//核保
 	public void testsubmitProposal(){
 		
-		Map<String,Object> obj = new HashMap<>();
+		//Map<String,Object> obj = new HashMap<>();
+		JSONObject obj = new JSONObject();
+		
+		obj.put("payee","111");  //收款人姓名","111");
+		obj.put("account","111");  //收款人卡","111");
+	    obj.put("bankname","111");  //开户行","111");
+	    obj.put("openId",openId);//微信openId
+	    obj.put("reciver","111");  //收件人","111");
+	    obj.put("reciverPhone","111");  //手机号码","111");
+	    obj.put("provincesCities","111");  //省市","111");
+	    obj.put("addressDetail","111");  //详细","111");
+	    obj.put("invoiceType","111");  //发票信息","111");
+	    obj.put("invoiceTitle","111");  //发表抬头","111");
+	    obj.put("invoicePhone","111");  //手机号码","111");
+		
+		
+		obj.put("licenseNumber", licenseNumber);
 		obj.put("offerId", offerId);
 		obj.put("ownerName", ownerName);
 		obj.put("idCard", idNumber);
@@ -104,8 +122,12 @@ public class LuoTuoTest {
 		obj.put("idCard", "320112198807021630");
 		obj.put("phone", "13705159506");
 		obj.put("contactAddress", "江苏南京");*/
-		
-		HttpClientUtil.httpPost("http://www.xhnky.cn/carInsurance/api/insurance/submitProposal", obj);
+		try {
+			HttpClientUtil.httpPost("http://www.howmuchweb.com/carInsurance/api/insurance/submitProposal", obj);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		//HttpClientUtil.httpPost("http://localhost:8080/carInsurance/api/insurance/queryPrice", obj);
 	}
 	
@@ -127,7 +149,7 @@ public class LuoTuoTest {
 		try {
 			//Date parse = formate.parse("2018-04-18 23:59:59");
 			//Date parse = formate.parse("2018-08-09 00:00:00");//朱
-			Date parse = formate.parse("2018-04-20 00:00:00");//胡
+			Date parse = formate.parse("2018-05-13 23:59:59");//胡
 			System.out.println(parse.getTime());
 		} catch (ParseException e) {
 			// TODO Auto-generated catch block

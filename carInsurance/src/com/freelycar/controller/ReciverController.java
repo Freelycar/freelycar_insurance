@@ -37,7 +37,7 @@ public class ReciverController
 	
 	//查询所有的Reciver	
 	@RequestMapping(value = "/list",method = RequestMethod.GET)
-	public Map<String,Object> listReciver(@RequestBody(required =false) Reciver reciver, int page,int number){
+	public Map<String,Object> listReciver(Reciver reciver, int page,int number){
 		return reciverService.listReciver(reciver, page, number);
 	}
 	
@@ -49,7 +49,7 @@ public class ReciverController
 	
 	//更新Reciver
 	@RequestMapping(value = "/update",method = RequestMethod.POST)
-	public Map<String,Object> updateReciver(Reciver reciver){
+	public Map<String,Object> updateReciver(@RequestBody Reciver reciver){
 	    return reciverService.updateReciver(reciver);
 	}
     

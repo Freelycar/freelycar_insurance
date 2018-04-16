@@ -279,6 +279,12 @@ public class OrderService
 	
 	//报价记录
 	public Map<String,Object> getClientOrderByLicenseNumber(String licenseNumber,int page,int number){
+		if(Tools.isEmpty(licenseNumber)){
+			return RESCODE.USER_LICENSENUMBER_EMPTY.getJSONRES();
+		}
+		
+		
+		
 		List<InsuranceOrder> orderByLicenseNumber = orderDao.getOrderByLicenseNumber(licenseNumber,page,number);
 		//循环出来这单的报价记录
 		for(InsuranceOrder order : orderByLicenseNumber){

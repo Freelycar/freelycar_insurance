@@ -12,13 +12,14 @@ public enum RESCODE {
 	DELETE_FAIL(100, "删除失败"), 
 	NOT_FOUND(101, "无记录"), 
 	DATA_EXIST(102, "数据库已存在"), 
+	PARAM_EMPTY(103, "参数为空"), 
 	
 	
 	USER_PHONE_REGISTERED(200,"手机号已注册"),
 	USER_MAIL_USERD(201,"该邮箱已被注册"),
 	USER_NAMEPAS_ERROR(203,"用户名或密码错误"),
 	USER_EXIST(204,"用户已存在"),
-	USER_NOT_EXIST(2041,"用户不存在在"),
+	USER_NOT_EXIST(2041,"用户不存在"),
 	USER_NO_PHONE(205,"新用户没有手机号"),
 	USER_NAME_LICENSENUMBER_NOT_FOUND(206,"没有查询到该车牌与姓名的续保信息"),
 	USER_NAME_EMPTY(207,"用户名为空"),
@@ -29,9 +30,12 @@ public enum RESCODE {
 	INV_CODE_EXIST(210,"邀请码已存在"),
 	USER_LICENSENUMBER_EMPTY(211,"用户车牌为空"),
 	USER_OPENID_EMPTY(212,"用户openid为空"),
-	CASH_PAYEE_EMPTY(21,"收款人姓名为空"),
-	CASH_ACCOUNT_EMPTY(21,"收款人账户为空"),
-	CASH_BANKNAME_EMPTY(21,"收款人银行名称为空"),
+	CASH_PAYEE_EMPTY(213,"收款人姓名为空"),
+	CASH_ACCOUNT_EMPTY(214,"收款人账户为空"),
+	CASH_BANKNAME_EMPTY(215,"收款人银行名称为空"),
+	INVOICE_TYPE_EMPTY(216,"发票类型为空"),
+	INVOICE_TITLE_EMPTY(217,"发票抬头为空"),
+	INVOICE_PHONE_EMPTY(218,"发票电话为空"),
 	
 	
 	INSURANCE_BAOJIA_SUCCESS(300,"报价成功"),
