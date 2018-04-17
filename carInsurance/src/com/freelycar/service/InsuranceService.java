@@ -110,7 +110,9 @@ public class InsuranceService
     		if("success".equals(msg)){
     			JSONObject data = null;
 				try { data = new JSONObject(resultJson.getString("data"));
-				} catch (JSONException e) { e.printStackTrace();
+				} catch (JSONException e) { 
+					e.printStackTrace();
+					return RESCODE.LUOTUO_REPONSE_ERROR.getJSONRES();
 				}
 				
 				if(data.length()==0){
@@ -149,41 +151,46 @@ public class InsuranceService
     				String insuranceJson = info.has("insurances")?info.getJSONArray("insurances").toString():null;
     				
     				//根据车主姓名和车牌 保持只有一条查询续保记录
-    				Insurance insurance = insuranceDao.getInsuranceByNameLiceAndState(client.getOwnerName(), client.getLicenseNumber(), i==1);
-    				if(insurance == null){
-    					insurance = new Insurance();
+    				synchronized (InsuranceService.class) {
+    					Insurance insurance = insuranceDao.getInsuranceByNameLiceAndState(client.getOwnerName(), client.getLicenseNumber(), i==1);
+    					if(insurance == null){
+    						insurance = new Insurance();
+    					}
+    					
+    					insurance.setPolicyNo(policyNo);
+    					insurance.setCommercial(i==1);
+    					insurance.setInsurances(insuranceJson);
+    					insurance.setInsuranceBeginTime(insuranceBeginTime);
+    					insurance.setInsuranceCompany(insuranceCompany);
+    					insurance.setInsuranceCompanyId(insuranceCompanyId);
+    					insurance.setInsuranceEndTime(insuranceEndTime);
+    					insurance.setTotalLicenseNumber(client.getLicenseNumber());
+    					insurance.setLicenseNumber(client.getLicenseNumber());
+    					insurance.setOwnerName(client.getOwnerName());
+    					insurance.setTotalOpenId(client.getOpenId());
+    					insurance.setPrice(totalAmount);
+    					saveUpdateInsurance(insurance);
+    					result.add(insurance);
     				}
-    				
-    				insurance.setPolicyNo(policyNo);
-    				insurance.setCommercial(i==1);
-    				insurance.setInsurances(insuranceJson);
-    				insurance.setInsuranceBeginTime(insuranceBeginTime);
-    				insurance.setInsuranceCompany(insuranceCompany);
-    				insurance.setInsuranceCompanyId(insuranceCompanyId);
-    				insurance.setInsuranceEndTime(insuranceEndTime);
-    				insurance.setTotalLicenseNumber(client.getLicenseNumber());
-    				insurance.setLicenseNumber(client.getLicenseNumber());
-    				insurance.setOwnerName(client.getOwnerName());
-    				insurance.setTotalOpenId(client.getOpenId());
-    				insurance.setPrice(totalAmount);
-    				saveUpdateInsurance(insurance);
-    				result.add(insurance);
     			}
     			
     			
     			//证明用户身份真实有效
-    			Client exist = clientDao.getClientByOpenIdAndLicenseNumber(client.getOpenId(),client.getLicenseNumber());
-    			if(exist == null){
-    				//x询价的时候 插入客户的信息//初始状态 呆报价
-    				clientDao.saveClient(client);
-    			}else{
-    				//数据库有数据 填充其他信息 这边要注意
-    				exist.setOwnerName(client.getOwnerName());
-    				//exist.setQuoteState(INSURANCE.QUOTESTATE_NO_YIBAOJIA.getCode()+"");
-    				clientDao.saveClient(exist);
+    			synchronized (InsuranceService.class) {
+    				Client exist = clientDao.getClientByOpenIdAndLicenseNumber(client.getOpenId(),client.getLicenseNumber());
+    				if(exist == null){
+    					//x询价的时候 插入客户的信息//初始状态 呆报价
+    					clientDao.saveClient(client);
+    				}else{
+    					//数据库有数据 填充其他信息 这边要注意
+    					exist.setOwnerName(client.getOwnerName());
+    					//exist.setQuoteState(INSURANCE.QUOTESTATE_NO_YIBAOJIA.getCode()+"");
+    					clientDao.saveClient(exist);
+    				}
+    				
+    				return RESCODE.SUCCESS.getJSONRES(result);
     			}
     			
-    			return RESCODE.SUCCESS.getJSONRES(result);
     		}
     	}
     	
@@ -384,25 +391,28 @@ public class InsuranceService
     			System.out.println("提交核保成功");
     			
     			//保证同一个offerId 生成一个订单
-    			boolean save = false;
-    			InsuranceOrder inorder = orderDao.getOrderByOrderId(entity.getOfferId());
-    			if(inorder == null){
-    				 save = true;
-    				 inorder = new InsuranceOrder();
-    			}
-    			inorder.setCreateTime(System.currentTimeMillis());
-    			inorder.setInsuredIdNo(entity.getIdCard());
-    			inorder.setInsuredPhone(entity.getPhone());
-    			inorder.setInsureName(entity.getOwnerName());
-    			inorder.setLicenseNumber(entity.getLicenseNumber());
-    			inorder.setOrderId(entity.getOfferId());
-    			inorder.setOpenId(entity.getOpenId());
-    			inorder.setState(INSURANCE.QUOTESTATE_HEBAOING.getCode());
-    			inorder.setStateString(INSURANCE.QUOTESTATE_HEBAOING.getName());
-    			inorder.setCreateTime(System.currentTimeMillis());
-    			String saveId = orderDao.saveUpdateOrder(inorder,save);
+    			synchronized (InsuranceService.class) {
+    				boolean save = false;
+    				InsuranceOrder inorder = orderDao.getOrderByOrderId(entity.getOfferId());
+    				if(inorder == null){
+    					save = true;
+    					inorder = new InsuranceOrder();
+    				}
+    				inorder.setCreateTime(System.currentTimeMillis());
+    				inorder.setInsuredIdNo(entity.getIdCard());
+    				inorder.setInsuredPhone(entity.getPhone());
+    				inorder.setInsureName(entity.getOwnerName());
+    				inorder.setLicenseNumber(entity.getLicenseNumber());
+    				inorder.setOrderId(entity.getOfferId());
+    				inorder.setOpenId(entity.getOpenId());
+    				inorder.setState(INSURANCE.QUOTESTATE_HEBAOING.getCode());
+    				inorder.setStateString(INSURANCE.QUOTESTATE_HEBAOING.getName());
+    				inorder.setCreateTime(System.currentTimeMillis());
+    				String saveId = orderDao.saveUpdateOrder(inorder,save);
+    				return RESCODE.SUCCESS.getJSONRES(save?saveId:inorder.getId());
+				}
     			
-    			return RESCODE.SUCCESS.getJSONRES(save?saveId:inorder.getId());
+    			
     		}
     	}
     	return RESCODE.FAIL.getJSONRES();

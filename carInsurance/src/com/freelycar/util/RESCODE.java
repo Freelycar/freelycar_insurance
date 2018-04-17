@@ -37,6 +37,8 @@ public enum RESCODE {
 	INVOICE_TITLE_EMPTY(217,"发票抬头为空"),
 	INVOICE_PHONE_EMPTY(218,"发票电话为空"),
 	
+	LUOTUO_REPONSE_ERROR(220,"调用骆驼接口出现异常"),
+	
 	
 	INSURANCE_BAOJIA_SUCCESS(300,"报价成功"),
 	
