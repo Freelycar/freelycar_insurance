@@ -18,7 +18,8 @@ import com.freelycar.dao.QuoteRecordDao;
 import com.freelycar.entity.CashBackRate;
 import com.freelycar.entity.QuoteRecord;
 import com.freelycar.util.RESCODE;
-import com.freelycar.util.SocketHelper;  
+import com.freelycar.util.SocketHelper;
+import com.freelycar.util.Tools;  
 /**  
  *  
  */  
@@ -38,7 +39,8 @@ public class QuoteRecordService
     //增加一个QuoteRecord
     public Map<String,Object> quoteRecordPushDeal(String result){
     	try {
-    		if(!result.startsWith("{")){
+    		if(Tools.isEmpty(result) || !result.startsWith("{")){
+    			log.error("错误的报价推送的结果： "+result+"\n\n");
     			return RESCODE.LUOTUO_FAIL.getLuoTuoRes(false);
     		}
     		

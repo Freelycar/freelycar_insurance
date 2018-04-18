@@ -29,21 +29,20 @@ public class InvoiceInfoService
     //增加一个InvoiceInfo
     public Map<String,Object> saveInvoiceInfo(InvoiceInfo invoiceInfo){
 		if(Tools.isEmpty(invoiceInfo.getInvoiceTitle())){
-			RESCODE.INVOICE_TITLE_EMPTY.getJSONRES();
+			return RESCODE.INVOICE_TITLE_EMPTY.getJSONRES();
 		}
     	
 		if(Tools.isEmpty(invoiceInfo.getInvoiceType())){
-			RESCODE.INVOICE_TYPE_EMPTY.getJSONRES();
+			return RESCODE.INVOICE_TYPE_EMPTY.getJSONRES();
 		}
     	
 		if(Tools.isEmpty(invoiceInfo.getPhone())){
-			RESCODE.INVOICE_PHONE_EMPTY.getJSONRES();
+			return RESCODE.INVOICE_PHONE_EMPTY.getJSONRES();
 		}
 		
-		if(invoiceInfo.getClientId() == 0){
-			RESCODE.USER_NOT_EXIST.getJSONRES();
+		if(invoiceInfo.getClientId()==null ||invoiceInfo.getClientId() == 0){
+			return RESCODE.USER_NOT_EXIST.getJSONRES();
 		}
-    	
     	
 		invoiceInfoDao.saveInvoiceInfo(invoiceInfo);
 		return RESCODE.SUCCESS.getJSONRES();

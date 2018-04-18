@@ -26,9 +26,23 @@ public class QuoteRecordController
      * @param data
      * @return
      */
+    
+    static class ReponseData{
+    	String data;
+    	public String getData() {
+			return data;
+		}
+    	
+    	public void setData(String data) {
+			this.data = data;
+		}
+    	
+    }
+    
     @RequestMapping(value="/resultPush")
-    public Map<String,Object> quoteRecordPush(String data){
-    	return quoteRecordService.quoteRecordPushDeal(data);
+    public Map<String,Object> quoteRecordPush(@RequestBody ReponseData data){
+    	System.out.println("一开始接受的data:>>>>"+data.getData());
+    	return quoteRecordService.quoteRecordPushDeal(data.getData());
     }
 
     

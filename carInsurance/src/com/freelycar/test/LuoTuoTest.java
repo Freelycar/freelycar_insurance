@@ -19,12 +19,29 @@ import com.freelycar.util.Tools;
 public class LuoTuoTest {
 
 	private static final String BASEURL = Constant.INTERFACE_BASE_URL;
-	private static String licenseNumber = "苏A2G0S2";
-	private static String ownerName = "张子杰";
-	private static String idNumber = "320102198810091215";
-	private static String forceInsuranceStartTime = "1526572799";
+	/*private static String licenseNumber = "苏AB660C";
+	private static String ownerName = "陈雯";*/
+	private static String licenseNumber = "苏AE1B98";
+	private static String ownerName = "李哲";
+	private static String idNumber = "320705198710132050";
+	private static String forceInsuranceStartTime = "1532879999";
 	private static String offerId = "109-20180416151853-2207b";
 	private static String openId = "oziV35H727Dec0pp_cYcJYODSGkk";
+	
+	
+	@Test
+	public void testSelfUrl() throws ClientProtocolException, IOException{
+		JSONObject obj = new JSONObject();
+		obj.put("data", "海蜇");
+		/*obj.put("ownerName", ownerName);
+		obj.put("openId", openId);
+		obj.put("carTypeCode", "02");*/
+/*		obj.put("licenseNumber", "苏A129B0");
+		obj.put("ownerName", "朱祥珍");
+*//*		obj.put("licenseNumber", "苏A4PZ99");
+		obj.put("ownerName", "刘扬");
+*/		HttpClientUtil.httpPost("http://www.freelycar.com/carInsurance/api/quoterecord/resultPush", obj);
+	}
 	
 	@Test
 	public void testXunBao() throws ClientProtocolException, IOException{
@@ -33,9 +50,9 @@ public class LuoTuoTest {
 		obj.put("ownerName", ownerName);
 		obj.put("openId", openId);
 		obj.put("carTypeCode", "02");
-/*		obj.put("licenseNumber", "苏A129B0");
-		obj.put("ownerName", "朱祥珍");
-*//*		obj.put("licenseNumber", "苏A4PZ99");
+	/*	obj.put("licenseNumber", "苏A129B0");
+		obj.put("ownerName", "朱祥珍");*/
+		/*		obj.put("licenseNumber", "苏A4PZ99");
 		obj.put("ownerName", "刘扬");
 */		HttpClientUtil.httpPost(BASEURL+"insurance/queryLastYear", obj);
 	}
@@ -111,7 +128,7 @@ public class LuoTuoTest {
 		obj.put("offerId", offerId);
 		obj.put("ownerName", ownerName);
 		obj.put("idCard", idNumber);
-		obj.put("phone", "13814544395");
+		obj.put("phone", "13505143481");
 		obj.put("contactAddress", "江苏南京");
 		/*obj.put("offerId", offerId);
 		obj.put("ownerName", "朱祥珍");
@@ -150,7 +167,7 @@ public class LuoTuoTest {
 		try {
 			//Date parse = formate.parse("2018-04-18 23:59:59");
 			//Date parse = formate.parse("2018-08-09 00:00:00");//朱
-			Date parse = formate.parse("2018-05-17 23:59:59");//胡
+			Date parse = formate.parse("2018-07-29 23:59:59");//胡
 			System.out.println(parse.getTime());
 		} catch (ParseException e) {
 			// TODO Auto-generated catch block

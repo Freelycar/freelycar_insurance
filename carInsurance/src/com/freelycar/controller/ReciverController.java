@@ -25,7 +25,7 @@ public class ReciverController
     
     //增加一个Reciver
     @RequestMapping(value = "/save",method = RequestMethod.POST)
-    public Map<String,Object> saveReciver(Reciver reciver){
+    public Map<String,Object> saveReciver(@RequestBody Reciver reciver){
 		return reciverService.saveReciver(reciver);
 	}
     

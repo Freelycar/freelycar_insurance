@@ -29,28 +29,28 @@ public class ReciverService
     //增加一个Reciver
     public Map<String,Object> saveReciver(Reciver reciver){
 		if(Tools.isEmpty(reciver.getReciver())){
-			return RESCODE.PARAM_EMPTY.getJSONRES();
+			return RESCODE.PARAM_EMPTY.getJSONRES("姓名为空");
 		}
 		if(Tools.isEmpty(reciver.getAdressDetail())){
-			return RESCODE.PARAM_EMPTY.getJSONRES();
+			return RESCODE.PARAM_EMPTY.getJSONRES("地址为空");
 		}
 		if(Tools.isEmpty(reciver.getExpressCompany())){
-			return RESCODE.PARAM_EMPTY.getJSONRES();
+			return RESCODE.PARAM_EMPTY.getJSONRES("快递公司为空");
 		}
 		if(Tools.isEmpty(reciver.getOpenId())){
-			return RESCODE.PARAM_EMPTY.getJSONRES();
+			return RESCODE.PARAM_EMPTY.getJSONRES("openId为空");
 		}
 		if(Tools.isEmpty(reciver.getExpressNumber())){
-			return RESCODE.PARAM_EMPTY.getJSONRES();
+			return RESCODE.PARAM_EMPTY.getJSONRES("快递单号为空");
 		}
 		if(Tools.isEmpty(reciver.getPhone())){
-			return RESCODE.PARAM_EMPTY.getJSONRES();
+			return RESCODE.PARAM_EMPTY.getJSONRES("手机号码为空");
 		}
 		if(Tools.isEmpty(reciver.getProvincesCities())){
-			return RESCODE.PARAM_EMPTY.getJSONRES();
+			return RESCODE.PARAM_EMPTY.getJSONRES("省市为空");
 		}
 		if(reciver.getClientId()==0){
-			return RESCODE.PARAM_EMPTY.getJSONRES();
+			return RESCODE.PARAM_EMPTY.getJSONRES("客户clientId为空");
 		}
     	
     	
