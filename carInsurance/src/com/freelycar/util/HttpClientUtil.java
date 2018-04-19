@@ -119,7 +119,10 @@ public class HttpClientUtil {
 		if(param!=null){
 			List<NameValuePair> nvps = new ArrayList<NameValuePair>();
 			for(Map.Entry<String, Object> map : param.entrySet()){
-				nvps.add(new BasicNameValuePair(map.getKey(), map.getValue().toString()));
+				if(Tools.notEmpty(map.getKey()) && map.getValue()!=null){
+					nvps.add(new BasicNameValuePair(map.getKey(), map.getValue().toString()));
+				}
+				
 			}
 			String paramString = URLEncodedUtils.format(nvps, "utf-8");
 			url = url+"?"+paramString;

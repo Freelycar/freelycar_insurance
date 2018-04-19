@@ -99,7 +99,7 @@ public class InsuranceService
     	param.put("api_key", LUOTUOKEY);
     	param.put("ownerName", client.getOwnerName());
     	param.put("licenseNumber", client.getLicenseNumber());
-    	param.put("carTypeCode", client.getCarTypeCode());
+    	param.put("carTypeCode", Tools.isEmpty(client.getCarTypeCode())?"02":client.getCarTypeCode());
     	
     	JSONObject resultJson = HttpClientUtil.httpGet(LUOTUO_INTERFACE_BASEURL+"queryLatestPolicy", param);
     	
@@ -115,9 +115,10 @@ public class InsuranceService
 					return RESCODE.LUOTUO_REPONSE_ERROR.getJSONRES();
 				}
 				
-				if(data.length()==0){
+				
+				/*if(data.length()==0){
 					return RESCODE.USER_NAME_LICENSENUMBER_NOT_FOUND.getJSONRES();
-				}
+				}*/
 				
     			JSONArray array = new JSONArray();
     			if(data.has("ciInfo")){//交强险
@@ -125,6 +126,7 @@ public class InsuranceService
     				array.put(ciInfo);
     			}else{
     				//没有交强险
+    				System.out.println("查询不到交强险.........");
     				return RESCODE.REQUEST_BAOJIA_EXCEPTION.getJSONRES("查询不到交强险");
     			}
     			
@@ -143,6 +145,11 @@ public class InsuranceService
     				String insuranceEndTime = info.getString("insuranceEndTime");
     				try {
     					insuranceEndTime = String.valueOf(format.parse(insuranceEndTime).getTime()/1000);
+    					if(i==0){
+    						System.out.println("交强险时间：>>>"+insuranceEndTime);
+    					}else{
+    						System.out.println("商业险时间：>>>"+insuranceEndTime);
+    					}
 					} catch (ParseException e) {
 						e.printStackTrace();
 					}
@@ -220,7 +227,7 @@ public class InsuranceService
     	
     	JSONObject createEnquiryParams = new JSONObject();
     	createEnquiryParams.put("licenseNumber", entity.getLicenseNumber());//
-    	createEnquiryParams.put("carTypeCode", entity.getCarTypeCode());//
+    	createEnquiryParams.put("carTypeCode", Tools.isEmpty(entity.getCarTypeCode())?"02":entity.getCarTypeCode());//
     	createEnquiryParams.put("ownerName", entity.getOwnerName());//
     	createEnquiryParams.put("cityCode", entity.getCityCode());//前端写死
     	//obj.put("cityName", cityName);//cityName可以不传

@@ -21,27 +21,14 @@ public class LuoTuoTest {
 	private static final String BASEURL = Constant.INTERFACE_BASE_URL;
 	/*private static String licenseNumber = "苏AB660C";
 	private static String ownerName = "陈雯";*/
-	private static String licenseNumber = "苏AE1B98";
-	private static String ownerName = "李哲";
-	private static String idNumber = "320705198710132050";
-	private static String forceInsuranceStartTime = "1532879999";
-	private static String offerId = "109-20180416151853-2207b";
+	private static String licenseNumber = "苏A79FE8";
+	private static String ownerName = "张旭东";
+	private static String idNumber = "320114197809263017";
+	private static String forceInsuranceStartTime = "1525276800";
+	private static String insuranceStartTime = "1525276800";
+	private static String offerId = "109-20180419111055-2d903";
 	private static String openId = "oziV35H727Dec0pp_cYcJYODSGkk";
 	
-	
-	@Test
-	public void testSelfUrl() throws ClientProtocolException, IOException{
-		JSONObject obj = new JSONObject();
-		obj.put("data", "海蜇");
-		/*obj.put("ownerName", ownerName);
-		obj.put("openId", openId);
-		obj.put("carTypeCode", "02");*/
-/*		obj.put("licenseNumber", "苏A129B0");
-		obj.put("ownerName", "朱祥珍");
-*//*		obj.put("licenseNumber", "苏A4PZ99");
-		obj.put("ownerName", "刘扬");
-*/		HttpClientUtil.httpPost("http://www.freelycar.com/carInsurance/api/quoterecord/resultPush", obj);
-	}
 	
 	@Test
 	public void testXunBao() throws ClientProtocolException, IOException{
@@ -66,10 +53,11 @@ public class LuoTuoTest {
 		obj.put("openId", openId);
 		obj.put("licenseNumber", licenseNumber);
 		obj.put("ownerName", ownerName);
-		obj.put("cityCode", "32010002");
+		obj.put("cityCode", "320100");
 		obj.put("cityName", "南京");
 		obj.put("insuranceCompanyId", "2");
 		obj.put("forceInsuranceStartTime", forceInsuranceStartTime);
+		obj.put("insuranceStartTime", insuranceStartTime);
 		obj.put("carTypeCode", "02");
 		/*obj.put("phone", "13913980918");
 		obj.put("licenseNumber", "苏A2F6S5");
@@ -154,7 +142,7 @@ public class LuoTuoTest {
 	public void testconfirmChengbao(){
 		
 		Map<String,Object> obj = new HashMap<>();
-		obj.put("orderId", "109-20180329151717-be1fd");
+		obj.put("orderId", offerId);
 		
 		HttpClientUtil.httpPost(BASEURL+"insurance/confirmChengbao", obj);
 		//HttpClientUtil.httpPost("http://localhost:8080/carInsurance/api/insurance/queryPrice", obj);

@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.freelycar.entity.Client;
 import com.freelycar.entity.Insurance;
-import com.freelycar.entity.QuoteRecord;
 import com.freelycar.service.InsuranceService;
 /**  
  *  

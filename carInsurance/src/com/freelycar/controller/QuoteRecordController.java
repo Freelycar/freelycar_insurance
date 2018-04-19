@@ -1,15 +1,14 @@
 package com.freelycar.controller; 
 
-import com.freelycar.entity.QuoteRecord;
-import com.freelycar.service.QuoteRecordService;
-
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.freelycar.entity.QuoteRecord;
+import com.freelycar.service.QuoteRecordService;
 /**  
  *  
  */  
@@ -27,22 +26,10 @@ public class QuoteRecordController
      * @return
      */
     
-    static class ReponseData{
-    	String data;
-    	public String getData() {
-			return data;
-		}
-    	
-    	public void setData(String data) {
-			this.data = data;
-		}
-    	
-    }
-    
     @RequestMapping(value="/resultPush")
-    public Map<String,Object> quoteRecordPush(@RequestBody ReponseData data){
-    	System.out.println("一开始接受的data:>>>>"+data.getData());
-    	return quoteRecordService.quoteRecordPushDeal(data.getData());
+    public Map<String,Object> quoteRecordPush(String data){
+    	System.out.println("一开始接受的data:>>>>"+data);
+    	return quoteRecordService.quoteRecordPushDeal(data);
     }
 
     
