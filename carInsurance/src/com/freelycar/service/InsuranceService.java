@@ -120,18 +120,26 @@ public class InsuranceService
 					return RESCODE.USER_NAME_LICENSENUMBER_NOT_FOUND.getJSONRES();
 				}*/
 				
+				boolean hasciInfo = false;
+				
     			JSONArray array = new JSONArray();
     			if(data.has("ciInfo")){//交强险
     				JSONObject ciInfo = data.getJSONObject("ciInfo");
     				array.put(ciInfo);
-    			}else{
+    				hasciInfo = true;
+    			}/*else{
     				//没有交强险
     				System.out.println("查询不到交强险.........");
     				return RESCODE.REQUEST_BAOJIA_EXCEPTION.getJSONRES("查询不到交强险");
-    			}
-    			
+    			}*/
     			if(data.has("biInfo")){//商业险 
+    				
+    				//根据骆驼反馈 如果没有交强险 可以复用商业险也交强险
+    				
     				JSONObject biInfo = data.getJSONObject("biInfo");
+    				if(!hasciInfo){
+    					array.put(biInfo);
+    				}
     				array.put(biInfo);
     			}
     			List<Insurance> result = new ArrayList<>();
@@ -145,11 +153,7 @@ public class InsuranceService
     				String insuranceEndTime = info.getString("insuranceEndTime");
     				try {
     					insuranceEndTime = String.valueOf(format.parse(insuranceEndTime).getTime()/1000);
-    					if(i==0){
-    						System.out.println("交强险时间：>>>"+insuranceEndTime);
-    					}else{
-    						System.out.println("商业险时间：>>>"+insuranceEndTime);
-    					}
+    					System.out.println("交强险-商业险时间：>>>"+insuranceEndTime);
 					} catch (ParseException e) {
 						e.printStackTrace();
 					}

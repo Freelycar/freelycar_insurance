@@ -9,6 +9,7 @@ import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import org.apache.http.client.ClientProtocolException;
+import org.json.JSONArray;
 import org.json.JSONObject;
 import org.junit.Test;
 
@@ -21,11 +22,12 @@ public class LuoTuoTest {
 	private static final String BASEURL = Constant.INTERFACE_BASE_URL;
 	/*private static String licenseNumber = "苏AB660C";
 	private static String ownerName = "陈雯";*/
-	private static String licenseNumber = "苏A79FE8";
-	private static String ownerName = "张旭东";
+	private static String licenseNumber = "苏A93HV3";
+	private static String ownerName = "汪萍";
 	private static String idNumber = "320114197809263017";
 	private static String forceInsuranceStartTime = "1525276800";
 	private static String insuranceStartTime = "1525276800";
+	private static String phone = "13505143481";
 	private static String offerId = "109-20180419111055-2d903";
 	private static String openId = "oziV35H727Dec0pp_cYcJYODSGkk";
 	
@@ -116,7 +118,7 @@ public class LuoTuoTest {
 		obj.put("offerId", offerId);
 		obj.put("ownerName", ownerName);
 		obj.put("idCard", idNumber);
-		obj.put("phone", "13505143481");
+		obj.put("phone", phone);
 		obj.put("contactAddress", "江苏南京");
 		/*obj.put("offerId", offerId);
 		obj.put("ownerName", "朱祥珍");
@@ -201,8 +203,16 @@ public class LuoTuoTest {
 			e.printStackTrace();
 		}
 	}
-	
-	
+	@Test
+	public void test(){
+		JSONArray array = new JSONArray();
+		JSONObject obj = new JSONObject();
+		obj.put("aaa", "bbb");
+		array.put(obj);
+		array.put(obj);
+		array.put(obj);
+		System.out.println(array);
+	}
 	
 	
 }
