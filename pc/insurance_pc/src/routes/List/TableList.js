@@ -237,6 +237,7 @@ export default class TableList extends PureComponent {
       },
     });
 
+    message.destroy();
     message.success('添加成功');
     this.setState({
       modalVisible: false,

@@ -126,6 +126,7 @@ class BasicLayout extends React.PureComponent {
     });
   }
   handleNoticeClear = (type) => {
+    message.destroy();
     message.success(`清空了${type}`);
     this.props.dispatch({
       type: 'global/clearNotices',
@@ -161,7 +162,7 @@ class BasicLayout extends React.PureComponent {
       onCancel={() => this.setState({rateModalShow: false})}
       onOk={this.saveupdateCashBackRate}
     >
-      <span>返现率：</span><Input placeholder="请输入返现率" style={{width: 200}} value={this.state.rate} onChange={(e) => this.setState({rate: e.target.value})} />  %
+      <span>返现率：</span><Input placeholder="请输入返现率" style={{width: 200}} value={this.state.rate || 100} onChange={(e) => this.setState({rate: e.target.value})} />  %
       
     </Modal>
   }
@@ -184,6 +185,7 @@ class BasicLayout extends React.PureComponent {
 
   saveupdateCashBackRate = () => {
     if (!checkModal.isRealNum(this.state.rate)) {
+      message.destroy();
       message.warn('请输入正确数字');
       return;
     }
@@ -191,14 +193,17 @@ class BasicLayout extends React.PureComponent {
       rate: this.state.rate / 100.00
     }).then(res => {
       if (res && res.code == 0) {
+        message.destroy();
         message.success('修改成功');
         this.setState({
           rateModalShow: false
         })
       } else {
+        message.destroy();
         message.warn(res.msg || '修改失败');
       }
     }).catch(err => {
+      message.destroy();
       message.warn('修改失败');
       console.log(err);
     })

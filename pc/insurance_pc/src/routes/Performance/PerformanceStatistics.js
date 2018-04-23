@@ -58,6 +58,7 @@ export default class PerformanceStatistics extends PureComponent {
                 this.setState({
                     allData: []
                 })
+                message.destroy();
                 message.warn(res.msg || '请求失败')
             }
         }).catch(err => {
@@ -88,6 +89,7 @@ export default class PerformanceStatistics extends PureComponent {
                 this.setState({
                     listData: []
                 })
+                message.destroy();
                 message.warn(res.msg || '请求失败')
             }
         }).catch(err => {
@@ -219,14 +221,14 @@ export default class PerformanceStatistics extends PureComponent {
             <PageHeaderLayout title="业绩统计">
                 <Card bordered={false}>
                     <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
-                        <Col md={6} sm={24}>
+                        <Col md={8} sm={24}>
                             <Radio.Group value={this.state.type} onChange={this.handleTypeChange} size='large' type="primary">
                                 <Radio.Button value='0' >今日</Radio.Button>
                                 <Radio.Button value='1'>本月</Radio.Button>
                                 <Radio.Button value='2'>区间查找</Radio.Button>
                             </Radio.Group>
                         </Col>
-                        {this.state.type == 2 ? <Col md={6} sm={24}>
+                        {this.state.type == 2 ? <Col md={8} sm={24}>
                             {/* <DatePicker onChange={this.handleTimeChange} /> */}
                             <RangePicker onChange={this.handleTimeChange} />
                         </Col> : ''}

@@ -187,9 +187,11 @@ export default class ClientDetail extends PureComponent {
                     clientInfo: res.data
                 });
             } else {
+                message.destroy();
                 message.error(res.msg);
             }
         }).catch(err => {
+            message.destroy();
             message.error('系统出错，请重试');
             console.log(err);
         })
@@ -213,6 +215,7 @@ export default class ClientDetail extends PureComponent {
                     recordData: []
                 });
             } else {
+                message.destroy();
                 message.error(res.msg);
             }
             console.log(res);
@@ -235,6 +238,7 @@ export default class ClientDetail extends PureComponent {
             }
         }).catch(err => {
             console.log(res);
+            message.destroy();
             message.error('请求失败');
         })
     }

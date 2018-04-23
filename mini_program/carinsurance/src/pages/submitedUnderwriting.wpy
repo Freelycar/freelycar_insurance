@@ -27,16 +27,16 @@
 }
 </style>
 <template >
-    <view class="container border-box">
-        <image class='waiting-img' src='https://www.howmuchweb.com/carInsurance/imgs/order_waiting.png' />
-        <view class='tip-view'>
-            我们已经为您向
-            <text>中国人保</text>发出核保申请， 需要核实您上一年度的
-            <text>出险状况</text>和
-            <text>交通违章情况</text>, 请您耐心等待几分钟
-        </view>
-        <view @tap="checkOrder" class='check-button'>查看订单</view>
+  <view class="container border-box">
+    <image class='waiting-img' src='https://www.howmuchweb.com/carInsurance/imgs/order_waiting.png' />
+    <view class='tip-view'>
+      我们已经为您向
+      <text>中国人保</text>发出核保申请， 需要核实您上一年度的
+      <text>出险状况</text>和
+      <text>交通违章情况</text>, 请您耐心等待几分钟
     </view>
+    <view @tap="checkOrder" class='check-button'>查看订单</view>
+  </view>
 
 </template>
 

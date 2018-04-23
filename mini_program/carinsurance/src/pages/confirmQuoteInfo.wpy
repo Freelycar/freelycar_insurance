@@ -188,17 +188,22 @@
                         </view>
                     </picker>
                 </view>
-                <view class='line flex-box-row'>
+                <!-- <view class='line flex-box-row'>
                     <view>发票抬头
                         <text class='textColor-red'>*</text>
                     </view>
-                    <input placeholder='请输入发票抬头' data-type='invoiceTitle' bindinput="handlaInputChange" />
+                    <input placeholder='请输入发票抬头' data-type='invoiceTitle' bindinput="handlaInputChange"  disabled="disabled" />
+                </view> -->
+                <view class='line flex-box-row'>
+                    <view>发票抬头</view>
+                    <!-- <input placeholder='请输入车牌号' value='苏A123R0' /> -->
+                    <view>{{queryData.invoiceTitle}}</view>
                 </view>
                 <view class='line flex-box-row'>
                     <view>手机号码
                         <text class='textColor-red'>*</text>
                     </view>
-                    <input placeholder='请输入手机号码' data-type='invoicePhone' bindinput="handlaInputChange" />
+                    <input placeholder='请输入手机号码' value='{{queryData.invoicePhone}}' data-type='invoicePhone' bindinput="handlaInputChange" />
                 </view>
             </view>
         </scroll-view>
@@ -241,6 +246,8 @@ export default class ConfirmQuoteInfo extends wepy.page {
 
   methods = {
     getQuoteRecord() {},
+
+    //确认信息 过滤
     confirm() {
       const queryData = this.queryData;
       if (!queryData.payee) {
@@ -281,7 +288,6 @@ export default class ConfirmQuoteInfo extends wepy.page {
         data: queryData,
         method: 'POST',
         success: res => {
-          console.log(res);
           if (res.data.code === 0) {
             // this.startCountdown();
             wepy.showToast({ title: '申请报价成功!' });
@@ -297,13 +303,15 @@ export default class ConfirmQuoteInfo extends wepy.page {
         }
       });
     },
+
+    //以下和 选择、输入相关
     handlaInputChange(event) {
       let type = event.target.dataset.type;
+      
       this.queryData[type] = event.detail.value;
       this.$apply();
     },
     bindRegionChange(e) {
-      console.log('picker发送选择改变，携带值为', e.detail.value);
       this.region = e.detail.value;
       this.provincesCities = this.region.join('');
     },
@@ -314,12 +322,13 @@ export default class ConfirmQuoteInfo extends wepy.page {
   };
 
   onLoad(option) {
-    console.log(option);
     let formData = JSON.parse(option.data);
     this.formData = formData;
     this.queryData.offerId = this.formData.offerId;
     this.queryData.ownerName = this.$parent.globalData.name;
     this.queryData.licenseNumber = this.$parent.globalData.licenseNumber;
+    this.queryData.invoiceTitle = this.$parent.globalData.name;
+    this.queryData.invoicePhone = this.$parent.globalData.licenseNumber;
     this.queryData.openId = this.$parent.globalData.openId;
     this.queryData.provincesCities = this.region.join('');
     this.$apply();
