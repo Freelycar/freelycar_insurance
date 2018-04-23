@@ -9,6 +9,7 @@ import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import org.apache.http.client.ClientProtocolException;
+import org.json.JSONArray;
 import org.json.JSONObject;
 import org.junit.Test;
 
@@ -17,17 +18,23 @@ import com.freelycar.util.HttpClientUtil;
 import com.freelycar.util.Tools;
 
 public class LuoTuoTest {
-
+	/**
+	 * 测试的时候 把对应字段改掉
+	 * 具体看注释
+	 */
+	
+	//访问的域名 该域名要在骆驼那边注册
 	private static final String BASEURL = Constant.INTERFACE_BASE_URL;
 	/*private static String licenseNumber = "苏AB660C";
 	private static String ownerName = "陈雯";*/
-	private static String licenseNumber = "苏A79FE8";
-	private static String ownerName = "张旭东";
-	private static String idNumber = "320114197809263017";
-	private static String forceInsuranceStartTime = "1525276800";
-	private static String insuranceStartTime = "1525276800";
-	private static String offerId = "109-20180419111055-2d903";
-	private static String openId = "oziV35H727Dec0pp_cYcJYODSGkk";
+	private static String licenseNumber = "苏A93HV3";//车牌
+	private static String ownerName = "汪萍";//车主姓名
+	private static String idNumber = "320114197809263017";//身份证
+	private static String forceInsuranceStartTime = "1525276800";//续保信息中强制险的止保日期
+	private static String insuranceStartTime = "1525276800";//续保信息中商业险的止保日期
+	private static String phone = "13505143481";//手机号
+	private static String offerId = "109-20180419111055-2d903";//报价推送过来的编号
+	private static String openId = "oziV35H727Dec0pp_cYcJYODSGkk";//随便找个数据库中 已存在 的用户的openId，模拟用户登陆
 	
 	
 	@Test
@@ -36,7 +43,7 @@ public class LuoTuoTest {
 		obj.put("licenseNumber", licenseNumber);
 		obj.put("ownerName", ownerName);
 		obj.put("openId", openId);
-		obj.put("carTypeCode", "02");
+		obj.put("carTypeCode", "02");//该字段后台不传默认02
 	/*	obj.put("licenseNumber", "苏A129B0");
 		obj.put("ownerName", "朱祥珍");*/
 		/*		obj.put("licenseNumber", "苏A4PZ99");
@@ -116,7 +123,7 @@ public class LuoTuoTest {
 		obj.put("offerId", offerId);
 		obj.put("ownerName", ownerName);
 		obj.put("idCard", idNumber);
-		obj.put("phone", "13505143481");
+		obj.put("phone", phone);
 		obj.put("contactAddress", "江苏南京");
 		/*obj.put("offerId", offerId);
 		obj.put("ownerName", "朱祥珍");
@@ -201,8 +208,16 @@ public class LuoTuoTest {
 			e.printStackTrace();
 		}
 	}
-	
-	
+	@Test
+	public void test(){
+		JSONArray array = new JSONArray();
+		JSONObject obj = new JSONObject();
+		obj.put("aaa", "bbb");
+		array.put(obj);
+		array.put(obj);
+		array.put(obj);
+		System.out.println(array);
+	}
 	
 	
 }
