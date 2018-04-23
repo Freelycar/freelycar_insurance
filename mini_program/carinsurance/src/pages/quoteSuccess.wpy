@@ -185,12 +185,16 @@ export default class QuoteSuccess extends wepy.page {
 
   methods = {
     getQuoteRecord() {},
+
+    //跳转
     gotoConfirmQuoteInfo() {
         let formDataStr = JSON.stringify(this.formData) ;
       wepy.navigateTo({
         url: `confirmQuoteInfo?data=${formDataStr}`
       });
     },
+
+    //修改日期
     bindForceDateChange(e) {
       //强制险起保日期修改
       console.log('picker发送选择改变，携带值为', e.detail.value);
@@ -207,6 +211,8 @@ export default class QuoteSuccess extends wepy.page {
       //     date: e.detail.value
       //   });
     },
+
+    //红包的提示框
     showHelpModal() {
       wepy.showModal({
             title: '提示',

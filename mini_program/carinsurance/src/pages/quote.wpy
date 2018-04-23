@@ -264,6 +264,8 @@ export default class Quote extends wepy.page {
   computed = {};
 
   methods = {
+
+    //跳转调整选择的险种
     adjustQuoteProgram() {
       let data = JSON.stringify({
         limitDate: this.limitDate,
@@ -273,6 +275,8 @@ export default class Quote extends wepy.page {
         url: `adjustQuoteProgram?data=${data}`
       });
     },
+
+    //选择或取消险种
     selectInsuranceOrNot(event) {
       if (this.waitting) {
         return;
@@ -281,10 +285,12 @@ export default class Quote extends wepy.page {
       const insurances = this.data.insurances;
       const index = code - 1;
       insurances[index].isToubao = !insurances[index].isToubao;
-      insurances[index].compensation = insurances[index].isToubao;
+      insurances[index].compensation = insurances[index].isToubao;  //不计免赔和选择或者取消一起变化
       this.insurances = insurances;
       this.$parent.globalData.insurances = insurances;
     },
+
+    //选择或取消 不计免赔
     selectCompensationOrNot(event) {
       if (this.waitting) {
         return;
@@ -298,6 +304,8 @@ export default class Quote extends wepy.page {
         this.$parent.globalData.insurances = insurances;
       }
     },
+
+    // 选择险种的额度，或者赔偿国产，进口等等的字段
     selectAmountStr(event) {
       if (this.waitting) {
         return;
@@ -316,6 +324,7 @@ export default class Quote extends wepy.page {
       }
     },
 
+    //请求接口，获得报价
     queryPrice() {
       if (this.waitting) {
         return;
@@ -417,6 +426,9 @@ export default class Quote extends wepy.page {
       }
     });
 
+    //******** 
+    // webSocket相关
+
     //建立连接
     wepy.connectSocket({
       url: 'wss://www.howmuchweb.com/carInsurance/echo'
@@ -467,6 +479,7 @@ export default class Quote extends wepy.page {
     });
   }
 
+  //等待倒计时相关
   startCountdown() {
     //开始倒计时
     this.waitting = true;

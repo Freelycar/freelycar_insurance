@@ -184,6 +184,8 @@ export default class AdjustQuoteProgram extends wepy.page {
   computed = {};
 
   methods = {
+
+    //选择或者取消选择险种
     selectInsuranceOrNot(event) {
       if (this.waitting) {
         return;
@@ -195,6 +197,8 @@ export default class AdjustQuoteProgram extends wepy.page {
       insurances[index].compensation = insurances[index].isToubao;
       this.insurances = insurances;
     },
+
+    //选择或者取消选择不计免赔
     selectCompensationOrNot(event) {
       if (this.waitting) {
         return;
@@ -233,6 +237,8 @@ export default class AdjustQuoteProgram extends wepy.page {
       this.insurances = data;
     },
 
+
+    //获取报价 
     queryPrice() {
       if (this.waitting) {
         return;
@@ -346,6 +352,8 @@ export default class AdjustQuoteProgram extends wepy.page {
     });
   }
 
+
+  //倒计时相关
   startCountdown() {
     //开始倒计时
     this.waitting = true;

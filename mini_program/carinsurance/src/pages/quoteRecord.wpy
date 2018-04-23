@@ -76,6 +76,7 @@ export default class QuoteRecord extends wepy.page {
     this.getQuoteRecord();
   }
 
+  //查询报价记录
   getQuoteRecord() {
     wepy.showLoading();
     wepy.request({
