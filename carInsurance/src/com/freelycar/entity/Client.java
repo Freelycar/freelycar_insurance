@@ -61,6 +61,9 @@ public class Client
 	
     private Long transferTime;  //过户日期;
 	
+    @Transient
+    private Long leastQuoteTime;//最新报价时间
+    //强制险保险到期
     private Long insuranceDeadline;  //保险到期;
     
     @Transient
@@ -90,6 +93,15 @@ public class Client
     
    public int getQuoteStateCode() {
 	return quoteStateCode;
+   }
+   
+   
+   public Long getLeastQuoteTime() {
+	   return leastQuoteTime;
+   }
+   
+   public void setLeastQuoteTime(Long leastQuoteTime) {
+	   this.leastQuoteTime = leastQuoteTime;
    }
    
    public void setQuoteStateCode(int quoteStateCode) {

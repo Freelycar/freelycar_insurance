@@ -8,12 +8,14 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.freelycar.dao.ClientDao;
+import com.freelycar.dao.InsuranceDao;
 import com.freelycar.dao.OrderDao;
 import com.freelycar.dao.QuoteRecordDao;
 import com.freelycar.entity.Client;
-import com.freelycar.entity.InsuranceOrder;
+import com.freelycar.entity.Insurance;
 import com.freelycar.entity.QuoteRecord;
-import com.freelycar.util.RESCODE;  
+import com.freelycar.util.RESCODE;
+import com.freelycar.util.Tools;  
 /**  
  *  
  */  
@@ -31,6 +33,9 @@ public class ClientService
     @Autowired
     private OrderDao orderDao;
     
+    @Autowired
+    private InsuranceDao insuranceDao;
+    
     
     //增加一个Client
     public Map<String,Object> saveClient(Client client){
@@ -40,14 +45,23 @@ public class ClientService
 	
     public Map<String,Object> getClientDetail(int id){
     	Client clientById = clientDao.getClientById(id);
+    	if(clientById == null){
+    		return RESCODE.NOT_FOUND.getJSONRES();
+    	}
     	
-    	//查看他最近成交的订单
-    	//orderDao.getOrderByLicenseNumber(licenseNumber, page, number)
+    	QuoteRecord quoteRecord = orderDao.getLatestQuoteByNameLice(clientById.getOwnerName(), clientById.getLicenseNumber());
+		if(quoteRecord != null){
+			clientById.setLeastQuoteTime(quoteRecord.getCreateTime());
+		}
+		
+		Insurance insu = insuranceDao.getLatestXuBaoByNameLice(clientById.getOwnerName(), clientById.getLicenseNumber());
+		if(insu != null){
+			if(Tools.notEmpty(insu.getInsuranceEndTime())){
+				//查出来的是秒 所以加了三个零
+				clientById.setInsuranceDeadline(Long.parseLong(insu.getInsuranceEndTime()+"000"));
+			}
+		}
     	
-    	
-    	//找到他最近的报价记录
-    	/*QuoteRecord latest = qrdao.getLatestQuoteRecordByNameLice(clientById.getNickName(), clientById.getLicenseNumber());
-    	clientById.setInsuranceDeadline(latest.getin);*/
     	return RESCODE.SUCCESS.getJSONRES(clientById);
     }
     
@@ -74,6 +88,22 @@ public class ClientService
 	    int from = (page-1)*number;
 	    List<Client> listPage = clientDao.listClient(client,from, number);
 	    if(listPage !=null && !listPage.isEmpty()){
+	    	//查询最新的订单时间
+	    	for(Client c:listPage){
+	    		QuoteRecord quoteRecord = orderDao.getLatestQuoteByNameLice(c.getOwnerName(), c.getLicenseNumber());
+	    		if(quoteRecord != null){
+	    			c.setLeastQuoteTime(quoteRecord.getCreateTime());
+	    		}
+	    		
+	    		Insurance insu = insuranceDao.getLatestXuBaoByNameLice(c.getOwnerName(), c.getLicenseNumber());
+	    		if(insu != null){
+	    			if(Tools.notEmpty(insu.getInsuranceEndTime())){
+	    				//查出来的是秒 所以加了三个零
+	    				c.setInsuranceDeadline(Long.parseLong(insu.getInsuranceEndTime()+"000"));
+	    			}
+	    		}
+	    	}
+	    	
 	    	long count = clientDao.getClientCount(client);
 			return RESCODE.SUCCESS.getJSONRES(listPage,(int)Math.ceil(count/(float)number),count);
 		} 

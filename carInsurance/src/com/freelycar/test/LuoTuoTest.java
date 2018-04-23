@@ -27,8 +27,8 @@ public class LuoTuoTest {
 	private static final String BASEURL = Constant.INTERFACE_BASE_URL;
 	/*private static String licenseNumber = "苏AB660C";
 	private static String ownerName = "陈雯";*/
-	private static String licenseNumber = "苏A93HV3";//车牌
-	private static String ownerName = "汪萍";//车主姓名
+	private static String licenseNumber = "苏A89JF5";//车牌
+	private static String ownerName = "张磊";//车主姓名
 	private static String idNumber = "320114197809263017";//身份证
 	private static String forceInsuranceStartTime = "1525276800";//续保信息中强制险的止保日期
 	private static String insuranceStartTime = "1525276800";//续保信息中商业险的止保日期
