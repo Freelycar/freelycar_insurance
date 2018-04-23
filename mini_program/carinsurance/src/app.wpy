@@ -73,7 +73,7 @@ export default class extends wepy.app {
 
   globalData = {
     userInfo: null,
-    openId: '666666',
+    openId: '',
     session_key: '',
     name: '',
     licenseNumber: '',

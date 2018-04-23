@@ -58,6 +58,7 @@
   display: inline-block;
   height: 60rpx;
   line-height: 60rpx;
+  word-wrap:break-word;
 }
 .lastyear-record-money {
   border-left: 1rpx solid white;
@@ -190,7 +191,7 @@
           <view class='line'>强制险</view>
           <view class='line item-bg flex-box-row'>
             <view> 交强险、车船税</view>
-            <view class='select-img' style='background-image: url(/assets/imgs/select_defult.png);'></view>
+            <view class='select-img' style='background-image: url(https://www.howmuchweb.com/carInsurance/imgs/select-defult.png);'></view>
           </view>
         </view>
         <view>
@@ -214,7 +215,7 @@
                 </block>
                 <view class='flex-box-row'>
                   <view class="{{item.compensation ? 'bujimianpei  bujimianpei-select' : 'bujimianpei'}}" @tap="selectCompensationOrNot" data-code='{{item.code}}'>不计免赔</view>
-                  <view class='select-img' style="background-image: url({{item.isToubao? '/assets/imgs/select_yes.png' : '/assets/imgs/select_no.png'}});" @tap="selectInsuranceOrNot" data-code='{{item.code}}'></view>
+                  <view class='select-img' style="background-image: url({{item.isToubao? 'https://www.howmuchweb.com/carInsurance/imgs/select-yes.png' : 'https://www.howmuchweb.com/carInsurance/imgs/select-no.png'}});" @tap="selectInsuranceOrNot" data-code='{{item.code}}'></view>
                 </view>
               </view> 
             </block>
@@ -254,6 +255,7 @@ export default class Quote extends wepy.page {
     lastYearRecord: [],
     lastInsuranceCompany: '', //去年保险公司
     limitDate: '', //强保起保日期
+    busLimitDate: '', //商业险起保日期
     waitSecond: 90,
     waitting: false,
     timer: null
@@ -263,8 +265,12 @@ export default class Quote extends wepy.page {
 
   methods = {
     adjustQuoteProgram() {
+      let data = JSON.stringify({
+        limitDate: this.limitDate,
+        busLimitDate: this.busLimitDate,
+      })
       wepy.navigateTo({
-        url: `adjustQuoteProgram?startTime=${this.limitDate}`
+        url: `adjustQuoteProgram?data=${data}`
       });
     },
     selectInsuranceOrNot(event) {
@@ -347,11 +353,11 @@ export default class Quote extends wepy.page {
           cityName: '南京',
           insuranceCompanyId: '2',
           insurances: JSON.stringify(touBaoAry),
-          forceInsuranceStartTime: this.limitDate
+          forceInsuranceStartTime: this.limitDate,
+          insuranceStartTime: this.busLimitDate
         },
         method: 'POST',
         success: res => {
-          console.log(res);
           if (res.data.code === 0) {
             this.startCountdown();
             wepy.showToast({ title: '申请报价成功!' });
@@ -381,13 +387,12 @@ export default class Quote extends wepy.page {
       },
       method: 'POST',
       success: res => {
-        console.log(res);
         if (res.data.code === 0) {
           for (let i = 0; i < res.data.data.length; i++) {
             if (res.data.data[i].commercial) {
-              this.limitDate = res.data.data[i].insuranceEndTime || 0;
+              this.busLimitDate = res.data.data[i].insuranceEndTime || 0;
             } else {
-              this.limitDate = 0;
+              this.limitDate = res.data.data[i].insuranceEndTime || 0;
             }
             this.$apply();
             res.data.data[i].insuranceEndTime = moment(
@@ -429,7 +434,6 @@ export default class Quote extends wepy.page {
 
     //接收数据
     wepy.onSocketMessage(data => {
-      console.log(data);
       const objData = JSON.parse(data.data);
 
       console.log('成功接受数据');
