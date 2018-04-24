@@ -23,7 +23,6 @@ public class InvitionController
     @Autowired
 	private InvitionService invitionService;
 
-
     
     //增加一个Invition
     @RequestMapping(value = "/save",method = RequestMethod.POST)

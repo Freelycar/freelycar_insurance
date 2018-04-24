@@ -27,11 +27,11 @@ public class LuoTuoTest {
 	private static final String BASEURL = Constant.INTERFACE_BASE_URL;
 	/*private static String licenseNumber = "苏AB660C";
 	private static String ownerName = "陈雯";*/
-	private static String licenseNumber = "苏A89JF5";//车牌
-	private static String ownerName = "张磊";//车主姓名
-	private static String idNumber = "320114197809263017";//身份证
-	private static String forceInsuranceStartTime = "1525276800";//续保信息中强制险的止保日期
-	private static String insuranceStartTime = "1525276800";//续保信息中商业险的止保日期
+	private static String licenseNumber = "苏A92GX6";//车牌
+	private static String ownerName = "刘小庆";//车主姓名
+	private static String idNumber = "42108119840914002X";//身份证
+	private static String forceInsuranceStartTime = "1524239999";//续保信息中强制险的止保日期
+	private static String insuranceStartTime = "1524239999";//续保信息中商业险的止保日期
 	private static String phone = "13505143481";//手机号
 	private static String offerId = "109-20180419111055-2d903";//报价推送过来的编号
 	private static String openId = "oziV35H727Dec0pp_cYcJYODSGkk";//随便找个数据库中 已存在 的用户的openId，模拟用户登陆
@@ -60,7 +60,7 @@ public class LuoTuoTest {
 		obj.put("openId", openId);
 		obj.put("licenseNumber", licenseNumber);
 		obj.put("ownerName", ownerName);
-		obj.put("cityCode", "320100");
+		obj.put("cityCode", "320100");//很重要！！！！
 		obj.put("cityName", "南京");
 		obj.put("insuranceCompanyId", "2");
 		obj.put("forceInsuranceStartTime", forceInsuranceStartTime);

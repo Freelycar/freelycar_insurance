@@ -152,7 +152,7 @@ public class InsuranceService
     				String insuranceCompany = info.getString("insuranceCompany");
     				int insuranceCompanyId = info.getInt("insuranceCompanyId");
     				String insuranceBeginTime = info.getString("insuranceBeginTime");
-    				String insuranceEndTime = info.getString("insuranceEndTime");
+    				String insuranceEndTime = info.getString("insuranceEndTime");//注意：秒单位
     				try {
     					insuranceEndTime = String.valueOf(format.parse(insuranceEndTime).getTime()/1000);
     					System.out.println("交强险-商业险时间：>>>"+insuranceEndTime);
