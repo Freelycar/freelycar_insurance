@@ -108,7 +108,7 @@
                         <view>强制险</view>
                         <picker mode="date" value="{{forceDate}}" start="{{forceDate}}" end="2017-09-01" bindchange="bindForceDateChange">
                             <view>
-                                <i class='fa fa-calendar' style='color:lightgray'></i> 起保日期:{{forceDate}}</view>
+                                <i class='fa fa-calendar' style='color:#b2b2b2'></i> 起保日期:{{forceDate}}</view>
 
                         </picker>
                     </view>
@@ -127,7 +127,7 @@
                         <view>商业险</view>
                         <picker mode="date" value="{{insuranceDate}}" start="{{insuranceDate}}" end="2099-09-01" bindchange="bindBusinessDateChange">
                             <view>
-                                <i class='fa fa-calendar' style='color:lightgray'></i> 起保日期:{{insuranceDate}}</view>
+                                <i class='fa fa-calendar' style='color:#b2b2b2'></i> 起保日期:{{insuranceDate}}</view>
                         </picker>
                     </view>
                     <block wx:for={{formData.insurances}}  wx:key='index'>
@@ -139,27 +139,6 @@
                             <view>¥{{item.quotesPrice}}</view>
                         </view>
                     </block>
-                    <!-- <view class='line item-bg flex-box-row'>
-                        <view class='flex-box-row '>
-                            <view>车辆损失险</view>
-                            <view class='tag-view'>不计免赔</view>
-                        </view>
-                        <view>¥1847</view>
-                    </view>
-                    <view class='line item-bg flex-box-row'>
-                        <view class='flex-box-row '>
-                            <view>第三者责任险</view>
-                            <view class='tag-view'>100万 不计免赔</view>
-                        </view>
-                        <view>¥1847</view>
-                    </view>
-                    <view class='line item-bg flex-box-row'>
-                        <view class=' flex-box-row '>
-                            <view>玻璃破碎险</view>
-                            <view class='tag-view'>10万</view>
-                        </view>
-                        <view>¥1847</view>
-                    </view> -->
                 </view>
             </view>
 
@@ -167,12 +146,12 @@
         <view class='footer'>
             <view class='return-money-view'>
                 温馨提示:投保成功可获得小易现金红包¥{{formData.cashBackMoney}}
-                <i class='fa fa-question-circle-o' style='color:#328ebc'></i>
+                <i class='fa fa-question-circle-o' style='color:#328ebc' @tap='showHelpModal'></i>
             </view>
             <view class='total-price flex-box-row'>
                 <view class='total-price-item'>
                     合计:
-                    <text style='color: #f8b500'>¥{{formData.currentPrice}}</text>
+                    <text style='color: #f8b500'>¥{{formData.totalPrice / 100.0}}</text>
                 </view>
                 <view class='next-step' @tap='gotoConfirmQuoteInfo'>
                     下一步
@@ -206,12 +185,16 @@ export default class QuoteSuccess extends wepy.page {
 
   methods = {
     getQuoteRecord() {},
+
+    //跳转
     gotoConfirmQuoteInfo() {
         let formDataStr = JSON.stringify(this.formData) ;
       wepy.navigateTo({
         url: `confirmQuoteInfo?data=${formDataStr}`
       });
     },
+
+    //修改日期
     bindForceDateChange(e) {
       //强制险起保日期修改
       console.log('picker发送选择改变，携带值为', e.detail.value);
@@ -227,11 +210,19 @@ export default class QuoteSuccess extends wepy.page {
       //   this.setData({
       //     date: e.detail.value
       //   });
+    },
+
+    //红包的提示框
+    showHelpModal() {
+      wepy.showModal({
+            title: '提示',
+            content: '小易返现说明：\r\n因2018-03-03开始执行车险必须实名制支付的最新规定，用户需付全部保费，成功支付后在24小时内以现金形式返还至该用户开户行账户。',
+            showCancel: false
+          });
     }
   };
 
   onLoad(option) {
-    console.log(option);
     let formData = JSON.parse(option.data);
     for (let i = 0; i < formData.insurances.length; i++) {
       let item = formData.insurances[i];
@@ -260,7 +251,6 @@ export default class QuoteSuccess extends wepy.page {
     this.insuranceDate = moment(formData.insuranceStartTime * 1000).format(
       'YYYY-MM-DD'
     );
-    console.log(this.forceDate + ' ' + this.insuranceDate);
     this.formData = formData;
     this.$apply();
   }

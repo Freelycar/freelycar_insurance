@@ -50,6 +50,18 @@ public class InsuranceDao
     						.uniqueResult();
     	return result;
     }
+    
+    //查询最新的商业险查询续保
+    public Insurance getLatestXuBaoByNameLice(String ownerName,String licenseNumber){
+    	String hql = "from Insurance where ownerName = :ownerName and licenseNumber = :licenseNumber and commercial = false ORDER BY id desc";
+    	Insurance result = (Insurance) getSession().createQuery(hql)
+    			.setString("ownerName", ownerName)
+    			.setString("licenseNumber", licenseNumber)
+    			.setMaxResults(1)
+    			.uniqueResult();
+    	return result;
+    }
+    
 	
 	//查询所有的Insurance	
 	@SuppressWarnings("unchecked")

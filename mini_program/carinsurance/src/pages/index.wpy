@@ -74,6 +74,9 @@
   width: auto;
   height: 90rpx;
 }
+.confirm-button-unable {
+  background: #b2b2b2;
+}
 
 .quote-record-bg {
   margin: 10rpx 30rpx 30rpx 30rpx;
@@ -250,7 +253,7 @@
       <view class='recently-quoted'>
         <text @tap="checkQouteRecord">最近报价记录</text>
       </view>
-      <button class='confirm-button' @tap="getQuote">获取报价</button>
+      <button class="{{(licenseNumber && name) ? 'confirm-button' : 'confirm-button confirm-button-unable'}}" @tap="getQuote">获取报价</button>
       <view class='quote-record-bg'>
         <text style="color: red">*</text>
         现仅开通南京市内个人9座以下客车人保在线报价，其他情况可人工咨询
@@ -349,10 +352,8 @@ export default class Index extends wepy.page {
   methods = {
     getQuote() {
       if (this.data.licenseNumber === '') {
-        wepy.showToast({ title: '请输入车牌号码', icon: 'none' });
         return;
       } else if (this.data.name === '') {
-        wepy.showToast({ title: '请输入车主姓名', icon: 'none' });
         return;
       }
       if (
@@ -428,6 +429,7 @@ export default class Index extends wepy.page {
       this.verificationCode = e.detail.value;
     },
 
+    //跳转到 最近报价 界面
     checkQouteRecord() {
       //查看最近报价记录
       wepy.navigateTo({
@@ -477,6 +479,8 @@ export default class Index extends wepy.page {
         }
       });
     },
+
+    // 获取验证码
     getVerificatCode() {
       if (!this.data.phoneNumber) {
         wepy.showToast({ title: '请输入手机号码', icon: 'none' });
@@ -504,10 +508,17 @@ export default class Index extends wepy.page {
       });
     },
 
+    //拨打电话
     makePhoneCall() {
-      wepy.makePhoneCall({
-        phoneNumber: '58803353‬' //仅为示例，并非真实的电话号码
-      });
+      wx.makePhoneCall({
+            phoneNumber: '58803353',
+            success: function(res) {
+                console.log(res);
+            },
+            fail: function(err) {
+                console.log(err);
+            }
+        })
     }
   };
 
@@ -524,6 +535,7 @@ export default class Index extends wepy.page {
     clearInterval(this.timer);
   }
 
+  //验证码倒计时
   startCountdown() {
     //开始倒计时
     this.waitting = true;

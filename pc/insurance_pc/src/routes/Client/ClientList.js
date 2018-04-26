@@ -39,33 +39,35 @@ const columns = [
     },
     {
         title: '保险到期',
-        dataIndex: 'limitDate',
-        render: val => <span>{moment(val).format('YYYY-MM-DD HH:mm')}</span>,
+        dataIndex: 'insuranceDeadline',
+        render: val => val ? <span>{moment(val).format('YYYY-MM-DD HH:mm')}</span> : '',
     },
     {
         title: '报价时间',
-        dataIndex: 'time',
-        render: val => <span>{moment(val).format('YYYY-MM-DD HH:mm')}</span>,
+        dataIndex: 'leastQuoteTime',
+        render: val => val ? <span>{moment(val).format('YYYY-MM-DD HH:mm')}</span> : '',
     },
     {
         title: '报价状态',
-        dataIndex: 'quoteState',
+        dataIndex: 'quoteStateCode',
         render: val => {
             switch (val) {
-                case '1':
-                    return '待报价';
-                case '2':
-                    return '已报价';
-                case '3':
-                    return '核保成功';
-                case '4':
+                case 0:
+                    return '核保中';
+                case 1:
                     return '核保失败';
-                case '5':
-                    return '待签收';
-                case '6':
+                case 2:
+                    return '未支付';
+                case 3:
+                    return '承保中';
+                case 4:
+                    return '承保失败';
+                case 5:
                     return '待配送';
-                case '7':
-                    return '已配送';
+                case 6:
+                    return '待签收';
+                case 7:
+                    return '已投保';
             }
         }
     },
@@ -108,23 +110,25 @@ const alreadyColumns = [
     },
     {
         title: '订单状态',
-        dataIndex: 'quoteState',
+        dataIndex: 'quoteStateCode',
         render: val => {
             switch (val) {
-                case '1':
-                    return '待报价';
-                case '2':
-                    return '已报价';
-                case '3':
-                    return '核保成功';
-                case '4':
+                case 0:
+                    return '核保中';
+                case 1:
                     return '核保失败';
-                case '5':
-                    return '待签收';
-                case '6':
+                case 2:
+                    return '未支付';
+                case 3:
+                    return '承保中';
+                case 4:
+                    return '承保失败';
+                case 5:
                     return '待配送';
-                case '7':
-                    return '已配送';
+                case 6:
+                    return '待签收';
+                case 7:
+                    return '已投保';
             }
         }
     },
@@ -197,8 +201,11 @@ export default class ClientList extends PureComponent {
         getClientList({
             ...queryData
         }).then(res => {
+            console.log('*************');
             console.log(res);
             if (res && res.code == 0) {
+                console.log('*************');
+                console.log('i am here')
                 res.data.map((item, index) => {
                     res.data[index].key = item.id
                 })
@@ -251,11 +258,11 @@ export default class ClientList extends PureComponent {
                     </Col>
                     <Col md={6} sm={24}>
                         <FormItem label="订单状态">
-                            {getFieldDecorator('quotestate')(
+                            {getFieldDecorator('quoteStateCode')(
                                 <Select placeholder="请选择" style={{ width: '100%' }}>
-                                    <Option value="5">待签收</Option>
-                                    <Option value="6">待配送</Option>
-                                    <Option value="7">已签收</Option>
+                                    <Option value="5">待配送</Option>
+                                    <Option value="6">待签收</Option>
+                                    <Option value="7">已投保</Option>
                                 </Select>
                             )}
                         </FormItem>
@@ -309,12 +316,13 @@ export default class ClientList extends PureComponent {
                     </Col>
                     <Col md={6} sm={24}>
                         <FormItem label="报价状态">
-                            {getFieldDecorator('quotestate')(
+                            {getFieldDecorator('quoteStateCode')(
                                 <Select placeholder="请选择" style={{ width: '100%' }}>
-                                    <Option value="1">待报价</Option>
-                                    <Option value="2">已报价</Option>
-                                    <Option value="3">核保成功</Option>
-                                    <Option value="4">核保失败</Option>
+                                    <Option value="0">核保中</Option>
+                                    <Option value="1">核保失败</Option>
+                                    <Option value="2">未支付</Option>
+                                    <Option value="3">承保中</Option>
+                                    <Option value="4">承保失败</Option>
                                 </Select>
                             )}
                         </FormItem>
