@@ -97,7 +97,7 @@
         </view>
         <view class="order-list">
           <text class="list-item">订单时间：{{item.payTime}}</text>       
-          <text class="list-item list-item-grey">（可返￥{{item.backmoney}}现金红包）</text> 
+          <text wx:if="{{item.backmoney}}" class="list-item list-item-grey">（可返￥{{item.backmoney}}现金红包）</text> 
         </view>
       </view>
     </block>

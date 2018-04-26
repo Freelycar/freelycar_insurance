@@ -104,7 +104,7 @@
 <template>
   <view class="container order-detail" wx:if="{{orderDetail}}">
     <image class="freelycar_logo" src="https://www.howmuchweb.com/carInsurance/imgs/freelycar_logo_color.png"/>
-    <view class="order-info">订单编号：{{orderDetail.id}}</view>
+    <view class="order-info">订单编号：{{orderDetail.orderId}}</view>
     <view class="order-info">订单状态：{{orderDetail.stateString}}</view>
     <view class="order-info">订单时间：{{odrderDetail.createTime}}</view>
     <view class="order-info">付款时间：{{orderDetail.payTime}}</view>
@@ -229,8 +229,8 @@ export default class OrderDetail extends wepy.page {
     id: '',
     orderDetail: '',
     reciver: '',
-    quoteRecord: '',
-    invoiceInfo: '',
+    quoteRecord: '',// 投保方案
+    invoiceInfo: '',// 保单收货信息
     qiangzhiTotalPrice: 0,
     shangyeTotalPrice: 0,
     totalPrice: 0,
@@ -259,7 +259,7 @@ export default class OrderDetail extends wepy.page {
         }
       });
     },
-    copyTBL: () => {
+    copyTBL: () => {  // 复制运单号码
       wepy.setClipboardData({
         data: this.orderDetail.expressNumber,
         success: res => {
