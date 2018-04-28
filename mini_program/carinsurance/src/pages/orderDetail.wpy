@@ -109,7 +109,7 @@
     <view class="order-info">订单时间：{{odrderDetail.createTime}}</view>
     <view class="order-info">付款时间：{{orderDetail.payTime}}</view>
     <view class="order-info">发货时间：{{orderDetail.deliveredTime}}</view>
-    <view class="order-info">返现时间：2018-01-03 14:20</view>
+    <view class="order-info">返现时间：{{orderDetail.cashbackTime}}</view>
     <view class="order-info">成交时间：{{orderDetail.dealTime}}</view>
     <view class="order-info info-black">快递公司：{{orderDetail.expressCompany}}</view>
     <view class="order-info info-black">运单号码：{{orderDetail.expressNumber}} | <text class="info-blue" @tap="copyTBL">复制</text></view>
@@ -314,7 +314,7 @@ export default class OrderDetail extends wepy.page {
         res.data.quoteRecord.shangyeList.map((item, index) => {
           shangyeTotalPrice = Number(item.insurancePrice) + shangyeTotalPrice;
         });
-        totalPrice = qiangzhiTotalPrice + shangyeTotalPrice;
+        totalPrice = (qiangzhiTotalPrice + shangyeTotalPrice).toFixed(2);
         this.cashback = res.data.data.cashback || 0;
         this.totalPrice = totalPrice;
         this.qiangzhiTotalPrice = qiangzhiTotalPrice;
