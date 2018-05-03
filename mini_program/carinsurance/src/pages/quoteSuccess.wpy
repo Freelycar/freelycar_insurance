@@ -108,7 +108,7 @@
                         <view>强制险</view>
                         <picker mode="date" value="{{forceDate}}" start="{{forceDate}}" end="2017-09-01" bindchange="bindForceDateChange">
                             <view>
-                                <i class='fa fa-calendar' style='color:#b2b2b2'></i> 起保日期:{{forceDate}}</view>
+                                <i class='fa fa-calendar' style='color:#808080'></i> 起保日期:{{forceDate}}</view>
 
                         </picker>
                     </view>
@@ -127,7 +127,7 @@
                         <view>商业险</view>
                         <picker mode="date" value="{{insuranceDate}}" start="{{insuranceDate}}" end="2099-09-01" bindchange="bindBusinessDateChange">
                             <view>
-                                <i class='fa fa-calendar' style='color:#b2b2b2'></i> 起保日期:{{insuranceDate}}</view>
+                                <i class='fa fa-calendar' style='color:#808080'></i> 起保日期:{{insuranceDate}}</view>
                         </picker>
                     </view>
                     <block wx:for={{formData.insurances}}  wx:key='index'>

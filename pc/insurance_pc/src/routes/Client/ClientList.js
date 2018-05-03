@@ -180,6 +180,7 @@ export default class ClientList extends PureComponent {
         }, 1);
     }
 
+    //封装请求数据
     getQueryData = (values) => {
         let queryData = { ...values };
         this.state.type == '0' ? queryData.toubao = false : queryData.toubao = true;
@@ -188,6 +189,7 @@ export default class ClientList extends PureComponent {
         }
         return queryData;
     }
+
 
     getClientList = (values, page) => {
         let queryData = this.getQueryData(values)
@@ -227,6 +229,8 @@ export default class ClientList extends PureComponent {
         });
     }
 
+
+    //查询
     handleSearch = (e) => {
         e.preventDefault();
 
@@ -244,6 +248,8 @@ export default class ClientList extends PureComponent {
         });
     }
 
+
+    //动态获得头部筛选字段
     renderSimpleForm() {
         const { getFieldDecorator } = this.props.form;
         return (
@@ -356,7 +362,7 @@ export default class ClientList extends PureComponent {
         this.getClientList({}, pagination.current)
     }
 
-    exprotExcel = () => {   //导出excel
+    exprotExcel = () => {   //导出excel  TODO
 
     }
 
