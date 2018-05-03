@@ -1,7 +1,7 @@
 <style lang="less">
 .banner-bg {
   height: 373rpx;
-  width: 750rpx; 
+  width: 750rpx;
 }
 
 .quote-bg {
@@ -340,9 +340,7 @@ export default class Index extends wepy.page {
     licenseNumber: '',
     isTransferCar: 0, //是否过户车 0 否 1 是
     transferCarArray: ['否', '是'],
-
     showModal: false,
-
     phoneNumber: '',
     verificationCode: '',
     invcode: '', //邀请码
@@ -358,7 +356,9 @@ export default class Index extends wepy.page {
       } else if (this.data.name === '') {
         return;
       }
-      if (!checkModal.isLicenseNumber(this.data.region + this.data.licenseNumber)) {
+      if (
+        !checkModal.isLicenseNumber(this.data.region + this.data.licenseNumber)
+      ) {
         wepy.showToast({ title: '请输入正确车牌号码', icon: 'none' });
         return;
       }
@@ -368,7 +368,8 @@ export default class Index extends wepy.page {
       console.log(this.$parent.globalData);
       wepy.showLoading();
       wepy.request({
-        url: this.$parent.globalData.baseUrl+'api/' + 'client/isExistByOpenId',
+        url:
+          this.$parent.globalData.baseUrl + 'api/' + 'client/isExistByOpenId',
         data: {
           openId: this.$parent.globalData.openId,
           ownerName: this.name,
@@ -449,7 +450,8 @@ export default class Index extends wepy.page {
 
       wepy.showLoading();
       wepy.request({
-        url: this.$parent.globalData.baseUrl+'api/' + 'client/sms/verification',
+        url:
+          this.$parent.globalData.baseUrl + 'api/' + 'client/sms/verification',
         data: {
           phone: this.data.phoneNumber,
           smscode: this.data.verificationCode,
@@ -486,7 +488,7 @@ export default class Index extends wepy.page {
       }
       wepy.showLoading();
       wepy.request({
-        url: this.$parent.globalData.baseUrl+'api/' + 'client/sms/getCode',
+        url: this.$parent.globalData.baseUrl + 'api/' + 'client/sms/getCode',
         data: {
           phone: this.data.phoneNumber + ''
         },

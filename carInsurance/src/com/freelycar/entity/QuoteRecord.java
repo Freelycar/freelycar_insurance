@@ -108,6 +108,7 @@ public class QuoteRecord
     	private boolean compensation;
     	private boolean force;//是否是强制险
     	private String amountStr;//是否是强制险
+    	private String quotesPrice;
     	private int insuranceId;
 		public String getInsuranceName() {
 			return insuranceName;
@@ -115,6 +116,14 @@ public class QuoteRecord
 		public void setInsuranceName(String insuranceName) {
 			this.insuranceName = insuranceName;
 		}
+		public String getQuotesPrice() {
+			return quotesPrice;
+		}
+		
+		public void setQuotesPrice(String quotesPrice) {
+			this.quotesPrice = quotesPrice;
+		}
+		
 		public String getInsurancePrice() {
 			return insurancePrice;
 		}
@@ -168,7 +177,7 @@ public class QuoteRecord
     			od.setCompensation(jsonObject.getBoolean("compensation"));
     			od.setForce(false);
     			od.setInsuranceName(jsonObject.getString("insuranceName"));
-    			od.setInsurancePrice(jsonObject.getInt("price")+"");
+    			od.setInsurancePrice(jsonObject.getDouble("quotesPrice")+"");
     			od.setAmountStr(jsonObject.getString("amountStr"));
     			od.setInsuranceId(jsonObject.getInt("insuranceId"));
     			shangye.add(od);

@@ -1,5 +1,7 @@
 package com.freelycar.entity;  
 
+import java.util.Date;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -32,6 +34,7 @@ public class Insurance
 	
     private String insuranceCompany;  //保险公司名称;
 	
+    //上次的止保日期
     private String insuranceEndTime;  //终保日期;
 	
     private String insuranceBeginTime;  //起保险日期;
@@ -49,6 +52,16 @@ public class Insurance
     private String totalLicenseNumber;  //同一个车牌，怕一个openId有多个车;
     
     private String price;//该险种的钱
+    
+    private Date createTime;
+    
+    public Date getCreateTime() {
+		return createTime;
+	}
+    
+    public void setCreateTime(Date createTime) {
+		this.createTime = createTime;
+	}
     
     
     //核保	

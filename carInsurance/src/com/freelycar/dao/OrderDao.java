@@ -66,9 +66,20 @@ public class OrderDao
     
     
     //查询最新的查询Order
-    public QuoteRecord getLatestOrderByNameLice(String ownerName,String licenseNumber){
-    	String hql = "from QuoteRecord where ownerName = :ownerName and licenseNumber = :licenseNumber ORDER BY createTime,id desc LIMIT 1";
+    public QuoteRecord getLatestQuoteByNameLice(String ownerName,String licenseNumber){
+    	String hql = "from QuoteRecord where ownerName = :ownerName and licenseNumber = :licenseNumber ORDER BY createTime,id desc";
     	QuoteRecord result = (QuoteRecord) getSession().createQuery(hql)
+    			.setString("ownerName", ownerName)
+    			.setString("licenseNumber", licenseNumber)
+    			.setMaxResults(1)
+    			.uniqueResult();
+    	return result;
+    }
+    
+    //查询最新的查询Order
+    public InsuranceOrder getLatestOrderByNameLice(String ownerName,String licenseNumber){
+    	String hql = "from InsuranceOrder where insureName = :ownerName and licenseNumber = :licenseNumber ORDER BY createTime,id desc LIMIT 1";
+    	InsuranceOrder result = (InsuranceOrder) getSession().createQuery(hql)
     			.setString("ownerName", ownerName)
     			.setString("licenseNumber", licenseNumber)
     			.uniqueResult();

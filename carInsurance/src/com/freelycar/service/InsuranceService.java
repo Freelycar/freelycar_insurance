@@ -3,6 +3,7 @@ package com.freelycar.service;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -138,6 +139,7 @@ public class InsuranceService
     				
     				JSONObject biInfo = data.getJSONObject("biInfo");
     				if(!hasciInfo){
+    					System.out.println("----************----");
     					array.put(biInfo);
     				}
     				array.put(biInfo);
@@ -150,7 +152,7 @@ public class InsuranceService
     				String insuranceCompany = info.getString("insuranceCompany");
     				int insuranceCompanyId = info.getInt("insuranceCompanyId");
     				String insuranceBeginTime = info.getString("insuranceBeginTime");
-    				String insuranceEndTime = info.getString("insuranceEndTime");
+    				String insuranceEndTime = info.getString("insuranceEndTime");//注意：秒单位
     				try {
     					insuranceEndTime = String.valueOf(format.parse(insuranceEndTime).getTime()/1000);
     					System.out.println("交强险-商业险时间：>>>"+insuranceEndTime);
@@ -167,7 +169,6 @@ public class InsuranceService
     					if(insurance == null){
     						insurance = new Insurance();
     					}
-    					
     					insurance.setPolicyNo(policyNo);
     					insurance.setCommercial(i==1);
     					insurance.setInsurances(insuranceJson);
@@ -180,6 +181,7 @@ public class InsuranceService
     					insurance.setOwnerName(client.getOwnerName());
     					insurance.setTotalOpenId(client.getOpenId());
     					insurance.setPrice(totalAmount);
+    					insurance.setCreateTime(new Date());
     					saveUpdateInsurance(insurance);
     					result.add(insurance);
     				}
@@ -504,5 +506,7 @@ public class InsuranceService
 	    insuranceDao.updateInsurance(insurance);
 	    return RESCODE.SUCCESS.getJSONRES();
 	}
+	
+	//public 
     
 }

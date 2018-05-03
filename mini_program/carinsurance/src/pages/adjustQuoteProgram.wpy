@@ -184,7 +184,6 @@ export default class AdjustQuoteProgram extends wepy.page {
   computed = {};
 
   methods = {
-
     //选择或者取消选择险种
     selectInsuranceOrNot(event) {
       if (this.waitting) {
@@ -237,8 +236,7 @@ export default class AdjustQuoteProgram extends wepy.page {
       this.insurances = data;
     },
 
-
-    //获取报价 
+    //获取报价
     queryPrice() {
       if (this.waitting) {
         return;
@@ -299,9 +297,9 @@ export default class AdjustQuoteProgram extends wepy.page {
     this.insurances =
       JSON.parse(JSON.stringify(this.$parent.globalData.insurances)) ||
       JSON.parse(JSON.stringify(defultInsurances));
-    const data = JSON.parse(option.data) 
+    const data = JSON.parse(option.data);
     this.limitDate = data.limitDate || 0;
-    this.busLimitDate = data.busLimitDate || 0
+    this.busLimitDate = data.busLimitDate || 0;
     //建立连接
     wepy.connectSocket({
       url: 'wss://www.howmuchweb.com/carInsurance/echo'
@@ -330,7 +328,7 @@ export default class AdjustQuoteProgram extends wepy.page {
         wepy.redirectTo({
           url: `quoteSuccess?data=${JSON.stringify(objData.data)}`
         });
-      }  else if (objData.code === 609) {
+      } else if (objData.code === 609) {
         clearInterval(this.timer);
         this.waitSecond = 90;
         this.waitting = false;
@@ -351,7 +349,6 @@ export default class AdjustQuoteProgram extends wepy.page {
       url: 'wss://www.howmuchweb.com/carInsurance/echo'
     });
   }
-
 
   //倒计时相关
   startCountdown() {

@@ -27,7 +27,6 @@ public class InsuranceController
      * @param client
      * @return
      */
-    
     @RequestMapping(value = "/queryLastYear",method = RequestMethod.POST)
     public Map<String, Object> queryLastYear(@RequestBody Client client){
     	return insuranceService.queryLastYear(client);
@@ -45,7 +44,6 @@ public class InsuranceController
     public Map<String, Object> queryPrice(@RequestBody Insurance.QueryPriceEntity entity){
     	return insuranceService.queryPrice(entity);
     }
- 
     
     /**
      * 核保
@@ -67,10 +65,6 @@ public class InsuranceController
     public Map<String, Object> confirmChengbao(String orderId){
     	return insuranceService.confirmChengbao(orderId);
     }
-    
-    
-    
-    
     
     @RequestMapping(value = "/test1")
     public String queryPrice(){
