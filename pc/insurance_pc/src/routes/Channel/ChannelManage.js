@@ -66,6 +66,7 @@ export default class ChannelManage extends PureComponent {
     state = {
         modalVisible: false,
         modifyModalVisible: false,
+        deleteModalShow: false,
         invcode: '',  //搜索用的邀请码
         name: '',   //搜索用的渠道名称,
         listData: [],
@@ -237,6 +238,7 @@ export default class ChannelManage extends PureComponent {
             id: id
         }).then(res => {
             if (res.code == 0) {
+                this.setState({deleteModalShow: false});
                 message.success('删除成功');
                 this.getChannelList(1);
             } else {
@@ -360,7 +362,7 @@ export default class ChannelManage extends PureComponent {
                         </div>
                         <div className={styles.tableListOperator} style={{ marginTop: 50 }}>
                             <Button onClick={() => { this.setState({ modalVisible: true }) }} >新增</Button>
-                            <Button style={{ marginLeft: 20 }} onClick={() => this.deleteChannel(this.state.selectedRowKeys)} >批量删除</Button>
+                            <Button style={{ marginLeft: 20 }} onClick={() => this.setState({deleteModalShow: true})} >批量删除</Button>
                         </div>
                         <Table
                             //   loading={loading}
@@ -379,6 +381,16 @@ export default class ChannelManage extends PureComponent {
                     modifyData={this.state.modifyData}
                 />
                 {this.getModifyModal()}
+                <Modal
+                    title="提示"
+                    visible={this.state.deleteModalShow}
+                    onOk={() => this.deleteChannel(this.state.selectedRowKeys)}
+                    onCancel={() => this.setState({
+                        deleteModalShow: false
+                    })}
+                >
+                    确认批量删除选中的项目？
+                </Modal>
             </PageHeaderLayout >
         );
     }
