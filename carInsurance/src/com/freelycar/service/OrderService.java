@@ -1,10 +1,13 @@
 package com.freelycar.service; 
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -41,7 +44,7 @@ public class OrderService
     private QuoteRecordDao quoteRecordDao;
     
     @Autowired
-    private CashbackRecordDao cashbackDao;
+    private  CashbackRecordDao cashbackDao;
     
     @Autowired
     private ReciverDao reciverDao;
@@ -195,9 +198,15 @@ public class OrderService
 			String offerDetail = quoteRecordBySpecify.getOfferDetail();
 			quoteRecordBySpecify.setShangyeList(QuoteRecord.getShangYeJsonObj(offerDetail));
 			quoteRecordBySpecify.setQiangzhiList(QuoteRecord.getQiangzhiJsonObj(offerDetail));
+			//设置不计免赔险价格
+			quoteRecordBySpecify.setAdditionalPrice(QuoteRecord.getAdditionalPriceObj(offerDetail));
 			jsonres.put("quoteRecord", quoteRecordBySpecify);
-		}
-		
+			//设置返回的红包
+			BigDecimal bg = new BigDecimal(CalcuateMoneyBack(offerDetail) );
+            double calBackMoney = bg.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
+			
+			quoteRecordBySpecify.setBackmoney(String.valueOf(calBackMoney));	
+		}	
 		//收获信息
 		Reciver reciverByOrderId = reciverDao.getReciverByOrderId(orderId);
 		if(reciverByOrderId != null){
@@ -318,5 +327,19 @@ public class OrderService
 		return RESCODE.SUCCESS.getJSONRES(orderByLicenseNumber);
 	}
 	
+	private Double CalcuateMoneyBack(String offerDetail)
+	{
+		JSONObject obj = null;
+		try {
+			obj = new JSONObject(offerDetail);
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+		Double curPrice = obj.getDouble("currentPrice");
+	    Double ciBasePrice =  obj.getDouble("ciBasePrice");
+	    float rate  = cashbackDao.listCashbackRate().get(0).getRate();
+	    Double calReturn  = (curPrice + ciBasePrice) * rate;
+	    return calReturn;
+	}
 	
 }

@@ -43,6 +43,9 @@ public class QuoteRecord
     @Transient
     private List<OfferDetail> qiangzhiList;
     
+    @Transient
+    private String additionalPrice;
+    
     private String licenseNumber;  //车牌号;
 	
     private String ownerName;  //车主名称;
@@ -67,6 +70,8 @@ public class QuoteRecord
     private Integer transferDate;  //过户日期（时间戳）;
 	
     private String requestHeader;  //第三方信息(可以是任意信息比如;
+    
+    private String backmoney;
     
     @Transient
     private String totalPrice;
@@ -184,6 +189,21 @@ public class QuoteRecord
     		}
     	}
     	return shangye;
+    }
+    
+    //additionalprice
+    public static String getAdditionalPriceObj(String offerDetail){
+    	//List<OfferDetail> shangye = new ArrayList<>();
+    	JSONObject obj = null;
+    	try {
+			obj = new JSONObject(offerDetail);
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+    	if(obj.has("additionalPrice")){
+    		return String.valueOf(obj.get("additionalPrice"));
+    	}
+    	return null;
     }
     
     //offerDetail的详细
@@ -402,6 +422,23 @@ public class QuoteRecord
     
     
     
+	public String getAdditionalPrice() {
+		return additionalPrice;
+	}
+
+	public void setAdditionalPrice(String additionalPrice) {
+		this.additionalPrice = additionalPrice;
+	}
+
+	
+	public String getBackmoney() {
+		return backmoney;
+	}
+
+	public void setBackmoney(String backmoney) {
+		this.backmoney = backmoney;
+	}
+
 	@Override
 	public String toString() {
 		return "QuoteRecord [id=" + id 

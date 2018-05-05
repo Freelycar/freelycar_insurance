@@ -60,11 +60,14 @@ public class Client
     private int quoteStateCode;
 	
     private Long transferTime;  //过户日期;
-	
+	private Long leastQueryTime; // 获取报价时间
     @Transient
     private Long leastQuoteTime;//最新报价时间
     //强制险保险到期
     private Long insuranceDeadline;  //保险到期;
+    
+    @Transient
+    private Long leastOrderTime;//最新订单时间
     
     @Transient
     private String contactAddress;
@@ -197,7 +200,15 @@ public class Client
     }  
       
 	
-    public String getIdCard() {  
+    public Long getLeastQueryTime() {
+		return leastQueryTime;
+	}
+
+	public void setLeastQueryTime(Long leastQueryTime) {
+		this.leastQueryTime = leastQueryTime;
+	}
+
+	public String getIdCard() {  
         return idCard;  
     }  
   
@@ -263,6 +274,14 @@ public class Client
 	}
     
     
+	public Long getLeastOrderTime() {
+		return leastOrderTime;
+	}
+
+	public void setLeastOrderTime(Long leastOrderTime) {
+		this.leastOrderTime = leastOrderTime;
+	}
+
 	@Override
 	public String toString() {
 		return "Client [id=" + id 
