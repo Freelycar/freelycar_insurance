@@ -105,7 +105,7 @@ public class InsuranceService
     	JSONObject resultJson = HttpClientUtil.httpGet(LUOTUO_INTERFACE_BASEURL+"queryLatestPolicy", param);
     	
     	
-    	System.out.println("查询续保结果："+resultJson);
+    	//System.out.println("查询续保结果："+resultJson);
     	if(resultJson.has("errorMsg")){
     		String msg = resultJson.getJSONObject("errorMsg").getString("code");
     		if("success".equals(msg)){
@@ -115,11 +115,6 @@ public class InsuranceService
 					e.printStackTrace();
 					return RESCODE.LUOTUO_REPONSE_ERROR.getJSONRES();
 				}
-				
-				
-				/*if(data.length()==0){
-					return RESCODE.USER_NAME_LICENSENUMBER_NOT_FOUND.getJSONRES();
-				}*/
 				
 				boolean hasciInfo = false;
 				
@@ -155,7 +150,7 @@ public class InsuranceService
     				String insuranceEndTime = info.getString("insuranceEndTime");//注意：秒单位
     				try {
     					insuranceEndTime = String.valueOf(format.parse(insuranceEndTime).getTime()/1000);
-    					System.out.println("交强险-商业险时间：>>>"+insuranceEndTime);
+    					//System.out.println("交强险-商业险时间：>>>"+insuranceEndTime);
 					} catch (ParseException e) {
 						e.printStackTrace();
 					}
@@ -193,10 +188,12 @@ public class InsuranceService
     				Client exist = clientDao.getClientByOpenIdAndLicenseNumber(client.getOpenId(),client.getLicenseNumber());
     				if(exist == null){
     					//x询价的时候 插入客户的信息//初始状态 呆报价
+    					client.setLeastQueryTime(System.currentTimeMillis() );
     					clientDao.saveClient(client);
     				}else{
     					//数据库有数据 填充其他信息 这边要注意
     					exist.setOwnerName(client.getOwnerName());
+    					exist.setLeastQueryTime(System.currentTimeMillis() );
     					//exist.setQuoteState(INSURANCE.QUOTESTATE_NO_YIBAOJIA.getCode()+"");
     					clientDao.saveClient(exist);
     				}

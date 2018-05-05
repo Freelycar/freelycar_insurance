@@ -1,5 +1,7 @@
 package com.freelycar.service; 
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 
@@ -13,6 +15,7 @@ import com.freelycar.dao.OrderDao;
 import com.freelycar.dao.QuoteRecordDao;
 import com.freelycar.entity.Client;
 import com.freelycar.entity.Insurance;
+import com.freelycar.entity.InsuranceOrder;
 import com.freelycar.entity.QuoteRecord;
 import com.freelycar.util.RESCODE;
 import com.freelycar.util.Tools;  
@@ -62,6 +65,14 @@ public class ClientService
 			}
 		}
     	
+		InsuranceOrder insuranceOrder = orderDao.getLatestOrderByNameLice(clientById.getOwnerName(), clientById.getLicenseNumber());
+		if(quoteRecord != null){
+			clientById.setLeastQuoteTime(quoteRecord.getCreateTime());
+		}
+		if(insuranceOrder != null){
+			clientById.setLeastOrderTime(insuranceOrder.getCreateTime());
+		}
+		
     	return RESCODE.SUCCESS.getJSONRES(clientById);
     }
     
@@ -94,6 +105,7 @@ public class ClientService
 	    		if(quoteRecord != null){
 	    			c.setLeastQuoteTime(quoteRecord.getCreateTime());
 	    		}
+	    		//System.out.println("quotetime:" + c.getLeastQuoteTime());
 	    		
 	    		Insurance insu = insuranceDao.getLatestXuBaoByNameLice(c.getOwnerName(), c.getLicenseNumber());
 	    		if(insu != null){
@@ -102,8 +114,36 @@ public class ClientService
 	    				c.setInsuranceDeadline(Long.parseLong(insu.getInsuranceEndTime()+"000"));
 	    			}
 	    		}
+	    		
+	    		InsuranceOrder insuranceOrder = orderDao.getLatestOrderByNameLice(c.getOwnerName(), c.getLicenseNumber());
+	    		
+	    		if(insuranceOrder != null){
+	    			c.setLeastOrderTime(insuranceOrder.getCreateTime());
+	    		}
 	    	}
-	    	
+	    	if(client.isToubao())
+	    	{
+	    		Collections.sort(listPage, new Comparator<Client>() {  
+		            @Override  
+		            public int compare(Client s1, Client s2) {  
+		            	System.out.println(s1.getLeastOrderTime());
+		            	System.out.println(s2.getLeastOrderTime());
+		            	return (int) (s1.getLeastOrderTime() - s2.getLeastOrderTime());
+		            }  
+		        }); 
+	    	}
+	    	else
+	    	{
+		    	Collections.sort(listPage, new Comparator<Client>() {  
+		            @Override  
+		            public int compare(Client s1, Client s2) {  
+		            	/*System.out.println(s1.getLeastQuoteTime());
+		            	System.out.println(s2.getLeastQuoteTime());*/
+		            	return (int) (s1.getLeastQueryTime() - s2.getLeastQueryTime());
+		            }  
+		        });  
+	    	}
+	  
 	    	long count = clientDao.getClientCount(client);
 			return RESCODE.SUCCESS.getJSONRES(listPage,(int)Math.ceil(count/(float)number),count);
 		} 

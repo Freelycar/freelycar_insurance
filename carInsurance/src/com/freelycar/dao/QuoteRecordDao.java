@@ -57,7 +57,7 @@ public class QuoteRecordDao
     
     //指定cloumn
     public List<QuoteRecord> getQuoteRecordBylicenseNumber(String licenseNumber){
-    	String hql = "from QuoteRecord where licenseNumber = :licenseNumber order by createTime,id desc";
+    	String hql = "from QuoteRecord where licenseNumber = :licenseNumber order by createTime desc";
     	@SuppressWarnings("unchecked")
 		List<QuoteRecord> list = getSession().createQuery(hql).setString("licenseNumber", licenseNumber).setMaxResults(3).list();
     	return list;
