@@ -37,7 +37,7 @@ $(function () {
                 data.quoteRecord.shangyeList.map((item, index) => {
                     shangyeTotalPrice = Number(item.insurancePrice) + shangyeTotalPrice;
                 });
-                totalPrice = qiangzhiTotalPrice + shangyeTotalPrice;
+                totalPrice = (qiangzhiTotalPrice + shangyeTotalPrice).toFixed(2);
                 $('#cashback').append(data.data.cashback || 0)
                 $('#totalPrice').append(totalPrice)
                 $('#qiangzhiTotalPrice').append(qiangzhiTotalPrice)

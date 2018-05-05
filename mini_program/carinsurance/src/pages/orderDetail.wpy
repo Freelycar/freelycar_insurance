@@ -150,6 +150,11 @@
             <text>￥{{item.insurancePrice}}</text>
           </view>
         </block>
+         <view wx:if="{{quoteRecord.additionalPrice}}" class="detail-line">
+            <text> 不计免赔险
+            </text>
+            <text>￥{{quoteRecord.additionalPrice}}</text>
+          </view>
         <!-- <view class="detail-line">
           <text>车辆损失险 <text  class="detail-line-info">不计免赔</text></text>
           <text>￥950</text>
@@ -229,8 +234,8 @@ export default class OrderDetail extends wepy.page {
     id: '',
     orderDetail: '',
     reciver: '',
-    quoteRecord: '',// 投保方案
-    invoiceInfo: '',// 保单收货信息
+    quoteRecord: '', // 投保方案
+    invoiceInfo: '', // 保单收货信息
     qiangzhiTotalPrice: 0,
     shangyeTotalPrice: 0,
     totalPrice: 0,
@@ -259,7 +264,8 @@ export default class OrderDetail extends wepy.page {
         }
       });
     },
-    copyTBL: () => {  // 复制运单号码
+    copyTBL: () => {
+      // 复制运单号码
       wepy.setClipboardData({
         data: this.orderDetail.expressNumber,
         success: res => {
@@ -307,6 +313,7 @@ export default class OrderDetail extends wepy.page {
         );
         let qiangzhiTotalPrice = 0;
         let shangyeTotalPrice = 0;
+        let additionalPrice = res.data.quoteRecord.additionalPrice;
         let totalPrice = 0;
         res.data.quoteRecord.qiangzhiList.map((item, index) => {
           qiangzhiTotalPrice = Number(item.insurancePrice) + qiangzhiTotalPrice;
@@ -314,7 +321,11 @@ export default class OrderDetail extends wepy.page {
         res.data.quoteRecord.shangyeList.map((item, index) => {
           shangyeTotalPrice = Number(item.insurancePrice) + shangyeTotalPrice;
         });
-        totalPrice = (qiangzhiTotalPrice + shangyeTotalPrice).toFixed(2);
+        totalPrice = (
+          qiangzhiTotalPrice +
+          shangyeTotalPrice +
+          additionalPrice
+        ).toFixed(2);
         this.cashback = res.data.data.cashback || 0;
         this.totalPrice = totalPrice;
         this.qiangzhiTotalPrice = qiangzhiTotalPrice;
