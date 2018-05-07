@@ -144,8 +144,7 @@
         <block wx:for-index="index" wx:for-item="item" wx:key="index" wx:for-items="{{quoteRecord.shangyeList}}">
           <view class="detail-line">
             <text>{{item.insuranceName}}<text wx:if="{{item.compensation}}" class="detail-line-info">不计免赔</text>
-            <text wx:if="{{item.amountStr&&item.insuranceId!=2}}" class="detail-line-info">{{item.amountStr}}</text>
-            <text wx:if="{{item.amountStr&&item.insuranceId===2}}" class="detail-line-info">{{item.amountStr}}</text>
+            <text wx:if="{{item.amountStr&&item.insuranceId!==1}}" class="detail-line-info">{{item.amountStr}}</text>
             </text>
             <text>￥{{item.insurancePrice}}</text>
           </view>
@@ -303,7 +302,7 @@ export default class OrderDetail extends wepy.page {
         justifyNull(res.data.data);
         this.state = res.data.data.state;
         res.data.data.createTime = timestampToTime(
-          res.data.data.createTime/1000
+          res.data.data.createTime / 1000
         );
         this.orderDetail = res.data.data;
         justifyNull(res.data.reciver);
@@ -326,15 +325,13 @@ export default class OrderDetail extends wepy.page {
           shangyeTotalPrice = Number(item.insurancePrice) + shangyeTotalPrice;
         });
         console.log(additionalPrice);
-        totalPrice = (
-          qiangzhiTotalPrice +
-          shangyeTotalPrice +
-          additionalPrice
-        ).toFixed(2);
+        totalPrice = (qiangzhiTotalPrice + shangyeTotalPrice).toFixed(2);
         this.cashback = res.data.quoteRecord.backmoney || 0;
         this.totalPrice = totalPrice;
         this.qiangzhiTotalPrice = qiangzhiTotalPrice;
-        this.shangyeTotalPrice = (shangyeTotalPrice + additionalPrice).toFixed(2); // 不计免赔险
+        this.shangyeTotalPrice = (shangyeTotalPrice + additionalPrice).toFixed(
+          2
+        ); // 不计免赔险
         this.quoteRecord = res.data.quoteRecord;
         justifyNull(res.data.invoiceInfo);
         this.invoiceInfo = res.data.invoiceInfo;
