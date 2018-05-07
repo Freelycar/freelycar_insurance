@@ -79,7 +79,7 @@
       <view class="order-list-box" data-order-id="{{item.id}}"  @tap="goToDetail">
         <view class="order-list order-list-title">
           <view class="list-title">{{item.insureName}}</view>
-          <view wx:if="{{item.state===0}}" class="pay-state"><image class="orderlist_check" src="https://www.howmuchweb.com/carInsurance/imgs/orderlist_check.png"/>核保中</view> 
+          <view wx:if="{{item.state===0||!item.state}}" class="pay-state"><image class="orderlist_check" src="https://www.howmuchweb.com/carInsurance/imgs/orderlist_check.png"/>核保中</view> 
           <view wx:if="{{item.state===1}}"  class="pay-state error">核保失败</view>
           <view wx:if="{{item.state===2}}" data-order-id="{{item.id}}" @tap.stop="goToPay" class="pay-btn">支付</view>
           <view wx:if="{{item.state===3}}" class="pay-state"><image class="orderlist_wait" src="https://www.howmuchweb.com/carInsurance/imgs/orderlist_chengbao.png"/>承保中</view>
@@ -146,7 +146,7 @@ export default class OrderList extends wepy.page {
     wepy.request({
       url: this.$parent.globalData.baseUrl + 'api/' + 'order/list',
       data: {
-        openId: this.$parent.globalData.openId,
+        // openId: this.$parent.globalData.openId,
         state: -1,
         page: 1,
         number: 99
@@ -161,7 +161,7 @@ export default class OrderList extends wepy.page {
           let resArray = res.data.data;
           resArray.forEach(arrayItem => {
             justifyNull(arrayItem);
-            arrayItem.payTime = timestampToTime(arrayItem.payTime);
+            arrayItem.payTime = timestampToTime(arrayItem.createTime / 1000);
           }, this);
           this.orderlist = resArray;
           this.$apply();
