@@ -280,7 +280,9 @@ export default class ClientDetail extends PureComponent {
             {
                 title: '报价时间',
                 dataIndex: 'createTime',
-                key: 'createTime',
+                render: val => {
+                    return moment(val).format('YYYY-MM-DD hh:mm');
+                }
             },
             {
                 title: '报价编号',
@@ -399,7 +401,7 @@ export default class ClientDetail extends PureComponent {
                             </Col>
                             <Col xl={{ span: 6, offset: 2 }} lg={{ span: 8 }} md={{ span: 12 }} sm={24}>
                                 <Form.Item label='保险到期'>
-                                    {moment(this.state.clientInfo.insuranceDeadline).format('YYYY-MM-DD') || '暂无信息'}
+                                    {this.state.clientInfo.insuranceDeadline ? moment(this.state.clientInfo.insuranceDeadline).format('YYYY-MM-DD') : '暂无信息'}
                                 </Form.Item>
                             </Col>
                             <Col xl={{ span: 8, offset: 2 }} lg={{ span: 10 }} md={{ span: 24 }} sm={24}>
