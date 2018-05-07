@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.log4j.Logger;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -34,6 +35,7 @@ import com.freelycar.util.HttpClientUtil;
 import com.freelycar.util.INSURANCE;
 import com.freelycar.util.RESCODE;
 import com.freelycar.util.Tools;
+
 /**  
  *  
  */  
@@ -63,6 +65,9 @@ public class InsuranceService
     @Autowired
     private CashbackRecordDao cashbackDao;
     
+	private final static Logger logger = Logger.getLogger(InsuranceService.class);
+
+	
     private static final String LUOTUOKEY = Constant.LUOTUOKEY;
     private static final String LUOTUO_INTERFACE_BASEURL = Constant.LUOTUO_INTERFACE_URL;
     
@@ -260,9 +265,9 @@ public class InsuranceService
     	createEnquiryParams.put("insurancesList", insurancesList);
     	param.put("createEnquiryParams", createEnquiryParams);
     	
-    	for(Map.Entry<String, Object> p : param.entrySet()){
-    		System.out.println(p.getKey()+"------"+p.getValue());
-    	}
+//    	for(Map.Entry<String, Object> p : param.entrySet()){
+//    		System.out.println(p.getKey()+"------"+p.getValue());
+//    	}
     	
     	JSONObject resultJson = HttpClientUtil.httpGet(LUOTUO_INTERFACE_BASEURL+"createEnquiry", param);
     	
@@ -299,8 +304,8 @@ public class InsuranceService
     
     //提交核保
     public Map<String,Object> submitProposal(Insurance.ProposalEntity entity){
-    	System.out.println("核保的参数"+entity.toString());
-    	
+    	//System.out.println("核保的参数"+entity.toString());
+    	logger.debug("核保的参数"+entity.toString());
     	if(Tools.isEmpty(entity.getOpenId())){
     		return RESCODE.USER_OPENID_EMPTY.getJSONRES();
     	}
@@ -362,7 +367,8 @@ public class InsuranceService
     	param.put("api_key", LUOTUOKEY);
     	
     	JSONObject params = new JSONObject();
-    	System.out.println("#######"+entity.getOfferId());
+    	logger.debug("#######"+entity.getOfferId());
+    	//System.out.println("#######"+entity.getOfferId());
     	params.put("orderId", entity.getOfferId());/////
     	params.put("insuredName", entity.getOwnerName());/////
     	params.put("insuredIdNo", entity.getIdCard());/////
@@ -392,17 +398,17 @@ public class InsuranceService
     	param.put("params", params);
     	
     	
-    	for(Map.Entry<String, Object> p : param.entrySet()){
-    		System.out.println(p.getKey()+"------"+p.getValue());
-    	}
+//    	for(Map.Entry<String, Object> p : param.entrySet()){
+//    		System.out.println(p.getKey()+"------"+p.getValue());
+//    	}
     	JSONObject resultJson = HttpClientUtil.httpGet(LUOTUO_INTERFACE_BASEURL+"submitProposal", param);
     	
     	if(resultJson.has("errorMsg")){
     		String msg = resultJson.getJSONObject("errorMsg").getString("code");
     		if("success".equals(msg)){
     			//提交核保成功
-    			System.out.println("提交核保成功");
-    			
+    			//System.out.println("提交核保成功");
+    			logger.info("提交核保成功" + entity.getOfferId());
     			//保证同一个offerId 生成一个订单
     			synchronized (InsuranceService.class) {
     				boolean save = false;

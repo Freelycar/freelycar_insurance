@@ -1,5 +1,7 @@
 package com.freelycar.dao; 
 
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import org.hibernate.Query;
@@ -17,6 +19,7 @@ import com.freelycar.util.SqlHelper;
 @Repository
 public class ClientDao  
 {  
+	private final int delayDays = 90;
     /********** sessionFactory ***********/  
     @Autowired
 	private SessionFactory sessionFactory;
@@ -93,12 +96,29 @@ public class ClientDao
 			 .addBoolean("cashback", client.isCashback())
 			 .addString("phone", client.getPhone());
 		}
-		
 		return utils.setFirstResult(from)
 			 .setMaxResults(num)
 			 .getQuery().list();
 	}
 	
+	
+	//查询所有导出的client
+	@SuppressWarnings("unchecked")
+	public List<Client> listExportClient(boolean toubao){
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(new Date());
+		cal.add(Calendar.DAY_OF_MONTH, - delayDays);
+		java.sql.Date date=new java.sql.Date(cal.getTime().getTime());
+		if(!toubao)
+		{
+			String hql = "from Client where toubao = :toubao and leastQueryTime > :date";
+			List <Client> list = getSession().createQuery(hql).setBoolean("toubao", toubao)
+        		.setTimestamp("date", date).list();
+			return list;
+		}
+		return null;
+	}
+		
 	//查询所有的Client	
 	@SuppressWarnings("unchecked")
 	public List<Client> listAllClient(){

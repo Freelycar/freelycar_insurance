@@ -105,8 +105,8 @@ public class OrderpushResulService
 	//核保结果推送
 	public Map<String, Object> orderpushResult(String result) {
 		try {
-			log.error("核保推送结果： "+result);
-    		System.out.println("核保推送结果： "+result);
+			log.info("核保推送结果： "+result);
+    		//System.out.println("核保推送结果： "+result);
 			JSONObject resObj = new JSONObject(result);
 			if(resObj.getJSONObject("errorMsg").getString("code").equals("success")){
 				JSONObject resultobj = resObj.getJSONObject("data");
@@ -223,8 +223,8 @@ public class OrderpushResulService
 	//推送过来就说明支付用户支付
 	public Map<String, Object> chenbaopPushResult(String result) {
 		try {
-			log.error("承保推送："+result);
-			System.out.println("承保推送："+result);
+			log.info("承保推送："+result);
+			//System.out.println("承保推送："+result);
 			JSONObject resObj = new JSONObject(result);
 			if(resObj.getJSONObject("errorMsg").getString("code").equals("success")){
 				JSONObject resultobj = resObj.getJSONObject("data");
@@ -273,7 +273,7 @@ public class OrderpushResulService
 	//支付接口推送
 	public Map<String, Object> payPushResult(String result) {
 		try {
-			System.out.println(result);
+			//System.out.println(result);
 			JSONObject resObj = new JSONObject(result);
 			if(resObj.getJSONObject("errorMsg").getString("code").equals("success")){
 				JSONObject resultobj = resObj.getJSONObject("data");

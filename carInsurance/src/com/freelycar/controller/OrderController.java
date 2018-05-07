@@ -25,7 +25,7 @@ public class OrderController
 
     @RequestMapping(value = "/getOrderById",method = RequestMethod.GET)
     public Map<String, Object> getOrderById(int id){
-    	System.out.println(id);
+    	//System.out.println(id);
     	return orderService.getOrderById(id);
     }
     

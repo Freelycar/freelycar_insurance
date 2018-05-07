@@ -49,7 +49,7 @@ public class InvoiceInfoController
 	//更新InvoiceInfo
 	@RequestMapping(value = "/update",method = RequestMethod.POST)
 	public Map<String,Object> updateInvoiceInfo(@RequestBody InvoiceInfo invoiceinfo){
-		System.out.println(invoiceinfo);
+		//System.out.println(invoiceinfo);
 	    return invoiceInfoService.updateInvoiceInfo(invoiceinfo);
 	}
     

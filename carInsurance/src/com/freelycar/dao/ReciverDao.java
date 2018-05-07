@@ -65,7 +65,7 @@ public class ReciverDao
 			utils = utils
 			 .addInteger("clientId", reciver.getClientId());
 		}
-		System.out.println(utils.getQuery().getQueryString());
+		//System.out.println(utils.getQuery().getQueryString());
 		return utils.setFirstResult(from)
 			 .setMaxResults(num)
 			 .getQuery().list();

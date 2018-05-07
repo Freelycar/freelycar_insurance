@@ -7,6 +7,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.log4j.Logger;
 import org.hibernate.Query;
 import org.hibernate.Session;
 
@@ -49,6 +50,8 @@ public class QueryUtils {
 	//专门为日期区间的map
 	private Map<String,Date> paramsDate = new HashMap<>();
 	
+	private final static Logger log = Logger.getLogger(QueryUtils.class);
+
 	
 	public QueryUtils(Session session,String fromQuery){
 		this.session = session;
@@ -252,7 +255,7 @@ public class QueryUtils {
 		try{
 			query = session.createQuery(sb.toString());
 		}catch(Exception e){
-			System.out.println("出错的sql语句:  "+sb.toString());
+			log.error("出错的sql语句:  "+sb.toString());
 			e.printStackTrace();
 		}
 		
@@ -299,9 +302,9 @@ public class QueryUtils {
 			else if(value instanceof Object[]){
 				Object[] new_name = (Object[]) value;
 				query.setParameterList(map.getKey(), new_name);
-				System.out.println("new name" + Arrays.toString(new_name));
+				//System.out.println("new name" + Arrays.toString(new_name));
 			}
-			System.out.println(map.getKey()+"-------"+value);
+			//System.out.println(map.getKey()+"-------"+value);
 		}
 		
 		query.setCacheable(isCache);

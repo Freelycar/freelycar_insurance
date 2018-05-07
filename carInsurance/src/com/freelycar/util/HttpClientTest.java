@@ -38,7 +38,7 @@ public class HttpClientTest {
 	static {
 
 		try {
-			System.out.println("初始化HttpClientTest~~~开始");
+			//System.out.println("初始化HttpClientTest~~~开始");
 			SSLContextBuilder builder = new SSLContextBuilder();
 			builder.loadTrustMaterial(null, new TrustSelfSignedStrategy());
 			SSLConnectionSocketFactory sslsf = new SSLConnectionSocketFactory(builder.build());
@@ -61,7 +61,7 @@ public class HttpClientTest {
 			// 初始化httpClient
 			httpClient = getConnection();
 
-			System.out.println("初始化HttpClientTest~~~结束");
+			//System.out.println("初始化HttpClientTest~~~结束");
 		} catch (NoSuchAlgorithmException e) {
 			e.printStackTrace();
 		} catch (KeyStoreException e) {
@@ -80,9 +80,9 @@ public class HttpClientTest {
 				// 设置重试次数
 				.setRetryHandler(new DefaultHttpRequestRetryHandler(0, false)).build();
 
-		if (poolConnManager != null && poolConnManager.getTotalStats() != null) {
-			System.out.println("now client pool " + poolConnManager.getTotalStats().toString());
-		}
+//		if (poolConnManager != null && poolConnManager.getTotalStats() != null) {
+//			System.out.println("now client pool " + poolConnManager.getTotalStats().toString());
+//		}
 
 		return httpClient;
 	}
@@ -104,7 +104,7 @@ public class HttpClientTest {
 			
 			String result = EntityUtils.toString(entity, "utf-8");
 			EntityUtils.consume(entity);
-			System.out.println(result);
+			//System.out.println(result);
 		} catch (IOException e) {
 			e.printStackTrace();
 		} finally {

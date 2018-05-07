@@ -2,6 +2,7 @@ package com.freelycar.controller;
 
 import java.util.Map;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -20,6 +21,8 @@ public class QuoteRecordController
     @Autowired
 	private QuoteRecordService quoteRecordService;
 
+	private final static Logger logger = Logger.getLogger(QuoteRecordController.class);
+
     /**
      * 询价推送
      * @param data
@@ -28,7 +31,7 @@ public class QuoteRecordController
     
     @RequestMapping(value="/resultPush")
     public Map<String,Object> quoteRecordPush(String data){
-    	System.out.println("一开始接受的data:>>>>"+data);
+    	logger.debug("一开始接受的data:>>>>"+data);
     	return quoteRecordService.quoteRecordPushDeal(data);
     }
 

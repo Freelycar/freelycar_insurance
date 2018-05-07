@@ -67,7 +67,7 @@ public class InsuranceOrder
 	
     private Long dealTime;  //成交时间;
     
-    private long cashbackTime;
+    private Long cashbackTime;
 	
     private String expressNumber;  //快递单号;
 	
@@ -197,7 +197,7 @@ public class InsuranceOrder
 		this.effetiveTimeLong = effetiveTimeLong;
 	}
     
-    public long getCashbackTime() {
+    public Long getCashbackTime() {
 		return cashbackTime;
 	}
     
