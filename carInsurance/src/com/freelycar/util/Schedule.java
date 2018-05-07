@@ -27,7 +27,7 @@ public class Schedule {
     @Scheduled(fixedRateString="${luotuo_confirmchengbao_rate}")
     public void reportCurrentTime() {
     	if(onoff){
-    	   System.out.println("The time is now " + dateFormat.format(new Date()));
+    	   //System.out.println("The time is now " + dateFormat.format(new Date()));
 	       //查寻未支付的订单，调用承保变成已支付
 	       InsuranceOrder order = new InsuranceOrder();
 	       order.setState(INSURANCE.QUOTESTATE_NOTPAY.getCode());

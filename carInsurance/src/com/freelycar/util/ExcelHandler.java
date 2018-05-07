@@ -198,7 +198,7 @@ public class ExcelHandler {
 	}
 	
     
-	private static void downExcel(HSSFWorkbook wb,HttpServletResponse response){
+	public static boolean downExcel(HSSFWorkbook wb,HttpServletResponse response){
 		// 第六步，实现文件下载保存  
     	try {
 			response.setHeader("content-disposition", "attachment;filename="
@@ -210,8 +210,10 @@ public class ExcelHandler {
 			byte[] xlsBytes = baos.toByteArray();
 			out.write( xlsBytes);
 			out.close();
+			return true;
 		}  catch (IOException e) {
 			e.printStackTrace();
+			return false;
 		}
 	}
 	

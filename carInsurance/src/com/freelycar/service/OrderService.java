@@ -128,7 +128,7 @@ public class OrderService
     	List<CountBySource> newlist = new ArrayList<>();
     	
     	for(Object[] obj : list){
-    		System.out.println(obj);
+    		//System.out.println(obj);
     		CountBySource count = new CountBySource();
     		int sourceId = (int)obj[0];
     		count.setSourceId(sourceId);
@@ -165,7 +165,7 @@ public class OrderService
     	}
     	
     	for(Object[] obj : list){
-    		System.out.println(obj);
+    		//System.out.println(obj);
     		CountBySource count = new CountBySource();
     		count.setSourceId((int)obj[0]);
     		count.setSource((String)obj[1]);

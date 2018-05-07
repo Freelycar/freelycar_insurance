@@ -98,9 +98,9 @@ public class HttpClientUtil {
 				// 设置重试次数
 				.setRetryHandler(new DefaultHttpRequestRetryHandler(0, false)).build();
 
-		if (poolConnManager != null && poolConnManager.getTotalStats() != null) {
-			System.out.println("now client pool " + poolConnManager.getTotalStats().toString());
-		}
+//		if (poolConnManager != null && poolConnManager.getTotalStats() != null) {
+//			System.out.println("now client pool " + poolConnManager.getTotalStats().toString());
+//		}
 
 		return httpClient;
 	}
@@ -127,7 +127,7 @@ public class HttpClientUtil {
 			String paramString = URLEncodedUtils.format(nvps, "utf-8");
 			url = url+"?"+paramString;
 		}
-		System.out.println("请求的url: "+url);
+		//System.out.println("请求的url: "+url);
 		HttpGet httpGet = new HttpGet(url);
 		if(head != null){
 			for(Map.Entry<String, String> h : head.entrySet()){
@@ -151,7 +151,7 @@ public class HttpClientUtil {
 			HttpEntity entity = response.getEntity();
 			result = EntityUtils.toString(entity, "utf-8");
 			EntityUtils.consume(entity);
-			System.out.println("请求的结果: "+result);
+			//System.out.println("请求的结果: "+result);
 		} catch (IOException e) {
 			e.printStackTrace();
 		} finally {
@@ -184,7 +184,7 @@ public class HttpClientUtil {
 	    HttpEntity entity = response.getEntity();
 		String result = EntityUtils.toString(entity, "utf-8");
 		
-		System.out.println("post : "+result);
+		//System.out.println("post : "+result);
 		EntityUtils.consume(entity);
 	    
 	}
@@ -202,7 +202,7 @@ public class HttpClientUtil {
 			HttpEntity entity = response.getEntity();
 			String result = EntityUtils.toString(entity, "utf-8");
 			
-			System.out.println("post : "+result);
+			//System.out.println("post : "+result);
 			EntityUtils.consume(entity);
 		} catch (IOException e) {
 			e.printStackTrace();

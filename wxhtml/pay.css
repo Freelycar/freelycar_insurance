@@ -4,6 +4,8 @@
 }
 .payment-box {
   position: relative;
+  width: 100%;
+  overflow: hidden;
   height: auto !important;
 }
 .verify-code-bac {

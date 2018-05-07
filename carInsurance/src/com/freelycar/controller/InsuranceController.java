@@ -68,7 +68,6 @@ public class InsuranceController
     
     @RequestMapping(value = "/test1")
     public String queryPrice(){
-    	System.out.println("ddddddddddddddddddddddd");
     	return "hello";
     }
     

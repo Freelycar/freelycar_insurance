@@ -1,5 +1,6 @@
 package com.freelycar.service; 
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -14,6 +15,7 @@ import com.freelycar.dao.InsuranceDao;
 import com.freelycar.dao.OrderDao;
 import com.freelycar.dao.QuoteRecordDao;
 import com.freelycar.entity.Client;
+import com.freelycar.entity.ClientNOrder;
 import com.freelycar.entity.Insurance;
 import com.freelycar.entity.InsuranceOrder;
 import com.freelycar.entity.QuoteRecord;
@@ -104,6 +106,7 @@ public class ClientService
 	    		QuoteRecord quoteRecord = orderDao.getLatestQuoteByNameLice(c.getOwnerName(), c.getLicenseNumber());
 	    		if(quoteRecord != null){
 	    			c.setLeastQuoteTime(quoteRecord.getCreateTime());
+	    			c.setQuoteStateCode(quoteRecord.getState());
 	    		}
 	    		//System.out.println("quotetime:" + c.getLeastQuoteTime());
 	    		
@@ -149,6 +152,65 @@ public class ClientService
 		} 
 		return RESCODE.SUCCESS.getJSONRES(listPage);
     }
+	
+	public List<Client>getExportClientList(boolean toubao)
+	{
+		List<Client> listClient = clientDao.listExportClient(toubao);
+		if(listClient !=null && !listClient.isEmpty()){
+	    	//查询最新的订单时间
+	    	for(Client c:listClient){
+	    		QuoteRecord quoteRecord = orderDao.getLatestQuoteByNameLice(c.getOwnerName(), c.getLicenseNumber());
+	    		if(quoteRecord != null){
+	    			c.setLeastQuoteTime(quoteRecord.getCreateTime());
+	    			c.setQuoteStateCode(quoteRecord.getState());
+	    		}
+	    		Insurance insu = insuranceDao.getLatestXuBaoByNameLice(c.getOwnerName(), c.getLicenseNumber());
+	    		if(insu != null){
+	    			if(Tools.notEmpty(insu.getInsuranceEndTime())){
+	    				//查出来的是秒 所以加了三个零
+	    				c.setInsuranceDeadline(Long.parseLong(insu.getInsuranceEndTime()+"000"));
+	    			}
+	    		}
+	    		InsuranceOrder insuranceOrder = orderDao.getLatestOrderByNameLice(c.getOwnerName(), c.getLicenseNumber());
+	    		if(insuranceOrder != null){
+	    			c.setLeastOrderTime(insuranceOrder.getCreateTime());
+	    		}
+	    	}
+		}
+		return listClient;
+	}
+	
+	public List<ClientNOrder> getExportClientOrderList(boolean toubao)
+	{
+		List<ClientNOrder>retList = new ArrayList<ClientNOrder>();
+		List<Client> listClient = clientDao.listExportClient(toubao);
+		if(listClient !=null && !listClient.isEmpty()){
+	    	//查询最新的订单时间
+	    	for(Client c:listClient){
+	    		QuoteRecord quoteRecord = orderDao.getLatestQuoteByNameLice(c.getOwnerName(), c.getLicenseNumber());
+	    		if(quoteRecord != null){
+	    			c.setLeastQuoteTime(quoteRecord.getCreateTime());
+	    			c.setQuoteStateCode(quoteRecord.getState());
+	    		}
+	    		Insurance insu = insuranceDao.getLatestXuBaoByNameLice(c.getOwnerName(), c.getLicenseNumber());
+	    		if(insu != null){
+	    			if(Tools.notEmpty(insu.getInsuranceEndTime())){
+	    				//查出来的是秒 所以加了三个零
+	    				c.setInsuranceDeadline(Long.parseLong(insu.getInsuranceEndTime()+"000"));
+	    			}
+	    		}
+	    		InsuranceOrder insuranceOrder = orderDao.getLatestOrderByNameLice(c.getOwnerName(), c.getLicenseNumber());
+	    		if(insuranceOrder != null){
+	    			c.setLeastOrderTime(insuranceOrder.getCreateTime());
+	    		}
+	    		ClientNOrder nn = new ClientNOrder();
+	    		nn.setClient(c);
+	    		nn.setOrder(insuranceOrder);
+	    		retList.add(nn);
+	    	}
+		}
+		return retList;
+	}
 	
 	public List<Client> listAllClient(){
 		List<Client> allClient = clientDao.listAllClient();

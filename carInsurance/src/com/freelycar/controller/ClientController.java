@@ -9,9 +9,11 @@ import com.freelycar.util.Constant;
 import com.freelycar.util.HttpClientUtil;
 import com.freelycar.util.LeanCloudSms;
 
+
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.log4j.Logger;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -37,6 +39,7 @@ public class ClientController
     @Autowired
     private InsuranceService insuranceService;
 
+    private final static Logger logger = Logger.getLogger(ClientController.class);
     //获取短信验证码
     @RequestMapping(value = "/sms/getCode",method = RequestMethod.POST)
     public Map<String,Object> smsgetCode(@RequestBody String phone){
@@ -61,8 +64,7 @@ public class ClientController
     			client.setSource(invitionByInvcode2.getName());
     		}
     		client.setLicenseNumber(entity.getLicenseNumber());
-    		
-    		System.out.println("短信验码字的client"+client);
+    		logger.debug("短信验码字的client"+client);
     		return clientService.saveClient(client);
     	}
     	return res;

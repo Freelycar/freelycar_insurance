@@ -49,8 +49,8 @@ public class QuoteRecordService
 			
 			String openId = null;
 			String message = null;
-			System.out.println("最初报价推送的结果"+result);
-			log.error("最初报价推送的结果： "+result+"\n\n");
+			//System.out.println("最初报价推送的结果"+result);
+			log.info("最初报价推送的结果： "+result+"\n\n");
 			if(resObj.getJSONObject("errorMsg").getString("code").equals("success")){
 				message = resObj.getJSONObject("errorMsg").getString("message");
 				
@@ -67,7 +67,7 @@ public class QuoteRecordService
 				QuoteRecord qr = quoteRecordDao.getQuoteRecordBySpecify("requestHeader",requestHeader);
 				
 				if(qr==null){
-					System.out.println("requestHeader:"+requestHeader);
+					//System.out.println("requestHeader:"+requestHeader);
 					SocketHelper.sendMessage(openId,RESCODE.PUSHBACK_BAOJIA_FAIL.getJSONObject("requestHeader:"+requestHeader).toString());
 					return RESCODE.LUOTUO_SUCCESS.getLuoTuoRes(loutuomsg);
 				}
@@ -79,7 +79,8 @@ public class QuoteRecordService
 					if(string2.startsWith("{")){
 						JSONObject errorMsg = new JSONObject(string2);
 						if(!errorMsg.getString("code").equals("success")){
-							System.out.println("报价推送重复投保："+resObj);
+							log.error("报价推送重复投保："+resObj);
+							//System.out.println("报价推送重复投保："+resObj);
 							String string = errorMsg.getString("message");
 							SocketHelper.sendMessage(openId,RESCODE.PUSHBACK_BAOJIA_FAIL.getJSONObject(string).toString());
 							return RESCODE.LUOTUO_SUCCESS.getLuoTuoRes(loutuomsg);
@@ -87,8 +88,8 @@ public class QuoteRecordService
 					}
 				}
 				
-				
-				System.out.println("报价推送的offerId:"+offerId);
+				log.debug("报价推送的offerId:"+offerId);
+				//System.out.println("报价推送的offerId:"+offerId);
 				String offerDetail = resultobj.getString("offerDetail");
 				int state = resultobj.getInt("state");
 				
@@ -98,8 +99,8 @@ public class QuoteRecordService
 				qr.setOfferId(offerId);
 				qr.setOfferDetail(offerDetail);
 				quoteRecordDao.update(qr);
-				
-				System.out.println("准备推送openId"+qr.getOpenId());
+				log.debug("准备推送openId"+qr.getOpenId());
+				//System.out.println("准备推送openId"+qr.getOpenId());
 				//处理报价明细
 				JSONObject obj = new JSONObject(offerDetail);
 				obj.put("offerId", offerId);
@@ -131,7 +132,8 @@ public class QuoteRecordService
 				return RESCODE.LUOTUO_SUCCESS.getLuoTuoRes(loutuomsg);
 				
 			}else{
-				System.out.println("报价失败推送"+openId+"---"+message);
+				log.error("报价失败推送"+openId+"---"+message);
+				//System.out.println("报价失败推送"+openId+"---"+message);
 				SocketHelper.sendMessage(openId,RESCODE.PUSHBACK_BAOJIA_FAIL.getJSONObject(message).toString());
 			}
 			
@@ -157,7 +159,7 @@ public class QuoteRecordService
 	 * @return
 	 */
 	public Map<String,Object> listQuoteRecord(QuoteRecord quoteRecord, int page,int number){
-		System.out.println(quoteRecord.getClientId());
+		//System.out.println(quoteRecord.getClientId());
 		if(quoteRecord !=null){
 			if(quoteRecord.getClientId()==null || quoteRecord.getClientId()==0){
 				return RESCODE.USER_NOT_EXIST.getJSONRES("clientId 为空");

@@ -31,14 +31,15 @@ $(function () {
                 var qiangzhiTotalPrice = 0;
                 var shangyeTotalPrice = 0;
                 var totalPrice = 0;
+                var additionalPrice = Number(data.quoteRecord.additionalPrice);
                 data.quoteRecord.qiangzhiList.map(function (item, index) {
                     qiangzhiTotalPrice = Number(item.insurancePrice) + qiangzhiTotalPrice;
                 });
                 data.quoteRecord.shangyeList.map((item, index) => {
                     shangyeTotalPrice = Number(item.insurancePrice) + shangyeTotalPrice;
                 });
-                shangyeTotalPrice = (shangyeTotalPrice + data.quoteRecord.additionalPrice).toFixed(2)
-                totalPrice = (qiangzhiTotalPrice + shangyeTotalPrice + Number(data.quoteRecord.additionalPrice)).toFixed(2);
+                shangyeTotalPrice = Number(shangyeTotalPrice + additionalPrice).toFixed(2)
+                totalPrice = (Number(qiangzhiTotalPrice) + Number(shangyeTotalPrice)).toFixed(2);
                 $('#cashback').append(data.quoteRecord.backmoney || 0)
                 $('#totalPrice').append(totalPrice)
                 $('#qiangzhiTotalPrice').append(qiangzhiTotalPrice)
@@ -66,15 +67,16 @@ $(function () {
                     if (item.amountStr && item.insuranceId === 2) {
                         html1 += '<span  class="detail-line-info">' + item.amountStr + '</span>';
                     }
-                    html += '</span>' +
+                    html1 += '</span>' +
                         '<span>' + item.insurancePrice + '</span>' +
                         '</div>';
-
                 }
-                html1 = html1 + '<div class="detail-line">' +
-                    '<span>' + 不计免赔险 + '</span>' +
-                    '<span>' + data.quoteRecord.additionalPrice + '</span>' +
-                    '</div>'
+                if (additionalPrice) {
+                    html1 += '<div class="detail-line">' +
+                        '<span>不计免赔险</span>' +
+                        '<span>' + additionalPrice + '</span>' +
+                        '</div>'
+                }
                 document.getElementById('insurance-div2').innerHTML = html1;
 
             }
