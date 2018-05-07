@@ -126,8 +126,8 @@ public class ClientService
 	    		Collections.sort(listPage, new Comparator<Client>() {  
 		            @Override  
 		            public int compare(Client s1, Client s2) {  
-		            	System.out.println(s1.getLeastOrderTime());
-		            	System.out.println(s2.getLeastOrderTime());
+		            	//System.out.println(s1.getLeastOrderTime());
+		            	//System.out.println(s2.getLeastOrderTime());
 		            	return (int) (s1.getLeastOrderTime() - s2.getLeastOrderTime());
 		            }  
 		        }); 

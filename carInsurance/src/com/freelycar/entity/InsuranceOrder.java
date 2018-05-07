@@ -50,7 +50,7 @@ public class InsuranceOrder
 	
     private boolean cashback;  //是否返现;
 	
-    private Long backmoney;  //返现多少钱;
+    private String backmoney;  //返现多少钱;
 	
     private String invoiceInfo;  //发票信息;
 	
@@ -99,31 +99,31 @@ public class InsuranceOrder
       
     }  
    
-    public InsuranceOrder(String orderId, String ciPolicyNo, Long ciPolicyPrice, Long taxPrice, String biPolicyNo, Long biPolicyPrice, String offerDetail, String insureName, String insuredIdNo, String insuredPhone, String licenseNumber, boolean cashback, Long backmoney, String invoiceInfo, Integer addressId, int state, Long createTime, Long payTime, Long deliveredTime, Long dealTime, String expressNumber, String expressCompany, String remark) {  
-        this.orderId = orderId;  
-        this.ciPolicyNo = ciPolicyNo;  
-        this.ciPolicyPrice = ciPolicyPrice;  
-        this.taxPrice = taxPrice;  
-        this.biPolicyNo = biPolicyNo;  
-        this.biPolicyPrice = biPolicyPrice;  
-        this.offerDetail = offerDetail;  
-        this.insureName = insureName;  
-        this.insuredIdNo = insuredIdNo;  
-        this.insuredPhone = insuredPhone;  
-        this.licenseNumber = licenseNumber;  
-        this.cashback = cashback;  
-        this.backmoney = backmoney;  
-        this.invoiceInfo = invoiceInfo;  
-        this.addressId = addressId;  
-        this.state = state;  
-        this.createTime = createTime;  
-        this.payTime = payTime;  
-        this.deliveredTime = deliveredTime;  
-        this.dealTime = dealTime;  
-        this.expressNumber = expressNumber;  
-        this.expressCompany = expressCompany;  
-        this.remark = remark;  
-    }  
+//    public InsuranceOrder(String orderId, String ciPolicyNo, Long ciPolicyPrice, Long taxPrice, String biPolicyNo, Long biPolicyPrice, String offerDetail, String insureName, String insuredIdNo, String insuredPhone, String licenseNumber, boolean cashback, Long backmoney, String invoiceInfo, Integer addressId, int state, Long createTime, Long payTime, Long deliveredTime, Long dealTime, String expressNumber, String expressCompany, String remark) {  
+//        this.orderId = orderId;  
+//        this.ciPolicyNo = ciPolicyNo;  
+//        this.ciPolicyPrice = ciPolicyPrice;  
+//        this.taxPrice = taxPrice;  
+//        this.biPolicyNo = biPolicyNo;  
+//        this.biPolicyPrice = biPolicyPrice;  
+//        this.offerDetail = offerDetail;  
+//        this.insureName = insureName;  
+//        this.insuredIdNo = insuredIdNo;  
+//        this.insuredPhone = insuredPhone;  
+//        this.licenseNumber = licenseNumber;  
+//        this.cashback = cashback;  
+//        this.backmoney = backmoney;  
+//        this.invoiceInfo = invoiceInfo;  
+//        this.addressId = addressId;  
+//        this.state = state;  
+//        this.createTime = createTime;  
+//        this.payTime = payTime;  
+//        this.deliveredTime = deliveredTime;  
+//        this.dealTime = dealTime;  
+//        this.expressNumber = expressNumber;  
+//        this.expressCompany = expressCompany;  
+//        this.remark = remark;  
+//    }  
   
     /********** get/set ***********/  
     public Integer getId() {
@@ -334,11 +334,11 @@ public class InsuranceOrder
     }  
       
 	
-    public Long getBackmoney() {  
+    public String getBackmoney() {  
         return backmoney;  
     }  
   
-    public void setBackmoney(Long backmoney) {  
+    public void setBackmoney(String backmoney) {  
         this.backmoney = backmoney;  
     }  
       

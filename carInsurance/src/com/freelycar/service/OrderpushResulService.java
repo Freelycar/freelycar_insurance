@@ -1,5 +1,6 @@
 package com.freelycar.service; 
 
+import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.HashMap;
@@ -14,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.freelycar.dao.CashbackRecordDao;
 import com.freelycar.dao.OrderDao;
 import com.freelycar.dao.OrderpushResulDao;
 import com.freelycar.dao.QuoteRecordDao;
@@ -45,6 +47,9 @@ public class OrderpushResulService
     
     @Autowired
     private InsuranceService insuranceService;
+    
+    @Autowired
+    private  CashbackRecordDao cashbackDao;
     
     private static Logger log = Logger.getLogger(OrderpushResulService.class);
 
@@ -242,8 +247,11 @@ public class OrderpushResulService
 					orderByOrderId.setStateString(INSURANCE.QUOTESTATE_NOTDELIVER.getName());
 				}
 				
-				
-				int state = resultobj.getInt("state");
+				long totalPrice = orderByOrderId.getTotalPrice();
+				BigDecimal bg = new BigDecimal(CalcuateMoneyBack(totalPrice) );
+	            float calBackMoney = bg.setScale(2, BigDecimal.ROUND_HALF_UP).floatValue();
+	            orderByOrderId.setBackmoney(String.valueOf(calBackMoney));
+	            int state = resultobj.getInt("state");
 				String ciPolicyNo = resultobj.getString("ciPolicyNo");
 				String biPolicyNo = resultobj.getString("biPolicyNo");
 				
@@ -290,4 +298,12 @@ public class OrderpushResulService
 		
 		return RESCODE.LUOTUO_FAIL.getLuoTuoRes(false);
 	}
+	
+	private float CalcuateMoneyBack(long totalPrice)
+	{
+	    float rate  = cashbackDao.listCashbackRate().get(0).getRate();
+	    float calReturn  = totalPrice * rate;
+	    return calReturn;
+	}
+	
 }

@@ -316,6 +316,8 @@ public class InsuranceService
     	reciverByOpenId.setPhone(entity.getReciverPhone());
     	reciverByOpenId.setProvincesCities(entity.getProvincesCities());
     	reciverByOpenId.setAdressDetail(entity.getAddressDetail());
+    	//收件人姓名
+    	reciverByOpenId.setReciver(entity.getReciver());
     	reciverDao.saveUpdateReciver(reciverByOpenId);
     	
     	//更新车主的idcard
@@ -352,6 +354,7 @@ public class InsuranceService
     	invoiceInfoByOpenId.setInvoiceTitle(entity.getInvoiceTitle());
     	invoiceInfoByOpenId.setInvoiceType(entity.getInvoiceType());
     	invoiceInfoByOpenId.setPhone(entity.getInvoicePhone());
+    	invoiceInfoByOpenId.setOrderId(entity.getOfferId());
     	invoiceInfoDao.saveUpdateInvoiceInfo(invoiceInfoByOpenId);
     	
     	
