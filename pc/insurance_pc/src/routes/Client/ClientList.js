@@ -108,28 +108,28 @@ const alreadyColumns = [
     },
     {
         title: '订单时间',
-        dataIndex: 'time',
+        dataIndex: 'leastOrderTime',
     },
     {
         title: '订单状态',
         dataIndex: 'quoteStateCode',
         render: val => {
             switch (val) {
-                case 0:
+                case '0':
                     return '核保中';
-                case 1:
+                case '1':
                     return '核保失败';
-                case 2:
+                case '2':
                     return '未支付';
-                case 3:
+                case '3':
                     return '承保中';
-                case 4:
+                case '4':
                     return '承保失败';
-                case 5:
+                case '5':
                     return '待配送';
-                case 6:
+                case '6':
                     return '待签收';
-                case 7:
+                case '7':
                     return '已投保';
             }
         }

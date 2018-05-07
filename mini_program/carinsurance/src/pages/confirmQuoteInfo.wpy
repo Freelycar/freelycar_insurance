@@ -328,8 +328,9 @@ export default class ConfirmQuoteInfo extends wepy.page {
     this.queryData.ownerName = this.$parent.globalData.name;
     this.queryData.licenseNumber = this.$parent.globalData.licenseNumber;
     this.queryData.invoiceTitle = this.$parent.globalData.name;
-    this.queryData.invoicePhone = this.$parent.globalData.licenseNumber;
+    // this.queryData.invoicePhone = this.$parent.globalData.licenseNumber;
     this.queryData.openId = this.$parent.globalData.openId;
+    this.queryData.invoiceType = this.array[this.invoiceType];
     this.queryData.provincesCities = this.region.join('');
     this.$apply();
   }

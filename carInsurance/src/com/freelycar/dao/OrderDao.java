@@ -78,12 +78,15 @@ public class OrderDao
     
     //查询最新的查询Order
     public InsuranceOrder getLatestOrderByNameLice(String ownerName,String licenseNumber){
-    	String hql = "from InsuranceOrder where insureName = :ownerName and licenseNumber = :licenseNumber ORDER BY createTime,id desc LIMIT 1";
-    	InsuranceOrder result = (InsuranceOrder) getSession().createQuery(hql)
+    	String hql = "from InsuranceOrder where insureName = :ownerName and licenseNumber = :licenseNumber ORDER BY createTime desc";
+    	List<InsuranceOrder> result = (List<InsuranceOrder>) getSession().createQuery(hql)
     			.setString("ownerName", ownerName)
     			.setString("licenseNumber", licenseNumber)
-    			.uniqueResult();
-    	return result;
+    			.list();
+    	if(result != null && !result.isEmpty())
+    		return result.get(0);
+		return null;
+    	
     }
     
     
