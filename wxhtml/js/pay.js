@@ -14,7 +14,7 @@ $(function () {
                 this.orderDetail = data.data;
                 $("#pay-qrcode").attr('src', data.data.paycodeurl)
                 $("#pay_money").append(data.data.totalPrice / 100)
-                $('#pay_cashback').append(data.data.cashback || 0)
+                $('#pay_cashback').append(data.quoteRecord.backmoney || 0)
                 $("#pay_name").append(data.data.insureName)
                 $('#pay_cardid').append(data.data.expressNumber)
                 $('#pay_bank').append(data.data.expressCompany)
@@ -38,8 +38,8 @@ $(function () {
                     shangyeTotalPrice = Number(item.insurancePrice) + shangyeTotalPrice;
                 });
                 shangyeTotalPrice = (shangyeTotalPrice + data.quoteRecord.additionalPrice).toFixed(2)
-                totalPrice = (qiangzhiTotalPrice + shangyeTotalPrice + data.quoteRecord.additionalPrice).toFixed(2);
-                $('#cashback').append(data.data.cashback || 0)
+                totalPrice = (qiangzhiTotalPrice + shangyeTotalPrice + Number(data.quoteRecord.additionalPrice)).toFixed(2);
+                $('#cashback').append(data.quoteRecord.backmoney || 0)
                 $('#totalPrice').append(totalPrice)
                 $('#qiangzhiTotalPrice').append(qiangzhiTotalPrice)
                 $('#shangyeTotalPrice').append(shangyeTotalPrice)
