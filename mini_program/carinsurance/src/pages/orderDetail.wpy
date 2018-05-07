@@ -313,7 +313,7 @@ export default class OrderDetail extends wepy.page {
         );
         let qiangzhiTotalPrice = 0;
         let shangyeTotalPrice = 0;
-        let additionalPrice = res.data.quoteRecord.additionalPrice;
+        let additionalPrice = Number(res.data.quoteRecord.additionalPrice);
         let totalPrice = 0;
         res.data.quoteRecord.qiangzhiList.map((item, index) => {
           qiangzhiTotalPrice = Number(item.insurancePrice) + qiangzhiTotalPrice;
@@ -321,15 +321,16 @@ export default class OrderDetail extends wepy.page {
         res.data.quoteRecord.shangyeList.map((item, index) => {
           shangyeTotalPrice = Number(item.insurancePrice) + shangyeTotalPrice;
         });
+        console.log(additionalPrice);
         totalPrice = (
           qiangzhiTotalPrice +
           shangyeTotalPrice +
           additionalPrice
         ).toFixed(2);
-        this.cashback = res.data.data.cashback || 0;
+        this.cashback = res.data.quoteRecord.backmoney || 0;
         this.totalPrice = totalPrice;
         this.qiangzhiTotalPrice = qiangzhiTotalPrice;
-        this.shangyeTotalPrice = shangyeTotalPrice;
+        this.shangyeTotalPrice = shangyeTotalPrice + additionalPrice; // 不计免赔险
         this.quoteRecord = res.data.quoteRecord;
         justifyNull(res.data.invoiceInfo);
         this.invoiceInfo = res.data.invoiceInfo;
