@@ -93,7 +93,7 @@
         </view>
         <view class="order-list order-list-item">
           <text class="list-item">订单号：{{item.orderId}}</text>    
-          <text class="list-price">￥{{item.totalPrice}}</text>    
+          <text class="list-price" wx:if="{{item.state>1}}">￥{{item.totalPrice}}</text>    
         </view>
         <view class="order-list">
           <text class="list-item">订单时间：{{item.payTime}}</text>       
