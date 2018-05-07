@@ -14,7 +14,7 @@ $(function () {
                 this.orderDetail = data.data;
                 $("#pay-qrcode").attr('src', data.data.paycodeurl)
                 $("#pay_money").append(data.data.totalPrice / 100)
-                $('#pay_cashback').append(data.data.cashback||0)
+                $('#pay_cashback').append(data.data.cashback || 0)
                 $("#pay_name").append(data.data.insureName)
                 $('#pay_cardid').append(data.data.expressNumber)
                 $('#pay_bank').append(data.data.expressCompany)
@@ -37,7 +37,8 @@ $(function () {
                 data.quoteRecord.shangyeList.map((item, index) => {
                     shangyeTotalPrice = Number(item.insurancePrice) + shangyeTotalPrice;
                 });
-                totalPrice = (qiangzhiTotalPrice + shangyeTotalPrice).toFixed(2);
+                shangyeTotalPrice = (shangyeTotalPrice + data.quoteRecord.additionalPrice).toFixed(2)
+                totalPrice = (qiangzhiTotalPrice + shangyeTotalPrice + data.quoteRecord.additionalPrice).toFixed(2);
                 $('#cashback').append(data.data.cashback || 0)
                 $('#totalPrice').append(totalPrice)
                 $('#qiangzhiTotalPrice').append(qiangzhiTotalPrice)
@@ -50,10 +51,7 @@ $(function () {
                         '<span>￥' + item.insurancePrice + '</span>' +
                         '</div>';
                 }
-
                 document.getElementById('insurance-div').innerHTML = html;
-
-
                 var html1 = "";
                 for (var item of data.quoteRecord.shangyeList) {
                     html1 += '<div class="detail-line">' +
@@ -73,7 +71,10 @@ $(function () {
                         '</div>';
 
                 }
-
+                html1 = html1 + '<div class="detail-line">' +
+                    '<span>' + 不计免赔险 + '</span>' +
+                    '<span>' + data.quoteRecord.additionalPrice + '</span>' +
+                    '</div>'
                 document.getElementById('insurance-div2').innerHTML = html1;
 
             }

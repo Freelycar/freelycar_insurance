@@ -171,8 +171,9 @@
     </view>
     <view class="insurance-total">
       <view class="insurance-discount">
-        (<text class="insurance-discount-red">￥{{cashback}}</text>
-        现金红包已到账)
+        (<text wx:if="{{!orderDetail.cashbackTime}}">小易返现</text><text class="insurance-discount-red">￥{{cashback}}</text>
+        <text wx:if="{{orderDetail.cashbackTime}}">现金红包已到账</text>
+        )
       </view>
       <text class="insurance-total-price">合计：￥{{totalPrice}}</text>
     </view>
@@ -330,7 +331,7 @@ export default class OrderDetail extends wepy.page {
         this.cashback = res.data.quoteRecord.backmoney || 0;
         this.totalPrice = totalPrice;
         this.qiangzhiTotalPrice = qiangzhiTotalPrice;
-        this.shangyeTotalPrice = shangyeTotalPrice + additionalPrice; // 不计免赔险
+        this.shangyeTotalPrice = (shangyeTotalPrice + additionalPrice).toFixed(2); // 不计免赔险
         this.quoteRecord = res.data.quoteRecord;
         justifyNull(res.data.invoiceInfo);
         this.invoiceInfo = res.data.invoiceInfo;
