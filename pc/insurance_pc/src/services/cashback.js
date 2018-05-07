@@ -9,8 +9,5 @@ export async function getCurentCashBackRate(params) {
 //     return request(`api/cashbackrecord/saveupdateCashBackRate?${stringify(params)}`);
 // }
 export async function saveupdateCashBackRate(params) {
-    return request('api/cashbackrecord/saveupdateCashBackRate', {
-      method: 'POST',
-      body: params,
-    });
+    return request(`api/cashbackrecord/saveupdateCashBackRate?${stringify(params)}`);
 }

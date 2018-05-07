@@ -106,7 +106,7 @@
     <image class="freelycar_logo" src="https://www.howmuchweb.com/carInsurance/imgs/freelycar_logo_color.png"/>
     <view class="order-info">订单编号：{{orderDetail.orderId}}</view>
     <view class="order-info">订单状态：{{orderDetail.stateString}}</view>
-    <view class="order-info">订单时间：{{odrderDetail.createTime}}</view>
+    <view class="order-info">订单时间：{{orderDetail.createTime}}</view>
     <view class="order-info">付款时间：{{orderDetail.payTime}}</view>
     <view class="order-info">发货时间：{{orderDetail.deliveredTime}}</view>
     <view class="order-info">返现时间：{{orderDetail.cashbackTime}}</view>
@@ -150,6 +150,11 @@
             <text>￥{{item.insurancePrice}}</text>
           </view>
         </block>
+         <view wx:if="{{quoteRecord.additionalPrice}}" class="detail-line">
+            <text> 不计免赔险
+            </text>
+            <text>￥{{quoteRecord.additionalPrice}}</text>
+          </view>
         <!-- <view class="detail-line">
           <text>车辆损失险 <text  class="detail-line-info">不计免赔</text></text>
           <text>￥950</text>
@@ -166,8 +171,9 @@
     </view>
     <view class="insurance-total">
       <view class="insurance-discount">
-        (<text class="insurance-discount-red">￥{{cashback}}</text>
-        现金红包已到账)
+        (<text wx:if="{{!orderDetail.cashbackTime}}">小易返现</text><text class="insurance-discount-red">￥{{cashback}}</text>
+        <text wx:if="{{orderDetail.cashbackTime}}">现金红包已到账</text>
+        )
       </view>
       <text class="insurance-total-price">合计：￥{{totalPrice}}</text>
     </view>
@@ -229,8 +235,8 @@ export default class OrderDetail extends wepy.page {
     id: '',
     orderDetail: '',
     reciver: '',
-    quoteRecord: '',// 投保方案
-    invoiceInfo: '',// 保单收货信息
+    quoteRecord: '', // 投保方案
+    invoiceInfo: '', // 保单收货信息
     qiangzhiTotalPrice: 0,
     shangyeTotalPrice: 0,
     totalPrice: 0,
@@ -259,7 +265,8 @@ export default class OrderDetail extends wepy.page {
         }
       });
     },
-    copyTBL: () => {  // 复制运单号码
+    copyTBL: () => {
+      // 复制运单号码
       wepy.setClipboardData({
         data: this.orderDetail.expressNumber,
         success: res => {
@@ -295,6 +302,9 @@ export default class OrderDetail extends wepy.page {
         console.log(res.data);
         justifyNull(res.data.data);
         this.state = res.data.data.state;
+        res.data.data.createTime = timestampToTime(
+          res.data.data.createTime/1000
+        );
         this.orderDetail = res.data.data;
         justifyNull(res.data.reciver);
         this.reciver = res.data.reciver;
@@ -307,6 +317,7 @@ export default class OrderDetail extends wepy.page {
         );
         let qiangzhiTotalPrice = 0;
         let shangyeTotalPrice = 0;
+        let additionalPrice = Number(res.data.quoteRecord.additionalPrice);
         let totalPrice = 0;
         res.data.quoteRecord.qiangzhiList.map((item, index) => {
           qiangzhiTotalPrice = Number(item.insurancePrice) + qiangzhiTotalPrice;
@@ -314,11 +325,16 @@ export default class OrderDetail extends wepy.page {
         res.data.quoteRecord.shangyeList.map((item, index) => {
           shangyeTotalPrice = Number(item.insurancePrice) + shangyeTotalPrice;
         });
-        totalPrice = (qiangzhiTotalPrice + shangyeTotalPrice).toFixed(2);
-        this.cashback = res.data.data.cashback || 0;
+        console.log(additionalPrice);
+        totalPrice = (
+          qiangzhiTotalPrice +
+          shangyeTotalPrice +
+          additionalPrice
+        ).toFixed(2);
+        this.cashback = res.data.quoteRecord.backmoney || 0;
         this.totalPrice = totalPrice;
         this.qiangzhiTotalPrice = qiangzhiTotalPrice;
-        this.shangyeTotalPrice = shangyeTotalPrice;
+        this.shangyeTotalPrice = (shangyeTotalPrice + additionalPrice).toFixed(2); // 不计免赔险
         this.quoteRecord = res.data.quoteRecord;
         justifyNull(res.data.invoiceInfo);
         this.invoiceInfo = res.data.invoiceInfo;
