@@ -212,8 +212,11 @@ public class OrderService
 		if(reciverByOrderId != null){
 			jsonres.put("reciver", reciverByOrderId);
 		}
-		
-    	return jsonres;
+		InvoiceInfo invoiceByOrderId = invoiceInfoDao.getInvoiceInfoByOrderId(orderId);
+		if(reciverByOrderId != null){
+			jsonres.put("invoiceInfo", invoiceByOrderId);
+		}
+		return jsonres;
     }
     
     
