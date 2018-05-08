@@ -78,6 +78,7 @@ public class QuoteRecordDao
 		QueryUtils utils = new QueryUtils(getSession(), "from QuoteRecord");
 		if(quoteRecord != null){
 			utils = utils.addStringLike("openId", quoteRecord.getOpenId());
+			utils = utils.addInteger("clientId", quoteRecord.getClientId());
 		}
 		utils.addOrderByDesc("createTime");
 		return utils.setFirstResult(from)
