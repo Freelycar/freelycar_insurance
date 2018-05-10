@@ -162,7 +162,7 @@ class BasicLayout extends React.PureComponent {
       onCancel={() => this.setState({rateModalShow: false})}
       onOk={this.saveupdateCashBackRate}
     >
-      <span>返现率：</span><Input placeholder="请输入返现率" style={{width: 200}} value={this.state.rate || 100} onChange={(e) => this.setState({rate: e.target.value})} />  %
+      <span>返现率：</span><Input placeholder="请输入返现率" style={{width: 200}} value={this.state.rate} onChange={(e) => this.setState({rate: e.target.value})} />  %
       
     </Modal>
   }
@@ -187,6 +187,12 @@ class BasicLayout extends React.PureComponent {
     if (!checkModal.isRealNum(this.state.rate)) {
       message.destroy();
       message.warn('请输入正确数字');
+      return;
+    }
+    if (this.state.rate > 100) {
+      this.setState({ rate: 0})
+      message.destroy();
+      message.warn('请输入小于100的数字');
       return;
     }
     saveupdateCashBackRate({
