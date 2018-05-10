@@ -51,6 +51,9 @@ public class OrderService
     
     @Autowired
     private InvitionDao invitionDao;
+
+    @Autowired
+    private CashbackRecordDao cashbackRecordDao;
     
     public Map<String, Object> getOrderById(int id){
     	InsuranceOrder orderById = orderDao.getOrderById(id);
@@ -60,6 +63,11 @@ public class OrderService
     		if(Tools.notEmpty(orderId)){
     			Map<String, Object> res = fingOrderIdRelative(orderId);
         		res.put("data", orderById);
+
+        		//添加cashbackRecord信息（返现开户行信息）
+				CashbackRecord cashbackRecord = cashbackRecordDao.getCashbackRecordByOrderId(orderId);
+				res.put("cashbackRecord", cashbackRecord);
+
         		return res;
     		}
     		return jsonres;
