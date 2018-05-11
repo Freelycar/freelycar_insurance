@@ -1,3 +1,5 @@
 carInsurance/src/jdbc.properties
 carInsurance/.settings/org.eclipse.core.resources.prefs
 carInsurance/.classpath
+*.iml
+.idea
