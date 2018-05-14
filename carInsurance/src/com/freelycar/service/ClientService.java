@@ -124,14 +124,19 @@ public class ClientService
 	    			c.setLeastOrderTime(insuranceOrder.getCreateTime());
 	    		}
 	    	}
+
+	    	/*
+	    	1.如果是“未投保”查询，按照“报价时间”倒序
+	    	2.如果是“已投保”查询，按照“订单时间”倒序
+	    	 */
 	    	if(client.isToubao())
 	    	{
 	    		Collections.sort(listPage, new Comparator<Client>() {  
 		            @Override  
-		            public int compare(Client s1, Client s2) {  
-		            	//System.out.println(s1.getLeastOrderTime());
-		            	//System.out.println(s2.getLeastOrderTime());
-		            	return (int) (s1.getLeastOrderTime() - s2.getLeastOrderTime());
+		            public int compare(Client s1, Client s2) {
+						Long s1_OrderTime = s1.getLeastOrderTime() == null ? 0L : s1.getLeastOrderTime();
+						Long s2_OrderTime = s2.getLeastOrderTime() == null ? 0L : s2.getLeastOrderTime();
+		            	return (int) (s1_OrderTime - s2_OrderTime);
 		            }  
 		        }); 
 	    	}
@@ -140,9 +145,9 @@ public class ClientService
 		    	Collections.sort(listPage, new Comparator<Client>() {  
 		            @Override  
 		            public int compare(Client s1, Client s2) {  
-		            	/*System.out.println(s1.getLeastQuoteTime());
-		            	System.out.println(s2.getLeastQuoteTime());*/
-		            	return (int) (s1.getLeastQueryTime() - s2.getLeastQueryTime());
+						Long s1_QuoteTime = s1.getLeastQuoteTime() == null ? 0L : s1.getLeastQuoteTime();
+						Long s2_QuoteTime = s2.getLeastQuoteTime() == null ? 0L : s2.getLeastQuoteTime();
+		            	return (int) (s1_QuoteTime - s2_QuoteTime);
 		            }  
 		        });  
 	    	}
