@@ -142,7 +142,7 @@ export default class ChannelManage extends PureComponent {
             if (res.code == 0) {
                 res.data.map((item, index) => {
                     item.key = item.id;
-                    item.createTime = moment.unix(item.createTime / 1000).format('YYYY-MM-DD hh:mm');
+                    item.createTime = moment.unix(item.createTime / 1000).format('YYYY-MM-DD HH:mm');
                 })
                 this.setState({
                     listData: res.data,

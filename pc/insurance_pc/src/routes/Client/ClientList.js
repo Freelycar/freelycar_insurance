@@ -215,9 +215,9 @@ export default class ClientList extends PureComponent {
                 res.data.map((item, index) => {
                     res.data[index].key = item.id
                 })
-                this.setState({
+                    this.setState({
                     quotingData: res.data,
-                    pagination: { total: res.counts }
+                    pagination:{ total:res.counts}
                 })
             }
         }).catch(err => {
@@ -401,7 +401,7 @@ export default class ClientList extends PureComponent {
                             dataSource={this.state.type == '0' ? this.state.quotingData : this.state.quotedData}
                             columns={tableColumns}
                             onChange={(pagination) => this.handleTableChange(pagination)}
-                            pagination={this.state.pagination}
+                            pagination={ this.state.pagination}
                         />
                     </div>
                 </Card>
