@@ -67,7 +67,7 @@ public class OrderDao
     
     //查询最新的查询Order
     public QuoteRecord getLatestQuoteByNameLice(String ownerName,String licenseNumber){
-    	String hql = "from QuoteRecord where ownerName = :ownerName and licenseNumber = :licenseNumber ORDER BY createTime,id desc";
+    	String hql = "from QuoteRecord where ownerName = :ownerName and licenseNumber = :licenseNumber ORDER BY createTime desc,id desc";
     	QuoteRecord result = (QuoteRecord) getSession().createQuery(hql)
     			.setString("ownerName", ownerName)
     			.setString("licenseNumber", licenseNumber)
