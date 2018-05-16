@@ -123,7 +123,7 @@ public class OrderService
     
     public Map<String, Object> getCountBySourId(Date startTime,Date endTime){
     	if(startTime.getTime()==endTime.getTime()){
-    		//表示同一题
+    		//表示同一天
     		startTime = Tools.setTimeToBeginningOfDay(startTime);
     		endTime = Tools.setTimeToEndofDay(endTime);
     	}
@@ -144,8 +144,11 @@ public class OrderService
     		String source = (String)obj[1];
     		if(Tools.isEmpty(source)){
     			Invition invitionById = invitionDao.getInvitionById(sourceId);
-    			source = invitionById.getName();
-    			
+				if (null != invitionById) {
+					source = invitionById.getName();
+				}else{
+					source = "[已删除的渠道]";
+				}
     		}
     		count.setSource(source);
     		count.setPrice((long)obj[2]);

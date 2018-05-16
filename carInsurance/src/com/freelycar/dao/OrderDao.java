@@ -101,7 +101,7 @@ public class OrderDao
     
     //根据id查询Order dealtime ：成交时间
     public List<Object[]> getCountBySourId(Date startTime, Date endTime){
-    	String sql = "select sourceId, source, sum(totalPrice) from InsuranceOrder where dealTime > :startTime and dealTime<= :endTime group by sourceId";
+    	String sql = "select sourceId, source, sum(totalPrice) from InsuranceOrder where sourceId <>0 AND dealTime > :startTime and dealTime<= :endTime group by sourceId";
     	@SuppressWarnings("unchecked")
 		List<Object[]> list = getSession().createQuery(sql)
     							.setLong("startTime", startTime.getTime())
