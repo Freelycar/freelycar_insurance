@@ -113,7 +113,7 @@ public class OrderDao
     //根据id查询Order
     @SuppressWarnings("unchecked")
 	public List<Object[]> listCount(Invition invition, int page,int number,Date startTime, Date endTime){
-    	String sql = "select sourceId, source, sum(totalPrice) from InsuranceOrder where dealTime > :startTime and dealTime<= :endTime";
+    	String sql = "select sourceId, source, sum(totalPrice) from InsuranceOrder where sourceId <>0 AND dealTime > :startTime and dealTime<= :endTime";
     	if(Tools.notEmpty(invition.getName())){
     		sql += " and source like  :invName";
     	}
