@@ -335,6 +335,11 @@ public class OrderService
 				reciverByOrderId.setRemark(order.getRemark());
 			}
 			order.setReciver(reciverByOrderId);
+
+			//如果返现金额为null，则设置为0显示
+            if (Tools.isEmpty(order.getBackmoney())) {
+			    order.setBackmoney("0");
+            }
 		}
 		
 		
