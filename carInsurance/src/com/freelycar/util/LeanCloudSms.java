@@ -10,8 +10,8 @@ import com.avos.avoscloud.AVOSCloud;
 public class LeanCloudSms {
 
 	static {
-		AVOSCloud.initialize("YPVPvcghD0yT1CtQKUOpOUGI-gzGzoHsz", "AnrwmLo01qL7RuKNbV0NwWR4",
-				"TPP91RhAzOntQMb2elHO7nKu");
+		AVOSCloud.initialize("HIktLTOXYtCUOliWdq2XLlbR-gzGzoHsz", "3rhewMSocLrXdN1PrWifb5T3",
+				"VPp1zn6x40touQFHB1EmQcfD");
 	}
 
 	// https://leancloud.cn/docs/sms-guide.html#hash1173669716
