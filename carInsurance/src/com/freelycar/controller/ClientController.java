@@ -64,6 +64,10 @@ public class ClientController
     			client.setSource(invitionByInvcode2.getName());
     		}
     		client.setLicenseNumber(entity.getLicenseNumber());
+    		client.setCashback(false);
+    		client.setQuoteStateCode(0);
+    		client.setTransfer(false);
+			client.setToubao(false);
     		logger.debug("短信验码字的client"+client);
     		return clientService.saveClient(client);
     	}
