@@ -68,8 +68,6 @@ const columns = [
                     return '待签收';
                 case 7:
                     return '已投保';
-                default:
-                    return '状态未知'
             }
         }
     },
@@ -108,7 +106,7 @@ const alreadyColumns = [
     },
     {
         title: '订单时间',
-        dataIndex: 'leastOrderTime',
+        dataIndex: 'time',
     },
     {
         title: '订单状态',
@@ -131,8 +129,6 @@ const alreadyColumns = [
                     return '待签收';
                 case 7:
                     return '已投保';
-                default:
-                    return '状态未知'
             }
         }
     },
@@ -175,7 +171,8 @@ export default class ClientList extends PureComponent {
         type: '0', // 0 未投保 1 已投保,
         quotingData: [],
         quotedData: [],
-        pagination: { total: 0 },
+        pagination: { total: 0 }, 
+        fieldsValues:{}       
     };
 
     componentDidMount() {
@@ -215,9 +212,9 @@ export default class ClientList extends PureComponent {
                 res.data.map((item, index) => {
                     res.data[index].key = item.id
                 })
-                    this.setState({
+                this.setState({
                     quotingData: res.data,
-                    pagination:{ total:res.counts}
+                    pagination: { total: res.counts }
                 })
             }
         }).catch(err => {
@@ -239,13 +236,15 @@ export default class ClientList extends PureComponent {
         e.preventDefault();
 
         const { form } = this.props;
-
-        form.validateFields((err, fieldsValue) => {
+        form.validateFields((err,fieldsValues) => {
             if (err) return;
-            console.log(fieldsValue);
+            // console.log(fieldsValues);
+            this.setState({
+                fieldsValues:fieldsValues
+            })
             const values = {
-                ...fieldsValue,
-                updatedAt: fieldsValue.updatedAt && fieldsValue.updatedAt.valueOf(),
+                ...fieldsValues,
+                updatedAt: fieldsValues.updatedAt && fieldsValues.updatedAt.valueOf(),
             };
 
             this.getClientList(values, 1);
@@ -340,7 +339,7 @@ export default class ClientList extends PureComponent {
                 </Row>
                 <div style={{ overflow: 'hidden' }}>
                     <span style={{ float: 'right', marginBottom: 24 }}>
-                        <Button type="primary" htmlType="submit">查询</Button>
+                        <Button type="primary" htmlType="submit" onClick={this.handleSearch}>查询</Button>
                         <Button style={{ marginLeft: 8 }} onClick={this.handleFormReset}>重置</Button>
                     </span>
                 </div>
@@ -356,19 +355,19 @@ export default class ClientList extends PureComponent {
         this.setState({ type: e.target.value }, () => this.getClientList({}, 1));
     }
 
-    handleTableChange = (pagination) => {
+    handleTableChange = (pagination,data) => {
         const pager = { ...this.state.pagination };
         pager.current = pagination.current;
         this.setState({
             pagination: pager
         })
-        console.log(pagination)
-        this.getClientList({}, pagination.current)
+        console.log( pagination)
+        this.getClientList(this.state.fieldsValues,  pagination.current)
     }
 
-    exprotExcel = () => {   //导出excel  TODO
+    // exprotExcel = () => {   //导出excel  TODO
 
-    }
+    // }
 
     render() {
         const { type } = this.state;
@@ -394,14 +393,17 @@ export default class ClientList extends PureComponent {
                             {this.renderForm()}
                         </div>
                         <div className={styles.tableListOperator}>
-                            <Button type="primary" icon="download" size='large' onClick={this.exprotExcel} >导出</Button>
+                            <a href="/carInsurance/api/excel/exportClient">
+                                <Button type="primary" icon="download" size='large'>导出</Button>
+                            </a>   
                         </div>
+                            
                         <Table
                             // loading={loading}
                             dataSource={this.state.type == '0' ? this.state.quotingData : this.state.quotedData}
                             columns={tableColumns}
                             onChange={(pagination) => this.handleTableChange(pagination)}
-                            pagination={ this.state.pagination}
+                            pagination={this.state.pagination}
                         />
                     </div>
                 </Card>

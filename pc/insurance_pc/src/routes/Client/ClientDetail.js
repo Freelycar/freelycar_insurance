@@ -148,13 +148,14 @@ export default class ClientDetail extends PureComponent {
             expandForm: false,
             formValues: {},
             type: '0', // 0 未投保 1 已投保
+            licenseNumber: '',
             clientInfo: {
                 name: '',
                 phone: '',
                 IDCard: '',
                 carNumber: '',
                 limitDate: '',
-                source: ''
+                source: '',
             },
             recordData: [],
             orderList: [{
@@ -175,7 +176,6 @@ export default class ClientDetail extends PureComponent {
     componentDidMount() {
         this.queryClientDetail();
         this.getQuoteRecordList();
-        this.getClientOrderByLicenseNumber(1);
     }
 
     queryClientDetail = () => {
@@ -184,7 +184,10 @@ export default class ClientDetail extends PureComponent {
         }).then(res => {
             if (res.code == 0) {
                 this.setState({
-                    clientInfo: res.data
+                    clientInfo: res.data,
+                    licenseNumber: res.data.licenseNumber
+                },function(){
+                    this.getClientOrderByLicenseNumber(1);
                 });
             } else {
                 message.destroy();
@@ -203,6 +206,7 @@ export default class ClientDetail extends PureComponent {
             number: 3,
             clientId: this.state.clientId
         }).then(res => {
+            console.log(this.state)
             if (res.code == 0) {
                 res.data.map((item, index) => {
                     res.data[index].key = index;
@@ -226,8 +230,8 @@ export default class ClientDetail extends PureComponent {
 
     getClientOrderByLicenseNumber = (page) => {
         getClientOrderByLicenseNumber({
-            licenseNumber: '苏A4PZ99',
-            page: 1,
+            licenseNumber: this.state.licenseNumber,
+            page: page,
             number: 5
         }).then(res => {
             console.log(res);
@@ -281,7 +285,7 @@ export default class ClientDetail extends PureComponent {
                 title: '报价时间',
                 dataIndex: 'createTime',
                 render: val => {
-                    return moment(val).format('YYYY-MM-DD hh:mm');
+                    return moment(val).format('YYYY-MM-DD HH:mm');
                 }
             },
             {
@@ -295,7 +299,7 @@ export default class ClientDetail extends PureComponent {
                 title: '订单时间',
                 dataIndex: 'createTime',
                 render: val => {
-                    return moment(val * 1000).format('YYYY-MM-DD hh:mm');
+                    return moment(val).format('YYYY-MM-DD HH:mm');
                 }
             }, {
                 title: '订单编号',
@@ -309,7 +313,7 @@ export default class ClientDetail extends PureComponent {
                             })
                         }} >{text}</a>
                     } else {
-                        return <a >{text}</a>
+                        return <a>{text}</a>
                     }
                 }
             }, {
@@ -335,14 +339,14 @@ export default class ClientDetail extends PureComponent {
                 title: '返现时间',
                 dataIndex: 'cashbackTime',
                 render: val => {
-                    return moment(val * 1000).format('YYYY-MM-DD hh:mm');
+                    return val == 0 ? null : moment(val).format('YYYY-MM-DD HH:mm');
                 }
             },
             {
                 title: '付款时间',
                 dataIndex: 'payTime',
                 render: val => {
-                    return moment(val * 1000).format('YYYY-MM-DD hh:mm');
+                    return (val ==null ? null : moment(val).format('YYYY-MM-DD HH:mm'))
                 }
             },
             {

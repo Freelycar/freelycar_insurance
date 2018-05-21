@@ -23,11 +23,12 @@ export default {
     template: './src/index.ejs',
   },
   publicPath: 'https://www.howmuchweb.com/carInsurance/',
+  // publicPath: '/',
   disableDynamicImport: true,
   hash: true,
   proxy: {
     '/api': {
-      target: "https://www.howmuchweb.com/carInsurance/api",
+      target: "http://www.howmuchweb.com/carInsurance/api",
       changeOrigin: true,
       pathRewrite: {
         "^/api": ""
