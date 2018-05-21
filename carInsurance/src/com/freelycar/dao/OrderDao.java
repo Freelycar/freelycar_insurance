@@ -67,7 +67,7 @@ public class OrderDao
     
     //查询最新的查询Order
     public QuoteRecord getLatestQuoteByNameLice(String ownerName,String licenseNumber){
-    	String hql = "from QuoteRecord where ownerName = :ownerName and licenseNumber = :licenseNumber ORDER BY createTime,id desc";
+    	String hql = "from QuoteRecord where ownerName = :ownerName and licenseNumber = :licenseNumber ORDER BY createTime desc,id desc";
     	QuoteRecord result = (QuoteRecord) getSession().createQuery(hql)
     			.setString("ownerName", ownerName)
     			.setString("licenseNumber", licenseNumber)
@@ -101,7 +101,7 @@ public class OrderDao
     
     //根据id查询Order dealtime ：成交时间
     public List<Object[]> getCountBySourId(Date startTime, Date endTime){
-    	String sql = "select sourceId, source, sum(totalPrice) from InsuranceOrder where dealTime > :startTime and dealTime<= :endTime group by sourceId";
+    	String sql = "select sourceId, source, sum(totalPrice) from InsuranceOrder where sourceId <>0 AND dealTime > :startTime and dealTime<= :endTime group by sourceId";
     	@SuppressWarnings("unchecked")
 		List<Object[]> list = getSession().createQuery(sql)
     							.setLong("startTime", startTime.getTime())
@@ -113,7 +113,7 @@ public class OrderDao
     //根据id查询Order
     @SuppressWarnings("unchecked")
 	public List<Object[]> listCount(Invition invition, int page,int number,Date startTime, Date endTime){
-    	String sql = "select sourceId, source, sum(totalPrice) from InsuranceOrder where dealTime > :startTime and dealTime<= :endTime";
+    	String sql = "select sourceId, source, sum(totalPrice) from InsuranceOrder where sourceId <>0 AND dealTime > :startTime and dealTime<= :endTime";
     	if(Tools.notEmpty(invition.getName())){
     		sql += " and source like  :invName";
     	}

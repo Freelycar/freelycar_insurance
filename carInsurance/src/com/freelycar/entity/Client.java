@@ -50,14 +50,14 @@ public class Client
 	
     private String idCard;  //身份证号码;
 	
-    private boolean transfer;  //是否过户;
-    private boolean toubao;  //是否投保;
-    private boolean cashback;  //是否返现
+    private Boolean transfer;  //是否过户;
+    private Boolean toubao;  //是否投保;
+    private Boolean cashback;  //是否返现
     
     private String source;//来源
     
     private String quoteState;//报价状态
-    private int quoteStateCode;
+    private Integer quoteStateCode;
 	
     private Long transferTime;  //过户日期;
 	private Long leastQueryTime; // 获取报价时间
@@ -79,7 +79,7 @@ public class Client
       
     }  
   
-    public Client(String openId, String nickName, String headImg, String ownerName, String licenseNumber, String phone, String idCard, boolean transfer, Long transferTime, Long insuranceDeadline) {  
+    public Client(String openId, String nickName, String headImg, String ownerName, String licenseNumber, String phone, String idCard, Boolean transfer, Long transferTime, Long insuranceDeadline) {
         this.openId = openId;  
         this.nickName = nickName;  
         this.headImg = headImg;  
@@ -94,7 +94,7 @@ public class Client
   
     /********** get/set ***********/  
     
-   public int getQuoteStateCode() {
+   public Integer getQuoteStateCode() {
 	return quoteStateCode;
    }
    
@@ -107,7 +107,7 @@ public class Client
 	   this.leastQuoteTime = leastQuoteTime;
    }
    
-   public void setQuoteStateCode(int quoteStateCode) {
+   public void setQuoteStateCode(Integer quoteStateCode) {
 	this.quoteStateCode = quoteStateCode;
    }
     
@@ -217,11 +217,11 @@ public class Client
     }  
       
 	
-    public boolean getTransfer() {  
+    public Boolean getTransfer() {
         return transfer;  
     }  
   
-    public void setTransfer(boolean transfer) {  
+    public void setTransfer(Boolean transfer) {
         this.transfer = transfer;  
     }  
       
@@ -244,11 +244,11 @@ public class Client
     }  
       
 
-    public boolean isToubao() {
+    public Boolean isToubao() {
 		return toubao;
 	}
     
-    public void setToubao(boolean toubao) {
+    public void setToubao(Boolean toubao) {
 		this.toubao = toubao;
 	}
     
@@ -265,11 +265,11 @@ public class Client
 		this.quoteState = quoteState;
 	}
     
-    public boolean isCashback() {
+    public Boolean isCashback() {
 		return cashback;
 	}
     
-    public void setCashback(boolean cashback) {
+    public void setCashback(Boolean cashback) {
 		this.cashback = cashback;
 	}
     

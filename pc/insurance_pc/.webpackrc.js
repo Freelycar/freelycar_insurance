@@ -3,7 +3,7 @@ const path = require('path');
 export default {
   entry: 'src/index.js',
   extraBabelPlugins: [
-    'transform-decorators-legacy', ['import', {
+    ['import', {
       libraryName: 'antd',
       libraryDirectory: 'es',
       style: true
@@ -22,8 +22,7 @@ export default {
   html: {
     template: './src/index.ejs',
   },
-  publicPath: 'https://www.howmuchweb.com/carInsurance/',
-  // publicPath: '/',
+  publicPath: 'http://www.howmuchweb.com/carInsurance/',
   disableDynamicImport: true,
   hash: true,
   proxy: {

@@ -3,12 +3,14 @@ package com.freelycar.dao;
 import com.freelycar.entity.Client;
 import com.freelycar.util.QueryUtils;
 import com.freelycar.util.SqlHelper;
+import com.freelycar.util.Tools;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import java.math.BigInteger;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -101,6 +103,103 @@ public class ClientDao {
                 .getQuery().list();
     }
 
+    /**
+     * 查询未投保的车险客户
+     *
+     * @param client 查询条件
+     * @param from   数据起始行
+     * @param num    查询个数
+     * @return Client集合
+     */
+    public List<Client> listClientOrderByQuoteTimeDescByPage(Client client, int from, int num) {
+        //其他条件
+        String licenseNumber = null;
+        String phone = null;
+        String source = null;
+        Integer quoteStateCode = null;
+
+        //赋值
+        if (null != client) {
+            licenseNumber = client.getLicenseNumber();
+            phone = client.getPhone();
+            source = client.getSource();
+            quoteStateCode = client.getQuoteStateCode();
+        }
+
+
+        StringBuilder sql = new StringBuilder();
+        sql.append(" select c.id,c.headImg,c.idCard,c.insuranceDeadline,c.licenseNumber,c.nickName,c.openId,c.ownerName,c.phone,c.toubao,c.transfer,c.transferTime,c.cashback,c.source,c.quoteStateCode,c.leastQueryTime,qr.createTime as leastQuoteTime,qr.state as quoteState ")
+                .append(" from Client c left join (select createTime,state,licenseNumber,ownerName from QuoteRecord qr where createTime in (select max(createTime) from QuoteRecord group by licenseNumber,ownerName)) qr on qr.licenseNumber=c.licenseNumber and qr.ownerName=c.ownerName where c.toubao=0 ");
+
+        if (Tools.notEmpty(licenseNumber)) {
+            sql.append(" and c.licenseNumber like '%" + licenseNumber + "%' ");
+        }
+        if (Tools.notEmpty(phone)) {
+            sql.append(" and c.phone like '%" + phone + "%' ");
+        }
+        if (Tools.notEmpty(source)) {
+            sql.append(" and c.source like '%" + source + "%' ");
+        }
+        if (null != quoteStateCode) {
+            sql.append(" and c.quoteStateCode = " + quoteStateCode);
+        }
+
+        sql.append(" order by qr.createTime desc ");
+
+        return getSession().createSQLQuery(sql.toString())
+                .addEntity(Client.class)
+                .setFirstResult(from)
+                .setMaxResults(num)
+                .list();
+    }
+
+    /**
+     * 查询已投保的车险客户
+     *
+     * @param client 查询条件
+     * @param from   数据起始行
+     * @param num    查询个数
+     * @return Client集合
+     */
+    public List<Client> listClientOrderByOrderTimeDescByPage(Client client, int from, int num) {
+        //其他条件
+        String licenseNumber = null;
+        Integer quoteStateCode = null;
+        Integer cashback = null;
+
+        //赋值
+        if (null != client) {
+            licenseNumber = client.getLicenseNumber();
+            quoteStateCode = client.getQuoteStateCode();
+            if (null != client.isCashback()) {
+                cashback = client.isCashback() ? 1 : 0;
+            }
+        }
+
+
+        StringBuilder sql = new StringBuilder();
+        sql.append(" select c.id,c.headImg,c.idCard,c.insuranceDeadline,c.licenseNumber,c.nickName,c.openId,c.ownerName,c.phone,c.toubao,c.transfer,c.transferTime,c.cashback,c.source,c.quoteStateCode,c.leastQueryTime,qr.createTime as leastQuoteTime,qr.state as quoteState ")
+                .append(" from Client c left join (select createTime,state,licenseNumber,insureName from InsuranceOrder qr where createTime in (select max(createTime) from InsuranceOrder group by licenseNumber,insureName)) qr on qr.licenseNumber=c.licenseNumber and qr.insureName=c.ownerName where c.toubao=1 ");
+
+        if (Tools.notEmpty(licenseNumber)) {
+            sql.append(" and c.licenseNumber like '%" + licenseNumber + "%' ");
+        }
+        if (null != quoteStateCode) {
+            sql.append(" and c.quoteStateCode = " + quoteStateCode);
+        }
+        if (null != cashback) {
+            sql.append(" and c.cashback = " + cashback);
+        }
+
+        sql.append(" order by qr.createTime desc ");
+
+        return getSession().createSQLQuery(sql.toString())
+                .addEntity(Client.class)
+                .setFirstResult(from)
+                .setMaxResults(num)
+                .list();
+    }
+
 
     //查询所有导出的client
     @SuppressWarnings("unchecked")
@@ -127,25 +226,58 @@ public class ClientDao {
 
 
     /**
-     * 查询Client的总数
-     *
-     * @return
+     * 查询列表：获取相应条件下的数据总数
+     * @param client    查询条件
+     * @return  统计的总数
      */
-    public long getClientCount(Client client) {
-        QueryUtils utils = new QueryUtils(getSession(), "select count(*) from Client");
+    public BigInteger getClientCount(Client client) {
 
-        if (client != null) {
-            utils = utils.addStringLike("idCard", client.getIdCard())
-                    .addStringLike("source", client.getSource())
-                    .addStringLike("licenseNumber", client.getLicenseNumber())
-                    .addString("nickName", client.getNickName())
-                    .addInteger("quoteStateCode", client.getQuoteStateCode())
-                    .addBoolean("transfer", client.getTransfer())
-                    .addBoolean("toubao", client.isToubao())
-                    .addBoolean("cashback", client.isCashback())
-                    .addString("phone", client.getPhone());
+        Integer toubao = null;
+        //其他条件
+        String licenseNumber = null;
+        String phone = null;
+        String source = null;
+        Integer quoteStateCode = null;
+        Integer cashback = null;
+
+        //赋值
+        if (null != client) {
+            if (null != client.isToubao()) {
+                toubao = client.isToubao() ? 1 : 0;
+            }
+            licenseNumber = client.getLicenseNumber();
+            phone = client.getPhone();
+            source = client.getSource();
+            quoteStateCode = client.getQuoteStateCode();
+            if (null != client.isCashback()) {
+                cashback = client.isCashback() ? 1 : 0;
+            }
         }
-        return (long) utils.getQuery().uniqueResult();
+
+
+        StringBuilder sql = new StringBuilder();
+        sql.append(" select count(1) from Client c where 1=1");
+
+        if (null != cashback) {
+            sql.append(" and c.toubao = " + toubao);
+        }
+        if (Tools.notEmpty(licenseNumber)) {
+            sql.append(" and c.licenseNumber like '%" + licenseNumber + "%' ");
+        }
+        if (Tools.notEmpty(phone)) {
+            sql.append(" and c.phone like '%" + phone + "%' ");
+        }
+        if (Tools.notEmpty(source)) {
+            sql.append(" and c.source like '%" + source + "%' ");
+        }
+        if (null != quoteStateCode) {
+            sql.append(" and c.quoteStateCode = " + quoteStateCode);
+        }
+        if (null != cashback) {
+            sql.append(" and c.cashback = " + cashback);
+        }
+
+        return (BigInteger) getSession().createSQLQuery(sql.toString()).uniqueResult();
     }
 
 
