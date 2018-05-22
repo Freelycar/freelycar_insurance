@@ -337,7 +337,7 @@ public class InsuranceService
 
 		if (Tools.notEmpty(entity.getIdCard())) {
 			clientByOpenId.setIdCard(entity.getIdCard());
-			clientDao.updateClient(clientByOpenId);
+			clientDao.saveClient(clientByOpenId);
 		}
 
     	
@@ -431,6 +431,7 @@ public class InsuranceService
     				inorder.setState(INSURANCE.QUOTESTATE_HEBAOING.getCode());
     				inorder.setStateString(INSURANCE.QUOTESTATE_HEBAOING.getName());
     				inorder.setCreateTime(System.currentTimeMillis());
+					inorder.setCashbackTime(0);
     				String saveId = orderDao.saveUpdateOrder(inorder,save);
     				return RESCODE.SUCCESS.getJSONRES(save?saveId:inorder.getId());
 				}
