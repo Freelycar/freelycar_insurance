@@ -282,10 +282,12 @@ public class OrderService {
         for (InsuranceOrder order : orderByLicenseNumber) {
             QuoteRecord quoteRecordBylicenseNumberAndOfferId = quoteRecordDao.getQuoteRecordBylicenseNumberAndOfferId(licenseNumber, order.getOrderId());
 
+            long totalPrice = order.getTotalPrice();
+
             String offerDetail = quoteRecordBylicenseNumberAndOfferId.getOfferDetail();
             quoteRecordBylicenseNumberAndOfferId.setQiangzhiList(QuoteRecord.getQiangzhiJsonObj(offerDetail));
             quoteRecordBylicenseNumberAndOfferId.setShangyeList(QuoteRecord.getShangYeJsonObj(offerDetail));
-            quoteRecordBylicenseNumberAndOfferId.setTotalPrice(order.getTotalPrice() + "");
+            quoteRecordBylicenseNumberAndOfferId.setTotalPrice(totalPrice + "");
             order.setQuoteRecord(quoteRecordBylicenseNumberAndOfferId);
 
             Reciver reciverByOrderId = reciverDao.getReciverByOrderId(order.getOrderId());
@@ -296,10 +298,19 @@ public class OrderService {
             }
             order.setReciver(reciverByOrderId);
 
+
+            String backMoney = order.getBackmoney();
             //如果返现金额为null，则设置为0显示
-            if (Tools.isEmpty(order.getBackmoney())) {
-                order.setBackmoney("0");
+            if (Tools.isEmpty(backMoney)) {
+                backMoney = "0";
+                order.setBackmoney(backMoney);
             }
+
+            //计算实付金额
+            Float backMoneyFloat = Float.parseFloat(backMoney);
+            float theAmountActuallyPaid = (totalPrice - backMoneyFloat * 100) / 100;
+            order.setTheAmountActuallyPaid(String.valueOf(theAmountActuallyPaid));
+
         }
 
 
