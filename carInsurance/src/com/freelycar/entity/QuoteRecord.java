@@ -222,7 +222,7 @@ public class QuoteRecord
     		OfferDetail od = new OfferDetail();
     		od.setCompensation(false);
     		od.setForce(true);
-    		od.setInsuranceName("强制险");
+    		od.setInsuranceName("交强险");
     		od.setInsurancePrice(jsonObject.getInt("quotesPrice")+"");
     		qiangzhi.add(od);
     	}

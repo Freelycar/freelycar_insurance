@@ -325,7 +325,7 @@ public class InsuranceService
     	reciverByOpenId.setReciver(entity.getReciver());
     	reciverDao.saveUpdateReciver(reciverByOpenId);
     	
-    	//更新车主的idcard
+    	//更新车主的idCard
     	if(Tools.isEmpty(entity.getLicenseNumber())){
     		return RESCODE.USER_LICENSENUMBER_EMPTY.getJSONRES();
     	}
@@ -334,8 +334,12 @@ public class InsuranceService
     	if(clientByOpenId == null){
     		return RESCODE.USER_NOT_EXIST.getJSONRES();
     	}
-    	clientByOpenId.setLicenseNumber(entity.getLicenseNumber());
-    	
+
+		if (Tools.notEmpty(entity.getIdCard())) {
+			clientByOpenId.setIdCard(entity.getIdCard());
+			clientDao.saveClient(clientByOpenId);
+		}
+
     	
     	
     	//收款信息
@@ -427,6 +431,7 @@ public class InsuranceService
     				inorder.setState(INSURANCE.QUOTESTATE_HEBAOING.getCode());
     				inorder.setStateString(INSURANCE.QUOTESTATE_HEBAOING.getName());
     				inorder.setCreateTime(System.currentTimeMillis());
+					inorder.setCashbackTime(0);
     				String saveId = orderDao.saveUpdateOrder(inorder,save);
     				return RESCODE.SUCCESS.getJSONRES(save?saveId:inorder.getId());
 				}

@@ -93,8 +93,11 @@ public class InsuranceOrder
     private QuoteRecord quoteRecord;
     @Transient
     private Reciver reciver;
-    
-    /********** constructors ***********/  
+
+    @Transient
+    private String theAmountActuallyPaid;
+
+    /********** constructors ***********/
     public InsuranceOrder() {  
       
     }  
@@ -441,7 +444,15 @@ public class InsuranceOrder
 		this.stateString = stateString;
 	}
 
-	@Override
+    public String getTheAmountActuallyPaid() {
+        return theAmountActuallyPaid;
+    }
+
+    public void setTheAmountActuallyPaid(String theAmountActuallyPaid) {
+        this.theAmountActuallyPaid = theAmountActuallyPaid;
+    }
+
+    @Override
 	public String toString() {
 		return "Order [id=" + id 
 				+ ", orderId=" + orderId

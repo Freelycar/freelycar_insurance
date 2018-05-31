@@ -31,7 +31,13 @@ public class Constant {
       }
     
     public static final String INTERFACE_BASE_URL = prop.getProperty("domain_url")+"/";
-    
+
+    /**
+     * 小易爱车公众号的url
+     * by 唐炜
+     */
+    public static final String XIAOYIAICHE_URL = prop.getProperty("xiaoyiaiche_url")+"/";
+
     
     //骆驼加油的接口 key
     public static final String LUOTUOKEY = prop.getProperty("luotuo_key");
