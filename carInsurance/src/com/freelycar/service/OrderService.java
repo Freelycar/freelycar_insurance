@@ -288,6 +288,9 @@ public class OrderService {
             quoteRecordBylicenseNumberAndOfferId.setQiangzhiList(QuoteRecord.getQiangzhiJsonObj(offerDetail));
             quoteRecordBylicenseNumberAndOfferId.setShangyeList(QuoteRecord.getShangYeJsonObj(offerDetail));
             quoteRecordBylicenseNumberAndOfferId.setTotalPrice(totalPrice + "");
+
+            quoteRecordBylicenseNumberAndOfferId.setAdditionalPrice(QuoteRecord.getAdditionalPriceObj(quoteRecordBylicenseNumberAndOfferId.getOfferDetail()));
+
             order.setQuoteRecord(quoteRecordBylicenseNumberAndOfferId);
 
             Reciver reciverByOrderId = reciverDao.getReciverByOrderId(order.getOrderId());
