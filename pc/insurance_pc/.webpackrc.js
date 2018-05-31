@@ -23,6 +23,7 @@ export default {
     template: './src/index.ejs',
   },
   publicPath: 'http://www.howmuchweb.com/carInsurance/',
+  // publicPath: '/',
   disableDynamicImport: true,
   hash: true,
   proxy: {

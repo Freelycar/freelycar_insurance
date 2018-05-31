@@ -33,7 +33,7 @@ const WaybillDetail = Form.create()((props) => {
 });
 
 const InsuranceDetail = Form.create()((props) => {
-    const { modalVisible, form, handleModalVisible } = props;
+    const { modalVisible, form,theAmountActuallyPaid, handleModalVisible } = props;
     let dataAry = [];
     if (form.qiangzhiList) {
         form.qiangzhiList.map((item, index) => {
@@ -44,13 +44,18 @@ const InsuranceDetail = Form.create()((props) => {
                 insuranceName: item.insuranceName || '',
                 insurancePrice: item.insurancePrice || '',
                 totalPrice: form.totalPrice || '',
-                pay: form.totalPrice || ''
+                theAmountActuallyPaid: theAmountActuallyPaid || '',
+                amountStr: item.amountStr || '',
+
             }
             dataAry.push(insurance);
         })
     }
     if (form.shangyeList) {
         form.shangyeList.map((item, index) => {
+            console.log('aa',item);
+            console.log('bb',form);
+            let str = item.amountStr;
             let insurance = {
                 offerId: form.offerId,
                 type: '商业险',
@@ -58,11 +63,39 @@ const InsuranceDetail = Form.create()((props) => {
                 insuranceName: item.insuranceName || '',
                 insurancePrice: item.insurancePrice || '',
                 totalPrice: form.totalPrice || '',
-                pay: form.totalPrice || ''
+                theAmountActuallyPaid: theAmountActuallyPaid || '',
+                amountStr: str.indexOf("万") != -1 ? str : '',
             }
             dataAry.push(insurance);
         })
     }
+    // if (form.shangyeList) {
+    //     form.shangyeList.map((item, index) => {
+    //         let insurance = {
+    //             offerId: form.offerId,
+    //             type: '商业险',
+    //             insuranceStartTime: moment(form.insuranceStartTime * 1000).format('YYYY-MM-DD hh:mm'),
+    //             insuranceName:'不计免赔险',
+    //             insurancePrice:'0',
+    //             totalPrice: form.totalPrice || '',
+    //             theAmountActuallyPaid: theAmountActuallyPaid || '',
+    //         }
+    //         dataAry.push(insurance);
+    //     })
+    // } 
+   
+            let insurance = {
+                offerId: form.offerId,
+                type: '商业险',
+                insuranceStartTime: moment(form.insuranceStartTime * 1000).format('YYYY-MM-DD hh:mm'),
+                insuranceName:'不计免赔险',
+                insurancePrice:form.additionalPrice || '',
+                totalPrice: form.totalPrice || '',
+                theAmountActuallyPaid: theAmountActuallyPaid || '',
+            }
+            dataAry.push(insurance);
+        
+        
     const renderContent = (value, row, index) => {
         const obj = {
             children: value,
@@ -72,16 +105,27 @@ const InsuranceDetail = Form.create()((props) => {
             
         // }
         if (index == 0) {
-            obj.props.rowSpan = form.qiangzhiList.length;
-        } else if ( index < form.qiangzhiList.length) {
+            obj.props.rowSpan = row.type.length - 1;
+        } else if ( index < (row.type.length - 1)) {
             obj.props.rowSpan = 0;
-        } else if (index == form.qiangzhiList.length) {
-            obj.props.rowSpan = form.shangyeList.length;
+        } else if (index == row.type.length - 1) {
+            obj.props.rowSpan = form.shangyeList.length + 1;
         } else {
             obj.props.rowSpan = 0;
         }
         return obj;
     };
+//     if (index == 0) {
+//         obj.props.rowSpan = form.qiangzhiList.length;
+//     } else if ( index < form.qiangzhiList.length) {
+//         obj.props.rowSpan = 0;
+//     } else if (index == form.qiangzhiList.length) {
+//         obj.props.rowSpan = form.shangyeList.length + 1;
+//     } else {
+//         obj.props.rowSpan = 0;
+//     }
+//     return obj;
+// };
 
     const allRenderContent = (value, row, index) => {
         const obj = {
@@ -104,6 +148,19 @@ const InsuranceDetail = Form.create()((props) => {
         title: '险种',
         dataIndex: 'type',
         render: renderContent,
+        //     render: (value, row, index) => {
+        //     const obj = {
+        //         children: value,
+        //         props: {},
+        //     };
+        //     if (index == 0) {
+        //         obj.props.rowSpan =2;
+        //     } else {
+        //         obj.props.rowSpan = 0
+        //     }
+        //     return obj;
+        // }
+
     }, {
         title: '起保日期',
         dataIndex: 'insuranceStartTime',
@@ -111,18 +168,58 @@ const InsuranceDetail = Form.create()((props) => {
     }, {
         title: '险种明细',
         dataIndex: 'insuranceName',
-    }, {
+        render: (text,record) => (
+            <span>
+                 {record.insuranceName}
+                 <br/>
+                 {record.amountStr}
+            </span> 
+        )
+
+               
+   
+ },{
         title: '金额(元)',
         dataIndex: 'insurancePrice',
     },{
         title: '合计(元)',
         dataIndex: 'totalPrice',
-        render: allRenderContent
-    },{
+        // render: (val,record)=>{
+        //     return val;
+        // }
+        render:(text,record,index)=>{
+            const obj = {
+                children:text/100,
+                props:{}
+            }
+            if(index===0){
+                obj.props.rowSpan = dataAry.length;
+            }else{
+                obj.props.rowSpan = 0;
+            }
+            return obj;
+        }
+     },{
         title: '实付(元)',
-        dataIndex: 'pay',
-        render: allRenderContent
+        dataIndex: 'theAmountActuallyPaid',
+        // render: (val,record)=>{
+        //     return val;
+        // }
+        render:(text,record,index)=>{
+            const obj = {
+                children:text,
+                props:{}
+            }
+            if(index===0){
+                obj.props.rowSpan = dataAry.length;
+            }else{
+                obj.props.rowSpan = 0;
+            }
+            return obj;
+            
+        }
     }];
+
    
     return (
         <Modal
@@ -130,8 +227,10 @@ const InsuranceDetail = Form.create()((props) => {
             visible={modalVisible}
             onCancel={() => handleModalVisible()}
             onOk={() => handleModalVisible()}
+            footer={null}
             width={800}
         >
+
             <Table columns={columns} dataSource={dataAry} pagination={false} bordered />
         </Modal>
     );
@@ -169,7 +268,9 @@ export default class ClientDetail extends PureComponent {
                 returnTime: '2016-40-30',
             }],
             waybillData: {},
-            insuranceDetailData: {}
+            insuranceDetailData: {},
+            theAmountActuallyPaid:'',
+            additionalPrice: '0',
         };
     }
 
@@ -309,6 +410,7 @@ export default class ClientDetail extends PureComponent {
                         return <a onClick={() => {
                             this.setState({
                                 insuranceDetailData: record.quoteRecord,
+                                theAmountActuallyPaid: record.theAmountActuallyPaid,
                                 insuranceDetailModalVisible: true
                             })
                         }} >{text}</a>
@@ -319,6 +421,9 @@ export default class ClientDetail extends PureComponent {
             }, {
                 title: '订单总额(元)',
                 dataIndex: 'totalPrice',
+                render: val => {
+                    return val/100;
+                },
             },
             {
                 title: '订单状态',
@@ -440,6 +545,8 @@ export default class ClientDetail extends PureComponent {
                 <InsuranceDetail
                     {...insuranceParentMethods}
                     modalVisible={insuranceDetailModalVisible}
+                    theAmountActuallyPaid={this.state.theAmountActuallyPaid}
+                    additionalPrice={ this.state.additionalPrice }
                 />
 
             </PageHeaderLayout >
