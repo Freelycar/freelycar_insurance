@@ -128,7 +128,7 @@ public class ClientDao {
 
 
         StringBuilder sql = new StringBuilder();
-        sql.append(" select c.id,c.headImg,c.idCard,c.insuranceDeadline,c.licenseNumber,c.nickName,c.openId,c.ownerName,c.phone,c.toubao,c.transfer,c.transferTime,c.cashback,c.source,c.quoteStateCode,c.leastQueryTime,qr.createTime as leastQuoteTime,qr.state as quoteState ")
+        sql.append(" select c.id,c.headImg,c.idCard,c.insuranceDeadline,c.licenseNumber,c.nickName,c.openId,c.ownerName,c.phone,c.toubao,c.transfer,c.transferTime,c.cashback,c.source,c.quoteStateCode,c.leastQueryTime,qr.createTime as leastQuoteTime,c.quoteState as quoteState ")
                 .append(" from Client c left join (select createTime,state,licenseNumber,ownerName from QuoteRecord qr where createTime in (select max(createTime) from QuoteRecord group by licenseNumber,ownerName)) qr on qr.licenseNumber=c.licenseNumber and qr.ownerName=c.ownerName where c.toubao=0 ");
 
         if (Tools.notEmpty(licenseNumber)) {
@@ -178,7 +178,7 @@ public class ClientDao {
 
 
         StringBuilder sql = new StringBuilder();
-        sql.append(" select c.id,c.headImg,c.idCard,c.insuranceDeadline,c.licenseNumber,c.nickName,c.openId,c.ownerName,c.phone,c.toubao,c.transfer,c.transferTime,c.cashback,c.source,c.quoteStateCode,c.leastQueryTime,qr.createTime as leastQuoteTime,qr.state as quoteState ")
+        sql.append(" select c.id,c.headImg,c.idCard,c.insuranceDeadline,c.licenseNumber,c.nickName,c.openId,c.ownerName,c.phone,c.toubao,c.transfer,c.transferTime,c.cashback,c.source,c.quoteStateCode,c.leastQueryTime,qr.createTime as leastQuoteTime,c.quoteState as quoteState ")
                 .append(" from Client c left join (select createTime,state,licenseNumber,insureName from InsuranceOrder qr where createTime in (select max(createTime) from InsuranceOrder group by licenseNumber,insureName)) qr on qr.licenseNumber=c.licenseNumber and qr.insureName=c.ownerName where c.toubao=1 ");
 
         if (Tools.notEmpty(licenseNumber)) {

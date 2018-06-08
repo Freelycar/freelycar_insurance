@@ -46,6 +46,9 @@ public class OrderpushResulService {
     private InsuranceService insuranceService;
     @Autowired
     private CashbackRecordDao cashbackDao;
+    /********** 注入ClientService ***********/
+    @Autowired
+    private ClientService clientService;
 
     //增加一个OrderpushResul
     public Map<String, Object> saveOrderpushResul(OrderpushResul orderpushResul) {
@@ -181,7 +184,8 @@ public class OrderpushResulService {
 
                 orderService.updateOrder(order);
 
-
+                //同步更新Client中的状态
+                clientService.updateClientQuoteState(order.getOpenId(),order.getState());
 
                 /*
                  * 调用方法，将待支付信息推送给微信公众号
@@ -238,7 +242,9 @@ public class OrderpushResulService {
                 String biPolicyNo = resultobj.getString("biPolicyNo");
 
 
-                //orderDao.updateOrder(orderByOrderId);
+                orderDao.updateOrder(orderByOrderId);
+                //同步更新Client中的状态
+                clientService.updateClientQuoteState(orderByOrderId.getOpenId(),orderByOrderId.getState());
 
                 Map<String, Object> msg = new HashMap<>();
                 msg.put("orderId", orderId);

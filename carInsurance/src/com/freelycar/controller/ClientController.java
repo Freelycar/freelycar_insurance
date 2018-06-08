@@ -7,6 +7,7 @@ import com.freelycar.service.InsuranceService;
 import com.freelycar.service.InvitionService;
 import com.freelycar.util.Constant;
 import com.freelycar.util.HttpClientUtil;
+import com.freelycar.util.INSURANCE;
 import com.freelycar.util.LeanCloudSms;
 
 
@@ -65,7 +66,8 @@ public class ClientController
     		}
     		client.setLicenseNumber(entity.getLicenseNumber());
     		client.setCashback(false);
-    		client.setQuoteStateCode(0);
+    		client.setQuoteStateCode(8);
+			client.setQuoteState(INSURANCE.getQuotestateName(8));
     		client.setTransfer(false);
 			client.setToubao(false);
     		logger.debug("短信验码字的client"+client);

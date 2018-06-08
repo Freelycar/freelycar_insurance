@@ -47,6 +47,10 @@ public class OrderService {
     @Autowired
     private ClientDao clientDao;
 
+    /********** 注入ClientService ***********/
+    @Autowired
+    private ClientService clientService;
+
     public Map<String, Object> getOrderById(int id) {
         InsuranceOrder orderById = orderDao.getOrderById(id);
         if (orderById != null) {
@@ -256,6 +260,10 @@ public class OrderService {
         InsuranceOrder orderById = orderDao.getOrderById(order.getId());
         orderById.setState(order.getState());
         orderDao.updateOrder(orderById);
+
+        //同步更新Client中的状态
+        clientService.updateClientQuoteState(orderById.getOpenId(),orderById.getState());
+
         return RESCODE.SUCCESS.getJSONRES();
     }
 

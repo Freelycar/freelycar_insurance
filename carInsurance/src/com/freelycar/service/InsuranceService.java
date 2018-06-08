@@ -64,6 +64,10 @@ public class InsuranceService
     
     @Autowired
     private CashbackRecordDao cashbackDao;
+
+	/********** 注入ClientService ***********/
+	@Autowired
+	private ClientService clientService;
     
 	private final static Logger logger = Logger.getLogger(InsuranceService.class);
 
@@ -433,6 +437,10 @@ public class InsuranceService
     				inorder.setCreateTime(System.currentTimeMillis());
 					inorder.setCashbackTime(0);
     				String saveId = orderDao.saveUpdateOrder(inorder,save);
+
+					//同步更新Client中的状态
+					clientService.updateClientQuoteState(inorder.getOpenId(),inorder.getState());
+
     				return RESCODE.SUCCESS.getJSONRES(save?saveId:inorder.getId());
 				}
     			
