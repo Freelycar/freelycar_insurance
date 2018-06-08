@@ -281,11 +281,12 @@ public class OrderService {
 
     //报价记录
     public Map<String, Object> getClientOrderByLicenseNumber(String licenseNumber, int page, int number) {
+        int from = (page-1)*number;
         if (Tools.isEmpty(licenseNumber)) {
             return RESCODE.USER_LICENSENUMBER_EMPTY.getJSONRES();
         }
 
-        List<InsuranceOrder> orderByLicenseNumber = orderDao.getOrderByLicenseNumber(licenseNumber, page, number);
+        List<InsuranceOrder> orderByLicenseNumber = orderDao.getOrderByLicenseNumber(licenseNumber, from, number);
         //循环出来这单的报价记录
         for (InsuranceOrder order : orderByLicenseNumber) {
             QuoteRecord quoteRecordBylicenseNumberAndOfferId = quoteRecordDao.getQuoteRecordBylicenseNumberAndOfferId(licenseNumber, order.getOrderId());
@@ -324,8 +325,8 @@ public class OrderService {
 
         }
 
-
-        return RESCODE.SUCCESS.getJSONRES(orderByLicenseNumber);
+        long count = orderDao.getOrderCountByLicenseNumber(licenseNumber);
+        return RESCODE.SUCCESS.getJSONRES(orderByLicenseNumber,(int)Math.ceil(count/(float)number),count);
     }
 
     private Double CalcuateMoneyBack(String offerDetail) {
