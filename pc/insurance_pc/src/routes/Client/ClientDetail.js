@@ -257,16 +257,7 @@ export default class ClientDetail extends PureComponent {
                 source: '',
             },
             recordData: [],
-            orderList: [{
-                orderCode: '2341234123412341234',
-                carNumber: '苏A12345',
-                time: '2018-01-20',
-                form: '天上',
-                status: '完成',
-                returnMoney: '200',
-                isReturn: '是',
-                returnTime: '2016-40-30',
-            }],
+            orderList: [],
             waybillData: {},
             insuranceDetailData: {},
             theAmountActuallyPaid:'',
@@ -329,16 +320,27 @@ export default class ClientDetail extends PureComponent {
         })
     }
 
-    getClientOrderByLicenseNumber = (page) => {
+    getClientOrderByLicenseNumber = ( page) => {
+        if (page == 1) {
+            this.setState({
+                pagination: { total: 0, current: 1 }
+            })
+        }
         getClientOrderByLicenseNumber({
             licenseNumber: this.state.licenseNumber,
             page: page,
-            number: 5
+            number: 10
         }).then(res => {
             console.log(res);
             if (res && res.code === 0) {
                 this.setState({
-                    orderList: res.data
+                    orderList: res.data,
+                    pagination: { total: res.counts }
+                })
+            } else {
+                this.setState({
+                    orderList: [],
+                    pagination: { total: 0 }
                 })
             }
         }).catch(err => {
@@ -369,6 +371,17 @@ export default class ClientDetail extends PureComponent {
             })
         }
     }
+
+    handleTableChange = (pagination) => {
+        const pager = { ...this.state.pagination };
+        pager.current = pagination.current;
+        this.setState({
+            pagination: pager
+        })
+        console.log( pagination)
+        this. getClientOrderByLicenseNumber( pagination.current)
+    }
+
 
     render() {
         const recordColumns = [
@@ -535,7 +548,8 @@ export default class ClientDetail extends PureComponent {
                         // loading={loading}
                         dataSource={this.state.orderList}
                         columns={orderColumns}
-                        pagination={false}
+                        onChange={(pagination) => this.handleTableChange(pagination)}
+                        pagination={this.state.pagination}
                     />
                 </Card>
                 <WaybillDetail

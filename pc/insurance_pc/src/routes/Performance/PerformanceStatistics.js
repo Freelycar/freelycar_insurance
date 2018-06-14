@@ -119,10 +119,11 @@ export default class PerformanceStatistics extends PureComponent {
                 this.getListCount(this.state.searchName, 1)
             })    
         } else if (type == 1) {
-            let time = moment();
+            let sTime = moment().startOf("month").format('YYYY/MM/DD');
+            let eTime = moment().endOf("month").format('YYYY/MM/DD');
             this.setState({
-                startTime: time.format('YYYY/MM/DD'),
-                endTime: time.subtract(1, "months").format("YYYY/MM/DD")
+                startTime: sTime,
+                endTime: eTime
             }, () => {
                 this.getPieChart();
                 this.getListCount(this.state.searchName, 1)

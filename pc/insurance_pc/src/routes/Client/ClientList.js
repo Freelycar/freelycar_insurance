@@ -8,164 +8,21 @@ import { getClientList, getClientDetail } from '../../services/client';
 import { Link } from 'dva/router';
 
 import styles from './ClientList.less';
-
+const queryBtnStyle=null;
 const FormItem = Form.Item;
 const { Option } = Select;
 const getValue = obj => Object.keys(obj).map(key => obj[key]).join(',');
-const columns = [
-    {
-        title: '序号',
-        // dataIndex: 'key',
-        render: (text, record, index) => {
-            return index + 1;
-        }
-    },
-    {
-        title: '车牌号码',
-        dataIndex: 'licenseNumber',
-        render: (text, record) => {
-            return <Link to={`/client/detail/${record.id}`} >
-                {text}
-            </Link>
-        }
-    },
-    {
-        title: '车主姓名',
-        dataIndex: 'ownerName',
-    },
-    {
-        title: '手机号码',
-        dataIndex: 'phone',
-    },
-    {
-        title: '保险到期',
-        dataIndex: 'insuranceDeadline',
-        render: val => val ? <span>{moment(val).format('YYYY-MM-DD HH:mm')}</span> : '',
-    },
-    {
-        title: '报价时间',
-        dataIndex: 'leastQuoteTime',
-        render: val => val ? <span>{moment(val).format('YYYY-MM-DD HH:mm')}</span> : '',
-    },
-    {
-        title: '报价状态',
-        dataIndex: 'quoteStateCode',
-        render: val => {
-            switch (val) {
-                case 0:
-                    return '核保中';
-                case 1:
-                    return '核保失败';
-                case 2:
-                    return '未支付';
-                case 3:
-                    return '承保中';
-                case 4:
-                    return '承保失败';
-                case 5:
-                    return '待配送';
-                case 6:
-                    return '待签收';
-                case 7:
-                    return '已投保';
-            }
-        }
-    },
-    {
-        title: '来源渠道',
-        dataIndex: 'source',
-    }
-];
-const alreadyColumns = [
-    {
-        title: '序号',
-        render: (text, record, index) => {
-            return index + 1;
-        }
-    },
-    {
-        title: '车牌号码',
-        dataIndex: 'licenseNumber',
-        render: (text, record) => {
-            return <Link to='/client/detail' >
-                {text}
-            </Link>
-        }
-    },
-    {
-        title: '车主姓名',
-        dataIndex: 'ownerName',
-    },
-    {
-        title: '手机号码',
-        dataIndex: 'phone',
-    },
-    {
-        title: '订单编号',
-        dataIndex: 'limitDate',
-    },
-    {
-        title: '订单时间',
-        dataIndex: 'time',
-    },
-    {
-        title: '订单状态',
-        dataIndex: 'quoteStateCode',
-        render: val => {
-            switch (val) {
-                case 0:
-                    return '核保中';
-                case 1:
-                    return '核保失败';
-                case 2:
-                    return '未支付';
-                case 3:
-                    return '承保中';
-                case 4:
-                    return '承保失败';
-                case 5:
-                    return '待配送';
-                case 6:
-                    return '待签收';
-                case 7:
-                    return '已投保';
-            }
-        }
-    },
-    {
-        title: '是否返现',
-        dataIndex: 'cashback',
-        render: val => {
-            if (val) {
-                return '已返现';
-            } else {
-                return '未返现';
-            }
-        }
-    },
-    {
-        title: '返现金额',
-        dataIndex: 'backmoney',
-    },
-    {
-        title: '操作',
-        // dataIndex: 'from', 
-        render: val => {
-            return <div>
-                <a>配送</a>
-                <a style={{ marginLeft: 10 }} >返现</a>
-            </div>
-        }
-    }
-];
 
-// @connect(({ rule, loading }) => ({
-//     rule,
-//     loading: loading.models.rule,
-// }))
+@connect(({ chart, loading }) => {
+    return ({
+    chart,
+      loading: loading.models.chart,
+    })
+  })
 @Form.create()
 export default class ClientList extends PureComponent {
     state = {
+        page: 1,
         expandForm: false,
         formValues: {},
         type: '0', // 0 未投保 1 已投保,
@@ -179,6 +36,9 @@ export default class ClientList extends PureComponent {
         this.getClientList({
             toubao: false
         }, 1);
+        // dispatch({
+        //   type: 'rule/fetch',
+        // });
     }
 
     //封装请求数据
@@ -221,15 +81,17 @@ export default class ClientList extends PureComponent {
 
         })
     }
-
-    handleFormReset = () => {
-        const { form } = this.props;
-        form.resetFields();
-        this.setState({
-            formValues: {},
-        });
-    }
-
+        handleFormReset = () => {
+            const { form, dispatch } = this.props;
+            form.resetFields();
+            this.setState({
+              formValues: {},
+            });
+            // dispatch({
+            //   type: 'client/fetch',
+            //   payload: {}
+            // });
+        };
 
     //查询
     handleSearch = (e) => {
@@ -239,8 +101,9 @@ export default class ClientList extends PureComponent {
         form.validateFields((err,fieldsValues) => {
             if (err) return;
             // console.log(fieldsValues);
+            // this.state.quotingData;
             this.setState({
-                fieldsValues:fieldsValues
+                fieldsValues:e.target.value
             })
             const values = {
                 ...fieldsValues,
@@ -269,6 +132,9 @@ export default class ClientList extends PureComponent {
                         <FormItem label="订单状态">
                             {getFieldDecorator('quoteStateCode')(
                                 <Select placeholder="请选择" style={{ width: '100%' }}>
+                                    <Option value="">全部</Option>
+                                    <Option value="3">承保中</Option>
+                                    <Option value="4">承保失败</Option>
                                     <Option value="5">待配送</Option>
                                     <Option value="6">待签收</Option>
                                     <Option value="7">已投保</Option>
@@ -280,6 +146,7 @@ export default class ClientList extends PureComponent {
                         <FormItem label="是否返现">
                             {getFieldDecorator('cashback')(
                                 <Select placeholder="请选择" style={{ width: '100%' }}>
+                                    <Option value=''>全部</Option>
                                     <Option value='0'>否</Option>
                                     <Option value='1'>是</Option>
                                 </Select>
@@ -327,11 +194,11 @@ export default class ClientList extends PureComponent {
                         <FormItem label="报价状态">
                             {getFieldDecorator('quoteStateCode')(
                                 <Select placeholder="请选择" style={{ width: '100%' }}>
+                                    <Option value="">全部</Option>
+                                    <Option value="8">待报价</Option>
                                     <Option value="0">核保中</Option>
                                     <Option value="1">核保失败</Option>
                                     <Option value="2">未支付</Option>
-                                    <Option value="3">承保中</Option>
-                                    <Option value="4">承保失败</Option>
                                 </Select>
                             )}
                         </FormItem>
@@ -359,7 +226,8 @@ export default class ClientList extends PureComponent {
         const pager = { ...this.state.pagination };
         pager.current = pagination.current;
         this.setState({
-            pagination: pager
+            pagination: pager,
+            page: pager.current
         })
         console.log( pagination)
         this.getClientList(this.state.fieldsValues,  pagination.current)
@@ -371,7 +239,158 @@ export default class ClientList extends PureComponent {
 
     render() {
         const { type } = this.state;
-
+        const columns = [
+            {
+                title: '序号',
+                // dataIndex: 'key',
+                render: (text, record, index) => {
+                    // console.log('asdasdasdaads',this)
+                    return index + 1 + (this.state.page-1)*10;
+                }
+            },
+            {
+                title: '车牌号码',
+                dataIndex: 'licenseNumber',
+                render: (text, record) => {
+                    return <Link to={`/client/detail/${record.id}`} >
+                        {text}
+                    </Link>
+                }
+            },
+            {
+                title: '车主姓名',
+                dataIndex: 'ownerName',
+            },
+            {
+                title: '手机号码',
+                dataIndex: 'phone',
+            },
+            {
+                title: '保险到期',
+                dataIndex: 'insuranceDeadline',
+                render: val => val ? <span>{moment(val).format('YYYY-MM-DD HH:mm')}</span> : '',
+            },
+            {
+                title: '报价时间',
+                dataIndex: 'leastQuoteTime',
+                render: val => val ? <span>{moment(val).format('YYYY-MM-DD HH:mm')}</span> : '',
+            },
+            {
+                title: '报价状态',
+                dataIndex: 'quoteStateCode',
+                render: val => {
+                    switch (val) {
+                    case 0:
+                        return '核保中';
+                    case 1:
+                        return '核保失败';
+                    case 2:
+                        return '未支付';
+                    case 3:
+                        return '承保中';
+                    case 4:
+                        return '承保失败';
+                    case 5:
+                        return '待配送';
+                    case 6:
+                        return '待签收';
+                    case 7:
+                        return '已投保';
+                    case 8:
+                        return '待报价';    
+                        
+                    }
+                }
+            },
+            {
+                title: '来源渠道',
+                dataIndex: 'source',
+            }
+        ];
+        const alreadyColumns = [
+            {
+                title: '序号',
+                render: (text, record, index) => {
+                    return index + 1 + (this.state.page-1)*10 ;
+                }
+            },
+            {
+                title: '车牌号码',
+                dataIndex: 'licenseNumber',
+                render: (text, record) => {
+                    return <Link to='/client/detail' >
+                        {text}
+                    </Link>
+                }
+            },
+            {
+                title: '车主姓名',
+                dataIndex: 'ownerName',
+            },
+            {
+                title: '手机号码',
+                dataIndex: 'phone',
+            },
+            {
+                title: '订单编号',
+                dataIndex: 'limitDate',
+            },
+            {
+                title: '订单时间',
+                dataIndex: 'time',
+            },
+            {
+                title: '订单状态',
+                dataIndex: 'quoteStateCode',
+                render: val => {
+                    switch (val) {
+                    case 0:
+                        return '核保中';
+                    case 1:
+                        return '核保失败';
+                    case 2:
+                        return '未支付';
+                    case 3:
+                        return '承保中';
+                    case 4:
+                        return '承保失败';
+                    case 5:
+                        return '待配送';
+                    case 6:
+                        return '待签收';
+                    case 7:
+                        return '已投保';
+                    case 8:
+                        return '待报价';    
+                    }
+                }
+            },
+            {
+                title: '是否返现',
+                dataIndex: 'cashback',
+                render: val => {
+                    if (val) {
+                        return '已返现';
+                    } else {
+                        return '未返现';
+                    }
+                }
+            },
+            {
+                title: '返现金额',
+                dataIndex: 'backmoney',
+            },
+            {
+                title: '操作',
+                // dataIndex: 'from', 
+                render: val => {
+                    return <div>
+                        <a>配送</a>
+                        <a style={{ marginLeft: 10 }} >返现</a>
+                    </div>
+                }
+            }
+        ];
         let tableColumns;
         if (type === '0') {
             tableColumns = columns;

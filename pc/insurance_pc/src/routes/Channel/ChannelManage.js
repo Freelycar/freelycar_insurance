@@ -62,8 +62,10 @@ const CreateAddForm = Form.create()((props) => {
     );
 });
 
+
 export default class ChannelManage extends PureComponent {
     state = {
+        page: 1,
         modalVisible: false,
         modifyModalVisible: false,
         deleteModalShow: false,
@@ -81,8 +83,8 @@ export default class ChannelManage extends PureComponent {
             {
                 title: '序号',
                 dataIndex: 'no',
-                render: (text, data, index) => {
-                    return index + 1;
+                render: (text,record,index) => {
+                    return index + 1 + (this.state.page-1)*10 ;
                 }
             },
             {
@@ -115,6 +117,7 @@ export default class ChannelManage extends PureComponent {
             }],
         pagination: { total: 0 },
     };
+    
 
     showModifyModal = (item) => {
         this.setState({
@@ -124,21 +127,18 @@ export default class ChannelManage extends PureComponent {
     }
 
     componentDidMount() {
-        this.getChannelList(1);
+        this.getChannelList(this.state.page);
     }
+   
 
     getChannelList = (page) => {
-        if (page == 1) {
-            this.setState({
-                pagination: { total: 0, current: 1 }
-            })
-        }
         getChannelList({
             invcode: this.state.invcode,
             name: this.state.name,
             page: page,
             number: 10
         }).then((res) => {
+            const pagination = { ...this.state.pagination };
             if (res.code == 0) {
                 res.data.map((item, index) => {
                     item.key = item.id;
@@ -158,7 +158,9 @@ export default class ChannelManage extends PureComponent {
             console.log(error)
         })
     }
-
+    // componentDidMount() {
+    //     this.getChannelList(1);
+    // }
     handleFormReset = () => {
         this.setState({
             name: '',
@@ -184,7 +186,7 @@ export default class ChannelManage extends PureComponent {
                     modalVisible: false,
                 });
                 message.success('添加成功');
-                this.getChannelList(1)
+                this.getChannelList(this.state.page)
             } else {
                 message.error(res.msg);
             }
@@ -219,7 +221,7 @@ export default class ChannelManage extends PureComponent {
                     }
                 });
                 message.success('修改成功');
-                this.getChannelList(1)
+                this.getChannelList(this.state.page)
             } else {
                 message.error(res.msg);
             }
@@ -336,13 +338,13 @@ export default class ChannelManage extends PureComponent {
         const pager = { ...this.state.pagination };
         pager.current = pagination.current;
         this.setState({
-            pagination: pager
+            pagination: pager,
+            page: pager.current
         })
         this.getChannelList(pagination.current)
     }
 
     render() {
-
         const parentMethods = {
             handleAdd: this.handleAdd,
             handleModalVisible: this.handleModalVisible,
