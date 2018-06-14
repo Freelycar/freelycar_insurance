@@ -91,11 +91,11 @@ public class OrderService {
     }
 
     public Map<String, Object> getCountBySourId(Date startTime, Date endTime) {
-        if (startTime.getTime() == endTime.getTime()) {
+//        if (startTime.getTime() == endTime.getTime()) {
             //表示同一天
             startTime = Tools.setTimeToBeginningOfDay(startTime);
             endTime = Tools.setTimeToEndofDay(endTime);
-        }
+//        }
 
         List<Object[]> list = orderDao.getCountBySourId(startTime, endTime);
         if (list.isEmpty()) {
@@ -129,11 +129,11 @@ public class OrderService {
     }
 
     public Map<String, Object> listCount(Invition invition, int page, int number, Date startTime, Date endTime) {
-        if (startTime.getTime() == endTime.getTime()) {
-            //表示同一天
-            startTime = Tools.setTimeToBeginningOfDay(startTime);
-            endTime = Tools.setTimeToEndofDay(endTime);
-        }
+//        if (startTime.getTime() == endTime.getTime()) {
+        //表示同一天
+        startTime = Tools.setTimeToBeginningOfDay(startTime);
+        endTime = Tools.setTimeToEndofDay(endTime);
+//        }
 
         List<Object[]> list = orderDao.listCount(invition, page, number, startTime, endTime);
 
@@ -262,7 +262,7 @@ public class OrderService {
         orderDao.updateOrder(orderById);
 
         //同步更新Client中的状态
-        clientService.updateClientQuoteState(orderById.getOpenId(),orderById.getState());
+        clientService.updateClientQuoteState(orderById.getOpenId(), orderById.getState());
 
         return RESCODE.SUCCESS.getJSONRES();
     }
@@ -281,7 +281,7 @@ public class OrderService {
 
     //报价记录
     public Map<String, Object> getClientOrderByLicenseNumber(String licenseNumber, int page, int number) {
-        int from = (page-1)*number;
+        int from = (page - 1) * number;
         if (Tools.isEmpty(licenseNumber)) {
             return RESCODE.USER_LICENSENUMBER_EMPTY.getJSONRES();
         }
@@ -326,7 +326,7 @@ public class OrderService {
         }
 
         long count = orderDao.getOrderCountByLicenseNumber(licenseNumber);
-        return RESCODE.SUCCESS.getJSONRES(orderByLicenseNumber,(int)Math.ceil(count/(float)number),count);
+        return RESCODE.SUCCESS.getJSONRES(orderByLicenseNumber, (int) Math.ceil(count / (float) number), count);
     }
 
     private Double CalcuateMoneyBack(String offerDetail) {
