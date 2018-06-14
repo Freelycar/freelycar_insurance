@@ -5,13 +5,18 @@ import com.freelycar.dao.InsuranceDao;
 import com.freelycar.dao.OrderDao;
 import com.freelycar.dao.QuoteRecordDao;
 import com.freelycar.entity.*;
+import com.freelycar.util.INSURANCE;
 import com.freelycar.util.RESCODE;
 import com.freelycar.util.Tools;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 /**
  *
@@ -19,6 +24,8 @@ import java.util.*;
 @Transactional
 @Service
 public class ClientService {
+    private final static Logger log = Logger.getLogger(ClientService.class);
+
     /********** 注入ClientDao ***********/
     @Autowired
     private ClientDao clientDao;
@@ -114,6 +121,7 @@ public class ClientService {
                 if (quoteRecord != null) {
                     c.setLeastQuoteTime(quoteRecord.getCreateTime());
                     c.setQuoteStateCode(quoteRecord.getState());
+                    c.setQuoteState(INSURANCE.getQuotestateName(quoteRecord.getState()));
                 }
                 Insurance insu = insuranceDao.getLatestXuBaoByNameLice(c.getOwnerName(), c.getLicenseNumber());
                 if (insu != null) {
@@ -145,6 +153,7 @@ public class ClientService {
                 if (quoteRecord != null) {
                     c.setLeastQuoteTime(quoteRecord.getCreateTime());
                     c.setQuoteStateCode(quoteRecord.getState());
+                    c.setQuoteState(INSURANCE.getQuotestateName(quoteRecord.getState()));
                 }
                 Insurance insu = insuranceDao.getLatestXuBaoByNameLice(c.getOwnerName(), c.getLicenseNumber());
                 if (insu != null) {
@@ -172,6 +181,7 @@ public class ClientService {
                 if (quoteRecord != null) {
                     c.setLeastQuoteTime(quoteRecord.getCreateTime());
                     c.setQuoteStateCode(quoteRecord.getState());
+                    c.setQuoteState(INSURANCE.getQuotestateName(quoteRecord.getState()));
                 }
                 Insurance insu = insuranceDao.getLatestXuBaoByNameLice(c.getOwnerName(), c.getLicenseNumber());
                 if (insu != null) {
@@ -212,6 +222,34 @@ public class ClientService {
     public Map<String, Object> updateClient(Client client) {
         clientDao.updateClient(client);
         return RESCODE.SUCCESS.getJSONRES();
+    }
+
+
+    /**
+     * 根据openId更新Client的报价状态
+     * @param openId    openId
+     * @param quoteStateCode    报价状态
+     * @return  boolean
+     */
+    public boolean updateClientQuoteState(String openId, int quoteStateCode) {
+        if (StringUtils.isEmpty(openId)) {
+            log.error("方法updateClientQuoteState执行失败:参数openId为空。");
+            return false;
+        }
+        Client client = clientDao.getClientByOpenId(openId);
+        if (null == client) {
+            log.error("方法updateClientQuoteState执行失败:" + RESCODE.USER_NOT_EXIST.getMsg());
+            return false;
+        }
+        client.setQuoteStateCode(quoteStateCode);
+        client.setQuoteState(INSURANCE.getQuotestateName(quoteStateCode));
+        try {
+            clientDao.updateClient(client);
+        } catch (Exception e) {
+            log.error("方法updateClientQuoteState执行失败:执行SQL出现异常。", e);
+            e.printStackTrace();
+        }
+        return true;
     }
 
 }

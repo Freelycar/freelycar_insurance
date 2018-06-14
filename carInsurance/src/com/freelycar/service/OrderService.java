@@ -47,6 +47,10 @@ public class OrderService {
     @Autowired
     private ClientDao clientDao;
 
+    /********** 注入ClientService ***********/
+    @Autowired
+    private ClientService clientService;
+
     public Map<String, Object> getOrderById(int id) {
         InsuranceOrder orderById = orderDao.getOrderById(id);
         if (orderById != null) {
@@ -87,11 +91,11 @@ public class OrderService {
     }
 
     public Map<String, Object> getCountBySourId(Date startTime, Date endTime) {
-        if (startTime.getTime() == endTime.getTime()) {
+//        if (startTime.getTime() == endTime.getTime()) {
             //表示同一天
             startTime = Tools.setTimeToBeginningOfDay(startTime);
             endTime = Tools.setTimeToEndofDay(endTime);
-        }
+//        }
 
         List<Object[]> list = orderDao.getCountBySourId(startTime, endTime);
         if (list.isEmpty()) {
@@ -125,11 +129,11 @@ public class OrderService {
     }
 
     public Map<String, Object> listCount(Invition invition, int page, int number, Date startTime, Date endTime) {
-        if (startTime.getTime() == endTime.getTime()) {
-            //表示同一天
-            startTime = Tools.setTimeToBeginningOfDay(startTime);
-            endTime = Tools.setTimeToEndofDay(endTime);
-        }
+//        if (startTime.getTime() == endTime.getTime()) {
+        //表示同一天
+        startTime = Tools.setTimeToBeginningOfDay(startTime);
+        endTime = Tools.setTimeToEndofDay(endTime);
+//        }
 
         List<Object[]> list = orderDao.listCount(invition, page, number, startTime, endTime);
 
@@ -256,6 +260,10 @@ public class OrderService {
         InsuranceOrder orderById = orderDao.getOrderById(order.getId());
         orderById.setState(order.getState());
         orderDao.updateOrder(orderById);
+
+        //同步更新Client中的状态
+        clientService.updateClientQuoteState(orderById.getOpenId(), orderById.getState());
+
         return RESCODE.SUCCESS.getJSONRES();
     }
 
@@ -273,11 +281,12 @@ public class OrderService {
 
     //报价记录
     public Map<String, Object> getClientOrderByLicenseNumber(String licenseNumber, int page, int number) {
+        int from = (page - 1) * number;
         if (Tools.isEmpty(licenseNumber)) {
             return RESCODE.USER_LICENSENUMBER_EMPTY.getJSONRES();
         }
 
-        List<InsuranceOrder> orderByLicenseNumber = orderDao.getOrderByLicenseNumber(licenseNumber, page, number);
+        List<InsuranceOrder> orderByLicenseNumber = orderDao.getOrderByLicenseNumber(licenseNumber, from, number);
         //循环出来这单的报价记录
         for (InsuranceOrder order : orderByLicenseNumber) {
             QuoteRecord quoteRecordBylicenseNumberAndOfferId = quoteRecordDao.getQuoteRecordBylicenseNumberAndOfferId(licenseNumber, order.getOrderId());
@@ -316,8 +325,8 @@ public class OrderService {
 
         }
 
-
-        return RESCODE.SUCCESS.getJSONRES(orderByLicenseNumber);
+        long count = orderDao.getOrderCountByLicenseNumber(licenseNumber);
+        return RESCODE.SUCCESS.getJSONRES(orderByLicenseNumber, (int) Math.ceil(count / (float) number), count);
     }
 
     private Double CalcuateMoneyBack(String offerDetail) {

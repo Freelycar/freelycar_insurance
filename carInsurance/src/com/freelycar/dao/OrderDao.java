@@ -54,16 +54,23 @@ public class OrderDao
     }
     
     //根据id查询Order
-    public List<InsuranceOrder> getOrderByLicenseNumber(String licenseNumber,int page,int number){
-    	String hql = "from InsuranceOrder where licenseNumber = :licenseNumber";
+    public List<InsuranceOrder> getOrderByLicenseNumber(String licenseNumber,int from,int number){
+    	String hql = "from InsuranceOrder where licenseNumber = :licenseNumber order by id";
     	@SuppressWarnings("unchecked")
 		List<InsuranceOrder> result = getSession().createQuery(hql).setString("licenseNumber", licenseNumber)
-		.setFirstResult(page)
+		.setFirstResult(from)
 		.setMaxResults(number)
 		.list();
     	return result;
     }
-    
+
+    public long getOrderCountByLicenseNumber(String licenseNumber){
+    	String hql = "select count(*) from InsuranceOrder where licenseNumber = :licenseNumber";
+		@SuppressWarnings("unchecked")
+		long result = (long) getSession().createQuery(hql).setString("licenseNumber", licenseNumber).uniqueResult();
+    	return result;
+    }
+
     
     //查询最新的查询Order
     public QuoteRecord getLatestQuoteByNameLice(String ownerName,String licenseNumber){
