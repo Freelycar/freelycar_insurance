@@ -262,7 +262,7 @@ public class OrderService {
         orderDao.updateOrder(orderById);
 
         //同步更新Client中的状态
-        clientService.updateClientQuoteState(orderById.getOpenId(), orderById.getState());
+        clientService.updateClientQuoteState(orderById.getOpenId(),orderById.getLicenseNumber(), orderById.getState());
 
         return RESCODE.SUCCESS.getJSONRES();
     }

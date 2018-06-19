@@ -129,7 +129,7 @@ public class ClientController
 		private String invCode;
 		private String openId;
 		private String licenseNumber;
-		
+
 		public String getLicenseNumber() {
 			return licenseNumber;
 		}

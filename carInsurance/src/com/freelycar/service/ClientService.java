@@ -231,12 +231,17 @@ public class ClientService {
      * @param quoteStateCode    报价状态
      * @return  boolean
      */
-    public boolean updateClientQuoteState(String openId, int quoteStateCode) {
+    public boolean updateClientQuoteState(String openId,String licenseNumber, int quoteStateCode) {
         if (StringUtils.isEmpty(openId)) {
             log.error("方法updateClientQuoteState执行失败:参数openId为空。");
             return false;
         }
-        Client client = clientDao.getClientByOpenId(openId);
+        if (StringUtils.isEmpty(licenseNumber)) {
+            log.error("方法updateClientQuoteState执行失败:参数licenseNumber为空。");
+            return false;
+        }
+//        Client client = clientDao.getClientByOpenId(openId);
+        Client client = clientDao.getClientByOpenIdAndLicenseNumber(openId, licenseNumber);
         if (null == client) {
             log.error("方法updateClientQuoteState执行失败:" + RESCODE.USER_NOT_EXIST.getMsg());
             return false;
@@ -244,7 +249,8 @@ public class ClientService {
         client.setQuoteStateCode(quoteStateCode);
         client.setQuoteState(INSURANCE.getQuotestateName(quoteStateCode));
         try {
-            clientDao.updateClient(client);
+//            clientDao.updateClient(client);
+            clientDao.saveClient(client);
         } catch (Exception e) {
             log.error("方法updateClientQuoteState执行失败:执行SQL出现异常。", e);
             e.printStackTrace();

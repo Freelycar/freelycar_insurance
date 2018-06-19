@@ -10,6 +10,7 @@ import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -43,6 +44,9 @@ public class InsuranceService {
     /********** 注入ClientService ***********/
     @Autowired
     private ClientService clientService;
+
+    @Autowired
+    private TasUserInfoDao tasUserInfoDao;
 
     public Map<String, Object> queryLastYear(Client client) {
         if (Tools.isEmpty(client.getOpenId())) {
@@ -159,7 +163,7 @@ public class InsuranceService {
                     }
                 }
 
-
+                String unionId = client.getUnionId();
                 //证明用户身份真实有效
                 synchronized (InsuranceService.class) {
                     Client exist = clientDao.getClientByOpenIdAndLicenseNumber(client.getOpenId(), client.getLicenseNumber());
@@ -174,11 +178,27 @@ public class InsuranceService {
                         clientDao.saveClient(client);
                     } else {
                         //数据库有数据 填充其他信息 这边要注意
+                        if (!StringUtils.isEmpty(unionId)) {
+                            exist.setUnionId(unionId);
+                        }
                         exist.setOwnerName(client.getOwnerName());
                         exist.setLeastQueryTime(System.currentTimeMillis());
                         //exist.setQuoteState(INSURANCE.QUOTESTATE_NO_YIBAOJIA.getCode()+"");
                         clientDao.saveClient(exist);
+
+                        //添加一条公众号关联表信息
+                        if (!StringUtils.isEmpty(unionId)) {
+                            TasUserInfo tasUserInfo = tasUserInfoDao.getTasUserInfoByUnionId(unionId);
+                            if (null == tasUserInfo) {
+                                tasUserInfo = new TasUserInfo();
+                                tasUserInfo.setUnionId(unionId);
+                                tasUserInfoDao.saveOrUpdate(tasUserInfo);
+                            }
+                        }
                     }
+
+
+
 
                     return RESCODE.SUCCESS.getJSONRES(result);
                 }
@@ -411,7 +431,7 @@ public class InsuranceService {
                     String saveId = orderDao.saveUpdateOrder(inorder, save);
 
                     //同步更新Client中的状态
-                    clientService.updateClientQuoteState(inorder.getOpenId(), inorder.getState());
+                    clientService.updateClientQuoteState(inorder.getOpenId(),inorder.getLicenseNumber(), inorder.getState());
 
                     return RESCODE.SUCCESS.getJSONRES(save ? saveId : inorder.getId());
                 }

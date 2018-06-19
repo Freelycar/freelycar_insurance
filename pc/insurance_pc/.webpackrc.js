@@ -29,6 +29,7 @@ export default {
   proxy: {
     '/api': {
       target: "http://www.howmuchweb.com/carInsurance/api",
+      // target: "http://localhost:8080/carInsurance/api",
       changeOrigin: true,
       pathRewrite: {
         "^/api": ""

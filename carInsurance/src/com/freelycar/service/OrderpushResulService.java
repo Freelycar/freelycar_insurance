@@ -1,29 +1,25 @@
 package com.freelycar.service;
 
-import com.freelycar.dao.CashbackRecordDao;
-import com.freelycar.dao.OrderDao;
-import com.freelycar.dao.OrderpushResulDao;
-import com.freelycar.dao.QuoteRecordDao;
-import com.freelycar.entity.InsuranceOrder;
-import com.freelycar.entity.OrderpushResul;
-import com.freelycar.entity.QuoteRecord;
-import com.freelycar.util.*;
+import com.freelycar.dao.*;
+import com.freelycar.entity.*;
+import com.freelycar.util.Constant;
+import com.freelycar.util.INSURANCE;
+import com.freelycar.util.RESCODE;
+import com.freelycar.util.TasConfig;
 import org.apache.log4j.Logger;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
-import java.io.IOException;
 import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import static com.freelycar.util.Constant.XIAOYIAICHE_URL;
 
 /**
  *
@@ -49,6 +45,12 @@ public class OrderpushResulService {
     /********** 注入ClientService ***********/
     @Autowired
     private ClientService clientService;
+    @Autowired
+    private ClientDao clientDao;
+    @Autowired
+    private TasUserInfoDao tasUserInfoDao;
+    @Autowired
+    private TasUserInfoService tasUserInfoService;
 
     //增加一个OrderpushResul
     public Map<String, Object> saveOrderpushResul(OrderpushResul orderpushResul) {
@@ -185,12 +187,36 @@ public class OrderpushResulService {
                 orderService.updateOrder(order);
 
                 //同步更新Client中的状态
-                clientService.updateClientQuoteState(order.getOpenId(),order.getState());
+                clientService.updateClientQuoteState(order.getOpenId(), order.getLicenseNumber(), order.getState());
 
                 /*
                  * 调用方法，将待支付信息推送给微信公众号
                  */
-                WechatTemplateMessage.pushOrderUnpaidInfo(orderDao.getOrderByOrderId(orderId));
+                Client client = clientDao.getClientByOpenIdAndLicenseNumber(order.getOpenId(), order.getLicenseNumber());
+                if (null != client) {
+                    String unionId = client.getUnionId();
+                    TasUserInfo tasUserInfo = tasUserInfoDao.getTasUserInfoByUnionId(unionId);
+
+                    if (null != tasUserInfo) {
+                        String tasMessageSendResult = TasConfig.pushOrderUnpaidInfo(orderDao.getOrderByOrderId(orderId), tasUserInfo.getOpenId());
+                        log.debug(tasMessageSendResult);
+                    } else {
+                        //后面还得加一个逻辑，tasUserInfo找不到时，需要调用更新的方法去更新tasUserInfo表
+                        int updateCount = 0;
+                        if (!StringUtils.isEmpty(unionId)) {
+                            updateCount = tasUserInfoService.updateUserOpenIds();
+                        }
+                        if (updateCount == 0) {
+                            log.error("用户没有关注公众号，无法向其推送消息！");
+                        } else {
+                            tasUserInfo = tasUserInfoDao.getTasUserInfoByUnionId(unionId);
+                            if (null != tasUserInfo) {
+                                String tasMessageSendResult = TasConfig.pushOrderUnpaidInfo(orderDao.getOrderByOrderId(orderId), tasUserInfo.getOpenId());
+                                log.debug(tasMessageSendResult);
+                            }
+                        }
+                    }
+                }
 
 
                 Map<String, Object> msg = new HashMap<>();
@@ -244,7 +270,7 @@ public class OrderpushResulService {
 
                 orderDao.updateOrder(orderByOrderId);
                 //同步更新Client中的状态
-                clientService.updateClientQuoteState(orderByOrderId.getOpenId(),orderByOrderId.getState());
+                clientService.updateClientQuoteState(orderByOrderId.getOpenId(), orderByOrderId.getLicenseNumber(), orderByOrderId.getState());
 
                 Map<String, Object> msg = new HashMap<>();
                 msg.put("orderId", orderId);
