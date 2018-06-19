@@ -32,9 +32,9 @@ module.exports = [{
     isToubao: false,    //是否投保
     compensation: false, //不计免赔
     amountStr: '10万',  //   可以是国产/进口  100万/50万   string类型
-    selectAry:['200万', '150万', '100万', '50万', '30万', '20万', '10万', '5万'],
+    selectAry:['10万', '9万','8万', '7万', '6万', '5万', '4万', '3万', '2万', '1万'],
     tureAry:[100000, 90000, 80000, 70000, 60000, 50000, 40000, 30000, 20000, 10000],
-    selectIndex: 6,
+    selectIndex: 0,
     unit: '/座' //单位
 },{
     code: 5,
@@ -42,9 +42,9 @@ module.exports = [{
     isToubao: false,    //是否投保
     compensation: false, //不计免赔
     amountStr: '10万',  //   可以是国产/进口  100万/50万   string类型
-    selectAry:['200万', '150万', '100万', '50万', '30万', '20万', '10万', '5万'],
+    selectAry:['10万', '9万','8万', '7万', '6万', '5万', '4万', '3万', '2万', '1万'],
     tureAry:[100000, 90000, 80000, 70000, 60000, 50000, 40000, 30000, 20000, 10000],
-    selectIndex: 6,
+    selectIndex: 0,
     unit: '/座' //单位
 },{
     code: 6,

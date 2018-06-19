@@ -151,7 +151,7 @@
     </view>
     <view class='reset-program-button' @tap='reset'>
       <i class='fa fa-undo'></i>重置投保方案</view>
-    <block wx:if={{waitting}}>
+    <block wx:if="{{waitting}}">
       <button class='get-price-button get-price-button-loading'>报价中......{{waitSecond}}s</button>
     </block>
     <block wx:else>
@@ -190,6 +190,7 @@ export default class AdjustQuoteProgram extends wepy.page {
         return;
       }
       const code = event.currentTarget.dataset.code;
+      console.log(this.data.insurances)
       const insurances = this.data.insurances;
       const index = code - 1;
       insurances[index].isToubao = !insurances[index].isToubao;
@@ -219,6 +220,7 @@ export default class AdjustQuoteProgram extends wepy.page {
       const insurances = this.data.insurances;
       const index = code - 1;
       if (insurances[index].isToubao) {
+        console.log(event)
         const value = event.detail.value;
         const selectAry = insurances[index].selectAry;
 
@@ -298,6 +300,7 @@ export default class AdjustQuoteProgram extends wepy.page {
       JSON.parse(JSON.stringify(this.$parent.globalData.insurances)) ||
       JSON.parse(JSON.stringify(defultInsurances));
     const data = JSON.parse(option.data);
+    console.log(data)
     this.limitDate = data.limitDate || 0;
     this.busLimitDate = data.busLimitDate || 0;
     //建立连接

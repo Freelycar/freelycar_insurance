@@ -44,7 +44,7 @@
             <block wx:for="{{record}}"  wx:key='index'>
                 <view class='scroll-view-item'>
                     <text class='carNmuber'>{{item.licenseNumber}}</text>
-                    <text class='time'>{{item.crateTime}}</text>
+                    <text class='time'>{{item.createTime}}</text>
                 </view>
             </block>
 
@@ -80,7 +80,7 @@ export default class QuoteRecord extends wepy.page {
   getQuoteRecord() {
     wepy.showLoading();
     wepy.request({
-      url: 'http://localhost:8080/carInsurance/api/quoterecord/list',
+      url: this.$parent.globalData.baseUrl + 'api/' + 'quoterecord/list',
       data: {
         page: 1,
         number: 99,
@@ -92,8 +92,8 @@ export default class QuoteRecord extends wepy.page {
         console.log(res);
         if (res.data.code === 0) {
           for (let i = 0; i < res.data.data.length; i++) {
-            res.data.data[i].crateTime = moment(
-              res.data.data[i].crateTime
+            res.data.data[i].createTime = moment(
+              res.data.data[i].createTime
             ).format('YYYY-MM-DD hh:mm');
           }
           this.record = res.data.data;

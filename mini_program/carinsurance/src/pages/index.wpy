@@ -274,7 +274,7 @@
       <image class='call-button-img' src='https://www.howmuchweb.com/carInsurance/imgs/manual_consultation.png' />
     </view>
   </view>
-  <view wx:if={{showModal}} class='verification-bg'>
+  <view wx:if="{{showModal}}" class='verification-bg'>
     <view class='modal-bg'>
       <veiw class='tip-title'>由于监管要求，初次报价需要通过信息真实性验证</veiw>
       <view class='row'>
@@ -285,7 +285,7 @@
       </view>
       <view class='row flex-box'>
         <input placeholder='请输入验证码' bindinput="bindverificationCodeInput" />\
-        <block wx:if={{waitting}}>
+        <block wx:if="{{waitting}}">
           <view class='getcode-view'>
             {{wait}}s后重试
           </view>

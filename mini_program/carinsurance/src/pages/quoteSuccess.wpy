@@ -108,15 +108,15 @@
                         <view>强制险</view>
                         <picker mode="date" value="{{forceDate}}" start="{{forceDate}}" end="2017-09-01" bindchange="bindForceDateChange">
                             <view>
-                                <i class='fa fa-calendar' style='color:#808080'></i> 起保日期:{{forceDate}}</view>
+                                <i class='fa fa-calendar' style='color:#69c0ff'></i> 起保日期:{{forceDate}}</view>
 
                         </picker>
                     </view>
-                    <view class='line item-bg flex-box-row'>
+                    <view class='line item-bg flex-box-row' style='font-size: 13px'>
                         <view> 交强险</view>
                         <view>¥{{formData.forcePremium.quotesPrice}}</view>
                     </view>
-                    <view class='line item-bg flex-box-row'>
+                    <view class='line item-bg flex-box-row' style='font-size: 13px'>
                         <view> 车船税</view>
                         <view>¥{{formData.taxPrice.quotesPrice}}</view>
                     </view>
@@ -127,18 +127,24 @@
                         <view>商业险</view>
                         <picker mode="date" value="{{insuranceDate}}" start="{{insuranceDate}}" end="2099-09-01" bindchange="bindBusinessDateChange">
                             <view>
-                                <i class='fa fa-calendar' style='color:#808080'></i> 起保日期:{{insuranceDate}}</view>
+                                <i class='fa fa-calendar' style='color:#69c0ff'></i> 起保日期:{{insuranceDate}}</view>
                         </picker>
                     </view>
-                    <block wx:for={{formData.insurances}}  wx:key='index'>
-                        <view class='line item-bg flex-box-row'>
+                    <block wx:for="{{formData.insurances}}"  wx:key='index'>
+                        <view class='line item-bg flex-box-row' style='font-size: 13px'>
                             <view class='flex-box-row '>
-                                <view style='overflow: hidden;text-overflow: ellipsis;white-space: nowrap;'>{{item.insuranceName}}</view>
+                                <view style='width: 134px;overflow: hidden;text-overflow: ellipsis;white-space: nowrap'>{{item.insuranceName}}</view>
                                 <view class='tag-view'>{{item.amountStr}} {{item.compensationStr}}</view>
                             </view>
                             <view>¥{{item.quotesPrice}}</view>
                         </view>
                     </block>
+                    <view class='line item-bg flex-box-row' style='font-size: 13px' wx:if="{{formData.additionalPrice != 0}}">
+                            <view class='flex-box-row '>
+                              <view style='overflow: hidden;text-overflow: ellipsis;white-space: nowrap;'>不计免赔险</view>
+                            </view>
+                            <view>¥{{formData.additionalPrice}}</view>
+                        </view>
                 </view>
             </view>
 
@@ -189,6 +195,7 @@ export default class QuoteSuccess extends wepy.page {
     //跳转
     gotoConfirmQuoteInfo() {
         let formDataStr = JSON.stringify(this.formData) ;
+        console.log(this.formData)
       wepy.navigateTo({
         url: `confirmQuoteInfo?data=${formDataStr}`
       });
@@ -224,6 +231,7 @@ export default class QuoteSuccess extends wepy.page {
 
   onLoad(option) {
     let formData = JSON.parse(option.data);
+    console.log(formData)
     for (let i = 0; i < formData.insurances.length; i++) {
       let item = formData.insurances[i];
       if (

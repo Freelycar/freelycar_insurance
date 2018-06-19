@@ -211,7 +211,7 @@
             <view class='total-price flex-box-row'>
                 <view class='total-price-item'>
                     合计:
-                    <text style='color: #f8b500'>¥{{formData.currentPrice}}</text>
+                    <text style='color: #f8b500'>¥{{formData.totalPrice/100.0}}</text>
                 </view>
                 <view class='next-step' @tap='confirm'>
                     确认投保信息
@@ -247,7 +247,7 @@ export default class ConfirmQuoteInfo extends wepy.page {
   methods = {
     getQuoteRecord() {},
 
-    //确认信息 过滤
+    // 确认信息 过滤
     confirm() {
       const queryData = this.queryData;
       if (!queryData.payee) {
@@ -304,10 +304,10 @@ export default class ConfirmQuoteInfo extends wepy.page {
       });
     },
 
-    //以下和 选择、输入相关
+    // 以下和 选择、输入相关
     handlaInputChange(event) {
       let type = event.target.dataset.type;
-      
+
       this.queryData[type] = event.detail.value;
       this.$apply();
     },

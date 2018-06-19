@@ -152,7 +152,7 @@
       </view>
       <view class="insurance-detail">
         <block wx:for-index="index" wx:for-item="item" wx:key="index" wx:for-items="{{quoteRecord.qiangzhiList}}">
-          <view class="detail-line">
+          <view class="detail-line" style='font-size: 13px'>
             <text>{{item.insuranceName}}</text>
             <text>￥{{item.insurancePrice}}</text>
           </view>
@@ -170,7 +170,7 @@
       </view>
       <view class="insurance-detail">
         <block wx:for-index="index" wx:for-item="item" wx:key="index" wx:for-items="{{quoteRecord.shangyeList}}">
-          <view class="detail-line">
+          <view class="detail-line" style='font-size: 13px'>
             <text>{{item.insuranceName}}<text wx:if="{{item.compensation}}" class="detail-line-info">不计免赔</text>
             <text wx:if="{{item.amountStr&&item.insuranceId!=2}}" class="detail-line-info">{{item.amountStr}}</text>
             <text wx:if="{{item.amountStr&&item.insuranceId===2}}" class="detail-line-info">{{item.amountStr}}</text>
@@ -178,6 +178,11 @@
             <text>￥{{item.insurancePrice}}</text>
           </view>
         </block>
+        <view class="detail-line" wx:if="{{additionalPrice != 0}}" style='font-size: 13px'>
+            <text>不计免赔险
+            </text>
+            <text>￥{{additionalPrice}}</text>
+          </view>
       </view>
       <view class="insurance-title">
         <text></text>
@@ -186,8 +191,8 @@
     </view>
     <view wx:if="{{down}}" class="insurance-total">
       <view class="insurance-discount">
-        (<text class="insurance-discount-red">￥{{cashback}}</text>
-        现金红包已到账)
+        (小易现金红包金额<text class="insurance-discount-red">￥{{cashback}}</text>
+        )
       </view>
       <text class="insurance-total-price">合计：￥{{totalPrice}}</text>
     </view>
@@ -216,7 +221,8 @@ export default class Payment extends wepy.page {
     shangyeTotalPrice: 0,
     totalPrice: 0,
     cashback: 0,
-    state: 0
+    state: 0,
+    additionalPrice: 0
   };
 
   methods = {
@@ -262,6 +268,7 @@ export default class Payment extends wepy.page {
         justifyNull(res.data.data);
         this.state = res.data.data.state;
         this.orderDetail = res.data.data;
+        let additionalPrice = res.data.quoteRecord.additionalPrice;
         justifyNull(res.data.quoteRecord);
         res.data.quoteRecord.forceInsuranceStartTime = timestampToTime(
           res.data.quoteRecord.forceInsuranceStartTime
@@ -278,8 +285,10 @@ export default class Payment extends wepy.page {
         res.data.quoteRecord.shangyeList.map((item, index) => {
           shangyeTotalPrice = Number(item.insurancePrice) + shangyeTotalPrice;
         });
-        totalPrice = qiangzhiTotalPrice + shangyeTotalPrice;
-        this.cashback = res.data.data.cashback || 0;
+        shangyeTotalPrice = (Number(shangyeTotalPrice) + Number(additionalPrice)).toFixed(2)
+        totalPrice = qiangzhiTotalPrice + Number(shangyeTotalPrice);
+        this.additionalPrice = additionalPrice;
+        this.cashback = res.data.quoteRecord.backmoney || 0;
         this.totalPrice = totalPrice;
         this.qiangzhiTotalPrice = qiangzhiTotalPrice;
         this.shangyeTotalPrice = shangyeTotalPrice;

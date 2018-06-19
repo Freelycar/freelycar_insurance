@@ -124,7 +124,7 @@
       </view>
       <view class="insurance-detail" >
         <block wx:for-index="index" wx:for-item="item" wx:key="index" wx:for-items="{{quoteRecord.qiangzhiList}}">
-          <view class="detail-line">
+          <view class="detail-line"  style='font-size: 13px'>
             <text>{{item.insuranceName}}</text>
             <text>￥{{item.insurancePrice}}</text>
           </view>
@@ -140,7 +140,7 @@
         <text>商业险</text>
         <text>起保日期：{{quoteRecord.insuranceStartTime}}</text>
       </view>
-      <view class="insurance-detail">
+      <view class="insurance-detail" style='font-size: 13px'>
         <block wx:for-index="index" wx:for-item="item" wx:key="index" wx:for-items="{{quoteRecord.shangyeList}}">
           <view class="detail-line">
             <text>{{item.insuranceName}}<text wx:if="{{item.compensation}}" class="detail-line-info">不计免赔</text>
@@ -149,7 +149,7 @@
             <text>￥{{item.insurancePrice}}</text>
           </view>
         </block>
-         <view wx:if="{{quoteRecord.additionalPrice}}" class="detail-line">
+         <view wx:if="{{quoteRecord.additionalPrice}}" class="detail-line" wx:if="{{quoteRecord.additionalPrice != 0}}">
             <text> 不计免赔险
             </text>
             <text>￥{{quoteRecord.additionalPrice}}</text>
@@ -175,6 +175,44 @@
         )
       </view>
       <text class="insurance-total-price">合计：￥{{totalPrice}}</text>
+    </view>
+    <view class="order-detail-title">
+      <text class="fa fa-credit-card title-icon"/>小易返现信息
+    </view> 
+    <view class="order-detail-way order-side-padding">
+      <view class="insurance-title title-bottom-line">
+        <text>收款人姓名</text>
+        <text>{{cashbackinfo.payee}}</text>
+      </view>
+      <view class="insurance-title title-bottom-line">
+        <text>收款人卡号</text>
+        <text>{{cashbackinfo.account}}</text>
+      </view>
+      <view class="insurance-title title-bottom-line">
+        <text>开户行</text>
+        <text>{{cashbackinfo.bankname}}</text>
+      </view>
+    </view> 
+    <view class="order-detail-title">
+      <text class="fa fa-car title-icon" wx:if="{{carinfo}}"/>车辆信息
+    </view>
+    <view class="order-detail-way order-side-padding" wx:if="{{carinfo}}">
+      <view class="insurance-title title-bottom-line">
+        <text>车牌号</text>
+        <text>{{carinfo.licenseNumber}}</text>
+      </view>
+      <view class="insurance-title title-bottom-line">
+        <text>车主姓名</text>
+        <text>{{carinfo.ownerName}}</text>
+      </view>
+      <view class="insurance-title title-bottom-line">
+        <text>身份证号</text>
+        <text>{{carinfo.idCard}}</text>
+      </view>
+      <view class="insurance-title title-bottom-line">
+        <text>车主电话</text>
+        <text>{{carinfo.phone}}</text>
+      </view>
     </view>
     <view class="order-detail-title">
       <text class="fa fa-address-card-o title-icon" wx:if="{{reciver}}"/>保单收货信息
@@ -236,11 +274,13 @@ export default class OrderDetail extends wepy.page {
     reciver: '',
     quoteRecord: '', // 投保方案
     invoiceInfo: '', // 保单收货信息
+    carinfo: '', // 车辆信息
     qiangzhiTotalPrice: 0,
     shangyeTotalPrice: 0,
     totalPrice: 0,
     cashback: 0,
-    state: 0
+    state: 0,
+    cashbackinfo: ''
   };
 
   methods = {
@@ -305,6 +345,8 @@ export default class OrderDetail extends wepy.page {
           res.data.data.createTime / 1000
         );
         this.orderDetail = res.data.data;
+        this.cashbackinfo = res.data.cashbackRecord;
+        this.carinfo = res.data.carInfo;
         justifyNull(res.data.reciver);
         this.reciver = res.data.reciver;
         justifyNull(res.data.quoteRecord);
@@ -324,8 +366,8 @@ export default class OrderDetail extends wepy.page {
         res.data.quoteRecord.shangyeList.map((item, index) => {
           shangyeTotalPrice = Number(item.insurancePrice) + shangyeTotalPrice;
         });
-        console.log(additionalPrice);
-        totalPrice = (qiangzhiTotalPrice + shangyeTotalPrice).toFixed(2);
+        console.log(shangyeTotalPrice);
+        totalPrice = (qiangzhiTotalPrice + shangyeTotalPrice + additionalPrice).toFixed(2);
         this.cashback = res.data.quoteRecord.backmoney || 0;
         this.totalPrice = totalPrice;
         this.qiangzhiTotalPrice = qiangzhiTotalPrice;
