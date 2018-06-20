@@ -372,6 +372,7 @@ export default class Index extends wepy.page {
           this.$parent.globalData.baseUrl + 'api/' + 'client/isExistByOpenId',
         data: {
           openId: this.$parent.globalData.openId,
+          unionId: this.$parent.globalData.unionId,
           ownerName: this.name,
           licenseNumber: this.region + this.licenseNumber
         },

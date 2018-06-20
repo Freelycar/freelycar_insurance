@@ -1,144 +1,151 @@
 <style lang="less">
-@import './font.wxss';
-.container {
-  height: 100%;
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  // align-items: center;
-  // justify-content: space-between;
-  // box-sizing: border-box;
-  background: #efeff4;
-  font-size: 34rpx;
-  font-family: 'SimHei';
-}
+  @import './font.wxss';
 
-page {
-  height: 100%;
-  width: 100%;
-  background: #efeff4;
-}
+  .container {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    // align-items: center;
+    // justify-content: space-between;
+    // box-sizing: border-box;
+    background: #efeff4;
+    font-size: 34 rpx;
+    font-family: 'SimHei';
+  }
+
+  page {
+    height: 100%;
+    width: 100%;
+    background: #efeff4;
+  }
 </style>
 
 <script>
-import wepy from 'wepy';
-import 'wepy-async-function';
+  import wepy from 'wepy';
+  import 'wepy-async-function';
 
-import { setStore } from 'wepy-redux';
-import configStore from './store';
+  import {setStore} from 'wepy-redux';
+  import configStore from './store';
 
-const store = configStore();
-setStore(store);
+  const store = configStore();
+  setStore(store);
 
-export default class extends wepy.app {
-  config = {
-    pages: [
-      'pages/index',
-      'pages/orderList',
-      'pages/payment',
-      'pages/orderDetail',
-      'pages/quoteRecord',
-      'pages/quote',
-      'pages/adjustQuoteProgram',
-      'pages/quoteSuccess',
-      'pages/confirmQuoteInfo',
-      'pages/submitedUnderwriting'
-    ],
-    window: {
-      backgroundTextStyle: 'light',
-      navigationBarBackgroundColor: '#ce1826',
-      navigationBarTextStyle: '#fff',
-      navigationBarTitleText: 'WeChat',
-      backgroundColor: '#efeff4'
-    },
-    tabBar: {
-      list: [
-        {
-          pagePath: 'pages/index',
-          text: '车险',
-          iconPath: 'assets/imgs/tabBar_main.png',
-          selectedIconPath: 'assets/imgs/tabBar_main_selected.png'
-        },
-        {
-          pagePath: 'pages/orderList',
-          text: '订单',
-          iconPath: 'assets/imgs/tabBar_order.png',
-          selectedIconPath: 'assets/imgs/tabBar_order_selected.png'
-        }
+  export default class extends wepy.app {
+    config = {
+      pages: [
+        'pages/index',
+        'pages/orderList',
+        'pages/payment',
+        'pages/orderDetail',
+        'pages/quoteRecord',
+        'pages/quote',
+        'pages/adjustQuoteProgram',
+        'pages/quoteSuccess',
+        'pages/confirmQuoteInfo',
+        'pages/submitedUnderwriting'
       ],
-      color: '#b3b3b3',
-      selectedColor: '#ce1826'
+      window: {
+        backgroundTextStyle: 'light',
+        navigationBarBackgroundColor: '#ce1826',
+        navigationBarTextStyle: '#fff',
+        navigationBarTitleText: 'WeChat',
+        backgroundColor: '#efeff4'
+      },
+      tabBar: {
+        list: [
+          {
+            pagePath: 'pages/index',
+            text: '车险',
+            iconPath: 'assets/imgs/tabBar_main.png',
+            selectedIconPath: 'assets/imgs/tabBar_main_selected.png'
+          },
+          {
+            pagePath: 'pages/orderList',
+            text: '订单',
+            iconPath: 'assets/imgs/tabBar_order.png',
+            selectedIconPath: 'assets/imgs/tabBar_order_selected.png'
+          }
+        ],
+        color: '#b3b3b3',
+        selectedColor: '#ce1826'
+      }
+    };
+
+    globalData = {
+      userInfo: null,
+      openId: '',
+      unionId: '',
+      session_key: '',
+      name: '',
+      licenseNumber: '',
+      insurances: [],
+      baseUrl: 'https://www.howmuchweb.com/carInsurance/'
+      // baseUrl: 'http://localhost:8080/carInsurance/'
+    };
+
+    constructor() {
+      super();
+      this.use('requestfix');
     }
-  };
 
-  globalData = {
-    userInfo: null,
-    openId: '',
-    session_key: '',
-    name: '',
-    licenseNumber: '',
-    insurances: [],
-    baseUrl: 'https://www.howmuchweb.com/carInsurance/'
-  };
+    onLaunch() {
+      this.testAsync();
+    }
 
-  constructor() {
-    super();
-    this.use('requestfix');
-  }
-
-  onLaunch() {
-    this.testAsync();
-  }
-
-  sleep(s) {
-    return new Promise((resolve, reject) => {
-      setTimeout(() => {
-        resolve('promise resolved');
-      }, s * 1000);
-    });
-  }
-
-  async testAsync() {
-    const data = await this.sleep(3);
-    console.log(data);
-  }
-
-  getUserInfo(cb) {
-    const that = this;
-    if (this.globalData.userInfo) {
-      cb && cb(this.globalData.userInfo);
-    } else {
-      wepy.login({
-        success: res => {
-          console.log(res.code);
-          wepy.request({
-            // 获取openid接口
-            url:
-              'https://www.howmuchweb.com/carInsurance/api/client/getSmallWeixinInfo',
-            data: {
-              code: res.code
-            },
-            method: 'GET',
-            Accept: 'application/json, text/plain, text/html',
-            success(res) {
-              that.globalData.openId =
-                res.data.openid || that.globalData.openId; // 获取到的openid
-              that.globalData.session_key =
-                res.data.session_key || that.globalData.session_key; // 获取到session_key
-            }
-          });
-        }
-      });
-      wepy.getUserInfo({
-        success(res) {
-          that.globalData.userInfo = res.userInfo;
-          cb && cb(res.userInfo);
-        },
-        fail(error) {
-          console.log(error);
-        }
+    sleep(s) {
+      return new Promise((resolve, reject) => {
+        setTimeout(() => {
+          resolve('promise resolved');
+        }, s * 1000);
       });
     }
+
+    async testAsync() {
+      const data = await this.sleep(3);
+      console.log(data);
+    }
+
+    getUserInfo(cb) {
+      const that = this;
+      if (this.globalData.userInfo) {
+        cb && cb(this.globalData.userInfo);
+      } else {
+        wepy.login({
+          success: res => {
+            console.log(res.code);
+            wepy.request({
+              // 获取openid接口
+              url:
+                this.globalData.baseUrl + '/api/client/getSmallWeixinInfo',
+              data: {
+                code: res.code
+              },
+              method: 'GET',
+              Accept: 'application/json, text/plain, text/html',
+              success(res) {
+                console.log("app.wpy -- 获取OpenId的结果集为： ");
+                console.log(res);
+                that.globalData.openId =
+                  res.data.openid || that.globalData.openId; // 获取到的openid
+                that.globalData.session_key =
+                  res.data.session_key || that.globalData.session_key; // 获取到session_key
+                that.globalData.unionId =
+                  res.data.unionid || that.globalData.unionid; // 获取到unionid
+              }
+            });
+          }
+        });
+        wepy.getUserInfo({
+          success(res) {
+            that.globalData.userInfo = res.userInfo;
+            cb && cb(res.userInfo);
+          },
+          fail(error) {
+            console.log(error);
+          }
+        });
+      }
+    }
   }
-}
 </script>
