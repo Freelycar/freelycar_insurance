@@ -198,7 +198,7 @@ public class OrderpushResulService {
                     TasUserInfo tasUserInfo = tasUserInfoDao.getTasUserInfoByUnionId(unionId);
 
                     if (null != tasUserInfo) {
-                        String tasMessageSendResult = TasConfig.pushOrderUnpaidInfo(orderDao.getOrderByOrderId(orderId), tasUserInfo.getOpenId());
+                        String tasMessageSendResult = TasConfig.pushOrderUnpaidInfo(order, tasUserInfo.getOpenId());
                         log.debug(tasMessageSendResult);
                     } else {
                         //后面还得加一个逻辑，tasUserInfo找不到时，需要调用更新的方法去更新tasUserInfo表
@@ -211,7 +211,7 @@ public class OrderpushResulService {
                         } else {
                             tasUserInfo = tasUserInfoDao.getTasUserInfoByUnionId(unionId);
                             if (null != tasUserInfo) {
-                                String tasMessageSendResult = TasConfig.pushOrderUnpaidInfo(orderDao.getOrderByOrderId(orderId), tasUserInfo.getOpenId());
+                                String tasMessageSendResult = TasConfig.pushOrderUnpaidInfo(order, tasUserInfo.getOpenId());
                                 log.debug(tasMessageSendResult);
                             }
                         }

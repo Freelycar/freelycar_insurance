@@ -1,13 +1,19 @@
 package com.freelycar.service;
 
 import com.alibaba.fastjson.JSONObject;
+import com.freelycar.dao.ClientDao;
+import com.freelycar.dao.OrderDao;
 import com.freelycar.dao.TasUserInfoDao;
+import com.freelycar.entity.Client;
+import com.freelycar.entity.InsuranceOrder;
 import com.freelycar.entity.TasUserInfo;
 import com.freelycar.util.TasConfig;
 import org.apache.log4j.Logger;
+import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,6 +31,11 @@ public class TasUserInfoService {
     /********** 注入Dao ***********/
     @Autowired
     private TasUserInfoDao tasUserInfoDao;
+
+    @Autowired
+    private ClientDao clientDao;
+    @Autowired
+    private OrderDao orderDao;
 
 
     public String getTasOpenId(String unionId) {
@@ -84,6 +95,37 @@ public class TasUserInfoService {
 
 
         return updateCount;
+    }
+
+    @Test
+    public void sendMessageToUser() {
+        int orderId = 126;
+        InsuranceOrder order = orderDao.getOrderById(orderId);
+        Client client = clientDao.getClientByOpenIdAndLicenseNumber(order.getOpenId(), order.getLicenseNumber());
+        if (null != client) {
+            String unionId = client.getUnionId();
+            TasUserInfo tasUserInfo = tasUserInfoDao.getTasUserInfoByUnionId(unionId);
+
+            if (null != tasUserInfo) {
+                String tasMessageSendResult = TasConfig.pushOrderUnpaidInfo(order, tasUserInfo.getOpenId());
+                System.out.println(tasMessageSendResult);
+            } else {
+                //后面还得加一个逻辑，tasUserInfo找不到时，需要调用更新的方法去更新tasUserInfo表
+                int updateCount = 0;
+                if (!StringUtils.isEmpty(unionId)) {
+                    updateCount = this.updateUserOpenIds();
+                }
+                if (updateCount == 0) {
+                    System.out.println("用户没有关注公众号，无法向其推送消息！");
+                } else {
+                    tasUserInfo = tasUserInfoDao.getTasUserInfoByUnionId(unionId);
+                    if (null != tasUserInfo) {
+                        String tasMessageSendResult = TasConfig.pushOrderUnpaidInfo(order, tasUserInfo.getOpenId());
+                        System.out.println(tasMessageSendResult);
+                    }
+                }
+            }
+        }
     }
 }
 
