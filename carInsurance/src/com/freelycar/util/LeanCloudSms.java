@@ -1,5 +1,6 @@
 package com.freelycar.util;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import org.junit.Test;
@@ -34,6 +35,26 @@ public class LeanCloudSms {
 			return RESCODE.SMS_ERROR.getJSONRES(ex.getMessage());
 		}
 	}
+
+	/**
+	 * 发送通知类消息
+	 */
+/*	public static Map<String, Object> sendNotice() {
+		Map<String, Object> parameters = new HashMap<String, Object>();
+		//使用实际的值来替换模板中的变量
+//		parameters.put("order_id", "7623432424540");
+		try {
+			AVOSCloud.requestSMSCode("177xxxxxxxx", "车险办理成功通知", parameters);
+			return RESCODE.SUCCESS.getJSONRES();
+		} catch (AVException e) {
+			e.printStackTrace();
+			return RESCODE.SMS_ERROR.getJSONRES(e.getMessage());
+		}
+	}
+
+	public static void main(String[] args) {
+		sendNotice();
+	}*/
 	
 	@Test
 	public void testverify(){
