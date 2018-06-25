@@ -91,13 +91,13 @@ export default class QuoteRecord extends wepy.page {
       success: res => {
         console.log(res);
         if (res.data.code === 0) {
-          for (let i = 0; i < res.data.data.length; i++) {
-            res.data.data[i].createTime = moment(
-              res.data.data[i].createTime
-            ).format('YYYY-MM-DD hh:mm');
+          if (res.data.data.length > 0) {
+            res.data.data[0].createTime = moment(
+              res.data.data[0].createTime
+            ).format('YYYY-MM-DD HH:mm');
+            this.record = [res.data.data[0]];
+            this.$apply();
           }
-          this.record = res.data.data;
-          this.$apply();
         } else {
           this.record = [];
           this.$apply();
