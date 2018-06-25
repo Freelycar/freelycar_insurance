@@ -117,7 +117,7 @@ public class ClientService {
         if (listPage != null && !listPage.isEmpty()) {
             //查询最新的订单时间
             for (Client c : listPage) {
-                QuoteRecord quoteRecord = orderDao.getLatestQuoteByNameLice(c.getOwnerName(), c.getLicenseNumber());
+                QuoteRecord quoteRecord = orderDao.getLatestQuoteByNameLice(c.getOwnerName(), c.getLicenseNumber(),c.getId());
                 if (quoteRecord != null) {
                     c.setLeastQuoteTime(quoteRecord.getCreateTime());
                     c.setQuoteStateCode(quoteRecord.getState());
@@ -131,7 +131,7 @@ public class ClientService {
                     }
                 }
 
-                InsuranceOrder insuranceOrder = orderDao.getLatestOrderByNameLice(c.getOwnerName(), c.getLicenseNumber());
+                InsuranceOrder insuranceOrder = orderDao.getLatestOrderByNameLice(c.getOwnerName(), c.getLicenseNumber(),c.getOpenId());
 
                 if (insuranceOrder != null) {
                     c.setLeastOrderTime(insuranceOrder.getCreateTime());

@@ -92,9 +92,9 @@ public class OrderService {
 
     public Map<String, Object> getCountBySourId(Date startTime, Date endTime) {
 //        if (startTime.getTime() == endTime.getTime()) {
-            //表示同一天
-            startTime = Tools.setTimeToBeginningOfDay(startTime);
-            endTime = Tools.setTimeToEndofDay(endTime);
+        //表示同一天
+        startTime = Tools.setTimeToBeginningOfDay(startTime);
+        endTime = Tools.setTimeToEndofDay(endTime);
 //        }
 
         List<Object[]> list = orderDao.getCountBySourId(startTime, endTime);
@@ -262,7 +262,7 @@ public class OrderService {
         orderDao.updateOrder(orderById);
 
         //同步更新Client中的状态
-        clientService.updateClientQuoteState(orderById.getOpenId(),orderById.getLicenseNumber(), orderById.getState());
+        clientService.updateClientQuoteState(orderById.getOpenId(), orderById.getLicenseNumber(), orderById.getState());
 
         return RESCODE.SUCCESS.getJSONRES();
     }
@@ -280,13 +280,16 @@ public class OrderService {
 	}*/
 
     //报价记录
-    public Map<String, Object> getClientOrderByLicenseNumber(String licenseNumber, int page, int number) {
+    public Map<String, Object> getClientOrderByLicenseNumber(String licenseNumber, String openId, int page, int number) {
         int from = (page - 1) * number;
         if (Tools.isEmpty(licenseNumber)) {
             return RESCODE.USER_LICENSENUMBER_EMPTY.getJSONRES();
         }
+        if (null == openId) {
+            return RESCODE.PARAM_EMPTY.getJSONRES();
+        }
 
-        List<InsuranceOrder> orderByLicenseNumber = orderDao.getOrderByLicenseNumber(licenseNumber, from, number);
+        List<InsuranceOrder> orderByLicenseNumber = orderDao.getOrderByLicenseNumber(licenseNumber, openId, from, number);
         //循环出来这单的报价记录
         for (InsuranceOrder order : orderByLicenseNumber) {
             QuoteRecord quoteRecordBylicenseNumberAndOfferId = quoteRecordDao.getQuoteRecordBylicenseNumberAndOfferId(licenseNumber, order.getOrderId());
@@ -325,7 +328,7 @@ public class OrderService {
 
         }
 
-        long count = orderDao.getOrderCountByLicenseNumber(licenseNumber);
+        long count = orderDao.getOrderCountByLicenseNumber(licenseNumber,openId);
         return RESCODE.SUCCESS.getJSONRES(orderByLicenseNumber, (int) Math.ceil(count / (float) number), count);
     }
 
