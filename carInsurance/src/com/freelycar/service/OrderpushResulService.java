@@ -14,7 +14,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
-import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.HashMap;
@@ -51,6 +50,7 @@ public class OrderpushResulService {
     private TasUserInfoDao tasUserInfoDao;
     @Autowired
     private TasUserInfoService tasUserInfoService;
+
 
     //增加一个OrderpushResul
     public Map<String, Object> saveOrderpushResul(OrderpushResul orderpushResul) {
@@ -241,6 +241,10 @@ public class OrderpushResulService {
             if (resObj.getJSONObject("errorMsg").getString("code").equals("success")) {
                 JSONObject resultobj = resObj.getJSONObject("data");
                 String orderId = resultobj.getString("orderId");
+                int state = resultobj.getInt("state");
+//                String ciPolicyNo = resultobj.getString("ciPolicyNo");
+//                String biPolicyNo = resultobj.getString("biPolicyNo");
+
                 InsuranceOrder orderByOrderId = orderDao.getOrderByOrderId(orderId);
 
                 //yonghu支付
@@ -250,7 +254,12 @@ public class OrderpushResulService {
                 orderByOrderId.setStateString(INSURANCE.QUOTESTATE_CHENGBAOING.getName());
 
 
-                boolean fail = false;
+                //如果返回承保成功
+                boolean fail = true;
+                if (state == 4) {
+                    fail = false;
+                }
+
                 if (fail) {
                     orderByOrderId.setState(INSURANCE.QUOTESTATE_CHENGBAOFAIL.getCode());
                     orderByOrderId.setStateString(INSURANCE.QUOTESTATE_CHENGBAOFAIL.getName());
@@ -259,30 +268,34 @@ public class OrderpushResulService {
                     orderByOrderId.setStateString(INSURANCE.QUOTESTATE_NOTDELIVER.getName());
                 }
 
-                long totalPrice = orderByOrderId.getTotalPrice();
-                BigDecimal bg = new BigDecimal(CalcuateMoneyBack(totalPrice));
-                float calBackMoney = bg.setScale(2, BigDecimal.ROUND_HALF_UP).floatValue();
-                orderByOrderId.setBackmoney(String.valueOf(calBackMoney));
-                int state = resultobj.getInt("state");
-                String ciPolicyNo = resultobj.getString("ciPolicyNo");
-                String biPolicyNo = resultobj.getString("biPolicyNo");
+//                long totalPrice = orderByOrderId.getTotalPrice();
+//                BigDecimal bg = new BigDecimal(CalcuateMoneyBack(totalPrice));
+//                float calBackMoney = bg.setScale(2, BigDecimal.ROUND_HALF_UP).floatValue();
+//                orderByOrderId.setBackmoney(String.valueOf(calBackMoney));
 
 
                 orderDao.updateOrder(orderByOrderId);
                 //同步更新Client中的状态
                 clientService.updateClientQuoteState(orderByOrderId.getOpenId(), orderByOrderId.getLicenseNumber(), orderByOrderId.getState());
 
-                /*
-                 * 调用方法，将待配送信息推送给微信公众号
-                 */
-                Client client = clientDao.getClientByOpenIdAndLicenseNumber(orderByOrderId.getOpenId(), orderByOrderId.getLicenseNumber());
-                if (null != client) {
-                    String unionId = client.getUnionId();
-                    TasUserInfo tasUserInfo = tasUserInfoDao.getTasUserInfoByUnionId(unionId);
+                //同步修改报价表的状态
+                QuoteRecord qr = quoteRecordDao.getQuoteRecordBySpecify("offerId", orderId);
+                qr.setState(orderByOrderId.getState());
+                quoteRecordDao.updateQuoteRecord(qr);
 
-                    if (null != tasUserInfo) {
-                        String tasMessageSendResult = TasConfig.pushOrderForTheShippingInfo(orderByOrderId, tasUserInfo.getOpenId());
-                        log.debug(tasMessageSendResult);
+                if (!fail) {
+                    /*
+                     * 调用方法，将待配送信息推送给微信公众号
+                     */
+                    Client client = clientDao.getClientByOpenIdAndLicenseNumber(orderByOrderId.getOpenId(), orderByOrderId.getLicenseNumber());
+                    if (null != client) {
+                        String unionId = client.getUnionId();
+                        TasUserInfo tasUserInfo = tasUserInfoDao.getTasUserInfoByUnionId(unionId);
+
+                        if (null != tasUserInfo) {
+                            String tasMessageSendResult = TasConfig.pushOrderForTheShippingInfo(orderByOrderId, tasUserInfo.getOpenId());
+                            log.debug(tasMessageSendResult);
+                        }
                     }
                 }
 

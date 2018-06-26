@@ -96,6 +96,9 @@ public class Client {
 
     @Transient
     private String contactAddress;
+
+    @Transient
+    private String orderId;
     /**
      * 号牌种类(01 大型车、02 小型车)
      */
@@ -313,6 +316,14 @@ public class Client {
 
     public void setUnionId(String unionId) {
         this.unionId = unionId;
+    }
+
+    public String getOrderId() {
+        return orderId;
+    }
+
+    public void setOrderId(String orderId) {
+        this.orderId = orderId;
     }
 
     @Override

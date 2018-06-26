@@ -107,10 +107,13 @@ public class ClientService {
 	    	2.如果是“已投保”查询，按照“订单时间”倒序
          */
         List<Client> listPage;
+        long count;
         if (client.isToubao()) {
             listPage = clientDao.listClientOrderByOrderTimeDescByPage(client, from, number);
+            count = clientDao.getClientOrderByOrderTimeCount(client).longValue();
         } else {
             listPage = clientDao.listClientOrderByQuoteTimeDescByPage(client, from, number);
+            count = clientDao.getClientOrderByQuoteTimeCount(client).longValue();
         }
 
 
@@ -135,10 +138,11 @@ public class ClientService {
 
                 if (insuranceOrder != null) {
                     c.setLeastOrderTime(insuranceOrder.getCreateTime());
+                    c.setOrderId(insuranceOrder.getOrderId());
                 }
             }
 
-            long count = clientDao.getClientCount(client).longValue();
+
             return RESCODE.SUCCESS.getJSONRES(listPage, (int) Math.ceil(count / (float) number), count);
         }
         return RESCODE.SUCCESS.getJSONRES(listPage);
@@ -248,6 +252,10 @@ public class ClientService {
         }
         client.setQuoteStateCode(quoteStateCode);
         client.setQuoteState(INSURANCE.getQuotestateName(quoteStateCode));
+        //如果是待配送，则需要将该用户置为已投保的状态
+        if (quoteStateCode == INSURANCE.QUOTESTATE_NOTDELIVER.getCode()) {
+            client.setToubao(true);
+        }
         try {
 //            clientDao.updateClient(client);
             clientDao.saveClient(client);

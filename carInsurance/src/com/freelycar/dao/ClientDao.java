@@ -154,6 +154,45 @@ public class ClientDao {
     }
 
     /**
+     * 查询未投保的车险客户的数量
+     * @param client 查询条件
+     * @return long
+     */
+    public BigInteger getClientOrderByQuoteTimeCount(Client client){
+        //其他条件
+        String licenseNumber = null;
+        String phone = null;
+        String source = null;
+        Integer quoteStateCode = null;
+
+        //赋值
+        if (null != client) {
+            licenseNumber = client.getLicenseNumber();
+            phone = client.getPhone();
+            source = client.getSource();
+            quoteStateCode = client.getQuoteStateCode();
+        }
+
+        StringBuilder sql = new StringBuilder();
+        sql.append(" select count(1) ")
+                .append(" from Client c left join (select createTime,state,licenseNumber,ownerName from QuoteRecord qr where createTime in (select max(createTime) from QuoteRecord group by licenseNumber,ownerName)) qr on qr.licenseNumber=c.licenseNumber and qr.ownerName=c.ownerName where c.toubao=0 ");
+
+        if (Tools.notEmpty(licenseNumber)) {
+            sql.append(" and c.licenseNumber like '%" + licenseNumber + "%' ");
+        }
+        if (Tools.notEmpty(phone)) {
+            sql.append(" and c.phone like '%" + phone + "%' ");
+        }
+        if (Tools.notEmpty(source)) {
+            sql.append(" and c.source like '%" + source + "%' ");
+        }
+        if (null != quoteStateCode) {
+            sql.append(" and c.quoteStateCode = " + quoteStateCode);
+        }
+        return (BigInteger) getSession().createSQLQuery(sql.toString()).uniqueResult();
+    }
+
+    /**
      * 查询已投保的车险客户
      *
      * @param client 查询条件
@@ -178,7 +217,7 @@ public class ClientDao {
 
 
         StringBuilder sql = new StringBuilder();
-        sql.append(" select c.id,c.headImg,c.idCard,c.insuranceDeadline,c.licenseNumber,c.nickName,c.openId,c.unionId,c.ownerName,c.phone,c.toubao,c.transfer,c.transferTime,c.cashback,c.source,c.quoteStateCode,c.leastQueryTime,qr.createTime as leastQuoteTime,c.quoteState as quoteState ")
+        sql.append(" select c.id,c.headImg,c.idCard,c.insuranceDeadline,c.licenseNumber,c.nickName,c.openId,c.unionId,c.ownerName,c.phone,c.toubao,c.transfer,c.transferTime,c.cashback,c.source,c.quoteStateCode,c.leastQueryTime,qr.createTime as leastOrderTime,c.quoteState as quoteState ")
                 .append(" from Client c left join (select createTime,state,licenseNumber,insureName from InsuranceOrder qr where createTime in (select max(createTime) from InsuranceOrder group by licenseNumber,insureName)) qr on qr.licenseNumber=c.licenseNumber and qr.insureName=c.ownerName where c.toubao=1 ");
 
         if (Tools.notEmpty(licenseNumber)) {
@@ -198,6 +237,43 @@ public class ClientDao {
                 .setFirstResult(from)
                 .setMaxResults(num)
                 .list();
+    }
+
+    /**
+     * 查询已投保的车险客户数量
+     * @param client 查询条件
+     * @return long
+     */
+    public BigInteger getClientOrderByOrderTimeCount(Client client){
+        //其他条件
+        String licenseNumber = null;
+        Integer quoteStateCode = null;
+        Integer cashback = null;
+
+        //赋值
+        if (null != client) {
+            licenseNumber = client.getLicenseNumber();
+            quoteStateCode = client.getQuoteStateCode();
+            if (null != client.isCashback()) {
+                cashback = client.isCashback() ? 1 : 0;
+            }
+        }
+
+
+        StringBuilder sql = new StringBuilder();
+        sql.append(" select count(1) ")
+                .append(" from Client c left join (select createTime,state,licenseNumber,insureName from InsuranceOrder qr where createTime in (select max(createTime) from InsuranceOrder group by licenseNumber,insureName)) qr on qr.licenseNumber=c.licenseNumber and qr.insureName=c.ownerName where c.toubao=1 ");
+
+        if (Tools.notEmpty(licenseNumber)) {
+            sql.append(" and c.licenseNumber like '%" + licenseNumber + "%' ");
+        }
+        if (null != quoteStateCode) {
+            sql.append(" and c.quoteStateCode = " + quoteStateCode);
+        }
+        if (null != cashback) {
+            sql.append(" and c.cashback = " + cashback);
+        }
+        return (BigInteger) getSession().createSQLQuery(sql.toString()).uniqueResult();
     }
 
 
