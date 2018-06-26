@@ -12,15 +12,21 @@ $(function () {
             if (data.code == 0) {
                 justifyNull(data.data);
                 this.orderDetail = data.data;
-                $("#pay-qrcode").attr('src', data.data.paycodeurl)
-                $("#pay_money").append(data.data.totalPrice / 100)
-                $('#pay_cashback').append(data.quoteRecord.backmoney || 0)
-                $("#pay_name").append(data.data.insureName)
-                $('#pay_cardid').append(data.data.expressNumber)
-                $('#pay_bank').append(data.data.expressCompany)
-                $('#effectiveTime').append(data.data.effectiveTime)
-                $("#pay_carplate").append(data.data.licenseNumber)
-                $("#pay_number").append(data.data.orderId)
+                $("#pay-qrcode").attr('src', data.data.paycodeurl);
+                $("#pay_money").append(data.data.totalPrice / 100);
+                $('#pay_cashback').append(data.quoteRecord.backmoney || 0);
+                $("#pay_name").append(data.data.insureName);
+                // $('#pay_cardid').append(data.data.expressNumber);
+                // $('#pay_bank').append(data.data.expressCompany);
+                $('#effectiveTime').append(data.data.effectiveTime);
+                $("#pay_carplate").append(data.data.licenseNumber);
+                $("#pay_number").append(data.data.orderId);
+
+                //添加收款信息显示
+                $("#payee").append(data.cashbackRecord.payee);
+                $("#account").append(data.cashbackRecord.account);
+                $("#bankname").append(data.cashbackRecord.bankname);
+
                 justifyNull(data.quoteRecord);
                 $("#start_time").append(timestampToTime(
                     data.quoteRecord.forceInsuranceStartTime
@@ -79,6 +85,20 @@ $(function () {
                 }
                 document.getElementById('insurance-div2').innerHTML = html1;
 
+
+                // 添加一个手动获取支付状态的接口调用(AJAX)
+                $.ajax({
+                    url: "api/insurance/confirmChengbao",
+                    dataType: 'json',
+                    type: "post",
+                    data: {
+                        orderId: data.data.orderId
+                    },
+                    success: function (data) {
+                        console.log("已发送“确认承保”请求...");
+                        console.log(data);
+                    }
+                });
             }
         },
         error: function (data) {
