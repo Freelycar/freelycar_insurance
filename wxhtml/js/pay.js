@@ -87,18 +87,20 @@ $(function () {
 
 
                 // 添加一个手动获取支付状态的接口调用(AJAX)
-                $.ajax({
-                    url: "api/insurance/confirmChengbao",
-                    dataType: 'json',
-                    type: "post",
-                    data: {
-                        orderId: data.data.orderId
-                    },
-                    success: function (data) {
-                        console.log("已发送“确认承保”请求...");
-                        console.log(data);
-                    }
-                });
+                if (data.data.state == 2) {
+                    $.ajax({
+                        url: "api/insurance/confirmChengbao",
+                        dataType: 'json',
+                        type: "post",
+                        data: {
+                            orderId: data.data.orderId
+                        },
+                        success: function (data) {
+                            console.log("已发送“确认承保”请求...");
+                            console.log(data);
+                        }
+                    });
+                }
             }
         },
         error: function (data) {
