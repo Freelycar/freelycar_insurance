@@ -3,36 +3,19 @@ package com.freelycar.test;
 import com.alibaba.fastjson.JSONObject;
 import com.freelycar.entity.InsuranceOrder;
 import com.freelycar.util.Constant;
-import com.freelycar.util.HttpClientUtil;
+import com.freelycar.util.TasConfig;
 import com.freelycar.util.WechatTemplateMessage;
 import org.junit.Test;
-
-import java.util.List;
 
 public class WeChatMessageTest {
 
     public static void main(String[] args) {
-        //测试UnionId，遍历对应用户
-        String demoUnionId = "oypWW1CZQebTpndrg4YJEpMIquP8";
-        String getAccessTokenUrl = "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=wxfd188f8284ee297b&secret=70b5522f3ea3ab0071441efe33f37e6f";
-        JSONObject accessTokenJSONObject = JSONObject.parseObject(HttpClientUtil.httpGet(getAccessTokenUrl).toString());
-        System.out.println(accessTokenJSONObject);
-        String accessToken = accessTokenJSONObject.getString("access_token");
-
-        String getTasUsersUrl = "https://api.weixin.qq.com/cgi-bin/user/get?access_token=" + accessToken + "&next_openid";
-        JSONObject tasUsersJSONObject = JSONObject.parseObject(HttpClientUtil.httpGet(getTasUsersUrl).toString());
-        List<String> tasOpenIds = tasUsersJSONObject.getJSONObject("data").getObject("openid", List.class);
-        System.out.println(tasOpenIds);
-
-        String getTasUserInfoUrl = "https://api.weixin.qq.com/cgi-bin/user/info?access_token=" + accessToken + "&openid=";
-        for (String tasOpenId : tasOpenIds) {
-            JSONObject tasUsersInfoJSONObject = JSONObject.parseObject(HttpClientUtil.httpGet(getTasUserInfoUrl + tasOpenId).toString());
-            if (demoUnionId.equals(tasUsersInfoJSONObject.getString("unionid"))) {
-                System.out.println(tasUsersInfoJSONObject);
-                break;
-            }
-        }
-
+        InsuranceOrder orderByOrderId = new InsuranceOrder();
+        orderByOrderId.setId(141);
+        orderByOrderId.setOrderId("109-20180625135214-d7416");
+        orderByOrderId.setStateString("待配送");
+        String tasMessageSendResult = TasConfig.pushOrderForTheShippingInfo(orderByOrderId, "oBaSqs2Nnq1Iv4w74PfW8njeBpwA");
+        System.out.println(tasMessageSendResult);
     }
 
     /**

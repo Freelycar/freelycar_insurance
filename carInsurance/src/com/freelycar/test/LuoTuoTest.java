@@ -33,7 +33,7 @@ public class LuoTuoTest {
 	private static String forceInsuranceStartTime = "1524239999";//续保信息中强制险的止保日期
 	private static String insuranceStartTime = "1524239999";//续保信息中商业险的止保日期
 	private static String phone = "13505143481";//手机号
-	private static String offerId = "109-20180419111055-2d903";//报价推送过来的编号
+	private static String offerId = "109-20180625135214-d7416";//报价推送过来的编号
 	private static String openId = "oziV35H727Dec0pp_cYcJYODSGkk";//随便找个数据库中 已存在 的用户的openId，模拟用户登陆
 	
 	
@@ -218,6 +218,15 @@ public class LuoTuoTest {
 		array.put(obj);
 		System.out.println(array);
 	}
-	
-	
+
+	@Test
+	public void testConfirmPay() throws IOException{
+		Map<String, Object> param = new HashMap<>();
+		param.put("api_key", Constant.LUOTUOKEY);
+		param.put("orderId", "109-20180625135214-d7416");
+		JSONObject resultJson = HttpClientUtil.httpGet(Constant.LUOTUO_INTERFACE_URL + "confirmPay", param);
+		System.out.println(resultJson);
+
+
+	}
 }

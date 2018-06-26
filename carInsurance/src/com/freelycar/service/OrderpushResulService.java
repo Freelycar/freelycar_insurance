@@ -272,6 +272,20 @@ public class OrderpushResulService {
                 //同步更新Client中的状态
                 clientService.updateClientQuoteState(orderByOrderId.getOpenId(), orderByOrderId.getLicenseNumber(), orderByOrderId.getState());
 
+                /*
+                 * 调用方法，将待配送信息推送给微信公众号
+                 */
+                Client client = clientDao.getClientByOpenIdAndLicenseNumber(orderByOrderId.getOpenId(), orderByOrderId.getLicenseNumber());
+                if (null != client) {
+                    String unionId = client.getUnionId();
+                    TasUserInfo tasUserInfo = tasUserInfoDao.getTasUserInfoByUnionId(unionId);
+
+                    if (null != tasUserInfo) {
+                        String tasMessageSendResult = TasConfig.pushOrderForTheShippingInfo(orderByOrderId, tasUserInfo.getOpenId());
+                        log.debug(tasMessageSendResult);
+                    }
+                }
+
                 Map<String, Object> msg = new HashMap<>();
                 msg.put("orderId", orderId);
                 return RESCODE.LUOTUO_SUCCESS.getLuoTuoRes(msg);

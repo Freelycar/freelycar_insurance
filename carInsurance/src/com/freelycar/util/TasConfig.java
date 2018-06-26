@@ -11,8 +11,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static com.freelycar.util.Constant.XIAOYIAICHE_URL;
-
 /**
  * 小易爱车公众号的接口类
  * 注：主要用于车险小程序向小易爱车公众号推送模板消息等
@@ -122,12 +120,13 @@ public class TasConfig {
 
     /**
      * 发送微信模板消息
-     * @param params    模板消息参数
-     * @return  string  返回发送结果
+     *
+     * @param params 模板消息参数
+     * @return string  返回发送结果
      */
     private static String invokeTemplateMessage(JSONObject params) {
         //解决中文乱码问题
-        StringEntity entity = new StringEntity(params.toString(),"utf-8");
+        StringEntity entity = new StringEntity(params.toString(), "utf-8");
         String result = HttpRequest.postCall(WECHAT_TEMPLATE_MESSAGE_URL + getTasAccessToken(), entity, null);
         log.debug("微信模版消息结果：" + result);
         return result;
@@ -135,11 +134,12 @@ public class TasConfig {
 
     /**
      * 推送待支付信息到公众号
-     * @param insuranceOrder    订单信息
-     * @param tasOpenId 用户在公众号中的openId
-     * @return  string  发送接口调用结果
+     *
+     * @param insuranceOrder 订单信息
+     * @param tasOpenId      用户在公众号中的openId
+     * @return string  发送接口调用结果
      */
-    public static String pushOrderUnpaidInfo(InsuranceOrder insuranceOrder,String tasOpenId) {
+    public static String pushOrderUnpaidInfo(InsuranceOrder insuranceOrder, String tasOpenId) {
         if (null == insuranceOrder) {
             log.error("推送待支付信息失败：参数insuranceOrder为NULL");
             return "推送待支付信息失败：参数insuranceOrder为NULL";
@@ -162,6 +162,48 @@ public class TasConfig {
         data.put("OrderStatus", keywordFactory(orderStatus, "#173177"));
         data.put("remark", keywordFactory("点击“详情”跳转到订单详情及支付页面"));
         params.put("data", data);
+
+        Map<String, Object> map = new HashMap<>(1);
+        map.put("params", params.toString());
+
+        return TasConfig.invokeTemplateMessage(params);
+    }
+
+    /**
+     * 推送待配送信息到公众号
+     *
+     * @param insuranceOrder 订单信息
+     * @param tasOpenId      用户在公众号中的openId
+     * @return string  发送接口调用结果
+     */
+    public static String pushOrderForTheShippingInfo(InsuranceOrder insuranceOrder, String tasOpenId) {
+        if (null == insuranceOrder) {
+            log.error("推送待配送信息失败：参数insuranceOrder为NULL");
+            return "推送待配送信息失败：参数insuranceOrder为NULL";
+        }
+        if (StringUtils.isEmpty(tasOpenId)) {
+            log.error("推送待配送信息失败：参数tasOpenId为NULL");
+            return "推送待配送信息失败：参数insuranceOrder为NULL";
+        }
+        Integer id = insuranceOrder.getId();
+        String orderId = insuranceOrder.getOrderId();
+        String orderStatus = insuranceOrder.getStateString();
+
+        JSONObject params = new JSONObject();
+        JSONObject data = new JSONObject();
+        params.put("touser", tasOpenId);
+        params.put("template_id", ORDER_STATUS_UPDATE_TEMPLATE_ID);
+        data.put("first", keywordFactory("车险报价订单状态提醒", "#173177"));
+        data.put("OrderSn", keywordFactory(orderId, "#173177"));
+        data.put("OrderStatus", keywordFactory(orderStatus, "#173177"));
+        data.put("remark", keywordFactory("点击“详情”跳转到小程序订单详情页面"));
+        params.put("data", data);
+
+        JSONObject miniProgramJSON = new JSONObject();
+        miniProgramJSON.put("appid", WechatConfig.APP_ID);
+//        miniProgramJSON.put("pagepath", "pages/orderDetail?id=" + id);
+        miniProgramJSON.put("path", "pages/orderDetail?id=" + id);
+        params.put("miniprogram", miniProgramJSON);
 
         Map<String, Object> map = new HashMap<>(1);
         map.put("params", params.toString());
