@@ -13,8 +13,8 @@ public class WeChatMessageTest {
         InsuranceOrder orderByOrderId = new InsuranceOrder();
         orderByOrderId.setId(141);
         orderByOrderId.setOrderId("109-20180625135214-d7416");
-        orderByOrderId.setStateString("待配送");
-        String tasMessageSendResult = TasConfig.pushOrderForTheShippingInfo(orderByOrderId, "oBaSqs2Nnq1Iv4w74PfW8njeBpwA");
+        orderByOrderId.setStateString("待签收");
+        String tasMessageSendResult = TasConfig.pushOrderChangeInfo(orderByOrderId, "oBaSqs2Nnq1Iv4w74PfW8njeBpwA");
         System.out.println(tasMessageSendResult);
     }
 

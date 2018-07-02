@@ -4,7 +4,9 @@ import com.freelycar.dao.*;
 import com.freelycar.entity.*;
 import com.freelycar.util.INSURANCE;
 import com.freelycar.util.RESCODE;
+import com.freelycar.util.TasConfig;
 import com.freelycar.util.Tools;
+import org.apache.log4j.Logger;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,11 +21,13 @@ import java.util.List;
 import java.util.Map;
 
 /**
- *
+ * @author 唐炜（修改）
  */
 @Transactional
 @Service
 public class OrderService {
+    private static Logger log = Logger.getLogger(OrderService.class);
+
     /********** 注入OrderDao ***********/
     @Autowired
     private OrderDao orderDao;
@@ -48,6 +52,9 @@ public class OrderService {
 
     @Autowired
     private ClientDao clientDao;
+
+    @Autowired
+    private TasUserInfoDao tasUserInfoDao;
 
     /********** 注入ClientService ***********/
     @Autowired
@@ -94,6 +101,7 @@ public class OrderService {
 
     /**
      * 查询订单的运单信息
+     *
      * @param orderId
      * @return
      */
@@ -422,11 +430,21 @@ public class OrderService {
         client.setQuoteState(INSURANCE.QUOTESTATE_NOTREVICER.getName());
         clientDao.updateClient(client);
 
+        //推送模板消息到公众号
+        String unionId = client.getUnionId();
+        TasUserInfo tasUserInfo = tasUserInfoDao.getTasUserInfoByUnionId(unionId);
+
+        if (null != tasUserInfo) {
+            String tasMessageSendResult = TasConfig.pushOrderChangeInfo(order, tasUserInfo.getOpenId());
+            log.debug(tasMessageSendResult);
+        }
+
         return RESCODE.SUCCESS.getJSONRES();
     }
 
     /**
      * 确认签收
+     *
      * @param orderId
      * @return
      */
@@ -452,11 +470,21 @@ public class OrderService {
         client.setQuoteState(INSURANCE.QUOTESTATE_HASTOUBAO.getName());
         clientDao.updateClient(client);
 
+        //推送模板消息到公众号
+        String unionId = client.getUnionId();
+        TasUserInfo tasUserInfo = tasUserInfoDao.getTasUserInfoByUnionId(unionId);
+
+        if (null != tasUserInfo) {
+            String tasMessageSendResult = TasConfig.pushOrderChangeInfo(order, tasUserInfo.getOpenId());
+            log.debug(tasMessageSendResult);
+        }
+
         return RESCODE.SUCCESS.getJSONRES();
     }
 
     /**
      * 确认返现
+     *
      * @param orderId
      * @return
      */

@@ -293,7 +293,7 @@ public class OrderpushResulService {
                         TasUserInfo tasUserInfo = tasUserInfoDao.getTasUserInfoByUnionId(unionId);
 
                         if (null != tasUserInfo) {
-                            String tasMessageSendResult = TasConfig.pushOrderForTheShippingInfo(orderByOrderId, tasUserInfo.getOpenId());
+                            String tasMessageSendResult = TasConfig.pushOrderChangeInfo(orderByOrderId, tasUserInfo.getOpenId());
                             log.debug(tasMessageSendResult);
                         }
                     }

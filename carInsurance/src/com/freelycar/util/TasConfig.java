@@ -170,20 +170,20 @@ public class TasConfig {
     }
 
     /**
-     * 推送待配送信息到公众号
-     *
+     * 推送订单状态变更信息到公众号
+     * 待配送、待签收、已投保
      * @param insuranceOrder 订单信息
      * @param tasOpenId      用户在公众号中的openId
      * @return string  发送接口调用结果
      */
-    public static String pushOrderForTheShippingInfo(InsuranceOrder insuranceOrder, String tasOpenId) {
+    public static String pushOrderChangeInfo(InsuranceOrder insuranceOrder, String tasOpenId) {
         if (null == insuranceOrder) {
-            log.error("推送待配送信息失败：参数insuranceOrder为NULL");
-            return "推送待配送信息失败：参数insuranceOrder为NULL";
+            log.error("推送订单状态变更信息失败：参数insuranceOrder为NULL");
+            return "推送订单状态变更信息失败：参数insuranceOrder为NULL";
         }
         if (StringUtils.isEmpty(tasOpenId)) {
-            log.error("推送待配送信息失败：参数tasOpenId为NULL");
-            return "推送待配送信息失败：参数insuranceOrder为NULL";
+            log.error("推送订单状态变更信息失败：参数tasOpenId为NULL");
+            return "推送订单状态变更信息失败：参数insuranceOrder为NULL";
         }
         Integer id = insuranceOrder.getId();
         String orderId = insuranceOrder.getOrderId();
@@ -201,6 +201,7 @@ public class TasConfig {
 
         JSONObject miniProgramJSON = new JSONObject();
         miniProgramJSON.put("appid", WechatConfig.APP_ID);
+        //跳转到小程序的对应页面（需要小程序先发布）
 //        miniProgramJSON.put("pagepath", "pages/orderDetail?id=" + id);
         miniProgramJSON.put("path", "pages/orderDetail?id=" + id);
         params.put("miniprogram", miniProgramJSON);
