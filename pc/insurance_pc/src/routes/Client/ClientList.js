@@ -1,9 +1,18 @@
 import React, {PureComponent} from 'react';
 import {connect} from 'dva';
 import moment from 'moment';
-import {Button, Card, Col, Form, Input, Radio, Row, Select, Table} from 'antd';
+import {Button, Card, Col, Form, Input, message, Modal, Radio, Row, Select, Table} from 'antd';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
-import {getClientList} from '../../services/client';
+import {
+  affirmCashBackRecordInfo,
+  affirmDistributionInfo,
+  affirmSignForInfo,
+  getCashBackRecordByOrderId,
+  getClientList,
+  getInvoiceInfoByOrderId,
+  getOrderSignForInfoByOrderId,
+  getReciverByOrderId
+} from '../../services/client';
 import {Link} from 'dva/router';
 
 import styles from './ClientList.less';
@@ -12,6 +21,128 @@ const queryBtnStyle = null;
 const FormItem = Form.Item;
 const {Option} = Select;
 const getValue = obj => Object.keys(obj).map(key => obj[key]).join(',');
+
+const DistributionModalForm = Form.create()(
+  class extends React.Component {
+    render() {
+      const {visible, onCancel, onCreate, form, reciverData, invoiceData} = this.props;
+      const {getFieldDecorator} = form;
+      return (
+        <Modal
+          visible={visible}
+          title="保单发货"
+          onOk={onCreate}
+          onCancel={onCancel}
+          reciverData={reciverData}
+          invoiceData={invoiceData}
+        >
+          <Card title="收件人信息" bordered={false}>
+            <p style={{fontWeight: "bold"}}>收件人姓名</p>
+            <p>{reciverData.reciver}</p>
+            <p style={{fontWeight: "bold"}}>收件人联系方式</p>
+            <p>{reciverData.phone}</p>
+            <p style={{fontWeight: "bold"}}>收件人地址</p>
+            <p>{reciverData.provincesCities} {reciverData.adressDetail}</p>
+          </Card>
+          <Card title="发票信息" bordered={false}>
+            <p style={{fontWeight: "bold"}}>发票性质</p>
+            <p>{invoiceData.nature || '个人'}</p>
+            <p style={{fontWeight: "bold"}}>发票类型</p>
+            <p>{invoiceData.invoiceType}</p>
+            <p style={{fontWeight: "bold"}}>发票抬头</p>
+            <p>{invoiceData.invoiceTitle}</p>
+          </Card>
+          <Card title="运单信息" bordered={false}>
+            <Form layout="vertical">
+              <FormItem label="快递公司">
+                {getFieldDecorator('expressCompany', {
+                  rules: [{required: true, message: '请选择一个快递公司！'}],
+                })(
+                  <Select placeholder="请选择" style={{width: '100%'}}>
+                    <Option value="顺丰速运">顺丰速运</Option>
+                    <Option value="EMS">EMS</Option>
+                    <Option value="申通快递">申通快递</Option>
+                  </Select>
+                )}
+              </FormItem>
+              <FormItem label="运单编号">
+                {getFieldDecorator('expressNumber', {
+                  rules: [{required: true, message: '请输入运单编号！'}],
+                })(
+                  <Input placeholder="请输入运单编号"/>
+                )}
+              </FormItem>
+              <FormItem label="备注">
+                {getFieldDecorator('remark')(<Input/>)}
+              </FormItem>
+              <FormItem>
+                {getFieldDecorator('orderId', {initialValue: reciverData.orderId || ''})(<Input type="hidden"/>)}
+              </FormItem>
+            </Form>
+          </Card>
+
+        </Modal>
+      );
+    }
+  }
+);
+
+const SignForModalForm = Form.create()(
+  class extends React.Component {
+    render() {
+      const {visible, onCancel, onCreate, signForData} = this.props;
+      return (
+        <Modal
+          visible={visible}
+          okText="确定签收"
+          title="签收确认"
+          onOk={onCreate}
+          onCancel={onCancel}
+          signForData={signForData}
+        >
+          <Card title="运单配送信息" bordered={false}>
+            <p style={{fontWeight: "bold"}}>快递公司</p>
+            <p>{signForData.expressCompany}</p>
+            <p style={{fontWeight: "bold"}}>运单编号</p>
+            <p>{signForData.expressNumber}</p>
+            <p style={{fontWeight: "bold"}}>备注</p>
+            <p>{signForData.remark}</p>
+            <p style={{fontWeight: "bold"}}>发货时间</p>
+            <p>{moment(signForData.deliveredTime).format('YYYY-MM-DD HH:mm')}</p>
+          </Card>
+        </Modal>
+      );
+    }
+  }
+);
+
+const CashBackModal = Form.create()(
+  class extends React.Component {
+    render() {
+      const {visible, onCancel, onCreate, cashBackData} = this.props;
+      return (
+        <Modal
+          visible={visible}
+          title="返现信息"
+          onOk={onCreate}
+          onCancel={onCancel}
+          cashBackData={cashBackData}
+        >
+          <Card title="返现信息" bordered={false}>
+            <p style={{fontWeight: "bold"}}>收款人姓名</p>
+            <p>{cashBackData.payee}</p>
+            <p style={{fontWeight: "bold"}}>收款人卡号</p>
+            <p>{cashBackData.account}</p>
+            <p style={{fontWeight: "bold"}}>开户银行</p>
+            <p>{cashBackData.bankname}</p>
+            <p style={{fontWeight: "bold"}}>返现金额</p>
+            <p>{cashBackData.backMoney}</p>
+          </Card>
+        </Modal>
+      );
+    }
+  }
+);
 
 @connect(({chart, loading}) => {
   return ({
@@ -24,13 +155,40 @@ export default class ClientList extends PureComponent {
   state = {
     page: 1,
     expandForm: false,
+    distributionModalVisible: false,
+    signForModalVisible: false,
+    cashBackModalVisible: false,
     formValues: {},
     type: '0', // 0 未投保 1 已投保,
     quotingData: [],
     quotedData: [],
     pagination: {total: 0},
-    fieldsValues: {}
-  };
+    fieldsValues: {},
+    reciverData: {
+      reciver: '',
+      phone: '',
+      provincesCities: '',
+      adressDetail: ''
+    },
+    invoiceData: {
+      nature: '',
+      invoiceType: '',
+      invoiceTitle: ''
+    },
+    signForData: {
+      expressCompany: '',
+      expressNumber: '',
+      remark: '',
+      deliveredTime: ''
+    },
+    cashBackData: {
+      payee: '',
+      account: '',
+      bankname: '',
+      backMoney: ''
+    }
+  }
+  ;
   //封装请求数据
   getQueryData = (values) => {
     let queryData = {...values};
@@ -55,18 +213,19 @@ export default class ClientList extends PureComponent {
       console.log('查询结果：');
       console.log(res);
       if (res && res.code == 0) {
-        res.data.map((item, index) => {
-          res.data[index].key = item.id
-        })
+        const resultData = res.data;
+        resultData.map((item, index) => {
+          resultData[index].key = item.id
+        });
         this.setState({
-          quotingData: res.data,
+          quotingData: resultData,
           pagination: {total: res.counts}
         })
       }
     }).catch(err => {
 
     })
-  }
+  };
   handleFormReset = () => {
     const {form, dispatch} = this.props;
     form.resetFields();
@@ -89,7 +248,7 @@ export default class ClientList extends PureComponent {
       // this.state.quotingData;
       this.setState({
         fieldsValues: e.target.value
-      })
+      });
       const values = {
         ...fieldsValues,
         updatedAt: fieldsValues.updatedAt && fieldsValues.updatedAt.valueOf(),
@@ -97,8 +256,9 @@ export default class ClientList extends PureComponent {
 
       this.getClientList(values, 1);
     });
-  }
+  };
   handleTypeChange = (e) => {
+    this.setState({quotingData: [], quotedData: []});
     this.setState({type: e.target.value}, () => this.getClientList({}, 1));
   }
   handleTableChange = (pagination, data) => {
@@ -112,6 +272,178 @@ export default class ClientList extends PureComponent {
     this.getClientList(this.state.fieldsValues, pagination.current)
   }
 
+
+  //显示配送窗口
+  showDistributionModal = (item) => {
+    if (item.orderId) {
+      //发送异步请求，获取收件人信息
+      getReciverByOrderId({
+        orderId: item.orderId
+      }).then(res => {
+        if (res) {
+          this.setState({
+            reciverData: JSON.parse(JSON.stringify(res))
+          });
+        } else {
+          this.state.reciverData = {
+            reciver: '',
+            phone: '',
+            provincesCities: '',
+            adressDetail: ''
+          }
+        }
+      });
+      //发送异步请求，获取发票信息
+      getInvoiceInfoByOrderId({
+        orderId: item.orderId
+      }).then(res => {
+        if (res) {
+          console.log(res);
+          this.setState({
+            invoiceData: JSON.parse(JSON.stringify(res))
+          });
+        } else {
+          this.state.invoiceData = {
+            nature: '',
+            invoiceType: '',
+            invoiceTitle: ''
+          }
+        }
+      });
+      this.setState({
+        distributionModalVisible: true
+      });
+
+    } else {
+      console.log("orderId为空，请联系管理员！")
+    }
+  };
+
+  //配送弹窗：点击确定
+  handleDistributionForm = () => {
+    const form = this.distributionFormRef.props.form;
+    form.validateFields((err, values) => {
+      if (err) {
+        return;
+      }
+      affirmDistributionInfo({
+        ...values
+      }).then(res => {
+        if (res && res.code == 0) {
+          document.getElementById("searchBtn").click();
+          form.resetFields();
+          this.setState({distributionModalVisible: false});
+          message.success(res.msg);
+        } else {
+          console.log(res);
+          message.error(res.msg);
+        }
+      });
+
+    });
+  };
+
+  //配送窗口的取消事件
+  handleCancelDistributionForm = () => {
+    const form = this.distributionFormRef.props.form;
+    form.resetFields();
+    this.setState({distributionModalVisible: false});
+  };
+
+  //配送窗口的form表单
+  saveDistributionFormRef = (distributionFormRef) => {
+    this.distributionFormRef = distributionFormRef;
+  };
+
+  //显示签收弹窗
+  showSignForInfoModal = (item) => {
+    if (item.orderId) {
+      //发送异步请求，获取运单信息
+      getOrderSignForInfoByOrderId({
+        orderId: item.orderId
+      }).then(res => {
+        if (res) {
+          this.setState({
+            signForData: JSON.parse(JSON.stringify(res))
+          });
+        }
+      });
+      this.setState({
+        signForModalVisible: true
+      });
+
+    } else {
+      console.log("orderId为空，请联系管理员！")
+    }
+  };
+
+  //签收弹窗：点击确定
+  handleSignForForm = () => {
+    affirmSignForInfo({
+      orderId: this.state.signForData.orderId
+    }).then(res => {
+      if (res && res.code == 0) {
+        document.getElementById("searchBtn").click();
+        this.setState({signForModalVisible: false});
+        message.success(res.msg);
+      } else {
+        console.log(res);
+        message.error(res.msg);
+      }
+    });
+  };
+
+  //签收弹窗：取消事件
+  handleCancelSignForForm = () => {
+    this.setState({signForModalVisible: false, signForData: {}});
+  };
+
+  //显示返现弹窗
+  showCashBackModal = (item) => {
+    if (item.orderId) {
+      //发送异步请求，获取返现
+      getCashBackRecordByOrderId({
+        orderId: item.orderId
+      }).then(res => {
+        if (res) {
+          res["backMoney"] = item.backMoney;
+          res["orderId"] = item.orderId;
+          this.setState({
+            cashBackData: JSON.parse(JSON.stringify(res))
+          });
+        }
+      });
+      this.setState({
+        cashBackModalVisible: true
+      });
+
+    } else {
+      msessage.error("orderId为空，请联系管理员！");
+    }
+  };
+
+  //返现弹窗：点击确定
+  handleCashBackForm = () => {
+    affirmCashBackRecordInfo({
+      orderId: this.state.cashBackData.orderId
+    }).then(res => {
+      if (res && res.code == 0) {
+        document.getElementById("searchBtn").click();
+        this.setState({cashBackModalVisible: false});
+        message.success(res.msg);
+      } else {
+        console.log(res);
+        message.error(res.msg);
+      }
+    });
+
+  };
+
+  //返现弹窗：取消事件
+  handleCancelCashBackForm = () => {
+    this.setState({cashBackModalVisible: false});
+  };
+
   componentDidMount() {
     this.getClientList({
       toubao: false
@@ -121,11 +453,15 @@ export default class ClientList extends PureComponent {
     // });
   }
 
+  // exprotExcel = () => {   //导出excel  TODO
+
+  // }
+
   //动态获得头部筛选字段
   renderSimpleForm() {
     const {getFieldDecorator} = this.props.form;
     return (
-      <Form onSubmit={this.handleSearch} layout="inline">
+      <Form onSubmit={this.handleSearch} layout="inline" id="searchForm">
         <Row gutter={{md: 8, lg: 24, xl: 48}}>
           <Col md={6} sm={24}>
             <FormItem label="车牌号码">
@@ -161,7 +497,7 @@ export default class ClientList extends PureComponent {
           </Col>
           <Col md={6} sm={24}>
                         <span className={styles.submitButtons}>
-                            <Button type="primary" htmlType="submit">查询</Button>
+                            <Button type="primary" htmlType="submit" id="searchBtn">查询</Button>
                             <Button style={{marginLeft: 8}} onClick={this.handleFormReset}>重置</Button>
                         </span>
           </Col>
@@ -224,10 +560,6 @@ export default class ClientList extends PureComponent {
     return this.state.type === '0' ? this.renderAdvancedForm() : this.renderSimpleForm();
   }
 
-  // exprotExcel = () => {   //导出excel  TODO
-
-  // }
-
   render() {
     const {type} = this.state;
     const columns = [
@@ -235,7 +567,6 @@ export default class ClientList extends PureComponent {
         title: '序号',
         // dataIndex: 'key',
         render: (text, record, index) => {
-          // console.log('asdasdasdaads',this)
           return index + 1 + (this.state.page - 1) * 10;
         }
       },
@@ -309,7 +640,7 @@ export default class ClientList extends PureComponent {
         title: '车牌号码',
         dataIndex: 'licenseNumber',
         render: (text, record) => {
-          return <Link to='/client/detail'>
+          return <Link to={`/client/detail/${record.id}`}>
             {text}
           </Link>
         }
@@ -370,16 +701,31 @@ export default class ClientList extends PureComponent {
       },
       {
         title: '返现金额',
-        dataIndex: 'backmoney',
+        dataIndex: 'backMoney',
       },
       {
         title: '操作',
         // dataIndex: 'from',
         render: val => {
-          return <div>
-            <a>配送</a>
-            <a style={{marginLeft: 10}}>返现</a>
-          </div>
+          let stateCode = val.quoteStateCode;
+          let ifBack = val.cashback == true ? '' : '返现';
+          switch (stateCode) {
+            case 5:
+              return <div>
+                <a onClick={() => this.showDistributionModal(val)}>配送</a>
+                <a style={{marginLeft: 10}}>{ifBack}</a>
+              </div>;
+            case 6:
+              return <div>
+                <a onClick={() => this.showSignForInfoModal(val)}>签收</a>
+                <a style={{marginLeft: 10}}>{ifBack}</a>
+              </div>;
+            default:
+              return <div>
+                <Link to={`/client/detail/${val.id}`}>查看</Link>
+                <a style={{marginLeft: 10}} onClick={() => this.showCashBackModal(val)}>{ifBack}</a>
+              </div>;
+          }
         }
       }
     ];
@@ -419,6 +765,26 @@ export default class ClientList extends PureComponent {
             />
           </div>
         </Card>
+        <DistributionModalForm
+          wrappedComponentRef={this.saveDistributionFormRef}
+          visible={this.state.distributionModalVisible}
+          reciverData={this.state.reciverData}
+          invoiceData={this.state.invoiceData}
+          onCreate={this.handleDistributionForm}
+          onCancel={this.handleCancelDistributionForm}
+        />
+        <SignForModalForm
+          visible={this.state.signForModalVisible}
+          signForData={this.state.signForData}
+          onCreate={this.handleSignForForm}
+          onCancel={this.handleCancelSignForForm}
+        />
+        <CashBackModal
+          visible={this.state.cashBackModalVisible}
+          cashBackData={this.state.cashBackData}
+          onCreate={this.handleCashBackForm}
+          onCancel={this.handleCancelCashBackForm}
+        />
       </PageHeaderLayout>
     );
   }

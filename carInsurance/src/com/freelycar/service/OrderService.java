@@ -2,6 +2,7 @@ package com.freelycar.service;
 
 import com.freelycar.dao.*;
 import com.freelycar.entity.*;
+import com.freelycar.util.INSURANCE;
 import com.freelycar.util.RESCODE;
 import com.freelycar.util.Tools;
 import org.json.JSONException;
@@ -9,6 +10,7 @@ import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -87,6 +89,20 @@ public class OrderService {
             return res;
         } else {
             return RESCODE.NOT_FOUND.getJSONRES();
+        }
+    }
+
+    /**
+     * 查询订单的运单信息
+     * @param orderId
+     * @return
+     */
+    public InsuranceOrder getOrderSignForInfoByOrderId(String orderId) {
+        InsuranceOrder orderById = orderDao.getOrderByOrderId(orderId);
+        if (orderById != null) {
+            return orderById;
+        } else {
+            return null;
         }
     }
 
@@ -241,16 +257,51 @@ public class OrderService {
     //更新Order
     public Map<String, Object> updateOrderByOfferId(InsuranceOrder order) {
         InsuranceOrder or = orderDao.getOrderByOrderId(order.getOrderId());
-        or.setBackmoney(order.getBackmoney());
-        or.setBiPolicyNo(order.getBiPolicyNo());
-        or.setBiPolicyPrice(order.getBiPolicyPrice());
-        or.setCashback(order.getCashback());
-        or.setCiPolicyNo(order.getBiPolicyNo());
-        or.setCiPolicyPrice(order.getCiPolicyPrice());
-        or.setExpressCompany(order.getExpressCompany());
-        or.setExpressNumber(order.getExpressNumber());
-        or.setLicenseNumber(order.getLicenseNumber());
-        or.setOfferDetail(order.getOfferDetail());
+        String backMoney = order.getBackmoney();
+        if (!StringUtils.isEmpty(backMoney)) {
+            or.setBackmoney(backMoney);
+        }
+        String biPolicyNo = order.getBiPolicyNo();
+        if (!StringUtils.isEmpty(biPolicyNo)) {
+            or.setBiPolicyNo(biPolicyNo);
+        }
+        Long biPolicyPrice = order.getBiPolicyPrice();
+        if (!StringUtils.isEmpty(biPolicyPrice)) {
+            or.setBiPolicyPrice(biPolicyPrice);
+        }
+        Boolean cashBack = order.getCashback();
+        if (!StringUtils.isEmpty(cashBack)) {
+            or.setCashback(cashBack);
+        }
+        String ciPolicyNo = order.getCiPolicyNo();
+        if (!StringUtils.isEmpty(ciPolicyNo)) {
+            or.setCiPolicyNo(ciPolicyNo);
+        }
+        Long ciPolicyPrice = order.getCiPolicyPrice();
+        if (!StringUtils.isEmpty(ciPolicyPrice)) {
+            or.setCiPolicyPrice(ciPolicyPrice);
+        }
+        String expressCompany = order.getExpressCompany();
+        if (!StringUtils.isEmpty(expressCompany)) {
+            or.setExpressCompany(expressCompany);
+        }
+        String expressNumber = order.getExpressNumber();
+        if (!StringUtils.isEmpty(expressNumber)) {
+            or.setExpressNumber(expressNumber);
+        }
+        String licenseNumber = order.getLicenseNumber();
+        if (!StringUtils.isEmpty(licenseNumber)) {
+            or.setLicenseNumber(licenseNumber);
+        }
+        String offerDetail = order.getOfferDetail();
+        if (!StringUtils.isEmpty(offerDetail)) {
+            or.setOfferDetail(offerDetail);
+        }
+        String remark = order.getRemark();
+        if (!StringUtils.isEmpty(remark)) {
+            or.setRemark(remark);
+        }
+
         orderDao.updateOrder(or);
         return RESCODE.SUCCESS.getJSONRES();
     }
@@ -328,7 +379,7 @@ public class OrderService {
 
         }
 
-        long count = orderDao.getOrderCountByLicenseNumber(licenseNumber,openId);
+        long count = orderDao.getOrderCountByLicenseNumber(licenseNumber, openId);
         return RESCODE.SUCCESS.getJSONRES(orderByLicenseNumber, (int) Math.ceil(count / (float) number), count);
     }
 
@@ -344,6 +395,85 @@ public class OrderService {
         float rate = cashbackDao.listCashbackRate().get(0).getRate();
         Double calReturn = (curPrice + ciBasePrice) * rate;
         return calReturn;
+    }
+
+    public Map<String, Object> affirmDistributionInfo(InsuranceOrder insuranceOrder) {
+        InsuranceOrder order = orderDao.getOrderByOrderId(insuranceOrder.getOrderId());
+        order.setExpressCompany(insuranceOrder.getExpressCompany());
+        order.setExpressNumber(insuranceOrder.getExpressNumber());
+        order.setRemark(insuranceOrder.getRemark());
+        order.setState(INSURANCE.QUOTESTATE_NOTREVICER.getCode());
+        order.setStateString(INSURANCE.QUOTESTATE_NOTREVICER.getName());
+        order.setDeliveredTime(System.currentTimeMillis());
+        orderDao.updateOrder(order);
+
+        QuoteRecord quoteRecord = quoteRecordDao.getQuoteRecordBylicenseNumberAndOfferId(order.getLicenseNumber(), order.getOrderId());
+        if (null == quoteRecord) {
+            return RESCODE.NOT_FOUND.getJSONRES("对应的报价记录查询失败！");
+        }
+        quoteRecord.setState(INSURANCE.QUOTESTATE_NOTREVICER.getCode());
+        quoteRecordDao.update(quoteRecord);
+
+        Client client = clientDao.getClientByOpenIdAndLicenseNumber(order.getOpenId(), order.getLicenseNumber());
+        if (null == client) {
+            return RESCODE.NOT_FOUND.getJSONRES("对应的client信息查询失败！");
+        }
+        client.setQuoteStateCode(INSURANCE.QUOTESTATE_NOTREVICER.getCode());
+        client.setQuoteState(INSURANCE.QUOTESTATE_NOTREVICER.getName());
+        clientDao.updateClient(client);
+
+        return RESCODE.SUCCESS.getJSONRES();
+    }
+
+    /**
+     * 确认签收
+     * @param orderId
+     * @return
+     */
+    public Map<String, Object> affirmSignForInfo(String orderId) {
+        InsuranceOrder order = orderDao.getOrderByOrderId(orderId);
+        order.setState(INSURANCE.QUOTESTATE_HASTOUBAO.getCode());
+        order.setStateString(INSURANCE.QUOTESTATE_HASTOUBAO.getName());
+        order.setDeliveredTime(System.currentTimeMillis());
+        orderDao.updateOrder(order);
+
+        QuoteRecord quoteRecord = quoteRecordDao.getQuoteRecordBylicenseNumberAndOfferId(order.getLicenseNumber(), order.getOrderId());
+        if (null == quoteRecord) {
+            return RESCODE.NOT_FOUND.getJSONRES("对应的报价记录查询失败！");
+        }
+        quoteRecord.setState(INSURANCE.QUOTESTATE_HASTOUBAO.getCode());
+        quoteRecordDao.update(quoteRecord);
+
+        Client client = clientDao.getClientByOpenIdAndLicenseNumber(order.getOpenId(), order.getLicenseNumber());
+        if (null == client) {
+            return RESCODE.NOT_FOUND.getJSONRES("对应的client信息查询失败！");
+        }
+        client.setQuoteStateCode(INSURANCE.QUOTESTATE_HASTOUBAO.getCode());
+        client.setQuoteState(INSURANCE.QUOTESTATE_HASTOUBAO.getName());
+        clientDao.updateClient(client);
+
+        return RESCODE.SUCCESS.getJSONRES();
+    }
+
+    /**
+     * 确认返现
+     * @param orderId
+     * @return
+     */
+    public Map<String, Object> affirmCashBackRecordInfo(String orderId) {
+        InsuranceOrder order = orderDao.getOrderByOrderId(orderId);
+        order.setCashback(true);
+        order.setCashbackTime(System.currentTimeMillis());
+        orderDao.updateOrder(order);
+
+        Client client = clientDao.getClientByOpenIdAndLicenseNumber(order.getOpenId(), order.getLicenseNumber());
+        if (null == client) {
+            return RESCODE.NOT_FOUND.getJSONRES("对应的client信息查询失败！");
+        }
+        client.setCashback(true);
+        clientDao.updateClient(client);
+
+        return RESCODE.SUCCESS.getJSONRES();
     }
 
     static class CountBySource {

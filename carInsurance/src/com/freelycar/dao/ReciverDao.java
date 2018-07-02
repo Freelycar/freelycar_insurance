@@ -47,9 +47,13 @@ public class ReciverDao
     	Reciver result = (Reciver) getSession().createQuery(hql).setString("openId", openId).uniqueResult();
     	return result;
     }
-    
-    //根据id查询Reciver
-    public Reciver getReciverByOrderId(String orderId){
+
+	/**
+	 * 根据orderId查询Reciver
+	 * @param orderId
+	 * @return
+	 */
+	public Reciver getReciverByOrderId(String orderId){
     	String hql = "from Reciver where orderId = :orderId";
     	Reciver result = (Reciver) getSession().createQuery(hql).setString("orderId", orderId).uniqueResult();
     	return result;

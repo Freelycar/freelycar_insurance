@@ -99,6 +99,9 @@ public class Client {
 
     @Transient
     private String orderId;
+
+    @Transient
+    private String backMoney;
     /**
      * 号牌种类(01 大型车、02 小型车)
      */
@@ -324,6 +327,14 @@ public class Client {
 
     public void setOrderId(String orderId) {
         this.orderId = orderId;
+    }
+
+    public String getBackMoney() {
+        return backMoney;
+    }
+
+    public void setBackMoney(String backMoney) {
+        this.backMoney = backMoney;
     }
 
     @Override

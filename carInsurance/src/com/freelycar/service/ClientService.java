@@ -139,6 +139,7 @@ public class ClientService {
                 if (insuranceOrder != null) {
                     c.setLeastOrderTime(insuranceOrder.getCreateTime());
                     c.setOrderId(insuranceOrder.getOrderId());
+                    c.setBackMoney(insuranceOrder.getBackmoney());
                 }
             }
 

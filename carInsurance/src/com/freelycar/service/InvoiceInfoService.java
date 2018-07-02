@@ -10,7 +10,9 @@ import org.springframework.transaction.annotation.Transactional;
 import com.freelycar.dao.InvoiceInfoDao;
 import com.freelycar.entity.InvoiceInfo;
 import com.freelycar.util.RESCODE;
-import com.freelycar.util.Tools;  
+import com.freelycar.util.Tools;
+import org.springframework.util.StringUtils;
+
 /**  
  *  
  */  
@@ -91,5 +93,17 @@ public class InvoiceInfoService
 	    invoiceInfoDao.updateInvoiceInfo(invoiceInfo);
 	    return RESCODE.SUCCESS.getJSONRES();
 	}
-    
+
+	/**
+	 * 根据orderId获取发票信息
+	 * @param orderId
+	 * @return
+	 */
+	public InvoiceInfo getInvoiceInfoByOrderId(String orderId){
+		if (StringUtils.isEmpty(orderId)) {
+			return null;
+		}
+		return invoiceInfoDao.getInvoiceInfoByOrderId(orderId);
+	}
+
 }

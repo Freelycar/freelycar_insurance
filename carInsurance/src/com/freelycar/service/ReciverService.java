@@ -3,6 +3,7 @@ package com.freelycar.service;
 import java.util.List;
 import java.util.Map;
 
+import org.jsoup.helper.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -10,7 +11,9 @@ import org.springframework.transaction.annotation.Transactional;
 import com.freelycar.dao.ReciverDao;
 import com.freelycar.entity.Reciver;
 import com.freelycar.util.RESCODE;
-import com.freelycar.util.Tools;  
+import com.freelycar.util.Tools;
+import org.springframework.util.StringUtils;
+
 /**  
  *  
  */  
@@ -98,6 +101,19 @@ public class ReciverService
 	public Map<String,Object> updateReciver(Reciver reciver){
 	    reciverDao.updateReciver(reciver);
 	    return RESCODE.SUCCESS.getJSONRES();
+	}
+
+
+	/**
+	 * 根据orderId查询Reciver
+	 * @param orderId
+	 * @return
+	 */
+	public Reciver getReciverByOrderId(String orderId){
+		if (StringUtils.isEmpty(orderId)) {
+			return null;
+		}
+		return reciverDao.getReciverByOrderId(orderId);
 	}
     
 }

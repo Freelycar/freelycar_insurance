@@ -1,16 +1,10 @@
 package com.freelycar.entity;  
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-	
-	
-	
-	
+import javax.persistence.*;
 
-import javax.persistence.Table;
 
 import org.hibernate.annotations.GenericGenerator;
+import org.springframework.util.StringUtils;
 
 /**  
  *  
@@ -37,6 +31,10 @@ public class InvoiceInfo
     private String orderId;
 	
     private String phone;  //手机号码;
+
+    @Transient
+    private String nature;
+
     /********** constructors ***********/  
     public InvoiceInfo() {  
       
@@ -107,10 +105,20 @@ public class InvoiceInfo
   
     public void setPhone(String phone) {  
         this.phone = phone;  
-    }  
-      
+    }
 
-	@Override
+    public String getNature() {
+        return nature;
+    }
+
+    public void setNature(String nature) {
+        if (StringUtils.isEmpty(nature)) {
+            nature = "个人";
+        }
+        this.nature = nature;
+    }
+
+    @Override
 	public String toString() {
 		return "InvoiceInfo [id=" + id 
 				+ ", clientId=" + clientId

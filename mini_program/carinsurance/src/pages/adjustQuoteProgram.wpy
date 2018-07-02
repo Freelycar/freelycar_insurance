@@ -272,7 +272,7 @@ export default class AdjustQuoteProgram extends wepy.page {
           ownerName: this.$parent.globalData.name,
           licenseNumber: this.$parent.globalData.licenseNumber,
           openId: this.$parent.globalData.openId,
-          cityCode: '320100',
+          cityCode: '32010003',
           cityName: '南京',
           insuranceCompanyId: '2',
           insurances: JSON.stringify(touBaoAry),

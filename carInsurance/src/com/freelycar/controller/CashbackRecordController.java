@@ -90,5 +90,10 @@ public class CashbackRecordController
 	public Map<String,Object> updateCashbackRecord(@RequestBody CashbackRecord cashbackrecord){
 	    return cashbackRecordService.updateCashbackRecord(cashbackrecord);
 	}
+
+	@RequestMapping(value = "/getCashBackRecordByOrderId", method = RequestMethod.GET)
+	public CashbackRecord getCashBackRecordByOrderId(String orderId) {
+		return cashbackRecordService.getCashBackRecordByOrderId(orderId);
+	}
     
 }

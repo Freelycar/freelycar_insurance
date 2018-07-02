@@ -7,11 +7,10 @@ import com.freelycar.util.RESCODE;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
-/**  
+import org.springframework.util.StringUtils;
+import org.springframework.web.bind.annotation.*;
+
+/**
  *  
  */  
 @RestController
@@ -51,6 +50,16 @@ public class InvoiceInfoController
 	public Map<String,Object> updateInvoiceInfo(@RequestBody InvoiceInfo invoiceinfo){
 		//System.out.println(invoiceinfo);
 	    return invoiceInfoService.updateInvoiceInfo(invoiceinfo);
+	}
+
+	/**
+	 * 根据orderId获取发票信息
+	 * @param orderId
+	 * @return
+	 */
+	@RequestMapping(value = "/getInvoiceInfoByOrderId",method = RequestMethod.GET)
+	public InvoiceInfo getInvoiceInfoByOrderId(@RequestParam(value = "orderId") String orderId){
+		return invoiceInfoService.getInvoiceInfoByOrderId(orderId);
 	}
     
 }

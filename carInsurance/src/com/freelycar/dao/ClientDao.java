@@ -365,14 +365,10 @@ public class ClientDao {
     }
 
     //更新Client
-    public void updateClient(Client client) {
-        String hql = SqlHelper.genUpdateSql(client, Client.class);
-
-        Query query = getSession().createQuery(hql);
-        query = SqlHelper.getQuery(client, Client.class, query);
-
-        query.executeUpdate();
-
+    public Client updateClient(Client client) {
+        getSession().update(client);
+        return client;
     }
+
 
 }

@@ -3,7 +3,9 @@ package com.freelycar.controller;
 import com.freelycar.entity.InsuranceOrder;
 import com.freelycar.entity.Invition;
 import com.freelycar.service.OrderService;
+import com.freelycar.util.RESCODE;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -84,4 +86,78 @@ public class OrderController {
     public Map<String, Object> getClientOrderByLicenseNumber(String licenseNumber, String openId, int page, int number) {
         return orderService.getClientOrderByLicenseNumber(licenseNumber, openId, page, number);
     }
+
+    /**
+     * 根据orderId更新order的信息
+     * @param insuranceOrder
+     * @return
+     */
+    @RequestMapping(value = "/updateOrderByOfferId", method = RequestMethod.GET)
+    public Map<String, Object> updateOrderByOfferId(InsuranceOrder insuranceOrder) {
+        if (null == insuranceOrder) {
+            return RESCODE.PARAM_EMPTY.getJSONRES();
+        }
+        if (StringUtils.isEmpty(insuranceOrder.getOrderId())) {
+            return RESCODE.PARAM_EMPTY.getJSONRES();
+        }
+        return orderService.updateOrderByOfferId(insuranceOrder);
+    }
+
+    /**
+     * 确认配送信息
+     * @param insuranceOrder
+     * @return
+     */
+    @RequestMapping(value = "/affirmDistributionInfo", method = RequestMethod.GET)
+    public Map<String, Object> affirmDistributionInfo(InsuranceOrder insuranceOrder) {
+        if (null == insuranceOrder) {
+            return RESCODE.PARAM_EMPTY.getJSONRES();
+        }
+        if (StringUtils.isEmpty(insuranceOrder.getOrderId())) {
+            return RESCODE.PARAM_EMPTY.getJSONRES();
+        }
+        return orderService.affirmDistributionInfo(insuranceOrder);
+    }
+
+    /**
+     * 确认签收
+     * @param orderId
+     * @return
+     */
+    @RequestMapping(value = "/affirmSignForInfo", method = RequestMethod.GET)
+    public Map<String, Object> affirmSignForInfo(String orderId) {
+        if (StringUtils.isEmpty(orderId)) {
+            return RESCODE.PARAM_EMPTY.getJSONRES();
+        }
+        return orderService.affirmSignForInfo(orderId);
+    }
+
+    /**
+     * 查询订单的运单信息
+     * @param orderId
+     * @return
+     */
+    @RequestMapping(value = "/getOrderSignForInfoByOrderId", method = RequestMethod.GET)
+    public InsuranceOrder getOrderSignForInfoByOrderId(String orderId) {
+        if (StringUtils.isEmpty(orderId)) {
+            return null;
+        }
+        return orderService.getOrderSignForInfoByOrderId(orderId);
+    }
+
+    /**
+     * 确认返现
+     * @param orderId
+     * @return
+     */
+    @RequestMapping(value = "/affirmCashBackRecordInfo", method = RequestMethod.GET)
+    public Map<String, Object> affirmCashBackRecordInfo(String orderId) {
+        if (StringUtils.isEmpty(orderId)) {
+            return RESCODE.PARAM_EMPTY.getJSONRES();
+        }
+        return orderService.affirmCashBackRecordInfo(orderId);
+    }
+
+
+
 }
