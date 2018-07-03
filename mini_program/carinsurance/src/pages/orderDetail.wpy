@@ -118,7 +118,7 @@
 <template>
   <view class="container order-detail" wx:if="{{orderDetail}}">
     <view class="containerBody">
-      <image class="freelycar_logo" src="https://www.howmuchweb.com/carInsurance/imgs/freelycar_logo_color.png"/>
+      <image class="freelycar_logo" src="https://www.freelycar.com/carInsurance/imgs/freelycar_logo_color.png"/>
       <view class="order-info">订单编号：{{orderDetail.orderId}}</view>
       <view class="order-info">订单状态：{{orderDetail.stateString}}</view>
       <view class="order-info">订单时间：{{orderDetail.createTime}}</view>

@@ -10,7 +10,7 @@
     // justify-content: space-between;
     // box-sizing: border-box;
     background: #efeff4;
-    font-size: 34 rpx;
+    font-size: 34rpx;
     font-family: 'SimHei';
   }
 
@@ -80,7 +80,7 @@
       name: '',
       licenseNumber: '',
       insurances: [],
-      baseUrl: 'https://www.howmuchweb.com/carInsurance/'
+      baseUrl: 'https://www.freelycar.com/carInsurance/'
       // baseUrl: 'http://localhost:8080/carInsurance/'
     };
 
@@ -124,7 +124,7 @@
               method: 'GET',
               Accept: 'application/json, text/plain, text/html',
               success(res) {
-                console.log("app.wpy -- 获取OpenId的结果集为： ");
+                console.log('app.wpy -- 获取OpenId的结果集为： ');
                 console.log(res);
                 that.globalData.openId =
                   res.data.openid || that.globalData.openId; // 获取到的openid

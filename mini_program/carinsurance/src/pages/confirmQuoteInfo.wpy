@@ -87,7 +87,7 @@
 <template >
     <view class="container border-box">
         <scroll-view scroll-y="true" class="scroll-view-bg">
-            <image class='header-img' src='https://www.howmuchweb.com/carInsurance/imgs/remind-bg.png'>
+            <image class='header-img' src='https://www.freelycar.com/carInsurance/imgs/remind-bg.png'>
             </image>
             <view class='line border-bottom flex-box-row' style='margin-top: 0'>
                 <view>

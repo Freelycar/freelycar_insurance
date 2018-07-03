@@ -22,13 +22,13 @@ export default {
   html: {
     template: './src/index.ejs',
   },
-  publicPath: 'https://www.howmuchweb.com/carInsurance/',
+  publicPath: 'https://www.freelycar.com/carInsurance/',
   // publicPath: '/',
   disableDynamicImport: true,
   hash: true,
   proxy: {
     '/api': {
-      target: "https://www.howmuchweb.com/carInsurance/api",
+      target: "https://www.freelycar.com/carInsurance/api",
       // target: "http://localhost:8080/carInsurance/api",
       changeOrigin: true,
       pathRewrite: {

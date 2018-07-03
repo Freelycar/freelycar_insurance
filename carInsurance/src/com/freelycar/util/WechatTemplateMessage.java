@@ -126,7 +126,7 @@ public class WechatTemplateMessage {
         JSONObject params = new JSONObject();
         JSONObject data = new JSONObject();
         params.put("touser", openId);
-        params.put("url", "https://www.howmuchweb.com/carInsurance/pay.html?id=" + id);
+        params.put("url", "https://www.freelycar.com/carInsurance/pay.html?id=" + id);
         data.put("first", keywordFactory("车险报价订单状态提醒", "#173177"));
         data.put("OrderSn", keywordFactory(orderId, "#173177"));
         data.put("OrderStatus", keywordFactory(orderStatus, "#173177"));
