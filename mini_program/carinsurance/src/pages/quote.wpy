@@ -165,7 +165,7 @@
       </view>
 
       <view class='lastyear-record-bg'>
-        <block wx:for={{lastYearRecord}}  wx:key='index'>
+        <block wx:for="{{lastYearRecord}}"  wx:key='index'>
           <view class='lastyear-record-item'>
             <view class='lastyear-record-header'> {{item.insuranceName}}</view>
             <view class='lastyear-record-detail'>
@@ -224,7 +224,7 @@
       </view>
 
     </view>
-    <block wx:if={{waitting}}>
+    <block wx:if="{{waitting}}">
       <button class='get-price-button get-price-button-unable'>报价中......{{waitSecond}}s</button>
     </block>
     <block wx:else>

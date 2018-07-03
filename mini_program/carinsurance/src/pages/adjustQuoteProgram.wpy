@@ -105,7 +105,7 @@
   padding-left: 30rpx;
 }
 </style>
-<template >
+<template>
   <scroll-view scroll-y="true" class="container program-bg">
 
     <view class='white-bg border-bottom'>
