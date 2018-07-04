@@ -210,13 +210,14 @@ public class LuoTuoTest {
 	}
 	@Test
 	public void test(){
-		JSONArray array = new JSONArray();
-		JSONObject obj = new JSONObject();
-		obj.put("aaa", "bbb");
-		array.put(obj);
-		array.put(obj);
-		array.put(obj);
-		System.out.println(array);
+		Map<String, Object> param = new HashMap<>();
+		param.put("api_key", "5ff016f97cea4adc9b8ae8ccad6a7f84HLDD");
+		param.put("ownerName", "李哲");
+		param.put("licenseNumber", "苏AE1B98");
+		param.put("carTypeCode", "02");
+
+		JSONObject resultJson = HttpClientUtil.httpGet("http://wechat.bac365.com:8081/carRisk/car_risk/carApi/queryLatestPolicy", param);
+		System.out.println(resultJson);
 	}
 
 	@Test

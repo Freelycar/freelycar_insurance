@@ -215,7 +215,7 @@
                 </block>
                 <view class='flex-box-row'>
                   <view class="{{item.compensation ? 'bujimianpei  bujimianpei-select' : 'bujimianpei'}}" @tap="selectCompensationOrNot" data-code='{{item.code}}'>不计免赔</view>
-                  <view class='select-img' style="background-image: url({{item.isToubao? 'https://www.freelycar.com/carInsurance/imgs/select-yes.png' : 'https://www.freelycar.com/carInsurance/imgs/select-no.png'}});" @tap="selectInsuranceOrNot" data-code='{{item.code}}'></view>
+                  <view class='select-img' style="background-image: url({{item.isToubao ? 'https://www.freelycar.com/carInsurance/imgs/select-yes.png' : 'https://www.freelycar.com/carInsurance/imgs/select-no.png'}});" @tap="selectInsuranceOrNot" data-code='{{item.code}}'></view>
                 </view>
               </view>
             </block>
@@ -258,7 +258,8 @@ export default class Quote extends wepy.page {
     busLimitDate: '', //商业险起保日期
     waitSecond: 90,
     waitting: false,
-    timer: null
+    timer: null,
+    commercialInsurances: []
   };
 
   computed = {};
@@ -409,12 +410,13 @@ export default class Quote extends wepy.page {
               res.data.data[i].insuranceEndTime * 1000
             ).format('YYYY-MM-DD hh:mm');
             res.data.data[i].insuranceName = res.data.data[i].commercial
-              ? '强制险'
-              : '商业险';
+              ? '商业险'
+              : '强制险';
           }
           this.lastYearRecord = res.data.data;
           if (res.data.data.length > 0) {
             this.lastInsuranceCompany = res.data.data[0].insuranceCompany;
+            this.loadLastYearCommercialInsurances();
           }
 
           this.$apply();
@@ -495,6 +497,39 @@ export default class Quote extends wepy.page {
         clearInterval(this.timer);
       }
     }, 1000);
+  }
+
+  //遍历去年投保的商业险
+  loadLastYearCommercialInsurances() {
+    if (this.lastYearRecord.length > 0){
+      for(let i = 0;i<this.lastYearRecord.length;i++){
+        if (this.lastYearRecord[i].commercial) {
+          this.commercialInsurances = JSON.parse(this.lastYearRecord[i].insurances);
+        }
+      }
+      if (this.commercialInsurances.length > 0) {
+        for(let j = 0;j<this.commercialInsurances.length;j++){
+          let insuranceId = this.commercialInsurances[j].insuranceId;
+          let compensation = this.commercialInsurances[j].compensation;
+          let isToubao = this.commercialInsurances[j].isToubao;
+          let amountStr = this.commercialInsurances[j].amountStr;
+          this.insurances[insuranceId - 1].compensation = compensation;
+          this.insurances[insuranceId - 1].isToubao = isToubao;
+          let selectIndex = this.insurances[insuranceId - 1].selectIndex;
+          let selectAry = this.insurances[insuranceId - 1].selectAry;
+          if (selectAry.length > 0) {
+            for (let k = 0; k <selectAry.length;k++) {
+              if (amountStr == selectAry[k]) {
+                selectIndex = k;
+                break;
+              }
+            }
+            this.insurances[insuranceId - 1].selectIndex = selectIndex;
+            this.insurances[insuranceId - 1].amountStr = amountStr;
+          }
+        }
+      }
+    }
   }
 }
 </script>
