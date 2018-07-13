@@ -401,7 +401,7 @@ public class OrderService {
         Double curPrice = obj.getDouble("currentPrice");
         Double ciBasePrice = obj.getDouble("ciBasePrice");
         float rate = cashbackDao.listCashbackRate().get(0).getRate();
-        Double calReturn = (curPrice + ciBasePrice) * rate;
+        Double calReturn = curPrice * rate;
         return calReturn;
     }
 

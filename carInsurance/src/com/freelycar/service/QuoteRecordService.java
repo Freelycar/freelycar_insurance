@@ -121,8 +121,8 @@ public class QuoteRecordService {
                     obj.put("cashBackRate", ratevalue);
                     double currentPrice = obj.getDouble("currentPrice");
                     double ciBasePrice = obj.getDouble("ciBasePrice");
-                    //返现金额=（强制险金额+商业险金额）*返现系数
-                    double cashback = (currentPrice + ciBasePrice) * ratevalue;
+                    //返现金额 = 商业险金额 * 返现系数
+                    double cashback = currentPrice * ratevalue;
                     BigDecimal b = new BigDecimal(cashback);
                     cashback = b.setScale(2, RoundingMode.HALF_UP).doubleValue();
                     obj.put("cashBackMoney", cashback);

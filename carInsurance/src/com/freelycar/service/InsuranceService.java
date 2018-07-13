@@ -231,19 +231,20 @@ public class InsuranceService {
         param.put("mobilePhone", clientByOpenId.getPhone());
 
         JSONObject createEnquiryParams = new JSONObject();
-        createEnquiryParams.put("licenseNumber", entity.getLicenseNumber());//
-        createEnquiryParams.put("carTypeCode", Tools.isEmpty(entity.getCarTypeCode()) ? "02" : entity.getCarTypeCode());//
-        createEnquiryParams.put("ownerName", entity.getOwnerName());//
-        createEnquiryParams.put("cityCode", entity.getCityCode());//前端写死
-        //obj.put("cityName", cityName);//cityName可以不传
-        createEnquiryParams.put("insuranceCompanyName", entity.getInsuranceCompanyId());//保险公司编号多加用逗号分隔
-        createEnquiryParams.put("insuranceStartTime", Tools.isEmpty(entity.getInsuranceStartTime()) ? 0 : entity.getInsuranceStartTime());//
+        createEnquiryParams.put("licenseNumber", entity.getLicenseNumber());
+        createEnquiryParams.put("carTypeCode", Tools.isEmpty(entity.getCarTypeCode()) ? "02" : entity.getCarTypeCode());
+        createEnquiryParams.put("ownerName", entity.getOwnerName());
+        createEnquiryParams.put("cityCode", entity.getCityCode());
+        createEnquiryParams.put("cityName", entity.getCityName());
+        //保险公司编号多加用逗号分隔
+        createEnquiryParams.put("insuranceCompanyName", entity.getInsuranceCompanyId());
+        createEnquiryParams.put("insuranceStartTime", Tools.isEmpty(entity.getInsuranceStartTime()) ? 0 : entity.getInsuranceStartTime());
 
         String forceInsuranceStartTime = entity.getForceInsuranceStartTime();
-        createEnquiryParams.put("forceInsuranceStartTime", forceInsuranceStartTime);//
-        createEnquiryParams.put("transferDate", !entity.isTransfer() ? "0" : entity.getTransferTime());//
+        createEnquiryParams.put("forceInsuranceStartTime", forceInsuranceStartTime);
+        createEnquiryParams.put("transferDate", !entity.isTransfer() ? "0" : entity.getTransferTime());
         String requestHeader = Tools.uuid() + "HLDD";
-        createEnquiryParams.put("requestHeader", requestHeader);//
+        createEnquiryParams.put("requestHeader", requestHeader);
 
 
         JSONArray insurancesList = new JSONArray();
