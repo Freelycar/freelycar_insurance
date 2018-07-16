@@ -1,8 +1,8 @@
 module.exports = [{
     code: 1,
     name: "车辆损失险",
-    isToubao: true,    //是否投保
-    compensation: true, //不计免赔
+    isToubao: false,    //是否投保
+    compensation: false, //不计免赔
     amountStr: '',  //   可以是国产/进口  100万/50万   string类型
     selectAry:[],
     selectIndex: 0,

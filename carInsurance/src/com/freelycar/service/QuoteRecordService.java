@@ -77,7 +77,6 @@ public class QuoteRecordService {
                         JSONObject errorMsg = new JSONObject(string2);
                         if (!errorMsg.getString("code").equals("success")) {
                             log.error("报价推送重复投保：" + resObj);
-                            //System.out.println("报价推送重复投保："+resObj);
                             String string = errorMsg.getString("message");
                             SocketHelper.sendMessage(openId, RESCODE.PUSHBACK_BAOJIA_FAIL.getJSONObject(string).toString());
                             return RESCODE.LUOTUO_SUCCESS.getLuoTuoRes(loutuomsg);

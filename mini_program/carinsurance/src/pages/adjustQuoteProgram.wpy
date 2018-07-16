@@ -321,7 +321,7 @@ export default class AdjustQuoteProgram extends wepy.page {
     //接收数据
     wepy.onSocketMessage(data => {
       const objData = JSON.parse(data.data);
-      console.log('成功接受数据');
+      console.log('成功接收数据：');
       console.log(objData);
       if (objData.code === 606) {
         clearInterval(this.timer);
@@ -336,7 +336,7 @@ export default class AdjustQuoteProgram extends wepy.page {
         this.waitSecond = 90;
         this.waitting = false;
         this.$apply();
-        wepy.showToast({ title: objData.data, icon: 'none' });
+        wepy.showToast({ title: objData.data, icon: 'none' },10000);
       }
     });
 
