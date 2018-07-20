@@ -214,13 +214,9 @@
 </style>
 <template >
   <view class="container">
-    <swiper indicator-dots="true" autoplay="true" interval="5000" duration="1000" class="banner-bg">
-      <block wx:for="{{imgUrls}}" wx:key='index'>
-        <swiper-item>
-          <image src="{{item}}" class="slide-image" style="height:373rpx;width:750rpx" />
-        </swiper-item>
-      </block>
-    </swiper>
+    <block>
+      <image src="{{imgUrls}}" class="slide-image" style="height:373rpx;width:750rpx" />
+    </block>
     <view class='quote-bg'>
       <view class='line' style="flex-direction:row;">
         <div class='line-key'>车牌号码
@@ -329,9 +325,7 @@ export default class Index extends wepy.page {
 
   data = {
     imgUrls: [
-      'https://www.freelycar.com/carInsurance/imgs/banner.jpg',
-      'https://www.freelycar.com/carInsurance/imgs/banner.jpg',
-      'https://www.freelycar.com/carInsurance/imgs/banner.jpg'
+      'https://www.freelycar.com/carInsurance/imgs/banner.png'
     ],
 
     //报价的信息
