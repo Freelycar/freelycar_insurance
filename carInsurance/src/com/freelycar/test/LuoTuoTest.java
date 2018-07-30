@@ -27,14 +27,14 @@ public class LuoTuoTest {
 	private static final String BASEURL = Constant.INTERFACE_BASE_URL;
 	/*private static String licenseNumber = "苏AB660C";
 	private static String ownerName = "陈雯";*/
-	private static String licenseNumber = "苏A92GX6";//车牌
-	private static String ownerName = "刘小庆";//车主姓名
+	private static String licenseNumber = "苏AE1B98";//车牌
+	private static String ownerName = "李哲";//车主姓名
 	private static String idNumber = "42108119840914002X";//身份证
 	private static String forceInsuranceStartTime = "1524239999";//续保信息中强制险的止保日期
 	private static String insuranceStartTime = "1524239999";//续保信息中商业险的止保日期
 	private static String phone = "13505143481";//手机号
 	private static String offerId = "109-20180625135214-d7416";//报价推送过来的编号
-	private static String openId = "oziV35H727Dec0pp_cYcJYODSGkk";//随便找个数据库中 已存在 的用户的openId，模拟用户登陆
+	private static String openId = "oziV35LSeMzPGl2kY5-8EAY181no";//随便找个数据库中 已存在 的用户的openId，模拟用户登陆
 	
 	
 	@Test
@@ -216,7 +216,7 @@ public class LuoTuoTest {
 		param.put("licenseNumber", "苏AE1B98");
 		param.put("carTypeCode", "02");
 
-		JSONObject resultJson = HttpClientUtil.httpGet("http://wechat.bac365.com:8081/carRisk/car_risk/carApi/queryLatestPolicy", param);
+		JSONObject resultJson = HttpClientUtil.httpGet("http://wechat.bac365.com/carRisk/car_risk/carApi/queryLatestPolicy", param);
 		System.out.println(resultJson);
 	}
 

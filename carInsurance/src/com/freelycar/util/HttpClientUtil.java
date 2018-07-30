@@ -184,7 +184,7 @@ public class HttpClientUtil {
 	    HttpEntity entity = response.getEntity();
 		String result = EntityUtils.toString(entity, "utf-8");
 		
-		//System.out.println("post : "+result);
+		System.out.println("post : "+result);
 		EntityUtils.consume(entity);
 	    
 	}
