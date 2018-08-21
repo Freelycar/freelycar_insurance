@@ -334,7 +334,7 @@ export default class Quote extends wepy.page {
       const insurances = this.$parent.globalData.insurances;
       let touBaoAry = [];
       insurances.map((item, index) => {
-        if (item.isToubao === true) {
+        if (item.isToubao === true || item.isToubao == 1) {
           let insurance = {
             compensation: item.compensation,
             isToubao: 1,
